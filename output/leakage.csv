@@ -1,0 +1,7 @@
+transformation,bridge width,centralization,density,clustering,cohesion
+Bridge Width,1.0,0.0062,0.0,-0.0069,0.1135
+Centralization,0.0,0.3633,0.0,0.1119,-0.1203
+Bridge Trend,-1.6667,0.0123,0.0,0.0199,-0.1358
+Churn,0.0,-0.0062,0.0,0.0182,0.0016
+Density (intra-confined),0.0,0.0062,0.023,0.0588,0.0157
+Density (UNCONSTRAINED),6.1667,0.0246,0.023,0.0026,0.6296
