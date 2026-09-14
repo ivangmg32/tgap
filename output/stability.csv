@@ -1,0 +1,9 @@
+label,mean,std
+Increase Bridge Width (10.0%),16.0,0.0
+Decrease Bridge Width (10.0%),-16.0,0.0
+Increase Centralization (10.0%),0.3757201302496448,5.551115123125783e-17
+Decrease Centralization (10.0%),-0.3694581280788197,0.0
+Increase Bridge Trend (10.0%),0.0,0.0
+Decrease Bridge Trend (10.0%),0.0,0.0
+Increase Churn (10.0%),0.0,0.0
+Decrease Churn (10.0%),0.0,0.0
