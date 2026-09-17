@@ -71,6 +71,34 @@ MEASURED = "measured"
 # One seed drives the whole suite unless an experiment sweeps seeds.
 BASE_SEED = 42
 
+# COMPARABILITY OF PERTURBATION STRENGTHS.
+# Requested delta is not semantically identical across all transformations.
+# BridgeWidth/Density/Churn read delta as a relative change of the property
+# itself, whereas Centralization reads it as a MECHANISM parameter (the
+# fraction of edges to rewire) and BridgeTrend as a compounding per-step
+# ratio whose property is a slope measured in absolute units. The same
+# requested 0.1 therefore produces very different achieved changes - in
+# this world the Centralization transformation overshoots by an order of
+# magnitude. Therefore cross-concept magnitude comparisons require matched
+# achieved perturbations or should be avoided. RQ1 reports within-concept
+# fidelity only; the matched analysis lives in RQ1b.
+MATCH_TOLERANCE = 0.10  # max relative gap between two achieved magnitudes
+# Requested deltas swept when searching for a matched pair. Spread over two
+# orders of magnitude because a transformation that overshoots needs a much
+# smaller request to reach the same achieved change as one that does not.
+# Capped below 1.0: BridgeTrendTransformation divides by (1 + delta), so
+# delta = -1 is a singularity in the current core implementation (it raises
+# ZeroDivisionError). The sweep stays clear of it rather than changing core
+# semantics here; see the report accompanying this suite.
+MATCH_DELTAS = (0.005, 0.01, 0.02, 0.03, 0.05, 0.075, 0.10, 0.15,
+                0.20, 0.30, 0.50, 0.75, 0.90)
+# Seeds for the matched comparison. A single world can only show that a
+# result holds THERE; repeating the identical procedure on independently
+# generated worlds is what distinguishes "consistent across seeds" from
+# "observed in one seed". Five keeps a full run near a minute (~4 s/seed);
+# raise to ten if a longer run is acceptable.
+RQ1B_SEEDS = (0, 1, 2, 3, 4)
+
 # Consistent figure style - readable, not over-styled.
 FIG_SIZE = (7.0, 4.2)
 plt.rcParams.update({"figure.figsize": FIG_SIZE, "font.size": 10,
@@ -257,6 +285,8 @@ def rq1Faithfulness(seed=BASE_SEED):
     transformations = makeTransformations(comm, seed=seed)
     models = buildKnownTruthModels(tg, comm)
 
+    deltaModeByConcept = {t.name: t.deltaMode for t in transformations}
+
     rows = []
     summary = []
     for modelName, spec in models.items():
@@ -267,6 +297,17 @@ def rq1Faithfulness(seed=BASE_SEED):
                                 ).explainDetailed(tg, leakageMetrics=panel)
         weightByConcept = {name: w for w, name, m in spec["terms"]
                            if m is not None}
+
+        # The concept this model actually reads, used as the reference when
+        # asking whether another row's perturbation strength is comparable.
+        analytic = {c: abs(e["value"]) for c, e in spec["expect"].items()
+                    if e["kind"] == EXACT}
+        reference = max(analytic, key=analytic.get) if analytic else None
+        referenceAchieved = {}
+        for r in records:
+            if r["transformation"] == reference and r["achievedDelta"]:
+                key = "increase" if r["requestedDelta"] > 0 else "decrease"
+                referenceAchieved[key] = abs(r["achievedDelta"])
 
         magnitudes = {}
         for r in records:
@@ -286,6 +327,20 @@ def rq1Faithfulness(seed=BASE_SEED):
                 expectedFull = sum(
                     weightByConcept[name] * r["leakage"][name]["change"]
                     for name in weightByConcept) / abs(r["achievedDelta"])
+            # Is this row's perturbation strength comparable with the
+            # reference concept's? Two conditions: the achieved changes must
+            # be in the same units (same deltaMode), and their magnitudes
+            # must agree within MATCH_TOLERANCE. Anything else must not be
+            # ranked against the reference - see the note at the top.
+            comparable = False
+            refAchieved = referenceAchieved.get(direction)
+            if (reference is not None and r["achievedDelta"]
+                    and refAchieved
+                    and deltaModeByConcept.get(concept)
+                    == deltaModeByConcept.get(reference)):
+                gap = abs(abs(r["achievedDelta"]) - refAchieved) / max(
+                    abs(r["achievedDelta"]), refAchieved)
+                comparable = bool(gap <= MATCH_TOLERANCE)
             magnitudes.setdefault(concept, []).append(abs(measured))
             rows.append({
                 "experiment": "RQ1",
@@ -306,33 +361,26 @@ def rq1Faithfulness(seed=BASE_SEED):
                                     if r["achievedDelta"] else None),
                 "normalizer": r["normalizer"],
                 "noop": r["noop"],
+                "reference_concept": reference,
+                "comparable": comparable,
                 "seed": seed,
             })
 
-        # Dominant concept = largest mean |impact| across both directions.
-        # The margin to the runner-up is reported because two concepts can
-        # come out numerically indistinguishable, in which case "which one
-        # dominates" is decided by floating-point noise and the answer
-        # should be read as a TIE, not as a recovery or a failure.
+        # Raw magnitude ranking across concepts is recorded but NOT used as
+        # a faithfulness result: at one fixed requested delta the concepts
+        # receive different achieved perturbation strengths, so ranking them
+        # would compare unequal experiments. The fair version - matching the
+        # achieved changes first - is RQ1b. These fields are kept only so
+        # the unmatched ranking stays inspectable in the CSV/JSON.
         meanMag = {c: float(np.mean(v)) for c, v in magnitudes.items()}
         ranked = sorted(meanMag.items(), key=lambda kv: kv[1], reverse=True)
-        dominant = ranked[0][0]
-        margin = ranked[0][1] - ranked[1][1] if len(ranked) > 1 else None
-        tied = margin is not None and margin <= 1e-9 * max(ranked[0][1], 1.0)
-        for row in rows:
-            if row["model"] == modelName:
-                row["is_dominant"] = (row["concept"] == dominant)
-
-        # Which concept SHOULD dominate: the largest non-zero analytic
-        # expectation, when the model has one.
-        analytic = {c: abs(e["value"]) for c, e in spec["expect"].items()
-                    if e["kind"] == EXACT}
-        intended = max(analytic, key=analytic.get) if analytic else None
-        recovered = (dominant == intended) if intended else None
         exactRows = [r for r in rows
                      if r["model"] == modelName and r["expectation_kind"] == EXACT]
         zeroRows = [r for r in rows
                     if r["model"] == modelName and r["expectation_kind"] == ZERO]
+        modelRows = [r for r in rows if r["model"] == modelName]
+        comparableRows = [r for r in modelRows
+                          if r["comparable"] and r["concept"] != reference]
         # How far each transformation OVERSHOOTS its requested delta. This
         # matters for cross-concept comparison: a transformation whose
         # delta is a mechanism knob rather than a property ratio (e.g.
@@ -348,22 +396,31 @@ def rq1Faithfulness(seed=BASE_SEED):
             overshoot.setdefault(r["concept"], []).append(ratio)
         overshootByConcept = {c: float(np.median(v))
                               for c, v in overshoot.items()}
+        exactRelErrors = [r["relative_error"] for r in exactRows
+                          if r["relative_error"] is not None]
+        exactAbsErrors = [r["absolute_error"] for r in exactRows
+                          if r["absolute_error"] is not None]
         summary.append({
             "model": modelName,
-            "intended_dominant": intended,
-            "recovered_dominant": dominant,
-            "dominant_correct": recovered,
-            "runner_up": ranked[1][0] if len(ranked) > 1 else None,
-            "dominant_margin": margin,
-            "dominant_tied": tied,
+            "reference_concept": reference,
+            # --- A. within-concept fidelity (the RQ1 result) ---
             "exact_rows": len(exactRows),
-            "max_relative_error": max(
-                [r["relative_error"] for r in exactRows
-                 if r["relative_error"] is not None], default=None),
+            "signs_correct": sum(1 for r in exactRows if r["sign_correct"]),
+            "mean_absolute_error": (float(np.mean(exactAbsErrors))
+                                    if exactAbsErrors else None),
+            "mean_relative_error": (float(np.mean(exactRelErrors))
+                                    if exactRelErrors else None),
+            "max_relative_error": max(exactRelErrors, default=None),
             "zero_rows": len(zeroRows),
             "zero_rows_exactly_zero": sum(1 for r in zeroRows
                                           if r["measured"] == 0.0),
-            "signs_correct": sum(1 for r in exactRows if r["sign_correct"]),
+            # --- B. cross-concept comparability at this fixed delta ---
+            "comparable_rows": len(comparableRows),
+            "non_comparable_rows": len(modelRows) - len(comparableRows)
+                                   - sum(1 for r in modelRows
+                                         if r["concept"] == reference),
+            # unmatched ranking, retained for inspection only
+            "raw_ranking_unmatched": [c for c, _ in ranked],
             "max_overshoot_ratio": (max(overshootByConcept.values())
                                     if overshootByConcept else None),
             "max_overshoot_concept": (max(overshootByConcept,
@@ -381,6 +438,292 @@ def rq1Faithfulness(seed=BASE_SEED):
     print()
     print(pd.DataFrame(summary).to_string(index=False))
     return {"rows": rows, "summary": summary}
+
+
+##  RQ1b - matched achieved perturbations  ##
+
+def sweepConcept(model, tg, trans, deltas):
+    ''' Run one concept across many requested deltas and record what each
+    request actually achieved. This is the raw material for matching:
+    because the mapping request -> achieved differs per transformation, the
+    only way to compare two concepts fairly is to search each one's sweep
+    for the request that lands nearest the other's achieved magnitude. '''
+    out = []
+    for delta in deltas:
+        for r in TgapExplainer(model, [trans],
+                               defaultDelta=delta).explainDetailed(tg):
+            out.append({
+                "concept": trans.name,
+                "delta_mode": trans.deltaMode,
+                "direction": ("increase" if r["requestedDelta"] > 0
+                              else "decrease"),
+                "requested_delta": r["requestedDelta"],
+                "achieved_delta": r["achievedDelta"],
+                "baseline": r["baseline"],
+                "transformed": r["transformed"],
+                "impact": r["impact"],
+                "noop": r["noop"],
+            })
+    return out
+
+
+def bestMatch(sweepA, sweepB, direction, tolerance=MATCH_TOLERANCE):
+    ''' Find the pair of runs - one from each concept, same direction -
+    whose achieved magnitudes are closest. Returns (rowA, rowB, gap) or
+    None when the two concepts are not even in the same units.
+
+    The gap is the relative difference between achieved magnitudes,
+    |a - b| / max(|a|, |b|); the caller decides comparability by testing
+    gap <= tolerance. No match is ever forced: if the closest achievable
+    pair still exceeds the tolerance, the pair is reported as not
+    comparable rather than compared anyway. '''
+    a = [r for r in sweepA if r["direction"] == direction
+         and not r["noop"] and r["achieved_delta"]]
+    b = [r for r in sweepB if r["direction"] == direction
+         and not r["noop"] and r["achieved_delta"]]
+    if not a or not b:
+        return None
+    # Different deltaMode means different units (a ratio vs a slope in
+    # edges/step); no numeric tolerance can make those commensurable.
+    if a[0]["delta_mode"] != b[0]["delta_mode"]:
+        return None
+    best = None
+    for ra in a:
+        for rb in b:
+            x, y = abs(ra["achieved_delta"]), abs(rb["achieved_delta"])
+            gap = abs(x - y) / max(x, y)
+            if best is None or gap < best[2]:
+                best = (ra, rb, gap)
+    return best
+
+
+def matchedComparisonForSeed(seed):
+    ''' Run the matched-perturbation procedure on ONE controlled world.
+
+    Returns (rows, sweepCache). Factored out of rq1bMatchedComparison so
+    the identical procedure - same tolerance, same delta grid, same
+    no-forced-match rule - can be repeated across seeds without the
+    matching logic itself varying with the seed. '''
+    tg, comm = makeWorld(seed=seed)
+    transformations = makeTransformations(comm, seed=seed)
+    models = buildKnownTruthModels(tg, comm)
+
+    rows = []
+    sweepCache = {}
+    for modelName, spec in models.items():
+        analytic = {c: abs(e["value"]) for c, e in spec["expect"].items()
+                    if e["kind"] == EXACT}
+        if not analytic:
+            continue
+        reference = max(analytic, key=analytic.get)
+        for trans in transformations:
+            key = (modelName, trans.name)
+            if key not in sweepCache:
+                sweepCache[key] = sweepConcept(spec["model"], tg, trans,
+                                               MATCH_DELTAS)
+        refSweep = sweepCache[(modelName, reference)]
+        for trans in transformations:
+            if trans.name == reference:
+                continue
+            for direction in ("increase", "decrease"):
+                match = bestMatch(refSweep, sweepCache[(modelName, trans.name)],
+                                  direction)
+                if match is None:
+                    rows.append({
+                        "experiment": "RQ1b", "model": modelName,
+                        "reference_concept": reference,
+                        "concept": trans.name, "direction": direction,
+                        "comparable": False,
+                        "reason": "different achieved-change units "
+                                  "(not comparable under the current "
+                                  "transformation semantics)",
+                        "seed": seed})
+                    continue
+                refRow, otherRow, gap = match
+                comparable = bool(gap <= MATCH_TOLERANCE)
+                # Three-way outcome, so a tie is never silently counted as
+                # "reference smaller". Only meaningful when comparable.
+                outcome = None
+                if comparable:
+                    refMag = abs(refRow["impact"])
+                    otherMag = abs(otherRow["impact"])
+                    scale = max(refMag, otherMag, 1e-12)
+                    if abs(refMag - otherMag) <= 1e-12 * scale:
+                        outcome = "tie"
+                    elif refMag > otherMag:
+                        outcome = "reference_larger"
+                    else:
+                        outcome = "reference_smaller"
+                rows.append({
+                    "experiment": "RQ1b", "model": modelName,
+                    "reference_concept": reference,
+                    "concept": trans.name, "direction": direction,
+                    "comparable": comparable,
+                    "reason": ("matched" if comparable else
+                               f"closest achievable gap {gap:.3f} exceeds "
+                               f"tolerance {MATCH_TOLERANCE}"),
+                    "achieved_gap": gap,
+                    "reference_requested_delta": refRow["requested_delta"],
+                    "reference_achieved_delta": refRow["achieved_delta"],
+                    "reference_baseline": refRow["baseline"],
+                    "reference_transformed": refRow["transformed"],
+                    "reference_impact": refRow["impact"],
+                    "concept_requested_delta": otherRow["requested_delta"],
+                    "concept_achieved_delta": otherRow["achieved_delta"],
+                    "concept_baseline": otherRow["baseline"],
+                    "concept_transformed": otherRow["transformed"],
+                    "concept_impact": otherRow["impact"],
+                    # Only meaningful when comparable is True.
+                    "comparison_outcome": outcome,
+                    "reference_larger": (outcome == "reference_larger"
+                                         if comparable else None),
+                    "seed": seed})
+    return rows, sweepCache
+
+
+def rq1bMatchedComparison(seeds=RQ1B_SEEDS):
+    ''' RQ1b: cross-concept comparison, but only where the achieved
+    perturbations are comparable - repeated across several seeds.
+
+    For each known-truth model, every non-reference concept is matched
+    against the concept the model actually reads, by sweeping both across
+    requested deltas and picking the pair with the closest achieved
+    magnitudes. A pair counts as comparable only when that gap is within
+    MATCH_TOLERANCE and both concepts express their achieved change in the
+    same units. Where no such pair exists the row is reported as "not
+    comparable under the current transformation semantics" - it is not
+    compared anyway.
+
+    Repeating over seeds answers a different question from the single-seed
+    version: not "does this hold here" but "does this hold in each of
+    several independently generated worlds". The per-seed breakdown is
+    reported so a result seen in one world is never presented as a result
+    that holds across worlds. '''
+    print()
+    print("=" * 72)
+    print("RQ1b  CROSS-CONCEPT COMPARISON UNDER MATCHED PERTURBATIONS")
+    print(f"      repeated across {len(seeds)} seeds: {list(seeds)}")
+    print("=" * 72)
+
+    rows = []
+    firstSweep = None
+    for seed in seeds:
+        seedRows, sweepCache = matchedComparisonForSeed(seed)
+        rows.extend(seedRows)
+        if firstSweep is None:
+            firstSweep = (seed, sweepCache)
+
+    df = saveCsv(rows, "matched_comparison.csv")
+
+    # --- per-seed breakdown ---
+    perSeed = []
+    for seed in seeds:
+        sub = df[df["seed"] == seed]
+        matched = sub[sub["comparable"]]
+        outcomes = matched["comparison_outcome"].value_counts().to_dict()
+        perSeed.append({
+            "seed": seed,
+            "total_pairs": int(len(sub)),
+            "matched_pairs": int(len(matched)),
+            "non_matched_pairs": int(len(sub) - len(matched)),
+            "match_percentage": (100.0 * len(matched) / len(sub)
+                                 if len(sub) else 0.0),
+            "reference_larger": int(outcomes.get("reference_larger", 0)),
+            "reference_smaller": int(outcomes.get("reference_smaller", 0)),
+            "ties": int(outcomes.get("tie", 0)),
+        })
+    bySeed = pd.DataFrame(perSeed)
+    bySeed.to_csv(os.path.join(OUTPUT, "matched_comparison_by_seed.csv"),
+                  index=False)
+    print("\nper-seed breakdown:")
+    print(bySeed.to_string(index=False))
+
+    # --- reasons a pair could not be matched, aggregated ---
+    notMatched = df[~df["comparable"]]
+    unitMismatch = int(notMatched["reason"].str.startswith(
+        "different achieved-change units").sum())
+    print(f"\nnon-matched pairs by reason: {unitMismatch} different units, "
+          f"{len(notMatched) - unitMismatch} closest achievable gap above "
+          f"tolerance {MATCH_TOLERANCE}")
+
+    matched = df[df["comparable"]]
+    outcomes = matched["comparison_outcome"].value_counts().to_dict()
+    # A result is only "consistent across seeds" if every seed that
+    # produced matched pairs agreed; otherwise it is seed-dependent.
+    seedsWithMatches = [s for s in perSeed if s["matched_pairs"] > 0]
+    allLarger = all(s["reference_larger"] == s["matched_pairs"]
+                    for s in seedsWithMatches)
+    verdict = {
+        "seeds": list(seeds),
+        "seeds_evaluated": len(seeds),
+        "total_pairs": int(len(df)),
+        "comparable_pairs": int(len(matched)),
+        "non_comparable_pairs": int(len(df) - len(matched)),
+        "match_percentage": (100.0 * len(matched) / len(df)
+                             if len(df) else 0.0),
+        "reference_larger_in_matched": int(outcomes.get("reference_larger", 0)),
+        "reference_smaller_in_matched": int(
+            outcomes.get("reference_smaller", 0)),
+        "ties_in_matched": int(outcomes.get("tie", 0)),
+        "matched_pairs_per_seed": {s["seed"]: s["matched_pairs"]
+                                   for s in perSeed},
+        "seeds_with_matches": len(seedsWithMatches),
+        "reference_larger_in_every_seed_with_matches": bool(
+            allLarger and seedsWithMatches),
+        "non_comparable_unit_mismatch": unitMismatch,
+        "non_comparable_gap_above_tolerance": int(
+            len(notMatched) - unitMismatch),
+    }
+    print(f"\noverall across {len(seeds)} seeds: "
+          f"{verdict['comparable_pairs']}/{verdict['total_pairs']} pairs "
+          f"comparable ({verdict['match_percentage']:.1f}%); among matched "
+          f"pairs the reference concept had the larger |impact| in "
+          f"{verdict['reference_larger_in_matched']}, smaller in "
+          f"{verdict['reference_smaller_in_matched']}, tied in "
+          f"{verdict['ties_in_matched']}.")
+
+    # --- figures ---
+    # Left: the achievable perturbation ranges (a property of the
+    # transformation semantics, shown for one world). Right: how many
+    # pairs could be matched in each world, so a single-seed result is
+    # never mistaken for a cross-seed one.
+    fig, (axL, axR) = plt.subplots(1, 2, figsize=(11.0, 4.2))
+    firstSeed, sweepCache = firstSweep
+    modelKey = "C-weighted (2bw+3c)"
+    for (name, conceptName), sweep in sweepCache.items():
+        if name != modelKey:
+            continue
+        pts = [(abs(r["achieved_delta"]), abs(r["impact"]))
+               for r in sweep if r["direction"] == "increase"
+               and not r["noop"] and r["achieved_delta"]]
+        if not pts:
+            continue
+        pts.sort()
+        mode = sweep[0]["delta_mode"]
+        axL.plot([p[0] for p in pts], [p[1] for p in pts], marker="o",
+                 markersize=3, label=f"{conceptName} ({mode})")
+    axL.set_xscale("log")
+    axL.set_xlabel("achieved change magnitude "
+                   "(log scale; units differ by mode)")
+    axL.set_ylabel("|impact|")
+    axL.set_title(f"achievable perturbation ranges (seed {firstSeed})\n"
+                  f"model: 2*bridgeWidth + 3*centralization", fontsize=9)
+    axL.legend(fontsize=7)
+
+    xs = np.arange(len(perSeed))
+    axR.bar(xs, [s["matched_pairs"] for s in perSeed], label="matched")
+    axR.bar(xs, [s["non_matched_pairs"] for s in perSeed],
+            bottom=[s["matched_pairs"] for s in perSeed],
+            label="not comparable")
+    axR.set_xticks(xs)
+    axR.set_xticklabels([str(s["seed"]) for s in perSeed])
+    axR.set_xlabel("seed")
+    axR.set_ylabel("concept pairs")
+    axR.set_title(f"matched vs non-comparable pairs per seed\n"
+                  f"(tolerance {MATCH_TOLERANCE})", fontsize=9)
+    axR.legend(fontsize=8)
+    savePlot(fig, "matched_comparison.png")
+    return {"rows": rows, "verdict": verdict, "per_seed": perSeed}
 
 
 ##  RQ2 - temporal sensitivity  ##
@@ -958,30 +1301,71 @@ def printSummary(results):
     print("=" * 72)
 
     rq1 = results["RQ1"]["summary"]
-    print("\nRQ1 Known-truth faithfulness:")
+    print("\nRQ1 Known-truth faithfulness (WITHIN-concept only; no "
+          "cross-concept ranking\n    is reported here because the "
+          "perturbation strengths are not matched):")
     for s in rq1:
-        err = ("n/a" if s["max_relative_error"] is None
+        mae = ("n/a" if s["mean_absolute_error"] is None
+               else f"{s['mean_absolute_error']:.4f}")
+        mre = ("n/a" if s["mean_relative_error"] is None
+               else f"{100 * s['mean_relative_error']:.2f}%")
+        mxe = ("n/a" if s["max_relative_error"] is None
                else f"{100 * s['max_relative_error']:.2f}%")
-        note = ""
-        if s["dominant_tied"]:
-            note = (f"  [TIE with {s['runner_up']}, margin "
-                    f"{s['dominant_margin']:.1e} - not a recovery failure]")
-        elif s["dominant_correct"] is False:
-            note = (f"  [runner-up {s['runner_up']}, margin "
-                    f"{s['dominant_margin']:.3f}]")
-        print(f"   {s['model']:24s} dominant recovered: "
-              f"{str(s['dominant_correct']):5s}  max rel. error: {err:>8s}  "
-              f"zero-rows exactly zero: "
-              f"{s['zero_rows_exactly_zero']}/{s['zero_rows']}{note}")
-    # Unequal effective perturbation sizes are a confound for any
-    # cross-concept magnitude comparison, so the overshoot is surfaced
-    # rather than left inside the CSV.
+        print(f"   {s['model']:24s} analytic rows {s['exact_rows']:2d}  "
+              f"signs {s['signs_correct']}/{s['exact_rows']}  "
+              f"MAE {mae:>8s}  mean rel. {mre:>7s}  max rel. {mxe:>7s}  "
+              f"zero-rows exactly zero {s['zero_rows_exactly_zero']}/"
+              f"{s['zero_rows']}")
+    print("   comparability of the remaining concepts at the fixed delta "
+          "(vs each model's\n   reference concept):")
+    for s in rq1:
+        print(f"      {s['model']:24s} reference "
+              f"{str(s['reference_concept']):16s} comparable "
+              f"{s['comparable_rows']}, not comparable "
+              f"{s['non_comparable_rows']}")
+    # Unequal effective perturbation sizes are the reason the ranking is
+    # withheld above, so the overshoot is surfaced explicitly.
     print("   largest achieved/requested delta ratio per model "
           "(1.0 = hit the requested size exactly):")
     for s in rq1:
         if s["max_overshoot_ratio"] is not None:
             print(f"      {s['model']:24s} {s['max_overshoot_concept']:16s} "
                   f"x{s['max_overshoot_ratio']:.2f}")
+
+    rq1b = results["RQ1b"]["verdict"]
+    print(f"\nRQ1b Cross-concept comparison under MATCHED perturbations "
+          f"({rq1b['seeds_evaluated']} seeds: {rq1b['seeds']}):")
+    print(f"   comparable pairs:     {rq1b['comparable_pairs']}/"
+          f"{rq1b['total_pairs']} ({rq1b['match_percentage']:.1f}%)")
+    print(f"   not comparable:       {rq1b['non_comparable_pairs']} "
+          f"(reported as such, not compared) - of which "
+          f"{rq1b['non_comparable_unit_mismatch']} different units, "
+          f"{rq1b['non_comparable_gap_above_tolerance']} gap > tolerance")
+    print(f"   matched pairs per seed: {rq1b['matched_pairs_per_seed']}")
+    if rq1b["comparable_pairs"]:
+        print(f"   among matched pairs: reference larger "
+              f"{rq1b['reference_larger_in_matched']}, reference smaller "
+              f"{rq1b['reference_smaller_in_matched']}, ties "
+              f"{rq1b['ties_in_matched']}")
+        # The distinction the paper must preserve: a pooled count is not
+        # by itself evidence that the pattern held in every world.
+        if rq1b["reference_larger_in_every_seed_with_matches"]:
+            print(f"   CONSISTENT ACROSS SEEDS: in each of the "
+                  f"{rq1b['seeds_with_matches']} seeds that produced matched "
+                  f"pairs,\n   the reference concept had the larger |impact| "
+                  f"in every matched pair.")
+        else:
+            print("   NOT consistent across seeds: at least one seed "
+                  "contained a matched pair\n   where the reference concept "
+                  "did not have the larger |impact| (see\n   "
+                  "matched_comparison_by_seed.csv).")
+        print("   This is a descriptive count of model sensitivity under "
+              "matched\n   counterfactual perturbations; it is not a claim "
+              "of superiority.")
+    else:
+        print("   no dominance result is reported: no pair of concepts "
+              "reached\n   comparable achieved perturbations under the "
+              "current transformation semantics")
 
     print("\nRQ2 Temporal sensitivity:")
     for key, value in results["RQ2"]["check"].items():
@@ -1062,7 +1446,10 @@ def toJson(results):
     already in the CSVs - so the file stays readable. '''
     payload = {
         "seed": BASE_SEED,
+        "match_tolerance": MATCH_TOLERANCE,
         "RQ1_faithfulness": results["RQ1"]["summary"],
+        "RQ1b_matched_comparison": results["RQ1b"]["verdict"],
+        "RQ1b_per_seed": results["RQ1b"]["per_seed"],
         "RQ2_temporal_sensitivity": results["RQ2"]["check"],
         "RQ3_stability": {
             "deterministic_repeatability": results["RQ3"]["repeatable"],
@@ -1101,6 +1488,7 @@ def toJson(results):
 def runAll():
     results = {
         "RQ1": rq1Faithfulness(),
+        "RQ1b": rq1bMatchedComparison(),
         "RQ2": rq2TemporalSensitivity(),
         "RQ3": rq3Stability(),
         "RQ4": rq4Efficiency(),

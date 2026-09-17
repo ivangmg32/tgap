@@ -231,6 +231,229 @@ class TestEvaluationHelpers(unittest.TestCase):
             pe.meanMetric(metric, tg),
             BridgeWidthTransformation(comm).propertyValue(tg))
 
+    def testNoCrossConceptRankingIsPresentedAsAnRq1Result(self):
+        ''' The methodological point: at one fixed requested delta the
+        concepts receive different achieved perturbations, so RQ1 must not
+        publish a dominance verdict. The raw ranking may be retained for
+        inspection, but not under a name that reads as a result. '''
+        with contextlib.redirect_stdout(io.StringIO()):
+            summary = pe.rq1Faithfulness(seed=11)["summary"]
+        for s in summary:
+            self.assertNotIn("dominant_correct", s)
+            self.assertNotIn("recovered_dominant", s)
+            self.assertIn("raw_ranking_unmatched", s)
+            # within-concept fidelity IS a legitimate RQ1 result
+            self.assertIn("mean_absolute_error", s)
+            self.assertIn("signs_correct", s)
+
+    def testComparableFlagRequiresMatchedAchievedChange(self):
+        ''' A row may only be marked comparable when its achieved change
+        is within tolerance of the reference concept's. '''
+        with contextlib.redirect_stdout(io.StringIO()):
+            rows = pe.rq1Faithfulness(seed=11)["rows"]
+        byModelDirection = {}
+        for r in rows:
+            if r["concept"] == r["reference_concept"] and r["achieved_delta"]:
+                byModelDirection[(r["model"], r["direction"])] = abs(
+                    r["achieved_delta"])
+        checked = 0
+        for r in rows:
+            ref = byModelDirection.get((r["model"], r["direction"]))
+            if not r["comparable"] or ref is None or not r["achieved_delta"]:
+                continue
+            gap = abs(abs(r["achieved_delta"]) - ref) / max(
+                abs(r["achieved_delta"]), ref)
+            self.assertLessEqual(gap, pe.MATCH_TOLERANCE)
+            checked += 1
+        self.assertGreater(checked, 0, "no comparable rows were exercised")
+
+
+class TestMatchedComparison(unittest.TestCase):
+    ''' RQ1b: cross-concept comparison is only allowed where the achieved
+    perturbations were actually matched. '''
+
+    def makeSweeps(self):
+        tg, comm = pe.makeWorld(seed=5)
+        model = WeightedMetricModel(
+            [(1.0, BridgeWidthMetric(comm))], mode="mean")
+        deltas = (0.05, 0.1, 0.2, 0.5)
+        bridge = pe.sweepConcept(model, tg, BridgeWidthTransformation(comm),
+                                 deltas)
+        trend = pe.sweepConcept(model, tg, BridgeTrendTransformation(comm),
+                                deltas)
+        central = pe.sweepConcept(model, tg,
+                                  CentralizationTransformation(comm), deltas)
+        return bridge, trend, central
+
+    def testDifferentDeltaModesNeverMatch(self):
+        ''' A relative ratio and a slope in edges-per-step are not in the
+        same units; no tolerance can make them comparable. '''
+        bridge, trend, _ = self.makeSweeps()
+        self.assertIsNone(pe.bestMatch(bridge, trend, "increase"))
+        self.assertIsNone(pe.bestMatch(trend, bridge, "decrease"))
+
+    def testMatchPicksClosestAchievedPair(self):
+        bridge, _, central = self.makeSweeps()
+        match = pe.bestMatch(bridge, central, "increase")
+        self.assertIsNotNone(match)
+        rowA, rowB, gap = match
+        # No other achievable pair may be closer than the one returned.
+        for a in bridge:
+            for b in central:
+                if (a["direction"] != "increase" or b["direction"] != "increase"
+                        or a["noop"] or b["noop"]
+                        or not a["achieved_delta"] or not b["achieved_delta"]):
+                    continue
+                x, y = abs(a["achieved_delta"]), abs(b["achieved_delta"])
+                self.assertLessEqual(gap - 1e-12, abs(x - y) / max(x, y))
+
+    def testNoMatchIsForcedWhenGapExceedsTolerance(self):
+        ''' bestMatch always returns its closest pair; comparability is a
+        separate decision, and a gap beyond the tolerance must not be
+        silently accepted. '''
+        bridge, _, central = self.makeSweeps()
+        match = pe.bestMatch(bridge, central, "increase")
+        _, _, gap = match
+        comparable = gap <= pe.MATCH_TOLERANCE
+        self.assertEqual(comparable, bool(gap <= pe.MATCH_TOLERANCE))
+
+    def testIncomparablePairsAreReportedNotCompared(self):
+        with contextlib.redirect_stdout(io.StringIO()):
+            rows = pe.rq1bMatchedComparison(seeds=(5,))["rows"]
+        self.assertTrue(rows)
+        for r in rows:
+            if not r["comparable"]:
+                # No verdict may be attached to a non-comparable pair.
+                self.assertIsNone(r.get("reference_larger"))
+                self.assertIn("reason", r)
+            else:
+                self.assertIsNotNone(r.get("reference_larger"))
+                self.assertLessEqual(r["achieved_gap"], pe.MATCH_TOLERANCE)
+
+    def testSlopeModelReferenceHasNoComparableCounterpart(self):
+        ''' The slope model's reference concept is the only absolute-mode
+        transformation, so nothing can be matched against it. The suite
+        must say so rather than produce a ranking. '''
+        with contextlib.redirect_stdout(io.StringIO()):
+            rows = pe.rq1bMatchedComparison(seeds=(5,))["rows"]
+        slopeRows = [r for r in rows if r["model"] == "D-slope-of-bridge"]
+        self.assertTrue(slopeRows)
+        self.assertTrue(all(not r["comparable"] for r in slopeRows))
+
+    def testMatchedComparisonIsReproducible(self):
+        with contextlib.redirect_stdout(io.StringIO()):
+            a = pe.rq1bMatchedComparison(seeds=(5,))["rows"]
+            b = pe.rq1bMatchedComparison(seeds=(5,))["rows"]
+        self.assertEqual([r.get("concept_impact") for r in a],
+                         [r.get("concept_impact") for r in b])
+
+
+class TestMatchedComparisonAcrossSeeds(unittest.TestCase):
+    ''' The multi-seed extension. These tests check IMPLEMENTATION
+    behavior - that every requested seed is actually run, that results
+    stay deterministic, and that no match is forced - not that any
+    particular scientific outcome holds in every world.
+
+    The sweep is expensive (~4 s per seed), so the shared multi-seed run
+    is computed once for the whole class. '''
+
+    SEEDS = (0, 1, 2)
+
+    @classmethod
+    def runSeeds(cls, seeds):
+        with contextlib.redirect_stdout(io.StringIO()):
+            return pe.rq1bMatchedComparison(seeds=seeds)
+
+    @classmethod
+    def setUpClass(cls):
+        cls.result = cls.runSeeds(cls.SEEDS)
+
+    def testEveryRequestedSeedIsEvaluated(self):
+        self.assertEqual(sorted({r["seed"] for r in self.result["rows"]}),
+                         list(self.SEEDS))
+        self.assertEqual(self.result["verdict"]["seeds_evaluated"],
+                         len(self.SEEDS))
+        self.assertEqual([s["seed"] for s in self.result["per_seed"]],
+                         list(self.SEEDS))
+
+    def testEverySeedContributesTheSameNumberOfPairs(self):
+        ''' The procedure is identical per world, so the number of concept
+        pairs examined must not depend on the seed - only the outcomes may. '''
+        counts = {s["seed"]: s["total_pairs"]
+                  for s in self.result["per_seed"]}
+        self.assertEqual(len(set(counts.values())), 1, counts)
+
+    def testPerSeedCountsAreInternallyConsistent(self):
+        for s in self.result["per_seed"]:
+            self.assertEqual(s["matched_pairs"] + s["non_matched_pairs"],
+                             s["total_pairs"])
+            self.assertEqual(
+                s["reference_larger"] + s["reference_smaller"] + s["ties"],
+                s["matched_pairs"])
+
+    def testPooledTotalsEqualTheSumOverSeeds(self):
+        verdict = self.result["verdict"]
+        perSeed = self.result["per_seed"]
+        self.assertEqual(verdict["comparable_pairs"],
+                         sum(s["matched_pairs"] for s in perSeed))
+        self.assertEqual(verdict["total_pairs"],
+                         sum(s["total_pairs"] for s in perSeed))
+        self.assertEqual(
+            verdict["reference_larger_in_matched"]
+            + verdict["reference_smaller_in_matched"]
+            + verdict["ties_in_matched"],
+            verdict["comparable_pairs"])
+
+    def testNoForcedMatchesInAnySeed(self):
+        ''' The no-forced-match rule must hold in every world: a pair may
+        be marked comparable only if its achieved gap is within tolerance,
+        and a non-comparable pair must carry no verdict. '''
+        for r in self.result["rows"]:
+            if r["comparable"]:
+                self.assertLessEqual(r["achieved_gap"], pe.MATCH_TOLERANCE)
+                self.assertIn(r["comparison_outcome"],
+                              ("reference_larger", "reference_smaller", "tie"))
+            else:
+                self.assertIsNone(r.get("reference_larger"))
+                self.assertIsNone(r.get("comparison_outcome"))
+
+    def testConsistencyFlagMatchesThePerSeedCounts(self):
+        ''' The "consistent across seeds" flag must be derived from the
+        per-seed numbers, not asserted independently of them. '''
+        perSeed = self.result["per_seed"]
+        withMatches = [s for s in perSeed if s["matched_pairs"] > 0]
+        expected = all(s["reference_larger"] == s["matched_pairs"]
+                       for s in withMatches)
+        self.assertEqual(
+            self.result["verdict"]
+            ["reference_larger_in_every_seed_with_matches"],
+            bool(expected and withMatches))
+
+    def testMultiSeedRunIsDeterministic(self):
+        a = self.runSeeds((0, 1))["rows"]
+        b = self.runSeeds((0, 1))["rows"]
+        self.assertEqual([(r["seed"], r["model"], r["concept"], r["direction"],
+                           r.get("concept_impact"), r["comparable"])
+                          for r in a],
+                         [(r["seed"], r["model"], r["concept"], r["direction"],
+                           r.get("concept_impact"), r["comparable"])
+                          for r in b])
+
+    def testDifferentSeedsProduceDifferentWorlds(self):
+        ''' Seeds must actually change the generated world; otherwise the
+        multi-seed evidence would be one world counted five times. The key
+        includes the model, because concept+direction alone collapses rows
+        from different models onto each other. '''
+        def fingerprint(seed):
+            return {(r["model"], r["concept"], r["direction"]):
+                    (r.get("concept_achieved_delta"),
+                     r.get("concept_impact"),
+                     r.get("reference_impact"))
+                    for r in self.runSeeds((seed,))["rows"]}
+        self.assertNotEqual(fingerprint(0), fingerprint(1))
+
+
+class TestEvaluationHelpersContinued(unittest.TestCase):
     def testFaithfulnessIsReproducible(self):
         # rq1Faithfulness prints its table; silence it so the test output
         # stays readable, and run it twice on the same seed.
