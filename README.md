@@ -19,9 +19,17 @@ cost of only `1 + 2 × properties` model calls.
 pip install -r requirements.txt
 python examples.py            # interactive charts
 python examples.py --no-show  # console only
-python -m unittest discover -s tests   # test suite (55 tests)
-python evaluation.py          # faithfulness / stability / efficiency / leakage
+python -m unittest discover -s tests   # test suite (75 tests)
+python evaluation.py          # quick check: faithfulness / stability / efficiency / leakage
+python paper_evaluation.py    # full RQ1-RQ8 suite -> output/paper/ (CSVs, figures, summary.json)
 ```
+
+`evaluation.py` is the fast developer-facing check and writes to `output/`.
+`paper_evaluation.py` is the paper artifact: eight research questions
+(known-truth faithfulness, temporal sensitivity, stability, efficiency,
+delta sensitivity, leakage, graph-size robustness, normalization
+ablation), writing CSVs, publication figures and `summary.json` to
+`output/paper/`. Neither overwrites the other's outputs.
 
 **Normalization note (v0.2):** impacts are normalized by the property
 change the transformation *actually achieved* (graphs are discrete: a
