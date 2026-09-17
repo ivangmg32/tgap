@@ -1,0 +1,11 @@
+experiment,requested_delta,direction,achieved_delta,baseline,transformed,impact,analytic_impact,normalizer,noop,seed
+RQ5,0.05,increase,0.0,8.0,8.0,0.0,8.0,requested,True,42
+RQ5,-0.05,decrease,0.0,8.0,8.0,0.0,8.0,requested,True,42
+RQ5,0.1,increase,0.125,8.0,9.0,8.0,8.0,achieved,False,42
+RQ5,-0.1,decrease,-0.125,8.0,7.0,-8.0,8.0,achieved,False,42
+RQ5,0.2,increase,0.25,8.0,10.0,8.0,8.0,achieved,False,42
+RQ5,-0.2,decrease,-0.25,8.0,6.0,-8.0,8.0,achieved,False,42
+RQ5,0.3,increase,0.25,8.0,10.0,8.0,8.0,achieved,False,42
+RQ5,-0.3,decrease,-0.25,8.0,6.0,-8.0,8.0,achieved,False,42
+RQ5,0.5,increase,0.5,8.0,12.0,8.0,8.0,achieved,False,42
+RQ5,-0.5,decrease,-0.5,8.0,4.0,-8.0,8.0,achieved,False,42

@@ -1,0 +1,214 @@
+{
+  "seed": 42,
+  "RQ1_faithfulness": [
+    {
+      "model": "A-pure-bridge (mean)",
+      "intended_dominant": "Bridge Width",
+      "recovered_dominant": "Bridge Width",
+      "dominant_correct": true,
+      "runner_up": "Bridge Trend",
+      "dominant_margin": 5.507575757575757,
+      "dominant_tied": false,
+      "exact_rows": 2,
+      "max_relative_error": 0.0,
+      "zero_rows": 6,
+      "zero_rows_exactly_zero": 6,
+      "signs_correct": 2,
+      "max_overshoot_ratio": 17.749999999999996,
+      "max_overshoot_concept": "Centralization"
+    },
+    {
+      "model": "A-persistence (last)",
+      "intended_dominant": "Bridge Width",
+      "recovered_dominant": "Bridge Width",
+      "dominant_correct": true,
+      "runner_up": "Centralization",
+      "dominant_margin": 8.0,
+      "dominant_tied": false,
+      "exact_rows": 2,
+      "max_relative_error": 0.0,
+      "zero_rows": 8,
+      "zero_rows_exactly_zero": 8,
+      "signs_correct": 2,
+      "max_overshoot_ratio": 17.749999999999996,
+      "max_overshoot_concept": "Centralization"
+    },
+    {
+      "model": "B-pure-centralization",
+      "intended_dominant": "Centralization",
+      "recovered_dominant": "Density",
+      "dominant_correct": false,
+      "runner_up": "Centralization",
+      "dominant_margin": 1.3877787807814457e-16,
+      "dominant_tied": true,
+      "exact_rows": 2,
+      "max_relative_error": 1.1268763699945338e-16,
+      "zero_rows": 0,
+      "zero_rows_exactly_zero": 0,
+      "signs_correct": 2,
+      "max_overshoot_ratio": 17.749999999999996,
+      "max_overshoot_concept": "Centralization"
+    },
+    {
+      "model": "C-weighted (2bw+3c)",
+      "intended_dominant": "Bridge Width",
+      "recovered_dominant": "Bridge Width",
+      "dominant_correct": true,
+      "runner_up": "Bridge Trend",
+      "dominant_margin": 11.11034995894909,
+      "dominant_tied": false,
+      "exact_rows": 4,
+      "max_relative_error": 0.009236453201969752,
+      "zero_rows": 0,
+      "zero_rows_exactly_zero": 0,
+      "signs_correct": 4,
+      "max_overshoot_ratio": 17.749999999999996,
+      "max_overshoot_concept": "Centralization"
+    },
+    {
+      "model": "D-slope-of-bridge",
+      "intended_dominant": "Bridge Trend",
+      "recovered_dominant": "Bridge Trend",
+      "dominant_correct": true,
+      "runner_up": "Bridge Width",
+      "dominant_margin": 0.9999999999999988,
+      "dominant_tied": false,
+      "exact_rows": 2,
+      "max_relative_error": 0.0,
+      "zero_rows": 6,
+      "zero_rows_exactly_zero": 6,
+      "signs_correct": 2,
+      "max_overshoot_ratio": 17.749999999999996,
+      "max_overshoot_concept": "Centralization"
+    }
+  ],
+  "RQ2_temporal_sensitivity": {
+    "persistence_all_zero": true,
+    "trajectory_responds_to_trend": true,
+    "trajectory_churn_zero": true
+  },
+  "RQ3_stability": {
+    "deterministic_repeatability": true,
+    "max_std_graph_seed": 0.5155027779083062,
+    "max_std_transformation_seed": 0.662196366832574
+  },
+  "RQ4_efficiency": {
+    "all_call_counts_match": true,
+    "rows": [
+      {
+        "experiment": "RQ4",
+        "path": "local explain",
+        "transformations": 1,
+        "inputs": 1,
+        "deltas": 2,
+        "expected_model_calls": 3,
+        "actual_model_calls": 3,
+        "matches_expected": true,
+        "runtime_seconds": 0.010531227104365826
+      },
+      {
+        "experiment": "RQ4",
+        "path": "local explain",
+        "transformations": 2,
+        "inputs": 1,
+        "deltas": 2,
+        "expected_model_calls": 5,
+        "actual_model_calls": 5,
+        "matches_expected": true,
+        "runtime_seconds": 0.019678757525980473
+      },
+      {
+        "experiment": "RQ4",
+        "path": "local explain",
+        "transformations": 3,
+        "inputs": 1,
+        "deltas": 2,
+        "expected_model_calls": 7,
+        "actual_model_calls": 7,
+        "matches_expected": true,
+        "runtime_seconds": 0.15757365804165602
+      },
+      {
+        "experiment": "RQ4",
+        "path": "local explain",
+        "transformations": 4,
+        "inputs": 1,
+        "deltas": 2,
+        "expected_model_calls": 9,
+        "actual_model_calls": 9,
+        "matches_expected": true,
+        "runtime_seconds": 0.03436470218002796
+      },
+      {
+        "experiment": "RQ4",
+        "path": "local explain",
+        "transformations": 5,
+        "inputs": 1,
+        "deltas": 2,
+        "expected_model_calls": 11,
+        "actual_model_calls": 11,
+        "matches_expected": true,
+        "runtime_seconds": 0.06099965237081051
+      },
+      {
+        "experiment": "RQ4",
+        "path": "global boxplot",
+        "transformations": 1,
+        "inputs": 3,
+        "deltas": 5,
+        "expected_model_calls": 18,
+        "actual_model_calls": 18,
+        "matches_expected": true,
+        "runtime_seconds": 0.7187645360827446
+      }
+    ]
+  },
+  "RQ5_delta_sensitivity": {
+    "analytic_impact": 8.0
+  },
+  "RQ6_leakage_rows": 42,
+  "RQ7_graph_size": [
+    {
+      "size": "small",
+      "n": 20,
+      "noop_rate": 0.5,
+      "threshold": 0.125,
+      "noop_matches_threshold": true,
+      "edge_count_preserved_rate": 1.0,
+      "active_rows": 10,
+      "mean_relative_error": 0.0,
+      "max_relative_error": 0.0
+    },
+    {
+      "size": "medium",
+      "n": 20,
+      "noop_rate": 0.0,
+      "threshold": 0.0625,
+      "noop_matches_threshold": true,
+      "edge_count_preserved_rate": 1.0,
+      "active_rows": 20,
+      "mean_relative_error": 0.0,
+      "max_relative_error": 0.0
+    },
+    {
+      "size": "large",
+      "n": 20,
+      "noop_rate": 0.0,
+      "threshold": 0.041666666666666664,
+      "noop_matches_threshold": true,
+      "edge_count_preserved_rate": 1.0,
+      "active_rows": 20,
+      "mean_relative_error": 0.0,
+      "max_relative_error": 0.0
+    }
+  ],
+  "RQ8_normalization": {
+    "analytic_impact": 8.0,
+    "active_rows": 8,
+    "total_rows": 10,
+    "mean_error_achieved_active": 0.0,
+    "mean_error_requested_active": 1.3333333333333333,
+    "mean_error_achieved_all": 1.6,
+    "mean_error_requested_all": 2.6666666666666665
+  }
+}
