@@ -1,0 +1,6 @@
+seed,total_pairs,matched_pairs,non_matched_pairs,match_percentage,reference_larger,reference_smaller,ties
+0,40,24,16,60.0,24,0,0
+1,40,24,16,60.0,24,0,0
+2,40,24,16,60.0,24,0,0
+3,40,24,16,60.0,24,0,0
+4,40,24,16,60.0,23,1,0
