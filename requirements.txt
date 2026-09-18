@@ -1,0 +1,7 @@
+# TGAP dependencies. Install with:  pip install -r requirements.txt
+networkx>=3.0      # graphs: data structure, metrics, community detection
+scipy>=1.10        # algebraic connectivity (CohesionMetric)
+numpy>=1.24        # numerics (trend fitting, delta sweeps)
+pandas>=2.0        # tabular results for the global boxplots
+plotly>=5.0        # interactive charts (same visual stack as TSAP)
+matplotlib>=3.6    # static publication figures written by paper_evaluation.py

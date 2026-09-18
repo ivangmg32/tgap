@@ -1,0 +1,325 @@
+{
+  "seed": 42,
+  "match_tolerance": 0.1,
+  "RQ1_faithfulness": [
+    {
+      "model": "A-pure-bridge (mean)",
+      "reference_concept": "Bridge Width",
+      "exact_rows": 2,
+      "signs_correct": 2,
+      "mean_absolute_error": 0.0,
+      "mean_relative_error": 0.0,
+      "max_relative_error": 0.0,
+      "zero_rows": 6,
+      "zero_rows_exactly_zero": 6,
+      "comparable_rows": 0,
+      "non_comparable_rows": 8,
+      "raw_ranking_unmatched": [
+        "Bridge Width",
+        "Bridge Trend",
+        "Centralization",
+        "Density",
+        "Churn"
+      ],
+      "max_overshoot_ratio": 17.749999999999996,
+      "max_overshoot_concept": "Centralization"
+    },
+    {
+      "model": "A-persistence (last)",
+      "reference_concept": "Bridge Width",
+      "exact_rows": 2,
+      "signs_correct": 2,
+      "mean_absolute_error": 0.0,
+      "mean_relative_error": 0.0,
+      "max_relative_error": 0.0,
+      "zero_rows": 8,
+      "zero_rows_exactly_zero": 8,
+      "comparable_rows": 0,
+      "non_comparable_rows": 8,
+      "raw_ranking_unmatched": [
+        "Bridge Width",
+        "Centralization",
+        "Density",
+        "Bridge Trend",
+        "Churn"
+      ],
+      "max_overshoot_ratio": 17.749999999999996,
+      "max_overshoot_concept": "Centralization"
+    },
+    {
+      "model": "B-pure-centralization",
+      "reference_concept": "Centralization",
+      "exact_rows": 2,
+      "signs_correct": 2,
+      "mean_absolute_error": 6.938893903907228e-18,
+      "mean_relative_error": 5.634381849972669e-17,
+      "max_relative_error": 1.1268763699945338e-16,
+      "zero_rows": 0,
+      "zero_rows_exactly_zero": 0,
+      "comparable_rows": 0,
+      "non_comparable_rows": 8,
+      "raw_ranking_unmatched": [
+        "Density",
+        "Centralization",
+        "Bridge Width",
+        "Bridge Trend",
+        "Churn"
+      ],
+      "max_overshoot_ratio": 17.749999999999996,
+      "max_overshoot_concept": "Centralization"
+    },
+    {
+      "model": "C-weighted (2bw+3c)",
+      "reference_concept": "Bridge Width",
+      "exact_rows": 4,
+      "signs_correct": 4,
+      "mean_absolute_error": 0.03694581280787955,
+      "mean_relative_error": 0.002309113300493903,
+      "max_relative_error": 0.009236453201969752,
+      "zero_rows": 0,
+      "zero_rows_exactly_zero": 0,
+      "comparable_rows": 0,
+      "non_comparable_rows": 8,
+      "raw_ranking_unmatched": [
+        "Bridge Width",
+        "Bridge Trend",
+        "Centralization",
+        "Density",
+        "Churn"
+      ],
+      "max_overshoot_ratio": 17.749999999999996,
+      "max_overshoot_concept": "Centralization"
+    },
+    {
+      "model": "D-slope-of-bridge",
+      "reference_concept": "Bridge Trend",
+      "exact_rows": 2,
+      "signs_correct": 2,
+      "mean_absolute_error": 0.0,
+      "mean_relative_error": 0.0,
+      "max_relative_error": 0.0,
+      "zero_rows": 6,
+      "zero_rows_exactly_zero": 6,
+      "comparable_rows": 0,
+      "non_comparable_rows": 8,
+      "raw_ranking_unmatched": [
+        "Bridge Trend",
+        "Bridge Width",
+        "Centralization",
+        "Density",
+        "Churn"
+      ],
+      "max_overshoot_ratio": 17.749999999999996,
+      "max_overshoot_concept": "Centralization"
+    }
+  ],
+  "RQ1b_matched_comparison": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "seeds_evaluated": 5,
+    "total_pairs": 200,
+    "comparable_pairs": 120,
+    "non_comparable_pairs": 80,
+    "match_percentage": 60.0,
+    "reference_larger_in_matched": 119,
+    "reference_smaller_in_matched": 1,
+    "ties_in_matched": 0,
+    "matched_pairs_per_seed": {
+      "0": 24,
+      "1": 24,
+      "2": 24,
+      "3": 24,
+      "4": 24
+    },
+    "seeds_with_matches": 5,
+    "reference_larger_in_every_seed_with_matches": false,
+    "non_comparable_unit_mismatch": 80,
+    "non_comparable_gap_above_tolerance": 0
+  },
+  "RQ1b_per_seed": [
+    {
+      "seed": 0,
+      "total_pairs": 40,
+      "matched_pairs": 24,
+      "non_matched_pairs": 16,
+      "match_percentage": 60.0,
+      "reference_larger": 24,
+      "reference_smaller": 0,
+      "ties": 0
+    },
+    {
+      "seed": 1,
+      "total_pairs": 40,
+      "matched_pairs": 24,
+      "non_matched_pairs": 16,
+      "match_percentage": 60.0,
+      "reference_larger": 24,
+      "reference_smaller": 0,
+      "ties": 0
+    },
+    {
+      "seed": 2,
+      "total_pairs": 40,
+      "matched_pairs": 24,
+      "non_matched_pairs": 16,
+      "match_percentage": 60.0,
+      "reference_larger": 24,
+      "reference_smaller": 0,
+      "ties": 0
+    },
+    {
+      "seed": 3,
+      "total_pairs": 40,
+      "matched_pairs": 24,
+      "non_matched_pairs": 16,
+      "match_percentage": 60.0,
+      "reference_larger": 24,
+      "reference_smaller": 0,
+      "ties": 0
+    },
+    {
+      "seed": 4,
+      "total_pairs": 40,
+      "matched_pairs": 24,
+      "non_matched_pairs": 16,
+      "match_percentage": 60.0,
+      "reference_larger": 23,
+      "reference_smaller": 1,
+      "ties": 0
+    }
+  ],
+  "RQ2_temporal_sensitivity": {
+    "persistence_all_zero": true,
+    "trajectory_responds_to_trend": true,
+    "trajectory_churn_zero": true
+  },
+  "RQ3_stability": {
+    "deterministic_repeatability": true,
+    "max_std_graph_seed": 0.5155027779083062,
+    "max_std_transformation_seed": 0.662196366832574
+  },
+  "RQ4_efficiency": {
+    "all_call_counts_match": true,
+    "rows": [
+      {
+        "experiment": "RQ4",
+        "path": "local explain",
+        "transformations": 1,
+        "inputs": 1,
+        "deltas": 2,
+        "expected_model_calls": 3,
+        "actual_model_calls": 3,
+        "matches_expected": true,
+        "runtime_seconds": 0.015872128307819366
+      },
+      {
+        "experiment": "RQ4",
+        "path": "local explain",
+        "transformations": 2,
+        "inputs": 1,
+        "deltas": 2,
+        "expected_model_calls": 5,
+        "actual_model_calls": 5,
+        "matches_expected": true,
+        "runtime_seconds": 0.01828863751143217
+      },
+      {
+        "experiment": "RQ4",
+        "path": "local explain",
+        "transformations": 3,
+        "inputs": 1,
+        "deltas": 2,
+        "expected_model_calls": 7,
+        "actual_model_calls": 7,
+        "matches_expected": true,
+        "runtime_seconds": 0.031673300080001354
+      },
+      {
+        "experiment": "RQ4",
+        "path": "local explain",
+        "transformations": 4,
+        "inputs": 1,
+        "deltas": 2,
+        "expected_model_calls": 9,
+        "actual_model_calls": 9,
+        "matches_expected": true,
+        "runtime_seconds": 0.04409890063107014
+      },
+      {
+        "experiment": "RQ4",
+        "path": "local explain",
+        "transformations": 5,
+        "inputs": 1,
+        "deltas": 2,
+        "expected_model_calls": 11,
+        "actual_model_calls": 11,
+        "matches_expected": true,
+        "runtime_seconds": 0.05908180959522724
+      },
+      {
+        "experiment": "RQ4",
+        "path": "global boxplot",
+        "transformations": 1,
+        "inputs": 3,
+        "deltas": 5,
+        "expected_model_calls": 18,
+        "actual_model_calls": 18,
+        "matches_expected": true,
+        "runtime_seconds": 0.7351590767502785
+      }
+    ]
+  },
+  "RQ5_delta_sensitivity": {
+    "analytic_impact": 8.0
+  },
+  "RQ6_leakage_rows": 42,
+  "RQ7_graph_size": [
+    {
+      "size": "small",
+      "n": 20,
+      "noop_rate": 0.5,
+      "threshold": 0.125,
+      "noop_matches_threshold": true,
+      "edge_count_preserved_rate": 1.0,
+      "active_rows": 10,
+      "mean_relative_error": 0.0,
+      "max_relative_error": 0.0
+    },
+    {
+      "size": "medium",
+      "n": 20,
+      "noop_rate": 0.0,
+      "threshold": 0.0625,
+      "noop_matches_threshold": true,
+      "edge_count_preserved_rate": 1.0,
+      "active_rows": 20,
+      "mean_relative_error": 0.0,
+      "max_relative_error": 0.0
+    },
+    {
+      "size": "large",
+      "n": 20,
+      "noop_rate": 0.0,
+      "threshold": 0.041666666666666664,
+      "noop_matches_threshold": true,
+      "edge_count_preserved_rate": 1.0,
+      "active_rows": 20,
+      "mean_relative_error": 0.0,
+      "max_relative_error": 0.0
+    }
+  ],
+  "RQ8_normalization": {
+    "analytic_impact": 8.0,
+    "active_rows": 8,
+    "total_rows": 10,
+    "mean_error_achieved_active": 0.0,
+    "mean_error_requested_active": 1.3333333333333333,
+    "mean_error_achieved_all": 1.6,
+    "mean_error_requested_all": 2.6666666666666665
+  }
+}

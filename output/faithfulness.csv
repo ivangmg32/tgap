@@ -1,0 +1,5 @@
+model,dominant recovered,signs agree,mean magnitude error %,spearman rho
+pure-bridge  (pred = bw),True,True,0.0,1.0
+bridge+cent  (pred = 2bw+3c),True,True,0.42,1.0
+pure-cent    (pred = c),True,True,0.85,1.0
+trend-of-bw  (pred = slope bw),True,True,0.0,1.0

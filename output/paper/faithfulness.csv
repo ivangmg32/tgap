@@ -1,0 +1,51 @@
+experiment,model,concept,direction,expectation_kind,expected,expected_full,measured,absolute_error,relative_error,sign_correct,achieved_delta,requested_delta_value,overshoot_ratio,normalizer,noop,reference_concept,comparable,seed
+RQ1,A-pure-bridge (mean),Bridge Width,increase,exact,8.0,8.0,8.0,0.0,0.0,True,0.125,0.1,1.25,achieved,False,Bridge Width,True,42
+RQ1,A-pure-bridge (mean),Bridge Width,decrease,exact,-8.0,-8.0,-8.0,0.0,0.0,True,-0.125,-0.1,1.25,achieved,False,Bridge Width,True,42
+RQ1,A-pure-bridge (mean),Centralization,increase,zero,0.0,0.0,0.0,0.0,,True,2.9499999999999993,0.1,29.499999999999993,achieved,False,Bridge Width,False,42
+RQ1,A-pure-bridge (mean),Centralization,decrease,zero,-0.0,0.0,0.0,0.0,,True,-0.6,-0.1,5.999999999999999,achieved,False,Bridge Width,False,42
+RQ1,A-pure-bridge (mean),Density,increase,zero,0.0,0.0,0.0,0.0,,True,0.1,0.1,1.0,achieved,False,Bridge Width,False,42
+RQ1,A-pure-bridge (mean),Density,decrease,zero,-0.0,0.0,0.0,0.0,,True,-0.1,-0.1,1.0,achieved,False,Bridge Width,False,42
+RQ1,A-pure-bridge (mean),Bridge Trend,increase,measured,,-2.651515151515153,-2.651515151515153,,,,0.6285714285714283,0.1,6.285714285714283,achieved,False,Bridge Width,False,42
+RQ1,A-pure-bridge (mean),Bridge Trend,decrease,measured,,2.333333333333333,2.333333333333333,,,,-1.1428571428571428,-0.1,11.428571428571427,achieved,False,Bridge Width,False,42
+RQ1,A-pure-bridge (mean),Churn,increase,zero,0.0,0.0,0.0,0.0,,True,0.5226365877851986,0.1,5.226365877851986,achieved,False,Bridge Width,False,42
+RQ1,A-pure-bridge (mean),Churn,decrease,zero,-0.0,0.0,0.0,0.0,,True,-0.07907008057352824,-0.1,0.7907008057352823,achieved,False,Bridge Width,False,42
+RQ1,A-persistence (last),Bridge Width,increase,exact,8.0,8.0,8.0,0.0,0.0,True,0.125,0.1,1.25,achieved,False,Bridge Width,True,42
+RQ1,A-persistence (last),Bridge Width,decrease,exact,-8.0,-8.0,-8.0,0.0,0.0,True,-0.125,-0.1,1.25,achieved,False,Bridge Width,True,42
+RQ1,A-persistence (last),Centralization,increase,zero,0.0,0.0,0.0,0.0,,True,2.9499999999999993,0.1,29.499999999999993,achieved,False,Bridge Width,False,42
+RQ1,A-persistence (last),Centralization,decrease,zero,-0.0,0.0,0.0,0.0,,True,-0.6,-0.1,5.999999999999999,achieved,False,Bridge Width,False,42
+RQ1,A-persistence (last),Density,increase,zero,0.0,0.0,0.0,0.0,,True,0.1,0.1,1.0,achieved,False,Bridge Width,False,42
+RQ1,A-persistence (last),Density,decrease,zero,-0.0,0.0,0.0,0.0,,True,-0.1,-0.1,1.0,achieved,False,Bridge Width,False,42
+RQ1,A-persistence (last),Bridge Trend,increase,zero,0.0,-2.651515151515153,0.0,0.0,,True,0.6285714285714283,0.1,6.285714285714283,achieved,False,Bridge Width,False,42
+RQ1,A-persistence (last),Bridge Trend,decrease,zero,-0.0,2.333333333333333,0.0,0.0,,True,-1.1428571428571428,-0.1,11.428571428571427,achieved,False,Bridge Width,False,42
+RQ1,A-persistence (last),Churn,increase,zero,0.0,0.0,0.0,0.0,,True,0.5226365877851986,0.1,5.226365877851986,achieved,False,Bridge Width,False,42
+RQ1,A-persistence (last),Churn,decrease,zero,-0.0,0.0,0.0,0.0,,True,-0.07907008057352824,-0.1,0.7907008057352823,achieved,False,Bridge Width,False,42
+RQ1,B-pure-centralization,Bridge Width,increase,measured,,0.04926108374384219,0.04926108374384219,,,,0.125,0.1,1.25,achieved,False,Centralization,False,42
+RQ1,B-pure-centralization,Bridge Width,decrease,measured,,0.0,0.0,,,,-0.125,-0.1,1.25,achieved,False,Centralization,False,42
+RQ1,B-pure-centralization,Centralization,increase,exact,0.12315270935960591,0.12315270935960591,0.12315270935960591,0.0,0.0,True,2.9499999999999993,0.1,29.499999999999993,achieved,False,Centralization,True,42
+RQ1,B-pure-centralization,Centralization,decrease,exact,-0.12315270935960591,-0.1231527093596059,-0.1231527093596059,1.3877787807814457e-17,1.1268763699945338e-16,True,-0.6,-0.1,5.999999999999999,achieved,False,Centralization,True,42
+RQ1,B-pure-centralization,Density,increase,measured,,0.06157635467980302,0.06157635467980302,,,,0.1,0.1,1.0,achieved,False,Centralization,False,42
+RQ1,B-pure-centralization,Density,decrease,measured,,0.18472906403940906,0.18472906403940906,,,,-0.1,-0.1,1.0,achieved,False,Centralization,False,42
+RQ1,B-pure-centralization,Bridge Trend,increase,measured,,0.019592476489028173,0.019592476489028173,,,,0.6285714285714283,0.1,6.285714285714283,achieved,False,Centralization,False,42
+RQ1,B-pure-centralization,Bridge Trend,decrease,measured,,0.00538793103448274,0.00538793103448274,,,,-1.1428571428571428,-0.1,11.428571428571427,achieved,False,Centralization,False,42
+RQ1,B-pure-centralization,Churn,increase,measured,,-0.011781868341967408,-0.011781868341967408,,,,0.5226365877851986,0.1,5.226365877851986,achieved,False,Centralization,False,42
+RQ1,B-pure-centralization,Churn,decrease,measured,,0.0,0.0,,,,-0.07907008057352824,-0.1,0.7907008057352823,achieved,False,Centralization,False,42
+RQ1,C-weighted (2bw+3c),Bridge Width,increase,exact,16.0,16.147783251231527,16.147783251231516,0.14778325123151603,0.009236453201969752,True,0.125,0.1,1.25,achieved,False,Bridge Width,True,42
+RQ1,C-weighted (2bw+3c),Bridge Width,decrease,exact,-16.0,-16.0,-16.0,0.0,0.0,True,-0.125,-0.1,1.25,achieved,False,Bridge Width,True,42
+RQ1,C-weighted (2bw+3c),Centralization,increase,exact,0.3694581280788177,0.3694581280788177,0.3694581280788179,1.6653345369377348e-16,4.507505479978136e-16,True,2.9499999999999993,0.1,29.499999999999993,achieved,False,Bridge Width,False,42
+RQ1,C-weighted (2bw+3c),Centralization,decrease,exact,-0.3694581280788177,-0.3694581280788177,-0.3694581280788197,1.9984014443252818e-15,5.4090065759737625e-15,True,-0.6,-0.1,5.999999999999999,achieved,False,Bridge Width,False,42
+RQ1,C-weighted (2bw+3c),Density,increase,measured,,0.18472906403940906,0.18472906403939504,,,,0.1,0.1,1.0,achieved,False,Bridge Width,False,42
+RQ1,C-weighted (2bw+3c),Density,decrease,measured,,0.5541871921182271,0.5541871921182207,,,,-0.1,-0.1,1.0,achieved,False,Bridge Width,False,42
+RQ1,C-weighted (2bw+3c),Bridge Trend,increase,measured,,-5.244252873563221,-5.244252873563223,,,,0.6285714285714283,0.1,6.285714285714283,achieved,False,Bridge Width,False,42
+RQ1,C-weighted (2bw+3c),Bridge Trend,decrease,measured,,4.682830459770114,4.682830459770113,,,,-1.1428571428571428,-0.1,11.428571428571427,achieved,False,Bridge Width,False,42
+RQ1,C-weighted (2bw+3c),Churn,increase,measured,,-0.03534560502590223,-0.03534560502590634,,,,0.5226365877851986,0.1,5.226365877851986,achieved,False,Bridge Width,False,42
+RQ1,C-weighted (2bw+3c),Churn,decrease,measured,,0.0,0.0,,,,-0.07907008057352824,-0.1,0.7907008057352823,achieved,False,Bridge Width,False,42
+RQ1,D-slope-of-bridge,Bridge Width,increase,measured,,,-8.944859723915713e-16,,,,0.125,0.1,1.25,achieved,False,Bridge Trend,False,42
+RQ1,D-slope-of-bridge,Bridge Width,decrease,measured,,,-1.5829447121832076e-15,,,,-0.125,-0.1,1.25,achieved,False,Bridge Trend,False,42
+RQ1,D-slope-of-bridge,Centralization,increase,zero,0.0,,0.0,0.0,,True,2.9499999999999993,0.1,29.499999999999993,achieved,False,Bridge Trend,False,42
+RQ1,D-slope-of-bridge,Centralization,decrease,zero,-0.0,,0.0,0.0,,True,-0.6,-0.1,5.999999999999999,achieved,False,Bridge Trend,False,42
+RQ1,D-slope-of-bridge,Density,increase,zero,0.0,,0.0,0.0,,True,0.1,0.1,1.0,achieved,False,Bridge Trend,False,42
+RQ1,D-slope-of-bridge,Density,decrease,zero,-0.0,,0.0,0.0,,True,-0.1,-0.1,1.0,achieved,False,Bridge Trend,False,42
+RQ1,D-slope-of-bridge,Bridge Trend,increase,exact,1.0,,1.0,0.0,0.0,True,0.6285714285714283,0.1,6.285714285714283,achieved,False,Bridge Trend,True,42
+RQ1,D-slope-of-bridge,Bridge Trend,decrease,exact,-1.0,,-1.0,0.0,0.0,True,-1.1428571428571428,-0.1,11.428571428571427,achieved,False,Bridge Trend,True,42
+RQ1,D-slope-of-bridge,Churn,increase,zero,0.0,,0.0,0.0,,True,0.5226365877851986,0.1,5.226365877851986,achieved,False,Bridge Trend,False,42
+RQ1,D-slope-of-bridge,Churn,decrease,zero,-0.0,,0.0,0.0,,True,-0.07907008057352824,-0.1,0.7907008057352823,achieved,False,Bridge Trend,False,42
