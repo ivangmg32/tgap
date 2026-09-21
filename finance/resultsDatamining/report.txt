@@ -1,0 +1,48 @@
+Data-mining experimentation report
+===================================
+
+RQ1 median synchronization threshold: 0.2959634334758635
+
+RQ1 comparisons:
+                 metric  low_n  high_n  ...   p_value  cohens_d  permutation_p_value
+0               density     10      10  ...       NaN       NaN             1.000000
+1    average_clustering     10      10  ...       NaN       NaN             1.000000
+2  strong_edge_fraction     10      10  ...  0.007249  1.537703             0.001998
+
+[3 rows x 13 columns]
+
+RQ2 density association:
+Spearman rho = nan
+Spearman p-value = nan
+OLS R-squared = nan
+
+RQ3 sector analysis:
+    observed_within_minus_cross  null_mean  null_std  permutation_p_value  null_iterations
+0                      0.486166   0.003824  0.175164             0.010995             2000
+1                      0.473007  -0.004037  0.186496             0.009995             2000
+2                      0.400727   0.002458  0.189377             0.018991             2000
+3                      0.339811   0.002035  0.148625             0.009995             2000
+4                      0.284920   0.000989  0.120809             0.033983             2000
+5                      0.312885   0.002304  0.128330             0.045477             2000
+6                      0.258705   0.000726  0.096525             0.031984             2000
+7                      0.273595  -0.000084  0.103703             0.023488             2000
+8                      0.305080   0.004837  0.121028             0.077961             2000
+9                      0.205070  -0.001205  0.107920             0.053473             2000
+10                     0.160595   0.001474  0.094476             0.067966             2000
+11                     0.222079  -0.002867  0.102340             0.039980             2000
+12                     0.207507   0.002542  0.110325             0.062969             2000
+13                     0.202884   0.001492  0.130906             0.122439             2000
+14                     0.174672   0.002304  0.145190             0.283858             2000
+15                     0.198309   0.000589  0.152440             0.246377             2000
+16                     0.084654  -0.000586  0.072433             0.262369             2000
+17                     0.073892  -0.000313  0.071506             0.315842             2000
+18                     0.024918  -0.000745  0.076802             0.778611             2000
+19                    -0.046958   0.000901  0.073104             0.487256             2000
+
+RQ4 null model:
+Observed mean = 0.32612283808665465
+Null mean = 0.3261228380866546
+Null standard deviation = 0.11393360481178424
+Standardized difference = 4.872236889455135e-16
+
+Null model: edge weights are permuted within each graph. Graph topology is preserved, but temporal return structure is not modeled because CorrGraph.py does not retain returns.

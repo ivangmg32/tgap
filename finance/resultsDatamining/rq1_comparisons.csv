@@ -1,0 +1,4 @@
+metric,low_n,high_n,low_mean,high_mean,difference_high_minus_low,bootstrap_ci_low,bootstrap_ci_high,difference,t_statistic,p_value,cohens_d,permutation_p_value
+density,10,10,1.0,1.0,0.0,0.0,0.0,0.0,,,,1.0
+average_clustering,10,10,1.0,1.0,0.0,0.0,0.0,0.0,,,,1.0
+strong_edge_fraction,10,10,0.0035714285714285713,0.14642857142857144,0.14285714285714288,0.0642857142857143,0.22142857142857145,0.14285714285714288,3.438409530367517,0.00724855390594563,1.5377034888769792,0.001998001998001998
