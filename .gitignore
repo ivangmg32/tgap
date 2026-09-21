@@ -1,5 +1,5 @@
 # Project-specific folder ignores
-./finance/Cache/
+finance/Cache/*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
