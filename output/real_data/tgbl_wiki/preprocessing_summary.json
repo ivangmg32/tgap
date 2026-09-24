@@ -1,0 +1,19 @@
+{
+  "projection": "one-mode, onto pages (see module docstring for why the user-user projection was rejected as too sparse)",
+  "top_items_kept": 100,
+  "items_dropped": 900,
+  "events_kept": 43764,
+  "events_dropped": 113710,
+  "events_dropped_fraction": 0.7220874557069739,
+  "window_days": 2,
+  "fixed_node_set": true,
+  "isolated_nodes_included": true,
+  "partition_source": "greedy modularity on the aggregate graph",
+  "partition_sizes": [
+    38,
+    62
+  ],
+  "aggregate_edges": 1210,
+  "cohesion_usable": false,
+  "cohesion_note": "snapshots contain isolated inactive pages, so they are disconnected and algebraic connectivity is 0; cohesion is not used as a prediction target"
+}

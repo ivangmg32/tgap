@@ -1,0 +1,21 @@
+dataset,analysis_mode,transformation,property,before,after,change,delta,transformation_status,valid_for_analysis
+email_eu_core,temporal_evaluation,Bridge Width,bridge width,81.16666666666667,89.33333333333333,8.166666666666657,0.1,ok,True
+email_eu_core,temporal_evaluation,Bridge Width,centralization,0.05273869346733668,0.0497927135678392,-0.002945979899497478,0.1,ok,True
+email_eu_core,temporal_evaluation,Bridge Width,density,0.007786069651741293,0.007786069651741293,0.0,0.1,ok,True
+email_eu_core,temporal_evaluation,Bridge Width,clustering,0.10024448053844416,0.08530237849816426,-0.014942102040279903,0.1,ok,True
+email_eu_core,temporal_evaluation,Centralization,bridge width,81.16666666666667,81.16666666666667,0.0,0.1,ok,True
+email_eu_core,temporal_evaluation,Centralization,centralization,0.05273869346733668,0.13185929648241207,0.0791206030150754,0.1,ok,True
+email_eu_core,temporal_evaluation,Centralization,density,0.007786069651741293,0.007786069651741293,0.0,0.1,ok,True
+email_eu_core,temporal_evaluation,Centralization,clustering,0.10024448053844416,0.0894997273579541,-0.010744753180490063,0.1,ok,True
+email_eu_core,temporal_evaluation,Density,bridge width,81.16666666666667,81.16666666666667,0.0,0.1,ok,True
+email_eu_core,temporal_evaluation,Density,centralization,0.05273869346733668,0.05404731993299833,0.0013086264656616484,0.1,ok,True
+email_eu_core,temporal_evaluation,Density,density,0.007786069651741293,0.00857379767827529,0.000787728026533996,0.1,ok,True
+email_eu_core,temporal_evaluation,Density,clustering,0.10024448053844416,0.09576820987655747,-0.004476270661886689,0.1,ok,True
+email_eu_core,temporal_evaluation,Bridge Trend,bridge width,81.16666666666667,49.833333333333336,-31.333333333333336,0.1,ok,True
+email_eu_core,temporal_evaluation,Bridge Trend,centralization,0.05273869346733668,0.04474246231155778,-0.007996231155778896,0.1,ok,True
+email_eu_core,temporal_evaluation,Bridge Trend,density,0.007786069651741293,0.007786069651741293,0.0,0.1,ok,True
+email_eu_core,temporal_evaluation,Bridge Trend,clustering,0.10024448053844416,0.0617033451189875,-0.03854113541945666,0.1,ok,True
+email_eu_core,temporal_evaluation,Churn,bridge width,81.16666666666667,81.16666666666667,0.0,0.1,ok,True
+email_eu_core,temporal_evaluation,Churn,centralization,0.05273869346733668,0.05273869346733668,0.0,0.1,ok,True
+email_eu_core,temporal_evaluation,Churn,density,0.007786069651741293,0.007786069651741293,0.0,0.1,ok,True
+email_eu_core,temporal_evaluation,Churn,clustering,0.10024448053844416,0.09937864400718475,-0.0008658365312594063,0.1,ok,True

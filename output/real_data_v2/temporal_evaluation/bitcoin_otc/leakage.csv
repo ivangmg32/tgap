@@ -1,0 +1,21 @@
+dataset,analysis_mode,transformation,property,before,after,change,delta,transformation_status,valid_for_analysis
+bitcoin_otc,temporal_evaluation,Bridge Width,bridge width,8.642857142857142,9.5,0.8571428571428577,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Bridge Width,centralization,0.039717581948033445,0.03788634097706879,-0.0018312409709646538,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Bridge Width,density,0.0029611844737895154,0.0029611844737895154,0.0,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Bridge Width,clustering,0.011085600907029479,0.008824095877667306,-0.002261505029362173,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Centralization,bridge width,8.642857142857142,8.642857142857142,0.0,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Centralization,centralization,0.039717581948033445,0.056809164343703575,0.01709158239567013,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Centralization,density,0.0029611844737895154,0.0029611844737895154,0.0,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Centralization,clustering,0.011085600907029479,0.015016342262582862,0.003930741355553383,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Density,bridge width,8.642857142857142,8.642857142857142,0.0,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Density,centralization,0.039717581948033445,0.040043135898427167,0.0003255539503937213,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Density,density,0.0029611844737895154,0.0032412965186074424,0.00028011204481792704,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Density,clustering,0.011085600907029479,0.011624622071050644,0.0005390211640211653,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Bridge Trend,bridge width,8.642857142857142,6.285714285714286,-2.3571428571428568,0.1,saturated,False
+bitcoin_otc,temporal_evaluation,Bridge Trend,centralization,0.039717581948033445,0.03910716829104523,-0.0006104136569882179,0.1,saturated,False
+bitcoin_otc,temporal_evaluation,Bridge Trend,density,0.0029611844737895154,0.0029611844737895154,0.0,0.1,saturated,False
+bitcoin_otc,temporal_evaluation,Bridge Trend,clustering,0.011085600907029479,0.008851822780394208,-0.0022337781266352705,0.1,saturated,False
+bitcoin_otc,temporal_evaluation,Churn,bridge width,8.642857142857142,8.642857142857142,0.0,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Churn,centralization,0.039717581948033445,0.039717581948033445,0.0,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Churn,density,0.0029611844737895154,0.0029611844737895154,0.0,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Churn,clustering,0.011085600907029479,0.011085600907029479,0.0,0.1,ok,True

@@ -1,0 +1,181 @@
+dataset,snapshot_count,model,transformation,direction,requested_delta,achieved_delta,delta_mode,baseline_prediction,after_prediction,prediction_change,impact,normalizer,noop,seed
+tgbl_wiki,16,persistence_bridge_width,Bridge Width,increase,0.1,0.09769335142469471,relative,16.0,18.0,2.0,20.47222222222222,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Bridge Width,decrease,-0.1,-0.09769335142469471,relative,16.0,14.0,-2.0,-20.47222222222222,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Centralization,increase,0.1,0.7025291047771982,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Centralization,decrease,-0.1,-0.3412284223203533,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Density,increase,0.1,0.10023866348448687,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Density,decrease,-0.1,-0.10023866348448687,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Bridge Trend,increase,0.1,1.482352941176471,absolute,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Bridge Trend,decrease,-0.1,-13.542647058823526,absolute,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Churn,increase,0.1,0.0052284595494757734,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Churn,decrease,-0.1,-0.0904048420354766,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Bridge Width,increase,0.25,0.2510176390773406,relative,16.0,20.0,4.0,15.935135135135134,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Bridge Width,decrease,-0.25,-0.2510176390773406,relative,16.0,12.0,-4.0,-15.935135135135134,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Centralization,increase,0.25,0.9112806101967083,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Centralization,decrease,-0.25,-0.5258932155760738,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Density,increase,0.25,0.25011933174224343,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Density,decrease,-0.25,-0.25011933174224343,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Bridge Trend,increase,0.25,0.902941176470589,absolute,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Bridge Trend,decrease,-0.25,-176.11617647058821,absolute,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Churn,increase,0.25,0.01260835885707534,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Churn,decrease,-0.25,-0.2094488817384419,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Bridge Width,increase,0.5,0.4993215739484396,relative,16.0,24.0,8.0,16.02173913043478,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Bridge Width,decrease,-0.5,-0.4993215739484396,relative,16.0,8.0,-8.0,-16.02173913043478,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Centralization,increase,0.5,0.9112806101967083,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Centralization,decrease,-0.5,-0.6623845845042151,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Density,increase,0.5,0.49976133651551313,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Density,decrease,-0.5,-0.49260143198090695,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Bridge Trend,increase,0.5,0.06176470588235383,absolute,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Bridge Trend,decrease,-0.5,-171.45735294117648,absolute,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Churn,increase,0.5,0.026166692503588294,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_bridge_width,Churn,decrease,-0.5,-0.2703074886653946,relative,16.0,16.0,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Width,increase,0.1,0.09769335142469471,relative,61.400000000000006,67.45000000000002,6.050000000000011,61.92847222222234,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Width,decrease,-0.1,-0.09769335142469471,relative,61.400000000000006,55.35000000000001,-6.049999999999997,-61.92847222222219,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Centralization,increase,0.1,0.7025291047771982,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Centralization,decrease,-0.1,-0.3412284223203533,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Density,increase,0.1,0.10023866348448687,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Density,decrease,-0.1,-0.10023866348448687,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Trend,increase,0.1,1.482352941176471,absolute,61.400000000000006,51.5,-9.900000000000006,-6.67857142857143,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Trend,decrease,-0.1,-13.542647058823526,absolute,61.400000000000006,30.475000000000108,-30.924999999999898,-2.2835269844717057,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Churn,increase,0.1,0.0052284595494757734,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Churn,decrease,-0.1,-0.0904048420354766,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Width,increase,0.25,0.2510176390773406,relative,61.400000000000006,77.15000000000003,15.750000000000028,62.7445945945947,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Width,decrease,-0.25,-0.2510176390773406,relative,61.400000000000006,45.650000000000006,-15.75,-62.74459459459459,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Centralization,increase,0.25,0.9112806101967083,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Centralization,decrease,-0.25,-0.5258932155760738,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Density,increase,0.25,0.25011933174224343,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Density,decrease,-0.25,-0.25011933174224343,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Trend,increase,0.25,0.902941176470589,absolute,61.400000000000006,37.075,-24.325000000000003,-26.939739413680762,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Trend,decrease,-0.25,-176.11617647058821,absolute,61.400000000000006,-582.8999999999987,-644.2999999999987,-3.6583805810001686,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Churn,increase,0.25,0.01260835885707534,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Churn,decrease,-0.25,-0.2094488817384419,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Width,increase,0.5,0.4993215739484396,relative,61.400000000000006,91.80000000000001,30.400000000000006,60.88260869565219,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Width,decrease,-0.5,-0.4993215739484396,relative,61.400000000000006,31.000000000000004,-30.400000000000002,-60.88260869565218,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Centralization,increase,0.5,0.9112806101967083,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Centralization,decrease,-0.5,-0.6623845845042151,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Density,increase,0.5,0.49976133651551313,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Density,decrease,-0.5,-0.49260143198090695,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Trend,increase,0.5,0.06176470588235383,absolute,61.400000000000006,25.174999999999997,-36.22500000000001,-586.4999999999917,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Bridge Trend,decrease,-0.5,-171.45735294117648,absolute,61.400000000000006,272.4500000000012,211.05000000000118,1.23091833846524,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Churn,increase,0.5,0.026166692503588294,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_bridge_width,Churn,decrease,-0.5,-0.2703074886653946,relative,61.400000000000006,61.400000000000006,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Width,increase,0.1,0.09769335142469471,relative,1.8044117647058817,1.9867647058823528,0.18235294117647105,1.8665849673202661,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Width,decrease,-0.1,-0.09769335142469471,relative,1.8044117647058817,1.6220588235294127,-0.18235294117646905,-1.8665849673202457,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Centralization,increase,0.1,0.7025291047771982,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Centralization,decrease,-0.1,-0.3412284223203533,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Density,increase,0.1,0.10023866348448687,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Density,decrease,-0.1,-0.10023866348448687,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Trend,increase,0.1,1.482352941176471,absolute,1.8044117647058817,3.286764705882353,1.482352941176471,1.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Trend,decrease,-0.1,-13.542647058823526,absolute,1.8044117647058817,-11.738235294117645,-13.542647058823526,-1.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Churn,increase,0.1,0.0052284595494757734,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Churn,decrease,-0.1,-0.0904048420354766,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Width,increase,0.25,0.2510176390773406,relative,1.8044117647058817,2.297058823529413,0.4926470588235312,1.9625993640699593,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Width,decrease,-0.25,-0.2510176390773406,relative,1.8044117647058817,1.3117647058823527,-0.492647058823529,-1.9625993640699504,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Centralization,increase,0.25,0.9112806101967083,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Centralization,decrease,-0.25,-0.5258932155760738,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Density,increase,0.25,0.25011933174224343,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Density,decrease,-0.25,-0.25011933174224343,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Trend,increase,0.25,0.902941176470589,absolute,1.8044117647058817,2.7073529411764707,0.902941176470589,1.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Trend,decrease,-0.25,-176.11617647058821,absolute,1.8044117647058817,-174.31176470588233,-176.11617647058821,-1.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Churn,increase,0.25,0.01260835885707534,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Churn,decrease,-0.25,-0.2094488817384419,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Width,increase,0.5,0.4993215739484396,relative,1.8044117647058817,2.675,0.8705882352941181,1.7435421994884919,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Width,decrease,-0.5,-0.4993215739484396,relative,1.8044117647058817,0.9338235294117649,-0.8705882352941168,-1.7435421994884892,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Centralization,increase,0.5,0.9112806101967083,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Centralization,decrease,-0.5,-0.6623845845042151,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Density,increase,0.5,0.49976133651551313,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Density,decrease,-0.5,-0.49260143198090695,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Trend,increase,0.5,0.06176470588235383,absolute,1.8044117647058817,1.8661764705882355,0.06176470588235383,1.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Bridge Trend,decrease,-0.5,-171.45735294117648,absolute,1.8044117647058817,-169.6529411764706,-171.45735294117648,-1.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Churn,increase,0.5,0.026166692503588294,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,slope_bridge_width,Churn,decrease,-0.5,-0.2703074886653946,relative,1.8044117647058817,1.8044117647058817,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Width,increase,0.1,0.09769335142469471,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Width,decrease,-0.1,-0.09769335142469471,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Centralization,increase,0.1,0.7025291047771982,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Centralization,decrease,-0.1,-0.3412284223203533,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Density,increase,0.1,0.10023866348448687,relative,0.008484848484848486,0.009292929292929294,0.0008080808080808081,0.008061568061568061,achieved,False,42
+tgbl_wiki,16,persistence_density,Density,decrease,-0.1,-0.10023866348448687,relative,0.008484848484848486,0.007676767676767677,-0.000808080808080809,-0.00806156806156807,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Trend,increase,0.1,1.482352941176471,absolute,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Trend,decrease,-0.1,-13.542647058823526,absolute,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Churn,increase,0.1,0.0052284595494757734,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Churn,decrease,-0.1,-0.0904048420354766,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Width,increase,0.25,0.2510176390773406,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Width,decrease,-0.25,-0.2510176390773406,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Centralization,increase,0.25,0.9112806101967083,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Centralization,decrease,-0.25,-0.5258932155760738,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Density,increase,0.25,0.25011933174224343,relative,0.008484848484848486,0.010505050505050505,0.0020202020202020193,0.00807695273344128,achieved,False,42
+tgbl_wiki,16,persistence_density,Density,decrease,-0.25,-0.25011933174224343,relative,0.008484848484848486,0.006464646464646465,-0.002020202020202021,-0.008076952733441287,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Trend,increase,0.25,0.902941176470589,absolute,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Trend,decrease,-0.25,-176.11617647058821,absolute,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Churn,increase,0.25,0.01260835885707534,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Churn,decrease,-0.25,-0.2094488817384419,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Width,increase,0.5,0.4993215739484396,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Width,decrease,-0.5,-0.4993215739484396,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Centralization,increase,0.5,0.9112806101967083,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Centralization,decrease,-0.5,-0.6623845845042151,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Density,increase,0.5,0.49976133651551313,relative,0.008484848484848486,0.012727272727272728,0.004242424242424242,0.008488900465977828,achieved,False,42
+tgbl_wiki,16,persistence_density,Density,decrease,-0.5,-0.49260143198090695,relative,0.008484848484848486,0.004242424242424243,-0.004242424242424243,-0.00861228564716937,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Trend,increase,0.5,0.06176470588235383,absolute,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Bridge Trend,decrease,-0.5,-171.45735294117648,absolute,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Churn,increase,0.5,0.026166692503588294,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_density,Churn,decrease,-0.5,-0.2703074886653946,relative,0.008484848484848486,0.008484848484848486,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Width,increase,0.1,0.09769335142469471,relative,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Width,decrease,-0.1,-0.09769335142469471,relative,0.13564213564213565,0.1253349824778396,-0.010307153164296035,-0.10550516502897468,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Centralization,increase,0.1,0.7025291047771982,relative,0.13564213564213565,0.17687074829931973,0.04122861265718408,0.05868598521659743,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Centralization,decrease,-0.1,-0.3412284223203533,relative,0.13564213564213565,0.09441352298495155,-0.0412286126571841,-0.12082408721064186,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Density,increase,0.1,0.10023866348448687,relative,0.13564213564213565,0.13481756338899195,-0.0008245722531436961,-0.008226089858743063,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Density,decrease,-0.1,-0.10023866348448687,relative,0.13564213564213565,0.1261595547309833,-0.009482580911152338,-0.09460003337554357,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Trend,increase,0.1,1.482352941176471,absolute,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Trend,decrease,-0.1,-13.542647058823526,absolute,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Churn,increase,0.1,0.0052284595494757734,relative,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Churn,decrease,-0.1,-0.0904048420354766,relative,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Width,increase,0.25,0.2510176390773406,relative,0.13564213564213565,0.1150278293135436,-0.02061430632859204,-0.08212293926579639,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Width,decrease,-0.25,-0.2510176390773406,relative,0.13564213564213565,0.1150278293135436,-0.02061430632859204,-0.08212293926579639,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Centralization,increase,0.25,0.9112806101967083,relative,0.13564213564213565,0.18717790146361574,0.05153576582148009,0.05655312452039951,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Centralization,decrease,-0.25,-0.5258932155760738,relative,0.13564213564213565,0.06349206349206349,-0.07215007215007216,-0.13719528986704563,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Density,increase,0.25,0.25011933174224343,relative,0.13564213564213565,0.13358070500927643,-0.0020614306328592125,-0.008241788503511547,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Density,decrease,-0.25,-0.25011933174224343,relative,0.13564213564213565,0.10678210678210678,-0.028860028860028863,-0.1153850390491612,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Trend,increase,0.25,0.902941176470589,absolute,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Trend,decrease,-0.25,-176.11617647058821,absolute,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Churn,increase,0.25,0.01260835885707534,relative,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Churn,decrease,-0.25,-0.2094488817384419,relative,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Width,increase,0.5,0.4993215739484396,relative,0.13564213564213565,0.09441352298495155,-0.0412286126571841,-0.08256925958789314,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Width,decrease,-0.5,-0.4993215739484396,relative,0.13564213564213565,0.1150278293135436,-0.02061430632859204,-0.04128462979394656,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Centralization,increase,0.5,0.9112806101967083,relative,0.13564213564213565,0.18717790146361574,0.05153576582148009,0.05655312452039951,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Centralization,decrease,-0.5,-0.6623845845042151,relative,0.13564213564213565,0.04287775716347145,-0.0927643784786642,-0.14004610108506216,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Density,increase,0.5,0.49976133651551313,relative,0.13564213564213565,0.14162028447742733,0.005978148835291686,0.011962007459346783,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Density,decrease,-0.5,-0.49260143198090695,relative,0.13564213564213565,0.06782106782106782,-0.06782106782106782,-0.13767939640032664,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Trend,increase,0.5,0.06176470588235383,absolute,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Bridge Trend,decrease,-0.5,-171.45735294117648,absolute,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Churn,increase,0.5,0.026166692503588294,relative,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,persistence_centralization,Churn,decrease,-0.5,-0.2703074886653946,relative,0.13564213564213565,0.13564213564213565,0.0,0.0,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Width,increase,0.1,0.09769335142469471,relative,0.25731856038144074,0.22855454865335656,-0.028764011728084182,-0.2944316200499728,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Width,decrease,-0.1,-0.09769335142469471,relative,0.25731856038144074,0.23365736121237693,-0.023661199169063812,-0.24219866371666707,achieved,False,42
+tgbl_wiki,16,trend_clustering,Centralization,increase,0.1,0.7025291047771982,relative,0.25731856038144074,0.2451865651198899,-0.012131995261550843,-0.017269028683727507,achieved,False,42
+tgbl_wiki,16,trend_clustering,Centralization,decrease,-0.1,-0.3412284223203533,relative,0.25731856038144074,0.20732254933319175,-0.049996011048248995,-0.14651772178963324,achieved,False,42
+tgbl_wiki,16,trend_clustering,Density,increase,0.1,0.10023866348448687,relative,0.25731856038144074,0.23106747989063067,-0.02625108049081007,-0.261885779182129,achieved,False,42
+tgbl_wiki,16,trend_clustering,Density,decrease,-0.1,-0.10023866348448687,relative,0.25731856038144074,0.20962279238817322,-0.047695767993267524,-0.475822066409026,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Trend,increase,0.1,1.482352941176471,absolute,0.25731856038144074,0.21312996574419887,-0.04418859463724187,-0.02980976622353617,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Trend,decrease,-0.1,-13.542647058823526,absolute,0.25731856038144074,0.20181815693766156,-0.055500403443779184,-0.004098194629359306,achieved,False,42
+tgbl_wiki,16,trend_clustering,Churn,increase,0.1,0.0052284595494757734,relative,0.25731856038144074,0.2563032288347625,-0.0010153315466782664,-0.1941932489044632,achieved,False,42
+tgbl_wiki,16,trend_clustering,Churn,decrease,-0.1,-0.0904048420354766,relative,0.25731856038144074,0.22872897608742127,-0.028589584294019477,-0.3162395249006726,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Width,increase,0.25,0.2510176390773406,relative,0.25731856038144074,0.1903333175375947,-0.06698524284384605,-0.2668547241941326,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Width,decrease,-0.25,-0.2510176390773406,relative,0.25731856038144074,0.2157742578289444,-0.04154430255249633,-0.16550351881724212,achieved,False,42
+tgbl_wiki,16,trend_clustering,Centralization,increase,0.25,0.9112806101967083,relative,0.25731856038144074,0.27058943367540733,0.01327087329396659,0.014562883425229415,achieved,False,42
+tgbl_wiki,16,trend_clustering,Centralization,decrease,-0.25,-0.5258932155760738,relative,0.25731856038144074,0.17709665195915208,-0.08022190842228866,-0.15254410219841302,achieved,False,42
+tgbl_wiki,16,trend_clustering,Density,increase,0.25,0.25011933174224343,relative,0.25731856038144074,0.20663606159433245,-0.05068249878710829,-0.20263327282250357,achieved,False,42
+tgbl_wiki,16,trend_clustering,Density,decrease,-0.25,-0.25011933174224343,relative,0.25731856038144074,0.1517009823209127,-0.10561757806052804,-0.4222687519786379,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Trend,increase,0.25,0.902941176470589,absolute,0.25731856038144074,0.1884386791539252,-0.06887988122751554,-0.07628390754838847,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Trend,decrease,-0.25,-176.11617647058821,absolute,0.25731856038144074,0.07123216171083817,-0.18608639867060256,-0.0010566116208051983,achieved,False,42
+tgbl_wiki,16,trend_clustering,Churn,increase,0.25,0.01260835885707534,relative,0.25731856038144074,0.24840117498519554,-0.008917385396245203,-0.7072598025904934,achieved,False,42
+tgbl_wiki,16,trend_clustering,Churn,decrease,-0.25,-0.2094488817384419,relative,0.25731856038144074,0.24239620190426014,-0.014922358477180597,-0.07124582548889194,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Width,increase,0.5,0.4993215739484396,relative,0.25731856038144074,0.14251392214082942,-0.11480463824061132,-0.2299212456068765,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Width,decrease,-0.5,-0.4993215739484396,relative,0.25731856038144074,0.18491433058126955,-0.0724042298001712,-0.14500521022479937,achieved,False,42
+tgbl_wiki,16,trend_clustering,Centralization,increase,0.5,0.9112806101967083,relative,0.25731856038144074,0.27058943367540733,0.01327087329396659,0.014562883425229415,achieved,False,42
+tgbl_wiki,16,trend_clustering,Centralization,decrease,-0.5,-0.6623845845042151,relative,0.25731856038144074,0.10797101370851374,-0.149347546672927,-0.22546953864379465,achieved,False,42
+tgbl_wiki,16,trend_clustering,Density,increase,0.5,0.49976133651551313,relative,0.25731856038144074,0.1974159174329196,-0.05990264294852113,-0.1198624995006225,achieved,False,42
+tgbl_wiki,16,trend_clustering,Density,decrease,-0.5,-0.49260143198090695,relative,0.25731856038144074,0.015553254859175941,-0.2417653055222648,-0.4907929409584736,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Trend,increase,0.5,0.06176470588235383,absolute,0.25731856038144074,0.1726327608945063,-0.08468579948693444,-1.371103420264633,achieved,False,42
+tgbl_wiki,16,trend_clustering,Bridge Trend,decrease,-0.5,-171.45735294117648,absolute,0.25731856038144074,0.031939560439560435,-0.22537899994188032,-0.0013144901404094536,achieved,False,42
+tgbl_wiki,16,trend_clustering,Churn,increase,0.5,0.026166692503588294,relative,0.25731856038144074,0.23812966006690414,-0.0191889003145366,-0.7333330458905032,achieved,False,42
+tgbl_wiki,16,trend_clustering,Churn,decrease,-0.5,-0.2703074886653946,relative,0.25731856038144074,0.2515437532435296,-0.00577480713791112,-0.021363844436657755,achieved,False,42

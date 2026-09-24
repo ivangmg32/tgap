@@ -1,0 +1,7 @@
+dataset,analysis_mode,transformation,requested_delta,requested_direction,achieved_direction,slope_before,slope_after,slope_change,snapshots,compounding_factor,snapshots_saturated,fraction_saturated,min_bridge_width_before,max_bridge_width_before,min_bridge_width,max_bridge_width,status,valid_for_analysis
+bitcoin_otc,descriptive,Bridge Trend,0.1,1,1,-0.10649350649350639,0.34025974025974054,0.4467532467532469,21,6.727499949325611,5,0.23809523809523808,1,79,1,51,saturated,False
+bitcoin_otc,descriptive,Bridge Trend,-0.1,-1,-1,-0.10649350649350639,-9.797402597402593,-9.690909090909086,21,0.12157665459056935,0,0.0,1,79,6,192,ok,True
+bitcoin_otc,descriptive,Bridge Trend,0.25,1,1,-0.10649350649350639,0.3753246753246755,0.4818181818181819,21,86.73617379884035,5,0.23809523809523808,1,79,1,33,saturated,False
+bitcoin_otc,descriptive,Bridge Trend,-0.25,-1,-1,-0.10649350649350639,-172.7155844155845,-172.60909090909098,21,0.0031712119389339932,0,0.0,1,79,6,3599,ok,True
+bitcoin_otc,descriptive,Bridge Trend,0.5,1,1,-0.10649350649350639,0.2974025974025975,0.40389610389610386,21,3325.256730079651,6,0.2857142857142857,1,79,1,21,saturated,False
+bitcoin_otc,descriptive,Bridge Trend,-0.5,-1,-1,-0.10649350649350639,-234.6155844155844,-234.5090909090909,21,9.5367431640625e-07,0,0.0,1,79,6,3599,ok,True

@@ -1,0 +1,27 @@
+{
+  "projection": "none - edges are observed directly between actors",
+  "node_selection": "top 120 nodes by incident events",
+  "nodes_kept": 120,
+  "nodes_dropped": 3663,
+  "events_kept": 2883,
+  "events_dropped": 21303,
+  "unique_window_edges": 1962,
+  "events_dropped_node_filter": 21303,
+  "events_dropped_self_loops": 0,
+  "events_dropped_fraction": 0.8807988092284793,
+  "direction_dropped": true,
+  "self_loops_dropped": true,
+  "repeated_interactions": "collapsed to one edge per window",
+  "unused_fields": "RATING (-10..+10), as for bitcoin-otc",
+  "window_days": 90,
+  "fixed_node_set": true,
+  "isolated_nodes_included": true,
+  "partition_source": "greedy modularity on the aggregate graph",
+  "partition_sizes": [
+    60,
+    60
+  ],
+  "aggregate_edges": 1637,
+  "cohesion_usable": false,
+  "cohesion_note": "inactive nodes appear isolated, so snapshots are disconnected and algebraic connectivity is 0; cohesion is not used as a prediction target"
+}

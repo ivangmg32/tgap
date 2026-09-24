@@ -1,0 +1,27 @@
+{
+  "projection": "none - edges are observed directly between actors",
+  "node_selection": "top 120 nodes by incident events",
+  "nodes_kept": 120,
+  "nodes_dropped": 24698,
+  "events_kept": 35392,
+  "events_dropped": 471158,
+  "unique_window_edges": 13536,
+  "events_dropped_node_filter": 436288,
+  "events_dropped_self_loops": 34870,
+  "events_dropped_fraction": 0.930131280229,
+  "direction_dropped": true,
+  "self_loops_dropped": true,
+  "repeated_interactions": "collapsed to one edge per window",
+  "unused_fields": "interaction type (a2q / c2q / c2a are merged)",
+  "window_days": 120,
+  "fixed_node_set": true,
+  "isolated_nodes_included": true,
+  "partition_source": "greedy modularity on the aggregate graph",
+  "partition_sizes": [
+    61,
+    59
+  ],
+  "aggregate_edges": 4584,
+  "cohesion_usable": false,
+  "cohesion_note": "inactive nodes appear isolated, so snapshots are disconnected and algebraic connectivity is 0; cohesion is not used as a prediction target"
+}

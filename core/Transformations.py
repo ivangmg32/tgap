@@ -33,6 +33,8 @@ from .Communities import (
     intraCommunityEdges,
 )
 from .GraphMetric import DegreeCentralizationMetric
+# Feasibility imports only Communities, so there is no import cycle here.
+from .Feasibility import InfeasibleTransformation, bridgeWidthFeasibility
 
 
 def _edgeKey(u, v):
@@ -64,7 +66,7 @@ def _safeToRemove(graph, edges):
     return safe if safe else list(edges)
 
 
-def setBridgeWidth(graph, communities, targetWidth, rng):
+def setBridgeWidth(graph, communities, targetWidth, rng, strict=False):
     ''' Return a copy of `graph` whose bridge between the two communities
     has exactly `targetWidth` edges (clamped to >= 1 so the communities
     never fully disconnect), keeping node set and TOTAL EDGE COUNT fixed:
@@ -83,6 +85,13 @@ def setBridgeWidth(graph, communities, targetWidth, rng):
       the edge-count anchor may not hold exactly. On tiny or near-complete
       graphs, check the achieved change (see propertyValue /
       explainDetailed) instead of assuming the target was reached.
+    - `strict=True` turns that boundary case into an EXPLICIT failure: the
+      function raises core.Feasibility.InfeasibleTransformation, carrying
+      the measured counts that prove the payment was impossible, instead
+      of under-paying and returning a graph with a different edge count.
+      Default is False so existing behaviour and existing results are
+      unchanged; real-data evaluation screens with strict=True and records
+      an "infeasible" status (see realdata/run_real_data.py).
     - Rounding upstream uses Python's round(), which is round-half-to-
       EVEN (round(4.5)=4, round(5.5)=6). Deterministic, but worth knowing
       at exact .5 boundaries. '''
@@ -94,6 +103,15 @@ def setBridgeWidth(graph, communities, targetWidth, rng):
     targetWidth = max(1, targetWidth)  # never sever the last tie
     k = targetWidth - width  # >0: widen, <0: narrow
 
+    if strict and k != 0:
+        # Cheap pre-check on the raw pool sizes. This is a NECESSARY
+        # condition only: the payment also prefers non-cut edges, which can
+        # shrink the usable pool further, so the exact checks below sit at
+        # the point where the payment is actually made.
+        verdict = bridgeWidthFeasibility(graph, communities, targetWidth)
+        if not verdict["feasible"]:
+            raise InfeasibleTransformation(verdict["reason"], verdict)
+
     if k > 0:
         # --- WIDEN: add k new inter-community edges ---
         # Candidates: all cross pairs that are not edges yet (sorted so
@@ -102,11 +120,27 @@ def setBridgeWidth(graph, communities, targetWidth, rng):
             (a, b) for a in setA for b in setB if not g.has_edge(a, b)
         )
         toAdd = rng.sample(candidates, min(k, len(candidates)))
+        if strict and len(toAdd) < k:
+            raise InfeasibleTransformation(
+                "insufficient cross-community non-edges to widen the bridge",
+                {"edges_needed": k, "edges_available": len(candidates),
+                 "current_width": width, "clamped_target": targetWidth})
         g.add_edges_from(toAdd)
         # Pay for them: remove the same number of intra edges,
         # preferring ones that do not disconnect the graph.
         intra = _safeToRemove(g, intraCommunityEdges(g, communities))
         toRemove = rng.sample(intra, min(len(toAdd), len(intra)))
+        if strict and len(toRemove) < len(toAdd):
+            # The exact failure: fewer removable intra edges than bridge
+            # edges added, so the edge count would rise. Reported with the
+            # measured pool, which is the post-addition, cut-edge-preferring
+            # pool the mechanism really draws from.
+            raise InfeasibleTransformation(
+                "insufficient removable intra-community edges to preserve "
+                "total edge count",
+                {"edges_added": len(toAdd),
+                 "removable_intra_edges": len(intra),
+                 "current_width": width, "clamped_target": targetWidth})
         g.remove_edges_from(toRemove)
 
     elif k < 0:
@@ -119,6 +153,13 @@ def setBridgeWidth(graph, communities, targetWidth, rng):
             + [(a, b) for a in setB for b in setB if a < b and not g.has_edge(a, b)]
         )
         toAdd = rng.sample(candidates, min(len(toRemove), len(candidates)))
+        if strict and len(toAdd) < len(toRemove):
+            raise InfeasibleTransformation(
+                "insufficient intra-community non-edges to preserve total "
+                "edge count",
+                {"edges_removed": len(toRemove),
+                 "intra_nonedges_available": len(candidates),
+                 "current_width": width, "clamped_target": targetWidth})
         g.add_edges_from(toAdd)
 
     # k == 0: already at the target -> graph unchanged.
@@ -145,11 +186,15 @@ class BridgeWidthTransformation(TemporalGraphTransformation):
 
     name = "Bridge Width"
 
-    def __init__(self, communities=None, seed=42):
+    def __init__(self, communities=None, seed=42, strict=False):
         # communities: optional (setA, setB). Pass explicitly for real
         # experiments (see Communities.py); auto-detected per call if None.
+        # strict: raise InfeasibleTransformation instead of under-paying
+        # when the edge-count invariant cannot be kept (default off, so
+        # behaviour is unchanged unless a caller asks for it).
         self.communities = communities
         self.seed = seed
+        self.strict = strict
 
     def transformGraph(self, graph, delta):
         # Re-seed on every call: same input -> same output (stability).
@@ -162,7 +207,8 @@ class BridgeWidthTransformation(TemporalGraphTransformation):
         width = len(interCommunityEdges(graph, communities))
         target = round(width * (1 + delta))
         # All the add/remove/pay-for-it mechanics live in setBridgeWidth.
-        return setBridgeWidth(graph, communities, target, rng)
+        return setBridgeWidth(graph, communities, target, rng,
+                              strict=self.strict)
 
     def propertyValue(self, x):
         ''' Property = mean bridge width across snapshots (for a single
@@ -340,6 +386,20 @@ class BridgeTrendTransformation(TemporalGraphTransformation):
                this transformation; only models that read the trajectory
                can react. Within each earlier snapshot, node set and edge
                count are preserved by setBridgeWidth as usual.
+
+    KNOWN LIMITATION on long histories (measured, not hypothetical). The
+    backward recursion divides by (1 + delta) at every step, so the factor
+    reaching the OLDEST snapshot is (1 + delta)^(T-1) - about 8.95 at
+    delta = 0.1 with T = 24 snapshots. Targets below 1 are clamped to 1 by
+    setBridgeWidth, which never severs the last tie. When many snapshots
+    sit on that floor the intended geometric shape is lost, and the
+    achieved slope change can take the OPPOSITE sign to the requested one.
+    The recursion is kept verbatim from TSAP deliberately (changing it
+    would change the concept, and would change the synthetic results this
+    project reports). Instead the condition is DETECTED and such rows are
+    marked invalid: see core.Feasibility.bridgeTrendDirection, which
+    returns status "saturated" or "wrong_direction". Rows that are not
+    "ok" must not be used in aggregate conclusions.
     '''
 
     name = "Bridge Trend"
@@ -350,12 +410,15 @@ class BridgeTrendTransformation(TemporalGraphTransformation):
     # in the slope's own units (edges per snapshot-step).
     deltaMode = "absolute"
 
-    def __init__(self, communities, seed=42):
+    def __init__(self, communities, seed=42, strict=False):
         # communities is REQUIRED here (no auto-detection): the whole
         # point is to steer one well-defined bridge through time, so the
         # partition must be the same in every snapshot.
+        # strict: see BridgeWidthTransformation - raises instead of
+        # silently changing a snapshot's edge count. Default off.
         self.communities = communities
         self.seed = seed
+        self.strict = strict
 
     def propertyValue(self, x):
         ''' Property = OLS slope of the bridge-width series across
@@ -400,7 +463,8 @@ class BridgeTrendTransformation(TemporalGraphTransformation):
             # snapshots make independent edge choices.
             rng = random.Random(self.seed + t)
             result.append(setBridgeWidth(
-                g, self.communities, round(target[t]), rng))
+                g, self.communities, round(target[t]), rng,
+                strict=self.strict))
         result.append(temporalGraph[-1].copy())
         return result
 
@@ -558,6 +622,11 @@ class DensityTransformation(TemporalGraphTransformation):
     '''
 
     name = "Density"
+
+    # The edge count IS this transformation's property, so it makes no
+    # edge-count promise. core.Feasibility reads this attribute, which is
+    # why a changed edge count here is never reported as a violation.
+    preservesEdgeCount = False
 
     def __init__(self, communities=None, seed=42):
         self.communities = communities

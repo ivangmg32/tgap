@@ -1,0 +1,31 @@
+dataset,analysis_mode,transformation,family,claims_edge_count_preservation,snapshots_edge_count_changed,requested_delta,snapshots,snapshots_modified,modified_fraction,last_snapshot_modified,structurally_blocked
+sx_mathoverflow,descriptive,Bridge Width,structural,True,0,0.1,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Bridge Width,structural,True,0,-0.1,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Bridge Width,structural,True,0,0.25,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Bridge Width,structural,True,0,-0.25,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Bridge Width,structural,True,0,0.5,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Bridge Width,structural,True,0,-0.5,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Centralization,structural,True,0,0.1,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Centralization,structural,True,0,-0.1,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Centralization,structural,True,0,0.25,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Centralization,structural,True,0,-0.25,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Centralization,structural,True,0,0.5,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Centralization,structural,True,0,-0.5,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Density,structural,False,0,0.1,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Density,structural,False,0,-0.1,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Density,structural,False,0,0.25,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Density,structural,False,0,-0.25,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Density,structural,False,0,0.5,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Density,structural,False,0,-0.5,20,20,1.0,True,False
+sx_mathoverflow,descriptive,Bridge Trend,temporal,True,0,0.1,20,19,0.95,False,False
+sx_mathoverflow,descriptive,Bridge Trend,temporal,True,7,-0.1,20,19,0.95,False,False
+sx_mathoverflow,descriptive,Bridge Trend,temporal,True,0,0.25,20,19,0.95,False,False
+sx_mathoverflow,descriptive,Bridge Trend,temporal,True,15,-0.25,20,19,0.95,False,False
+sx_mathoverflow,descriptive,Bridge Trend,temporal,True,0,0.5,20,19,0.95,False,False
+sx_mathoverflow,descriptive,Bridge Trend,temporal,True,18,-0.5,20,19,0.95,False,False
+sx_mathoverflow,descriptive,Churn,temporal,True,0,0.1,20,18,0.9,False,False
+sx_mathoverflow,descriptive,Churn,temporal,True,0,-0.1,20,19,0.95,False,False
+sx_mathoverflow,descriptive,Churn,temporal,True,0,0.25,20,19,0.95,False,False
+sx_mathoverflow,descriptive,Churn,temporal,True,0,-0.25,20,19,0.95,False,False
+sx_mathoverflow,descriptive,Churn,temporal,True,0,0.5,20,19,0.95,False,False
+sx_mathoverflow,descriptive,Churn,temporal,True,0,-0.5,20,19,0.95,False,False

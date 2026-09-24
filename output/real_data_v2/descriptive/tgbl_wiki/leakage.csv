@@ -1,0 +1,21 @@
+dataset,analysis_mode,transformation,property,before,after,change,delta,transformation_status,valid_for_analysis
+tgbl_wiki,descriptive,Bridge Width,bridge width,46.0625,50.5625,4.5,0.1,ok,True
+tgbl_wiki,descriptive,Bridge Width,centralization,0.16046949082663367,0.15982529375386517,-0.0006441970727684987,0.1,ok,True
+tgbl_wiki,descriptive,Bridge Width,density,0.026452020202020206,0.026452020202020206,0.0,0.1,ok,True
+tgbl_wiki,descriptive,Bridge Width,clustering,0.23738862415990264,0.21938784174245712,-0.018000782417445516,0.1,ok,True
+tgbl_wiki,descriptive,Centralization,bridge width,46.0625,46.0625,0.0,0.1,ok,True
+tgbl_wiki,descriptive,Centralization,centralization,0.16046949082663367,0.27320397856112144,0.11273448773448777,0.1,ok,True
+tgbl_wiki,descriptive,Centralization,density,0.026452020202020206,0.026452020202020206,0.0,0.1,ok,True
+tgbl_wiki,descriptive,Centralization,clustering,0.23738862415990264,0.2349879287885402,-0.002400695371362449,0.1,ok,True
+tgbl_wiki,descriptive,Density,bridge width,46.0625,46.0625,0.0,0.1,ok,True
+tgbl_wiki,descriptive,Density,centralization,0.16046949082663367,0.15969645433931148,-0.0007730364873221873,0.1,ok,True
+tgbl_wiki,descriptive,Density,density,0.026452020202020206,0.029103535353535354,0.0026515151515151478,0.1,ok,True
+tgbl_wiki,descriptive,Density,clustering,0.23738862415990264,0.2237115955093114,-0.013677028650591228,0.1,ok,True
+tgbl_wiki,descriptive,Bridge Trend,bridge width,46.0625,23.5625,-22.5,0.1,saturated,False
+tgbl_wiki,descriptive,Bridge Trend,centralization,0.16046949082663367,0.13663419913419914,-0.023835291692434535,0.1,saturated,False
+tgbl_wiki,descriptive,Bridge Trend,density,0.026452020202020206,0.026452020202020206,0.0,0.1,saturated,False
+tgbl_wiki,descriptive,Bridge Trend,clustering,0.23738862415990264,0.1844357937561683,-0.05295283040373433,0.1,saturated,False
+tgbl_wiki,descriptive,Churn,bridge width,46.0625,46.0625,0.0,0.1,ok,True
+tgbl_wiki,descriptive,Churn,centralization,0.16046949082663367,0.15918109668109667,-0.0012883941455369974,0.1,ok,True
+tgbl_wiki,descriptive,Churn,density,0.026452020202020206,0.026452020202020206,0.0,0.1,ok,True
+tgbl_wiki,descriptive,Churn,clustering,0.23738862415990264,0.23308399771479635,-0.004304626445106291,0.1,ok,True

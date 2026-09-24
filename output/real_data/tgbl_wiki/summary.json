@@ -1,0 +1,43 @@
+{
+  "dataset": "tgbl_wiki",
+  "snapshot_count": 16,
+  "nodes": 100,
+  "edges_median": 141.0,
+  "bridge_width_first": 9,
+  "bridge_width_last": 16,
+  "connected_snapshots": 0,
+  "explanation_rows": 180,
+  "noop_rows": 0,
+  "noop_fraction": 0.0,
+  "models": [
+    "persistence_bridge_width",
+    "trend_bridge_width",
+    "slope_bridge_width",
+    "persistence_density",
+    "persistence_centralization",
+    "trend_clustering"
+  ],
+  "transformations": [
+    "Bridge Width",
+    "Centralization",
+    "Density",
+    "Bridge Trend",
+    "Churn"
+  ],
+  "deltas": [
+    0.1,
+    0.25,
+    0.5
+  ],
+  "largest_absolute_impact": {
+    "model": "trend_bridge_width",
+    "transformation": "Bridge Trend",
+    "direction": "increase",
+    "impact": -586.4999999999917
+  },
+  "persistence_models_blind_to_history": true,
+  "edge_count_anchor_violations": 33,
+  "bridge_trend_max_clamped_fraction": 0.4375,
+  "bridge_trend_sign_as_requested": 6,
+  "bridge_trend_cases": 6
+}

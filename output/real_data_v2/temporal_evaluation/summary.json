@@ -1,0 +1,663 @@
+{
+  "analysis_mode": "temporal_evaluation",
+  "selection_fraction_of_span": 0.2,
+  "leakage_safe": true,
+  "datasets": {
+    "tgbl_wiki": {
+      "dataset": "tgbl_wiki",
+      "analysis_mode": "temporal_evaluation",
+      "selection_fraction_of_span": 0.2,
+      "node_selection_mode": "temporal_train",
+      "community_mode": "temporal_train",
+      "selection_period": "0.0d .. 6.2d",
+      "evaluation_period": "6.2d .. 31.0d",
+      "future_information_used_for_node_selection": false,
+      "snapshot_count": 13,
+      "raw_nodes": 1000,
+      "retained_nodes": 100,
+      "nodes_retained_pct": 10.0,
+      "raw_events": 157474,
+      "retained_events": 13267,
+      "events_retained_pct": 8.42,
+      "partition_sizes": [
+        25,
+        75
+      ],
+      "edges_median": 19.0,
+      "bridge_width_first": 16,
+      "bridge_width_last": 0,
+      "bridge_width_min": 0,
+      "bridge_width_max": 29,
+      "snapshots_with_zero_bridge_width": 1,
+      "connected_snapshots": 0,
+      "explanation_rows": 180,
+      "valid_rows": 144,
+      "invalid_rows": 36,
+      "invalid_rows_by_status": {
+        "edge_count_infeasible": 24,
+        "saturated": 12
+      },
+      "noop_rows_valid": 18,
+      "noop_fraction_valid": 0.125,
+      "noop_fraction_all_rows_with_numbers": 0.11538461538461539,
+      "models": [
+        "persistence_bridge_width",
+        "trend_bridge_width",
+        "slope_bridge_width",
+        "persistence_density",
+        "persistence_centralization",
+        "trend_clustering"
+      ],
+      "transformations": [
+        "Bridge Width",
+        "Centralization",
+        "Density",
+        "Bridge Trend",
+        "Churn"
+      ],
+      "deltas": [
+        0.1,
+        0.25,
+        0.5
+      ],
+      "seed": 42,
+      "largest_absolute_impact_valid_rows": {
+        "model": "persistence_bridge_width",
+        "transformation": "Bridge Width",
+        "direction": "decrease",
+        "requested_delta": -0.1,
+        "impact": 10.0
+      },
+      "expected_invariance_history_only_transformations": {
+        "statement": "Expected by construction, then verified on this dataset: Bridge Trend and Churn return the last snapshot untouched (the TSAP anchor rule in the time dimension), and the persistence models read only the last snapshot, so their prediction change must be exactly 0. A zero here is therefore a VERIFICATION OF AN EXPECTED INVARIANT - a correctness check on the implementation and the pipeline - not an unexpected empirical discovery about the data.",
+        "rows_checked": 27,
+        "verified": true,
+        "max_absolute_impact_observed": 0.0
+      },
+      "edge_count_infeasible_settings": 4,
+      "edge_count_settings_checked": 30,
+      "strict_mode_disagreements": 0,
+      "bridge_trend_status_counts": {
+        "ok": 4,
+        "saturated": 2
+      },
+      "bridge_trend_max_saturated_fraction": 0.3076923076923077,
+      "edge_weight_used": false,
+      "edge_sign_used": false
+    },
+    "decentraland": {
+      "dataset": "decentraland",
+      "analysis_mode": "temporal_evaluation",
+      "selection_fraction_of_span": 0.2,
+      "node_selection_mode": "temporal_train",
+      "community_mode": "temporal_train",
+      "selection_period": "2021-05-24 .. 2021-10-12",
+      "evaluation_period": "2021-10-12 .. 2023-04-30",
+      "future_information_used_for_node_selection": false,
+      "snapshot_count": 19,
+      "raw_nodes": 4133,
+      "retained_nodes": 100,
+      "nodes_retained_pct": 2.42,
+      "raw_events": 53533,
+      "retained_events": 4996,
+      "events_retained_pct": 9.33,
+      "partition_sizes": [
+        50,
+        50
+      ],
+      "edges_median": 299.0,
+      "bridge_width_first": 234,
+      "bridge_width_last": 36,
+      "bridge_width_min": 36,
+      "bridge_width_max": 493,
+      "snapshots_with_zero_bridge_width": 0,
+      "connected_snapshots": 0,
+      "explanation_rows": 180,
+      "valid_rows": 144,
+      "invalid_rows": 36,
+      "invalid_rows_by_status": {
+        "saturated": 18,
+        "edge_count_infeasible": 18
+      },
+      "noop_rows_valid": 0,
+      "noop_fraction_valid": 0.0,
+      "noop_fraction_all_rows_with_numbers": 0.0,
+      "models": [
+        "persistence_bridge_width",
+        "trend_bridge_width",
+        "slope_bridge_width",
+        "persistence_density",
+        "persistence_centralization",
+        "trend_clustering"
+      ],
+      "transformations": [
+        "Bridge Width",
+        "Centralization",
+        "Density",
+        "Bridge Trend",
+        "Churn"
+      ],
+      "deltas": [
+        0.1,
+        0.25,
+        0.5
+      ],
+      "seed": 42,
+      "largest_absolute_impact_valid_rows": {
+        "model": "persistence_bridge_width",
+        "transformation": "Bridge Width",
+        "direction": "increase",
+        "requested_delta": 0.1,
+        "impact": 40.14666666666668
+      },
+      "expected_invariance_history_only_transformations": {
+        "statement": "Expected by construction, then verified on this dataset: Bridge Trend and Churn return the last snapshot untouched (the TSAP anchor rule in the time dimension), and the persistence models read only the last snapshot, so their prediction change must be exactly 0. A zero here is therefore a VERIFICATION OF AN EXPECTED INVARIANT - a correctness check on the implementation and the pipeline - not an unexpected empirical discovery about the data.",
+        "rows_checked": 27,
+        "verified": true,
+        "max_absolute_impact_observed": 0.0
+      },
+      "edge_count_infeasible_settings": 3,
+      "edge_count_settings_checked": 30,
+      "strict_mode_disagreements": 0,
+      "bridge_trend_status_counts": {
+        "saturated": 3,
+        "ok": 3
+      },
+      "bridge_trend_max_saturated_fraction": 0.2631578947368421,
+      "edge_weight_used": false,
+      "edge_sign_used": false
+    },
+    "email_eu_core": {
+      "dataset": "email_eu_core",
+      "analysis_mode": "temporal_evaluation",
+      "selection_fraction_of_span": 0.2,
+      "node_selection_mode": "ground_truth_labels",
+      "community_mode": "ground_truth_labels",
+      "selection_period": "0.0d .. 160.8d",
+      "evaluation_period": "160.8d .. 803.9d",
+      "future_information_used_for_node_selection": false,
+      "snapshot_count": 12,
+      "raw_nodes": 986,
+      "retained_nodes": 201,
+      "nodes_retained_pct": 20.39,
+      "raw_events": 332334,
+      "retained_events": 12599,
+      "events_retained_pct": 3.79,
+      "partition_sizes": [
+        109,
+        92
+      ],
+      "edges_median": 175.5,
+      "bridge_width_first": 82,
+      "bridge_width_last": 11,
+      "bridge_width_min": 11,
+      "bridge_width_max": 139,
+      "snapshots_with_zero_bridge_width": 0,
+      "connected_snapshots": 0,
+      "explanation_rows": 180,
+      "valid_rows": 138,
+      "invalid_rows": 42,
+      "invalid_rows_by_status": {
+        "edge_count_infeasible": 30,
+        "saturated": 12
+      },
+      "noop_rows_valid": 0,
+      "noop_fraction_valid": 0.0,
+      "noop_fraction_all_rows_with_numbers": 0.0,
+      "models": [
+        "persistence_bridge_width",
+        "trend_bridge_width",
+        "slope_bridge_width",
+        "persistence_density",
+        "persistence_centralization",
+        "trend_clustering"
+      ],
+      "transformations": [
+        "Bridge Width",
+        "Centralization",
+        "Density",
+        "Bridge Trend",
+        "Churn"
+      ],
+      "deltas": [
+        0.1,
+        0.25,
+        0.5
+      ],
+      "seed": 42,
+      "largest_absolute_impact_valid_rows": {
+        "model": "trend_bridge_width",
+        "transformation": "Bridge Width",
+        "direction": "decrease",
+        "requested_delta": -0.1,
+        "impact": -45.92918985776144
+      },
+      "expected_invariance_history_only_transformations": {
+        "statement": "Expected by construction, then verified on this dataset: Bridge Trend and Churn return the last snapshot untouched (the TSAP anchor rule in the time dimension), and the persistence models read only the last snapshot, so their prediction change must be exactly 0. A zero here is therefore a VERIFICATION OF AN EXPECTED INVARIANT - a correctness check on the implementation and the pipeline - not an unexpected empirical discovery about the data.",
+        "rows_checked": 27,
+        "verified": true,
+        "max_absolute_impact_observed": 0.0
+      },
+      "edge_count_infeasible_settings": 5,
+      "edge_count_settings_checked": 30,
+      "strict_mode_disagreements": 0,
+      "bridge_trend_status_counts": {
+        "ok": 4,
+        "saturated": 2
+      },
+      "bridge_trend_max_saturated_fraction": 0.25,
+      "edge_weight_used": false,
+      "edge_sign_used": false
+    },
+    "tgbl_enron": {
+      "dataset": "tgbl_enron",
+      "analysis_mode": "temporal_evaluation",
+      "selection_fraction_of_span": 0.2,
+      "node_selection_mode": "temporal_train",
+      "community_mode": "temporal_train",
+      "selection_period": "0.0d .. 263.3d",
+      "evaluation_period": "263.3d .. 1316.4d",
+      "future_information_used_for_node_selection": false,
+      "snapshot_count": 18,
+      "raw_nodes": 184,
+      "retained_nodes": 25,
+      "nodes_retained_pct": 13.59,
+      "raw_events": 125235,
+      "retained_events": 18510,
+      "events_retained_pct": 14.78,
+      "partition_sizes": [
+        8,
+        17
+      ],
+      "edges_median": 40.5,
+      "bridge_width_first": 9,
+      "bridge_width_last": 0,
+      "bridge_width_min": 0,
+      "bridge_width_max": 28,
+      "snapshots_with_zero_bridge_width": 2,
+      "connected_snapshots": 0,
+      "explanation_rows": 180,
+      "valid_rows": 144,
+      "invalid_rows": 36,
+      "invalid_rows_by_status": {
+        "saturated": 18,
+        "edge_count_infeasible": 18
+      },
+      "noop_rows_valid": 12,
+      "noop_fraction_valid": 0.08333333333333333,
+      "noop_fraction_all_rows_with_numbers": 0.07407407407407407,
+      "models": [
+        "persistence_bridge_width",
+        "trend_bridge_width",
+        "slope_bridge_width",
+        "persistence_density",
+        "persistence_centralization",
+        "trend_clustering"
+      ],
+      "transformations": [
+        "Bridge Width",
+        "Centralization",
+        "Density",
+        "Bridge Trend",
+        "Churn"
+      ],
+      "deltas": [
+        0.1,
+        0.25,
+        0.5
+      ],
+      "seed": 42,
+      "largest_absolute_impact_valid_rows": {
+        "model": "trend_bridge_width",
+        "transformation": "Bridge Width",
+        "direction": "increase",
+        "requested_delta": 0.1,
+        "impact": 10.967843137254924
+      },
+      "expected_invariance_history_only_transformations": {
+        "statement": "Expected by construction, then verified on this dataset: Bridge Trend and Churn return the last snapshot untouched (the TSAP anchor rule in the time dimension), and the persistence models read only the last snapshot, so their prediction change must be exactly 0. A zero here is therefore a VERIFICATION OF AN EXPECTED INVARIANT - a correctness check on the implementation and the pipeline - not an unexpected empirical discovery about the data.",
+        "rows_checked": 27,
+        "verified": true,
+        "max_absolute_impact_observed": 0.0
+      },
+      "edge_count_infeasible_settings": 3,
+      "edge_count_settings_checked": 30,
+      "strict_mode_disagreements": 0,
+      "bridge_trend_status_counts": {
+        "saturated": 3,
+        "ok": 3
+      },
+      "bridge_trend_max_saturated_fraction": 0.5,
+      "edge_weight_used": false,
+      "edge_sign_used": false
+    },
+    "tgbl_uci": {
+      "dataset": "tgbl_uci",
+      "analysis_mode": "temporal_evaluation",
+      "selection_fraction_of_span": 0.2,
+      "node_selection_mode": "temporal_train",
+      "community_mode": "temporal_train",
+      "selection_period": "0.0d .. 38.7d",
+      "evaluation_period": "38.7d .. 193.7d",
+      "future_information_used_for_node_selection": false,
+      "snapshot_count": 16,
+      "raw_nodes": 1899,
+      "retained_nodes": 120,
+      "nodes_retained_pct": 6.32,
+      "raw_events": 59835,
+      "retained_events": 1663,
+      "events_retained_pct": 2.78,
+      "partition_sizes": [
+        55,
+        65
+      ],
+      "edges_median": 13.0,
+      "bridge_width_first": 74,
+      "bridge_width_last": 2,
+      "bridge_width_min": 1,
+      "bridge_width_max": 74,
+      "snapshots_with_zero_bridge_width": 0,
+      "connected_snapshots": 0,
+      "explanation_rows": 180,
+      "valid_rows": 138,
+      "invalid_rows": 42,
+      "invalid_rows_by_status": {
+        "edge_count_infeasible": 24,
+        "saturated": 18
+      },
+      "noop_rows_valid": 36,
+      "noop_fraction_valid": 0.2608695652173913,
+      "noop_fraction_all_rows_with_numbers": 0.23076923076923078,
+      "models": [
+        "persistence_bridge_width",
+        "trend_bridge_width",
+        "slope_bridge_width",
+        "persistence_density",
+        "persistence_centralization",
+        "trend_clustering"
+      ],
+      "transformations": [
+        "Bridge Width",
+        "Centralization",
+        "Density",
+        "Bridge Trend",
+        "Churn"
+      ],
+      "deltas": [
+        0.1,
+        0.25,
+        0.5
+      ],
+      "seed": 42,
+      "largest_absolute_impact_valid_rows": {
+        "model": "trend_bridge_width",
+        "transformation": "Bridge Width",
+        "direction": "decrease",
+        "requested_delta": -0.1,
+        "impact": 10.931250000000155
+      },
+      "expected_invariance_history_only_transformations": {
+        "statement": "Expected by construction, then verified on this dataset: Bridge Trend and Churn return the last snapshot untouched (the TSAP anchor rule in the time dimension), and the persistence models read only the last snapshot, so their prediction change must be exactly 0. A zero here is therefore a VERIFICATION OF AN EXPECTED INVARIANT - a correctness check on the implementation and the pipeline - not an unexpected empirical discovery about the data.",
+        "rows_checked": 27,
+        "verified": true,
+        "max_absolute_impact_observed": 0.0
+      },
+      "edge_count_infeasible_settings": 4,
+      "edge_count_settings_checked": 30,
+      "strict_mode_disagreements": 0,
+      "bridge_trend_status_counts": {
+        "saturated": 3,
+        "ok": 3
+      },
+      "bridge_trend_max_saturated_fraction": 0.5,
+      "edge_weight_used": false,
+      "edge_sign_used": false
+    },
+    "sx_mathoverflow": {
+      "dataset": "sx_mathoverflow",
+      "analysis_mode": "temporal_evaluation",
+      "selection_fraction_of_span": 0.2,
+      "node_selection_mode": "temporal_train",
+      "community_mode": "temporal_train",
+      "selection_period": "0.0d .. 470.1d",
+      "evaluation_period": "470.1d .. 2350.3d",
+      "future_information_used_for_node_selection": false,
+      "snapshot_count": 16,
+      "raw_nodes": 24818,
+      "retained_nodes": 120,
+      "nodes_retained_pct": 0.48,
+      "raw_events": 506550,
+      "retained_events": 10685,
+      "events_retained_pct": 2.11,
+      "partition_sizes": [
+        57,
+        63
+      ],
+      "edges_median": 236.5,
+      "bridge_width_first": 386,
+      "bridge_width_last": 29,
+      "bridge_width_min": 29,
+      "bridge_width_max": 386,
+      "snapshots_with_zero_bridge_width": 0,
+      "connected_snapshots": 0,
+      "explanation_rows": 180,
+      "valid_rows": 162,
+      "invalid_rows": 18,
+      "invalid_rows_by_status": {
+        "edge_count_infeasible": 12,
+        "saturated": 6
+      },
+      "noop_rows_valid": 0,
+      "noop_fraction_valid": 0.0,
+      "noop_fraction_all_rows_with_numbers": 0.0,
+      "models": [
+        "persistence_bridge_width",
+        "trend_bridge_width",
+        "slope_bridge_width",
+        "persistence_density",
+        "persistence_centralization",
+        "trend_clustering"
+      ],
+      "transformations": [
+        "Bridge Width",
+        "Centralization",
+        "Density",
+        "Bridge Trend",
+        "Churn"
+      ],
+      "deltas": [
+        0.1,
+        0.25,
+        0.5
+      ],
+      "seed": 42,
+      "largest_absolute_impact_valid_rows": {
+        "model": "persistence_bridge_width",
+        "transformation": "Bridge Width",
+        "direction": "increase",
+        "requested_delta": 0.5,
+        "impact": 30.0
+      },
+      "expected_invariance_history_only_transformations": {
+        "statement": "Expected by construction, then verified on this dataset: Bridge Trend and Churn return the last snapshot untouched (the TSAP anchor rule in the time dimension), and the persistence models read only the last snapshot, so their prediction change must be exactly 0. A zero here is therefore a VERIFICATION OF AN EXPECTED INVARIANT - a correctness check on the implementation and the pipeline - not an unexpected empirical discovery about the data.",
+        "rows_checked": 30,
+        "verified": true,
+        "max_absolute_impact_observed": 0.0
+      },
+      "edge_count_infeasible_settings": 2,
+      "edge_count_settings_checked": 30,
+      "strict_mode_disagreements": 0,
+      "bridge_trend_status_counts": {
+        "ok": 5,
+        "saturated": 1
+      },
+      "bridge_trend_max_saturated_fraction": 0.0625,
+      "edge_weight_used": false,
+      "edge_sign_used": false
+    },
+    "bitcoin_otc": {
+      "dataset": "bitcoin_otc",
+      "analysis_mode": "temporal_evaluation",
+      "selection_fraction_of_span": 0.2,
+      "node_selection_mode": "temporal_train",
+      "community_mode": "temporal_train",
+      "selection_period": "0.0d .. 380.7d",
+      "evaluation_period": "380.7d .. 1903.3d",
+      "future_information_used_for_node_selection": false,
+      "snapshot_count": 14,
+      "raw_nodes": 5881,
+      "retained_nodes": 120,
+      "nodes_retained_pct": 2.04,
+      "raw_events": 35592,
+      "retained_events": 414,
+      "events_retained_pct": 1.16,
+      "partition_sizes": [
+        45,
+        75
+      ],
+      "edges_median": 9.5,
+      "bridge_width_first": 24,
+      "bridge_width_last": 1,
+      "bridge_width_min": 1,
+      "bridge_width_max": 25,
+      "snapshots_with_zero_bridge_width": 0,
+      "connected_snapshots": 0,
+      "explanation_rows": 180,
+      "valid_rows": 132,
+      "invalid_rows": 48,
+      "invalid_rows_by_status": {
+        "edge_count_infeasible": 30,
+        "saturated": 18
+      },
+      "noop_rows_valid": 36,
+      "noop_fraction_valid": 0.2727272727272727,
+      "noop_fraction_all_rows_with_numbers": 0.24,
+      "models": [
+        "persistence_bridge_width",
+        "trend_bridge_width",
+        "slope_bridge_width",
+        "persistence_density",
+        "persistence_centralization",
+        "trend_clustering"
+      ],
+      "transformations": [
+        "Bridge Width",
+        "Centralization",
+        "Density",
+        "Bridge Trend",
+        "Churn"
+      ],
+      "deltas": [
+        0.1,
+        0.25,
+        0.5
+      ],
+      "seed": 42,
+      "largest_absolute_impact_valid_rows": {
+        "model": "trend_bridge_width",
+        "transformation": "Bridge Width",
+        "direction": "decrease",
+        "requested_delta": -0.1,
+        "impact": 7.978021978022024
+      },
+      "expected_invariance_history_only_transformations": {
+        "statement": "Expected by construction, then verified on this dataset: Bridge Trend and Churn return the last snapshot untouched (the TSAP anchor rule in the time dimension), and the persistence models read only the last snapshot, so their prediction change must be exactly 0. A zero here is therefore a VERIFICATION OF AN EXPECTED INVARIANT - a correctness check on the implementation and the pipeline - not an unexpected empirical discovery about the data.",
+        "rows_checked": 27,
+        "verified": true,
+        "max_absolute_impact_observed": 0.0
+      },
+      "edge_count_infeasible_settings": 5,
+      "edge_count_settings_checked": 30,
+      "strict_mode_disagreements": 0,
+      "bridge_trend_status_counts": {
+        "saturated": 3,
+        "ok": 3
+      },
+      "bridge_trend_max_saturated_fraction": 0.21428571428571427,
+      "edge_weight_used": false,
+      "edge_sign_used": false
+    },
+    "bitcoin_alpha": {
+      "dataset": "bitcoin_alpha",
+      "analysis_mode": "temporal_evaluation",
+      "selection_fraction_of_span": 0.2,
+      "node_selection_mode": "temporal_train",
+      "community_mode": "temporal_train",
+      "selection_period": "0.0d .. 380.2d",
+      "evaluation_period": "380.2d .. 1901.0d",
+      "future_information_used_for_node_selection": false,
+      "snapshot_count": 13,
+      "raw_nodes": 3783,
+      "retained_nodes": 120,
+      "nodes_retained_pct": 3.17,
+      "raw_events": 24186,
+      "retained_events": 415,
+      "events_retained_pct": 1.72,
+      "partition_sizes": [
+        39,
+        81
+      ],
+      "edges_median": 12.0,
+      "bridge_width_first": 24,
+      "bridge_width_last": 2,
+      "bridge_width_min": 1,
+      "bridge_width_max": 25,
+      "snapshots_with_zero_bridge_width": 0,
+      "connected_snapshots": 0,
+      "explanation_rows": 180,
+      "valid_rows": 138,
+      "invalid_rows": 42,
+      "invalid_rows_by_status": {
+        "edge_count_infeasible": 30,
+        "saturated": 12
+      },
+      "noop_rows_valid": 36,
+      "noop_fraction_valid": 0.2608695652173913,
+      "noop_fraction_all_rows_with_numbers": 0.24,
+      "models": [
+        "persistence_bridge_width",
+        "trend_bridge_width",
+        "slope_bridge_width",
+        "persistence_density",
+        "persistence_centralization",
+        "trend_clustering"
+      ],
+      "transformations": [
+        "Bridge Width",
+        "Centralization",
+        "Density",
+        "Bridge Trend",
+        "Churn"
+      ],
+      "deltas": [
+        0.1,
+        0.25,
+        0.5
+      ],
+      "seed": 42,
+      "largest_absolute_impact_valid_rows": {
+        "model": "trend_bridge_width",
+        "transformation": "Bridge Width",
+        "direction": "decrease",
+        "requested_delta": -0.1,
+        "impact": 8.205128205128212
+      },
+      "expected_invariance_history_only_transformations": {
+        "statement": "Expected by construction, then verified on this dataset: Bridge Trend and Churn return the last snapshot untouched (the TSAP anchor rule in the time dimension), and the persistence models read only the last snapshot, so their prediction change must be exactly 0. A zero here is therefore a VERIFICATION OF AN EXPECTED INVARIANT - a correctness check on the implementation and the pipeline - not an unexpected empirical discovery about the data.",
+        "rows_checked": 27,
+        "verified": true,
+        "max_absolute_impact_observed": 0.0
+      },
+      "edge_count_infeasible_settings": 5,
+      "edge_count_settings_checked": 30,
+      "strict_mode_disagreements": 0,
+      "bridge_trend_status_counts": {
+        "ok": 4,
+        "saturated": 2
+      },
+      "bridge_trend_max_saturated_fraction": 0.15384615384615385,
+      "edge_weight_used": false,
+      "edge_sign_used": false
+    }
+  }
+}

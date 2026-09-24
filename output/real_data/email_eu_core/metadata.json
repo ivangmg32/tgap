@@ -1,0 +1,19 @@
+{
+  "dataset": "email-eu-core",
+  "source": "snap.stanford.edu/data/email-Eu-core-temporal.html",
+  "description": "European research institution email network (SNAP). 332,334 emails between 1,005 members over 803.9 days. Ships ground-truth department labels.",
+  "raw_file": "email-Eu-core-temporal.txt.gz",
+  "raw_bytes": 1683428,
+  "raw_sha256_first_1mb": "230f7be957e00c6dd47f9e1e2f380200646352a98f6212a20fa42cacfcaa2eaf",
+  "raw_events": 332334,
+  "raw_nodes": 986,
+  "raw_span_days": 803.9265509259259,
+  "graph_family": "unipartite (observed actor-actor edges, no projection)",
+  "graph_nodes_are": "institution members (anonymised ids)",
+  "graph_edges_are": "an email sent between two members in the window",
+  "snapshot_interval": "40 days",
+  "snapshot_count": 16,
+  "directed": false,
+  "weighted": false,
+  "node_count": 201
+}

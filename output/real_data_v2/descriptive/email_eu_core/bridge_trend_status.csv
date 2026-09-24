@@ -1,0 +1,7 @@
+dataset,analysis_mode,transformation,requested_delta,requested_direction,achieved_direction,slope_before,slope_after,slope_change,snapshots,compounding_factor,snapshots_saturated,fraction_saturated,min_bridge_width_before,max_bridge_width_before,min_bridge_width,max_bridge_width,status,valid_for_analysis
+email_eu_core,descriptive,Bridge Trend,0.1,1,1,-2.62205882352941,2.1985294117647065,4.8205882352941165,16,4.177248169415656,0,0.0,9,138,8,111,ok,True
+email_eu_core,descriptive,Bridge Trend,-0.1,-1,-1,-2.62205882352941,-23.704411764705878,-21.082352941176467,16,0.20589113209464907,0,0.0,9,138,10,411,ok,True
+email_eu_core,descriptive,Bridge Trend,0.25,1,1,-2.62205882352941,3.123529411764706,5.745588235294116,16,28.421709430404007,3,0.1875,9,138,1,94,saturated,False
+email_eu_core,descriptive,Bridge Trend,-0.25,-1,-1,-2.62205882352941,-291.22941176470584,-288.60735294117643,16,0.013363461010158062,0,0.0,9,138,12,5315,ok,True
+email_eu_core,descriptive,Bridge Trend,0.5,1,1,-2.62205882352941,2.4941176470588236,5.1161764705882335,16,437.8938903808594,5,0.3125,9,138,1,74,saturated,False
+email_eu_core,descriptive,Bridge Trend,-0.5,-1,-1,-2.62205882352941,-896.441176470588,-893.8191176470585,16,3.0517578125e-05,0,0.0,9,138,18,10028,ok,True

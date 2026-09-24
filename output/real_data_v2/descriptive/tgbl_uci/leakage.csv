@@ -1,0 +1,21 @@
+dataset,analysis_mode,transformation,property,before,after,change,delta,transformation_status,valid_for_analysis
+tgbl_uci,descriptive,Bridge Width,bridge width,41.2,45.4,4.199999999999996,0.1,ok,True
+tgbl_uci,descriptive,Bridge Width,centralization,0.09666001994017945,0.09195983478137018,-0.004700185158809267,0.1,ok,True
+tgbl_uci,descriptive,Bridge Width,density,0.01629551820728291,0.01629551820728291,0.0,0.1,ok,True
+tgbl_uci,descriptive,Bridge Width,clustering,0.031485872476519475,0.027454663222126453,-0.004031209254393021,0.1,ok,True
+tgbl_uci,descriptive,Centralization,bridge width,41.2,41.2,0.0,0.1,ok,True
+tgbl_uci,descriptive,Centralization,centralization,0.09666001994017945,0.1957911978350662,0.09913117789488676,0.1,ok,True
+tgbl_uci,descriptive,Centralization,density,0.01629551820728291,0.01629551820728291,0.0,0.1,ok,True
+tgbl_uci,descriptive,Centralization,clustering,0.031485872476519475,0.06351599499821492,0.032030122521695445,0.1,ok,True
+tgbl_uci,descriptive,Density,bridge width,41.2,41.2,0.0,0.1,ok,True
+tgbl_uci,descriptive,Density,centralization,0.09666001994017945,0.09585529126904999,-0.0008047286711294621,0.1,ok,True
+tgbl_uci,descriptive,Density,density,0.01629551820728291,0.017927170868347338,0.0016316526610644262,0.1,ok,True
+tgbl_uci,descriptive,Density,clustering,0.031485872476519475,0.032419485002945926,0.0009336125264264514,0.1,ok,True
+tgbl_uci,descriptive,Bridge Trend,bridge width,41.2,28.5,-12.700000000000003,0.1,saturated,False
+tgbl_uci,descriptive,Bridge Trend,centralization,0.09666001994017945,0.08640507050277738,-0.010254949437402072,0.1,saturated,False
+tgbl_uci,descriptive,Bridge Trend,density,0.01629551820728291,0.01629551820728291,0.0,0.1,saturated,False
+tgbl_uci,descriptive,Bridge Trend,clustering,0.031485872476519475,0.027567674576937977,-0.003918197899581498,0.1,saturated,False
+tgbl_uci,descriptive,Churn,bridge width,41.2,41.2,0.0,0.1,ok,True
+tgbl_uci,descriptive,Churn,centralization,0.09666001994017945,0.09666001994017945,0.0,0.1,ok,True
+tgbl_uci,descriptive,Churn,density,0.01629551820728291,0.01629551820728291,0.0,0.1,ok,True
+tgbl_uci,descriptive,Churn,clustering,0.031485872476519475,0.031485872476519475,0.0,0.1,ok,True

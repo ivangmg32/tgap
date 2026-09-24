@@ -1,0 +1,19 @@
+{
+  "dataset": "tgbl-enron",
+  "source": "TGB DATA_URL_DICT entry tgbl-enron",
+  "description": "Enron corporate email network (TGB). 125,235 emails among ~184 employees over 1316.4 days. Note the header is u,i,ts,label,idx - NOT the tgbl-wiki schema, which is why each adapter validates its own.",
+  "raw_file": "tgbl-enron.zip",
+  "raw_bytes": 1411386,
+  "raw_sha256_first_1mb": "48988fe202a94148a98ccc20f165476ace39eb4f5641c4a5656a9cb22ec82b0b",
+  "raw_events": 125235,
+  "raw_nodes": 184,
+  "raw_span_days": 1316.4398032407407,
+  "graph_family": "unipartite (observed actor-actor edges, no projection)",
+  "graph_nodes_are": "Enron employees (anonymised ids)",
+  "graph_edges_are": "an email between two employees in the window",
+  "snapshot_interval": "60 days",
+  "snapshot_count": 22,
+  "directed": false,
+  "weighted": false,
+  "node_count": 120
+}

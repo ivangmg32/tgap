@@ -1,0 +1,21 @@
+dataset,analysis_mode,transformation,property,before,after,change,delta,transformation_status,valid_for_analysis
+decentraland,temporal_evaluation,Bridge Width,bridge width,158.47368421052633,174.26315789473685,15.78947368421052,0.1,ok,True
+decentraland,temporal_evaluation,Bridge Width,centralization,0.26303854875283444,0.2505614686065814,-0.012477080146253039,0.1,ok,True
+decentraland,temporal_evaluation,Bridge Width,density,0.06758107389686338,0.06758107389686338,0.0,0.1,ok,True
+decentraland,temporal_evaluation,Bridge Width,clustering,0.30629000353197783,0.2815638962351197,-0.024726107296858146,0.1,ok,True
+decentraland,temporal_evaluation,Centralization,bridge width,158.47368421052633,158.47368421052633,0.0,0.1,ok,True
+decentraland,temporal_evaluation,Centralization,centralization,0.26303854875283444,0.3118619058468683,0.04882335709403385,0.1,ok,True
+decentraland,temporal_evaluation,Centralization,density,0.06758107389686338,0.06758107389686338,0.0,0.1,ok,True
+decentraland,temporal_evaluation,Centralization,clustering,0.30629000353197783,0.3073038216060016,0.0010138180740237868,0.1,ok,True
+decentraland,temporal_evaluation,Density,bridge width,158.47368421052633,158.47368421052633,0.0,0.1,ok,True
+decentraland,temporal_evaluation,Density,centralization,0.26303854875283444,0.26589200273410796,0.0028534539812735127,0.1,ok,True
+decentraland,temporal_evaluation,Density,density,0.06758107389686338,0.07435406698564592,0.006772993088782542,0.1,ok,True
+decentraland,temporal_evaluation,Density,clustering,0.30629000353197783,0.2908396458357439,-0.01545035769623393,0.1,ok,True
+decentraland,temporal_evaluation,Bridge Trend,bridge width,158.47368421052633,89.84210526315789,-68.63157894736844,0.1,saturated,False
+decentraland,temporal_evaluation,Bridge Trend,centralization,0.26303854875283444,0.22289489958662892,-0.040143649166205525,0.1,saturated,False
+decentraland,temporal_evaluation,Bridge Trend,density,0.06758107389686338,0.06758107389686338,0.0,0.1,saturated,False
+decentraland,temporal_evaluation,Bridge Trend,clustering,0.30629000353197783,0.24387774424937336,-0.062412259282604465,0.1,saturated,False
+decentraland,temporal_evaluation,Churn,bridge width,158.47368421052633,158.47368421052633,0.0,0.1,ok,True
+decentraland,temporal_evaluation,Churn,centralization,0.26303854875283444,0.2608686217708774,-0.00216992698195706,0.1,ok,True
+decentraland,temporal_evaluation,Churn,density,0.06758107389686338,0.06758107389686338,0.0,0.1,ok,True
+decentraland,temporal_evaluation,Churn,clustering,0.30629000353197783,0.30269034244014287,-0.0035996610918349603,0.1,ok,True

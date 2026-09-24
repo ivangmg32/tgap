@@ -69,6 +69,13 @@ from .SyntheticData import (
     makeScenario,
     SCENARIOS,
 )
+from .Feasibility import (
+    InfeasibleTransformation,
+    bridgeWidthFeasibility,
+    edgeCountFeasibility,
+    bridgeTrendDirection,
+    declaresEdgeCountPreservation,
+)
 from .Diagnostics import (
     CallCountingModel,
     leakageReport,
