@@ -8,9 +8,9 @@ decentraland,temporal_evaluation,Centralization,centralization,0.263038548752834
 decentraland,temporal_evaluation,Centralization,density,0.06758107389686338,0.06758107389686338,0.0,0.1,ok,True
 decentraland,temporal_evaluation,Centralization,clustering,0.30629000353197783,0.3073038216060016,0.0010138180740237868,0.1,ok,True
 decentraland,temporal_evaluation,Density,bridge width,158.47368421052633,158.47368421052633,0.0,0.1,ok,True
-decentraland,temporal_evaluation,Density,centralization,0.26303854875283444,0.26589200273410796,0.0028534539812735127,0.1,ok,True
+decentraland,temporal_evaluation,Density,centralization,0.26303854875283444,0.26100966702470463,-0.0020288817281298166,0.1,ok,True
 decentraland,temporal_evaluation,Density,density,0.06758107389686338,0.07435406698564592,0.006772993088782542,0.1,ok,True
-decentraland,temporal_evaluation,Density,clustering,0.30629000353197783,0.2908396458357439,-0.01545035769623393,0.1,ok,True
+decentraland,temporal_evaluation,Density,clustering,0.30629000353197783,0.29283977093913827,-0.013450232592839562,0.1,ok,True
 decentraland,temporal_evaluation,Bridge Trend,bridge width,158.47368421052633,89.84210526315789,-68.63157894736844,0.1,saturated,False
 decentraland,temporal_evaluation,Bridge Trend,centralization,0.26303854875283444,0.22289489958662892,-0.040143649166205525,0.1,saturated,False
 decentraland,temporal_evaluation,Bridge Trend,density,0.06758107389686338,0.06758107389686338,0.0,0.1,saturated,False

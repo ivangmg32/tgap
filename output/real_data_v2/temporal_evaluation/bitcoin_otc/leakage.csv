@@ -8,9 +8,9 @@ bitcoin_otc,temporal_evaluation,Centralization,centralization,0.0397175819480334
 bitcoin_otc,temporal_evaluation,Centralization,density,0.0029611844737895154,0.0029611844737895154,0.0,0.1,ok,True
 bitcoin_otc,temporal_evaluation,Centralization,clustering,0.011085600907029479,0.015016342262582862,0.003930741355553383,0.1,ok,True
 bitcoin_otc,temporal_evaluation,Density,bridge width,8.642857142857142,8.642857142857142,0.0,0.1,ok,True
-bitcoin_otc,temporal_evaluation,Density,centralization,0.039717581948033445,0.040043135898427167,0.0003255539503937213,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Density,centralization,0.039717581948033445,0.040653549555415384,0.0009359676073819392,0.1,ok,True
 bitcoin_otc,temporal_evaluation,Density,density,0.0029611844737895154,0.0032412965186074424,0.00028011204481792704,0.1,ok,True
-bitcoin_otc,temporal_evaluation,Density,clustering,0.011085600907029479,0.011624622071050644,0.0005390211640211653,0.1,ok,True
+bitcoin_otc,temporal_evaluation,Density,clustering,0.011085600907029479,0.010288679574393859,-0.0007969213326356195,0.1,ok,True
 bitcoin_otc,temporal_evaluation,Bridge Trend,bridge width,8.642857142857142,6.285714285714286,-2.3571428571428568,0.1,saturated,False
 bitcoin_otc,temporal_evaluation,Bridge Trend,centralization,0.039717581948033445,0.03910716829104523,-0.0006104136569882179,0.1,saturated,False
 bitcoin_otc,temporal_evaluation,Bridge Trend,density,0.0029611844737895154,0.0029611844737895154,0.0,0.1,saturated,False

@@ -1,6 +1,7 @@
 {
   "dataset": "decentraland-dao",
   "analysis_mode": "temporal_evaluation",
+  "description": "Decentraland DAO governance votes (frozen export, 2023-04-30). 53,533 votes by 4,133 voters on 1,816 proposals over 705 days. Bipartite, so it is projected onto voters: two voters are linked when they voted on the same proposal in the window.",
   "source": "Decentraland DAO Transparency export (frozen 2023-04-30), via github.com/Dr-Ali-Ahmed/dao-delegation-replication",
   "raw_file": "dcl_votes.csv",
   "raw_bytes": 13640511,

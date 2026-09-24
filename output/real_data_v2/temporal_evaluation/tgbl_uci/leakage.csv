@@ -8,9 +8,9 @@ tgbl_uci,temporal_evaluation,Centralization,centralization,0.032367184161800316,
 tgbl_uci,temporal_evaluation,Centralization,density,0.0038865546218487396,0.0038865546218487396,0.0,0.1,ok,True
 tgbl_uci,temporal_evaluation,Centralization,clustering,0.008130794773717566,0.01223495680732523,0.004104162033607663,0.1,ok,True
 tgbl_uci,temporal_evaluation,Density,bridge width,9.9375,9.9375,0.0,0.1,ok,True
-tgbl_uci,temporal_evaluation,Density,centralization,0.032367184161800316,0.032527417746759726,0.00016023358495940998,0.1,ok,True
+tgbl_uci,temporal_evaluation,Density,centralization,0.032367184161800316,0.03199330579689502,-0.0003738783649052946,0.1,ok,True
 tgbl_uci,temporal_evaluation,Density,density,0.0038865546218487396,0.004254201680672269,0.00036764705882352984,0.1,ok,True
-tgbl_uci,temporal_evaluation,Density,clustering,0.008130794773717566,0.008074782651988533,-5.6012121729032485e-05,0.1,ok,True
+tgbl_uci,temporal_evaluation,Density,clustering,0.008130794773717566,0.008365467083297964,0.00023467230958039778,0.1,ok,True
 tgbl_uci,temporal_evaluation,Bridge Trend,bridge width,9.9375,7.625,-2.3125,0.1,saturated,False
 tgbl_uci,temporal_evaluation,Bridge Trend,centralization,0.032367184161800316,0.02862840051274747,-0.003738783649052845,0.1,saturated,False
 tgbl_uci,temporal_evaluation,Bridge Trend,density,0.0038865546218487396,0.0038865546218487396,0.0,0.1,saturated,False

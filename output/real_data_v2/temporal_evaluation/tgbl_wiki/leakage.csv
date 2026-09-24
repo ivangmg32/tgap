@@ -8,9 +8,9 @@ tgbl_wiki,temporal_evaluation,Centralization,centralization,0.06106591820877535,
 tgbl_wiki,temporal_evaluation,Centralization,density,0.005423465423465424,0.005423465423465424,0.0,0.1,ok,True
 tgbl_wiki,temporal_evaluation,Centralization,clustering,0.0751463493771186,0.06184455827573236,-0.01330179110138624,0.1,ok,True
 tgbl_wiki,temporal_evaluation,Density,bridge width,10.0,10.0,0.0,0.1,ok,True
-tgbl_wiki,temporal_evaluation,Density,centralization,0.06106591820877535,0.06130377558948988,0.00023785738071453039,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Density,centralization,0.06106591820877535,0.06209663352520496,0.0010307153164296132,0.1,ok,True
 tgbl_wiki,temporal_evaluation,Density,density,0.005423465423465424,0.005967365967365968,0.0005439005439005443,0.1,ok,True
-tgbl_wiki,temporal_evaluation,Density,clustering,0.0751463493771186,0.0722914094452556,-0.002854939931863004,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Density,clustering,0.0751463493771186,0.07185885055115825,-0.0032874988259603555,0.1,ok,True
 tgbl_wiki,temporal_evaluation,Bridge Trend,bridge width,10.0,6.615384615384615,-3.384615384615385,0.1,ok,True
 tgbl_wiki,temporal_evaluation,Bridge Trend,centralization,0.06106591820877535,0.05393019678733963,-0.007135721421435717,0.1,ok,True
 tgbl_wiki,temporal_evaluation,Bridge Trend,density,0.005423465423465424,0.005423465423465424,0.0,0.1,ok,True

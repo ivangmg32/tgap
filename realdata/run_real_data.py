@@ -81,6 +81,8 @@ import sys
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import matplotlib.patches as mpatches
 import networkx as nx
 import numpy as np
 import pandas as pd
@@ -442,11 +444,298 @@ def transformationDiagnostics(prepared, transformations, deltas):
     return pd.DataFrame(rows)
 
 
-def makeFigures(prepared, summary, metricFrame, resultFrame, figureDir):
-    ''' Four figures per dataset - no more than the results justify.
 
-    The two impact figures use ONLY rows flagged valid_for_analysis, so a
+
+##  Readable views of tgap_results.csv  ##
+#
+# tgap_results.csv is the important output, but 180 rows of numbers is not
+# something anyone reads. The three views below answer the three questions
+# people actually ask of it.
+#
+# THE SCALE PROBLEM, and why a bar chart cannot solve it. Impacts legitimately
+# span orders of magnitude in the same dataset - a model reading bridge width
+# reacts to a bridge change with impact 29.4, while a model reading density
+# reacts to the same change with 0.008. On one shared axis the small bars
+# vanish, and a vanished bar is indistinguishable from a zero or from an
+# excluded row. So the heatmap colours by RELATIVE response within each model
+# (which concept does THIS model care about?) and prints the ABSOLUTE number
+# in the cell. Colour carries the pattern, text carries the magnitude, and
+# neither has to compromise for the other.
+
+
+def _formatImpact(value):
+    ''' Compact but honest: keep enough digits to be meaningful at every
+    order of magnitude, and never round a non-zero number to "0". '''
+    if value is None or value != value:
+        return "n/a"
+    magnitude = abs(value)
+    if magnitude == 0:
+        return "0"
+    if magnitude >= 100:
+        return f"{value:+.0f}"
+    if magnitude >= 1:
+        return f"{value:+.2f}"
+    if magnitude >= 0.001:
+        return f"{value:+.3f}"
+    return f"{value:+.0e}"
+
+
+def explanationMatrix(resultFrame, delta, direction="increase"):
+    ''' The 6 models x 5 concepts table at one perturbation size, using
+    VALID rows only. Missing cells stay missing (NaN) rather than becoming
+    zero: "this was excluded" and "this model did not react" are different
+    facts and must not be drawn the same way. '''
+    subset = resultFrame[resultFrame["valid_for_analysis"]
+                         & (resultFrame["requested_delta"].abs() == delta)
+                         & (resultFrame["direction"] == direction)]
+    if subset.empty:
+        return None
+    return subset.pivot_table(index="model", columns="transformation",
+                              values="impact", dropna=False)
+
+
+def figureExplanationHeatmap(name, mode, resultFrame, path, delta,
+                             direction="increase"):
+    ''' "Which concept does each model respond to?" - the central TGAP
+    question, as one picture.
+
+    Each ROW is normalised by its own largest absolute impact, so every model
+    is readable regardless of the units it predicts in. The printed number is
+    the real impact. Grey cells with "n/a" are settings that failed a validity
+    gate, so the reader can see coverage and result at the same time.
+    '''
+    matrix = explanationMatrix(resultFrame, delta, direction)
+    if matrix is None:
+        return
+    values = matrix.to_numpy(dtype=float)
+    scale = np.nanmax(np.abs(values), axis=1, keepdims=True)
+    scale[~np.isfinite(scale) | (scale == 0)] = 1.0
+    relative = values / scale
+
+    fig, ax = plt.subplots(figsize=(1.55 * len(matrix.columns) + 3.2,
+                                    0.62 * len(matrix.index) + 2.4))
+    image = ax.imshow(np.ma.masked_invalid(relative), cmap="RdBu_r",
+                      vmin=-1, vmax=1, aspect="auto")
+    ax.set_xticks(range(len(matrix.columns)))
+    ax.set_xticklabels(matrix.columns, rotation=18, ha="right")
+    ax.set_yticks(range(len(matrix.index)))
+    ax.set_yticklabels(matrix.index)
+    for row in range(values.shape[0]):
+        for column in range(values.shape[1]):
+            cell = values[row, column]
+            shown = _formatImpact(cell)
+            # White text on saturated colour, dark text on pale colour.
+            strong = np.isfinite(relative[row, column]) and \
+                abs(relative[row, column]) > 0.55
+            ax.text(column, row, shown, ha="center", va="center", fontsize=8,
+                    color="white" if strong else "black")
+    ax.set_title(f"{name} [{mode}]: what each model responds to\n"
+                 f"{direction}, requested delta {delta}; number = impact, "
+                 f"colour = share of that model's largest response")
+    ax.grid(False)
+    fig.colorbar(image, ax=ax, label="impact / largest |impact| in the row")
+    fig.savefig(path)
+    plt.close(fig)
+
+
+# Status colours, shared by the figure and the report so the two agree.
+STATUS_COLOURS = {
+    "ok": "#2e7d32",                      # green  - usable
+    "saturated": "#ef6c00",               # orange - trend hit the floor
+    "wrong_direction": "#6a1b9a",          # purple - moved the wrong way
+    "edge_count_infeasible": "#c62828",   # red    - broke the link budget
+    "no_property_change": "#757575",      # grey   - nothing moved
+}
+
+
+def figureValidityMap(name, mode, resultFrame, path):
+    ''' "Which experiments could I actually use, and why not the others?"
+
+    One cell per (concept, signed delta). 300 of the 1,440 rows across the
+    project are excluded; without this picture that fact lives only in a
+    column of a CSV nobody scrolls to.
+    '''
+    frame = resultFrame.drop_duplicates(["transformation", "requested_delta"])
+    concepts = sorted(frame["transformation"].unique())
+    deltas = sorted(frame["requested_delta"].unique())
+    statuses = sorted(set(frame["transformation_status"]))
+
+    order = {status: index for index, status
+             in enumerate(STATUS_COLOURS)}
+    grid = np.full((len(concepts), len(deltas)), np.nan)
+    for rowIndex, concept in enumerate(concepts):
+        for columnIndex, delta in enumerate(deltas):
+            match = frame[(frame["transformation"] == concept)
+                          & (frame["requested_delta"] == delta)]
+            if not match.empty:
+                grid[rowIndex, columnIndex] = order.get(
+                    match["transformation_status"].iloc[0], np.nan)
+
+    colours = [STATUS_COLOURS[status] for status in STATUS_COLOURS]
+    cmap = mcolors.ListedColormap(colours)
+    fig, ax = plt.subplots(figsize=(1.1 * len(deltas) + 3.6,
+                                    0.58 * len(concepts) + 2.6))
+    ax.imshow(np.ma.masked_invalid(grid), cmap=cmap, aspect="auto",
+              vmin=-0.5, vmax=len(colours) - 0.5)
+    ax.set_xticks(range(len(deltas)))
+    ax.set_xticklabels([f"{d:+g}" for d in deltas])
+    ax.set_yticks(range(len(concepts)))
+    ax.set_yticklabels(concepts)
+    ax.set_xlabel("requested delta (sign = direction)")
+    for rowIndex in range(len(concepts)):
+        for columnIndex in range(len(deltas)):
+            index = grid[rowIndex, columnIndex]
+            if index == index:
+                label = list(STATUS_COLOURS)[int(index)]
+                ax.text(columnIndex, rowIndex,
+                        "OK" if label == "ok" else label.split("_")[0],
+                        ha="center", va="center", fontsize=7, color="white")
+    present = [s for s in STATUS_COLOURS if s in statuses]
+    ax.legend(handles=[mpatches.Patch(color=STATUS_COLOURS[s], label=s)
+                       for s in present],
+              loc="upper left", bbox_to_anchor=(1.02, 1.0), fontsize=8)
+    ax.set_title(f"{name} [{mode}]: which perturbations were usable\n"
+                 f"(same for every model, so computed once)")
+    ax.grid(False)
+    fig.savefig(path)
+    plt.close(fig)
+
+
+def writeReport(prepared, summary, resultFrame, trendFrame, feasibilityFrame,
+                path, delta):
+    ''' A human-readable summary of this dataset\'s run, in markdown.
+
+    The CSV files stay the source of truth; this is the thing a person reads
+    first and shows to someone else. Deliberately contains NO timestamp, so
+    two runs of the same code produce identical bytes.
+    '''
+    meta, pre = prepared.meta, prepared.preprocessing
+    valid = resultFrame[resultFrame["valid_for_analysis"]]
+    invalid = resultFrame[~resultFrame["valid_for_analysis"]]
+    lines = []
+    add = lines.append
+
+    add(f"# {prepared.name} - TGAP real-data run")
+    add("")
+    add(f"**Analysis mode:** `{meta['analysis_mode']}`"
+        + ("  (leakage-safe - use these numbers)"
+           if meta["analysis_mode"] == "temporal_evaluation"
+           else "  (FULL-PERIOD, NOT leakage-safe - description only)"))
+    add("")
+    # .get, not [...]: a report is a convenience, and a missing optional
+    # field must never abort a whole run's worth of real computation.
+    add(f"> {meta.get('description', prepared.name)}")
+    add("")
+
+    add("## What was used")
+    add("")
+    add("| | in the source file | actually used | kept |")
+    add("|---|---|---|---|")
+    add(f"| actors | {meta['raw_nodes']:,} | {meta['retained_nodes']:,} | "
+        f"{meta['nodes_retained_pct']}% |")
+    add(f"| events | {meta['raw_events']:,} | {meta['retained_events']:,} | "
+        f"{meta['events_retained_pct']}% |")
+    add("")
+    add(f"- A node is **{meta['graph_nodes_are']}**")
+    add(f"- A link means **{meta['graph_edges_are']}**")
+    add(f"- {meta['snapshot_count']} snapshots of {meta['snapshot_interval']}")
+    add(f"- Communities: **{pre['partition_sizes']}** "
+        f"via `{pre['community_mode']}`")
+    add(f"- Edge weights used: **{meta['edge_weight_used']}**, "
+        f"signs used: **{meta['edge_sign_used']}**")
+    add("")
+
+    add("## No future information")
+    add("")
+    add(f"- Actors chosen using: **{pre['selection_period']}** "
+        f"(`{pre['node_selection_mode']}`)")
+    add(f"- TGAP explained: **{pre['evaluation_period']}**")
+    add(f"- Future information used for selection: "
+        f"**{pre['future_information_used_for_node_selection']}**")
+    add("")
+
+    add("## How much of the run is usable")
+    add("")
+    add(f"**{len(valid)} of {len(resultFrame)} experiments are valid.** "
+        f"Excluded, by reason:")
+    add("")
+    if invalid.empty:
+        add("- nothing excluded")
+    else:
+        add("| reason | rows |")
+        add("|---|---|")
+        for status, count in (invalid["transformation_status"]
+                              .value_counts().items()):
+            add(f"| `{status}` | {count} |")
+    add("")
+    add(f"- edge-count invariant held in "
+        f"{int(feasibilityFrame['feasible'].sum())}/"
+        f"{len(feasibilityFrame)} settings")
+    if not trendFrame.empty:
+        counts = trendFrame["status"].value_counts().to_dict()
+        add(f"- bridge-trend status: {counts}")
+    add("")
+
+    add(f"## What each model responds to (delta {delta}, increase)")
+    add("")
+    matrix = explanationMatrix(resultFrame, delta, "increase")
+    if matrix is None:
+        add("_No valid rows at this delta._")
+    else:
+        add("Impact = change in the model's answer, divided by the change we "
+            "actually achieved. `n/a` = the experiment failed a validity "
+            "check.")
+        add("")
+        add("| model | " + " | ".join(matrix.columns) + " |")
+        add("|---" * (len(matrix.columns) + 1) + "|")
+        for modelName, row in matrix.iterrows():
+            add(f"| `{modelName}` | "
+                + " | ".join(_formatImpact(v) for v in row) + " |")
+    add("")
+
+    add("## Largest responses (valid rows only)")
+    add("")
+    strongest = valid.assign(size=valid["impact"].abs()) \
+        .sort_values("size", ascending=False).head(5)
+    if strongest.empty:
+        add("_No valid rows._")
+    else:
+        add("| model | concept | direction | delta | impact |")
+        add("|---|---|---|---|---|")
+        for _, row in strongest.iterrows():
+            add(f"| `{row['model']}` | {row['transformation']} | "
+                f"{row['direction']} | {abs(row['requested_delta']):g} | "
+                f"{_formatImpact(row['impact'])} |")
+    add("")
+
+    add("## Snapshots")
+    add("")
+    add("| # | label | links | density | bridge width |")
+    add("|---|---|---|---|---|")
+    for _, row in summary.iterrows():
+        add(f"| {row['snapshot_index']} | {row['label']} | {row['edges']} | "
+            f"{row['density']:.4f} | {row['bridge_width']} |")
+    add("")
+
+    add("---")
+    add("")
+    add("*Real data has no ground truth, so nothing here validates TGAP's "
+        "correctness - it shows the pipeline handles real temporal "
+        "structure. Every number is a model sensitivity to a controlled "
+        "counterfactual perturbation, not a causal claim.*")
+    add("")
+
+    with open(path, "w", encoding="utf-8") as handle:
+        handle.write("\n".join(lines))
+
+
+def makeFigures(prepared, summary, metricFrame, resultFrame, figureDir):
+    ''' Six figures per dataset - no more than the results justify.
+
+    Every impact figure uses ONLY rows flagged valid_for_analysis, so a
     perturbation that broke its own invariant cannot appear as a result.
+    The heatmap and the validity map are added last; see the "Readable
+    views" section above for why a bar chart alone is not enough.
     '''
     os.makedirs(figureDir, exist_ok=True)
     name = prepared.name
@@ -524,6 +813,15 @@ def makeFigures(prepared, summary, metricFrame, resultFrame, figureDir):
     ax.legend(fontsize=6, ncol=2)
     fig.savefig(os.path.join(figureDir, "delta_sensitivity.png"))
     plt.close(fig)
+
+    # 5. The explanation itself, readable at every order of magnitude.
+    figureExplanationHeatmap(
+        name, mode, resultFrame,
+        os.path.join(figureDir, "explanation_heatmap.png"), DELTAS[0])
+
+    # 6. Which perturbations survived the validity gates, and which did not.
+    figureValidityMap(name, mode, resultFrame,
+                      os.path.join(figureDir, "validity_map.png"))
 
 
 def runDataset(key, mode):
@@ -685,6 +983,11 @@ def runDataset(key, mode):
 
     makeFigures(prepared, summary, metricFrame, resultFrame,
                 os.path.join(directory, "figures"))
+
+    # The one file a person reads first. The CSVs stay the source of truth;
+    # this turns them into something showable without opening a spreadsheet.
+    writeReport(prepared, summary, resultFrame, trendFrame, feasibilityFrame,
+                os.path.join(directory, "report.md"), DELTAS[0])
 
     # The expected-invariance check of item 6: a verification, not a
     # discovery. Computed over ALL Bridge Trend / Churn rows of the
