@@ -103,9 +103,15 @@ from .adapters import decentraland, edgelist, tgbl_wiki
 from .adapters.base import (ANALYSIS_MODES, DESCRIPTIVE, SELECTION_FRACTION,
                             TEMPORAL_EVALUATION)
 
-# Versioned root: the v1 results under output/real_data/ were produced
-# before the methodological cleanup (full-period selection, no validity
-# gating) and must never be confused with these.
+# Versioned root. The pre-cleanup v1 results (full-period selection, no
+# validity gating) used to sit beside these under output/real_data/; they
+# were deleted rather than kept, because git history already holds them and
+# two similar-looking result trees invite quoting the wrong one. Recover
+# them with `git show 28df00c:output/real_data/<file>` if ever needed.
+#
+# Only the DEFAULT mode's results are committed. Descriptive-mode results
+# are reproducible on demand with `--mode descriptive` and are deliberately
+# not stored, so nobody can quote a leakage-unsafe number by accident.
 OUTPUT_ROOT = os.path.join("output", "real_data_v2")
 SEED = 42
 DELTAS = (0.1, 0.25, 0.5)

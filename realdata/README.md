@@ -15,9 +15,11 @@ python -m realdata.compare_datasets --mode both        # comparison tables + fig
 python -m unittest discover -s tests                   # 269 tests, 101.8 s
 ```
 
-> **v1 results are superseded.** `output/real_data/` holds the run made
-> before the methodological cleanup and carries a `SUPERSEDED.md`. Every
-> number below comes from `output/real_data_v2/`.
+> **Only the default mode's results are committed**, under
+> `output/real_data_v2/temporal_evaluation/`. Descriptive-mode results are
+> reproducible with `--mode descriptive` but are not stored, so a
+> leakage-unsafe number cannot be quoted by accident. The pre-cleanup v1
+> results were deleted; git history still holds them.
 
 ---
 

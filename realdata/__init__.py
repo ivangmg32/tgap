@@ -30,8 +30,11 @@ DECISION 4):
     descriptive          Full-period selection and snapshots. NOT
                          leakage-safe; for describing a dataset only.
 
-Results under output/real_data/ are the pre-cleanup v1 run and are marked
-SUPERSEDED; nothing should be quoted from them.
+Only the DEFAULT mode's results are committed, under
+output/real_data_v2/temporal_evaluation/. Descriptive-mode results are
+reproducible with `--mode descriptive` but are not stored, so a
+leakage-unsafe number cannot be quoted by accident. The pre-cleanup v1
+results were deleted; git history still holds them.
 
 Scientific caution: running TGAP on real data shows that the pipeline
 works on real temporal structure and produces interpretable sensitivities.
