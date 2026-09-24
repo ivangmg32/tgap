@@ -8,9 +8,9 @@ email_eu_core,temporal_evaluation,Centralization,centralization,0.05273869346733
 email_eu_core,temporal_evaluation,Centralization,density,0.007786069651741293,0.007786069651741293,0.0,0.1,ok,True
 email_eu_core,temporal_evaluation,Centralization,clustering,0.10024448053844416,0.0894997273579541,-0.010744753180490063,0.1,ok,True
 email_eu_core,temporal_evaluation,Density,bridge width,81.16666666666667,81.16666666666667,0.0,0.1,ok,True
-email_eu_core,temporal_evaluation,Density,centralization,0.05273869346733668,0.05404731993299833,0.0013086264656616484,0.1,ok,True
+email_eu_core,temporal_evaluation,Density,centralization,0.05273869346733668,0.05320561139028476,0.00046691792294808326,0.1,ok,True
 email_eu_core,temporal_evaluation,Density,density,0.007786069651741293,0.00857379767827529,0.000787728026533996,0.1,ok,True
-email_eu_core,temporal_evaluation,Density,clustering,0.10024448053844416,0.09576820987655747,-0.004476270661886689,0.1,ok,True
+email_eu_core,temporal_evaluation,Density,clustering,0.10024448053844416,0.09589176441418713,-0.004352716124257028,0.1,ok,True
 email_eu_core,temporal_evaluation,Bridge Trend,bridge width,81.16666666666667,49.833333333333336,-31.333333333333336,0.1,ok,True
 email_eu_core,temporal_evaluation,Bridge Trend,centralization,0.05273869346733668,0.04474246231155778,-0.007996231155778896,0.1,ok,True
 email_eu_core,temporal_evaluation,Bridge Trend,density,0.007786069651741293,0.007786069651741293,0.0,0.1,ok,True

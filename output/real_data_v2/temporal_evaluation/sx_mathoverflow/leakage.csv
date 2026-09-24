@@ -8,9 +8,9 @@ sx_mathoverflow,temporal_evaluation,Centralization,centralization,0.203674690215
 sx_mathoverflow,temporal_evaluation,Centralization,density,0.04394257703081233,0.04394257703081233,0.0,0.1,ok,True
 sx_mathoverflow,temporal_evaluation,Centralization,clustering,0.14765853609875348,0.21060839669581943,0.06294986059706595,0.1,ok,True
 sx_mathoverflow,temporal_evaluation,Density,bridge width,121.75,121.75,0.0,0.1,ok,True
-sx_mathoverflow,temporal_evaluation,Density,centralization,0.20367469021506907,0.20079048568579974,-0.002884204529269324,0.1,ok,True
+sx_mathoverflow,temporal_evaluation,Density,centralization,0.20367469021506907,0.20025637373593502,-0.0034183164791340426,0.1,ok,True
 sx_mathoverflow,temporal_evaluation,Density,density,0.04394257703081233,0.04835434173669467,0.004411764705882344,0.1,ok,True
-sx_mathoverflow,temporal_evaluation,Density,clustering,0.14765853609875348,0.14073862977347132,-0.006919906325282166,0.1,ok,True
+sx_mathoverflow,temporal_evaluation,Density,clustering,0.14765853609875348,0.140737912095935,-0.006920624002818482,0.1,ok,True
 sx_mathoverflow,temporal_evaluation,Bridge Trend,bridge width,121.75,77.6875,-44.0625,0.1,ok,True
 sx_mathoverflow,temporal_evaluation,Bridge Trend,centralization,0.20367469021506907,0.1839125480700755,-0.019762142144993555,0.1,ok,True
 sx_mathoverflow,temporal_evaluation,Bridge Trend,density,0.04394257703081233,0.04394257703081233,0.0,0.1,ok,True

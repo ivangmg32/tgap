@@ -180,6 +180,10 @@ def prepare(topItems=100, windowDays=2, mode=TEMPORAL_EVALUATION,
     meta = {
         "dataset": "tgbl-wiki",
         "analysis_mode": mode,
+        "description": "Wikipedia edit stream (TGB). 157,474 edits by 8,227 "
+                       "users on 1,000 pages over 31 days. Bipartite, so it "
+                       "is projected onto pages: two pages are linked when "
+                       "the same user edited both inside the window.",
         "source": "Temporal Graph Benchmark (TGB); archive URL from "
                   "tgb/utils/info.py DATA_URL_DICT",
         "raw_file": os.path.basename(path),
