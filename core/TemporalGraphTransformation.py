@@ -44,6 +44,18 @@ class TemporalGraphTransformation:
     # See ExplainerBase.explainDetailed for how this feeds normalization.
     deltaMode = "relative"
 
+    # Does this transformation DECLARE that it keeps the total edge count
+    # fixed while changing its property? True for every transformation
+    # whose anchor includes the edge budget (BridgeWidth, Centralization,
+    # BridgeTrend, Churn). DensityTransformation overrides it to False,
+    # because the edge count IS its property - changing it is the point,
+    # not a violation.
+    #
+    # Read by core.Feasibility.declaresEdgeCountPreservation, so a
+    # transformation states its own promise instead of being classified by
+    # name or isinstance elsewhere in the code base.
+    preservesEdgeCount = True
+
     def propertyValue(self, x):
         ''' Measure the scalar property this transformation changes, on an
         input x (a single graph OR a temporal graph - implementations must

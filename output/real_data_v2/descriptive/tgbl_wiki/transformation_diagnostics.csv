@@ -1,0 +1,31 @@
+dataset,analysis_mode,transformation,family,claims_edge_count_preservation,snapshots_edge_count_changed,requested_delta,snapshots,snapshots_modified,modified_fraction,last_snapshot_modified,structurally_blocked
+tgbl_wiki,descriptive,Bridge Width,structural,True,0,0.1,16,16,1.0,True,False
+tgbl_wiki,descriptive,Bridge Width,structural,True,0,-0.1,16,16,1.0,True,False
+tgbl_wiki,descriptive,Bridge Width,structural,True,0,0.25,16,16,1.0,True,False
+tgbl_wiki,descriptive,Bridge Width,structural,True,0,-0.25,16,16,1.0,True,False
+tgbl_wiki,descriptive,Bridge Width,structural,True,0,0.5,16,16,1.0,True,False
+tgbl_wiki,descriptive,Bridge Width,structural,True,0,-0.5,16,16,1.0,True,False
+tgbl_wiki,descriptive,Centralization,structural,True,0,0.1,16,16,1.0,True,False
+tgbl_wiki,descriptive,Centralization,structural,True,0,-0.1,16,16,1.0,True,False
+tgbl_wiki,descriptive,Centralization,structural,True,0,0.25,16,16,1.0,True,False
+tgbl_wiki,descriptive,Centralization,structural,True,0,-0.25,16,16,1.0,True,False
+tgbl_wiki,descriptive,Centralization,structural,True,0,0.5,16,16,1.0,True,False
+tgbl_wiki,descriptive,Centralization,structural,True,0,-0.5,16,16,1.0,True,False
+tgbl_wiki,descriptive,Density,structural,False,0,0.1,16,16,1.0,True,False
+tgbl_wiki,descriptive,Density,structural,False,0,-0.1,16,16,1.0,True,False
+tgbl_wiki,descriptive,Density,structural,False,0,0.25,16,16,1.0,True,False
+tgbl_wiki,descriptive,Density,structural,False,0,-0.25,16,16,1.0,True,False
+tgbl_wiki,descriptive,Density,structural,False,0,0.5,16,16,1.0,True,False
+tgbl_wiki,descriptive,Density,structural,False,0,-0.5,16,16,1.0,True,False
+tgbl_wiki,descriptive,Bridge Trend,temporal,True,0,0.1,16,15,0.9375,False,False
+tgbl_wiki,descriptive,Bridge Trend,temporal,True,5,-0.1,16,15,0.9375,False,False
+tgbl_wiki,descriptive,Bridge Trend,temporal,True,0,0.25,16,15,0.9375,False,False
+tgbl_wiki,descriptive,Bridge Trend,temporal,True,13,-0.25,16,15,0.9375,False,False
+tgbl_wiki,descriptive,Bridge Trend,temporal,True,0,0.5,16,15,0.9375,False,False
+tgbl_wiki,descriptive,Bridge Trend,temporal,True,15,-0.5,16,15,0.9375,False,False
+tgbl_wiki,descriptive,Churn,temporal,True,0,0.1,16,8,0.5,False,False
+tgbl_wiki,descriptive,Churn,temporal,True,0,-0.1,16,15,0.9375,False,False
+tgbl_wiki,descriptive,Churn,temporal,True,0,0.25,16,10,0.625,False,False
+tgbl_wiki,descriptive,Churn,temporal,True,0,-0.25,16,15,0.9375,False,False
+tgbl_wiki,descriptive,Churn,temporal,True,0,0.5,16,13,0.8125,False,False
+tgbl_wiki,descriptive,Churn,temporal,True,0,-0.5,16,15,0.9375,False,False

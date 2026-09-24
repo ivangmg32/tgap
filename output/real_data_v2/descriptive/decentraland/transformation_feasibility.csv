@@ -1,0 +1,31 @@
+dataset,analysis_mode,transformation,requested_delta,declares_edge_count_preservation,feasible,infeasible_reason,edge_count_before,edge_count_after,edge_count_preserved,snapshots_checked,snapshots_violating,strict_mode_raises,strict_mode_reason,strict_agrees_with_measurement,transformation_status
+decentraland,descriptive,Bridge Width,0.1,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Bridge Width,-0.1,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Bridge Width,0.25,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Bridge Width,-0.25,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Bridge Width,0.5,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Bridge Width,-0.5,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Centralization,0.1,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Centralization,-0.1,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Centralization,0.25,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Centralization,-0.25,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Centralization,0.5,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Centralization,-0.5,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Density,0.1,False,True,,31815,34997,False,24,0,False,,True,ok
+decentraland,descriptive,Density,-0.1,False,True,,31815,28634,False,24,0,False,,True,ok
+decentraland,descriptive,Density,0.25,False,True,,31815,39767,False,24,0,False,,True,ok
+decentraland,descriptive,Density,-0.25,False,True,,31815,23863,False,24,0,False,,True,ok
+decentraland,descriptive,Density,0.5,False,True,,31815,46744,False,24,0,False,,True,ok
+decentraland,descriptive,Density,-0.5,False,True,,31815,15952,False,24,0,False,,True,ok
+decentraland,descriptive,Bridge Trend,0.1,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Bridge Trend,-0.1,True,False,insufficient cross-community non-edges to widen the bridge,31815,58869,False,24,16,True,insufficient cross-community non-edges to widen the bridge,True,edge_count_infeasible
+decentraland,descriptive,Bridge Trend,0.25,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Bridge Trend,-0.25,True,False,insufficient cross-community non-edges to widen the bridge,31815,59189,False,24,17,True,insufficient cross-community non-edges to widen the bridge,True,edge_count_infeasible
+decentraland,descriptive,Bridge Trend,0.5,True,False,insufficient intra-community non-edges to preserve total edge count,31815,31711,False,24,3,True,insufficient intra-community non-edges to preserve total edge count,True,edge_count_infeasible
+decentraland,descriptive,Bridge Trend,-0.5,True,False,insufficient cross-community non-edges to widen the bridge,31815,59925,False,24,18,True,insufficient cross-community non-edges to widen the bridge,True,edge_count_infeasible
+decentraland,descriptive,Churn,0.1,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Churn,-0.1,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Churn,0.25,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Churn,-0.25,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Churn,0.5,True,True,,31815,31815,True,24,0,False,,True,ok
+decentraland,descriptive,Churn,-0.5,True,True,,31815,31815,True,24,0,False,,True,ok

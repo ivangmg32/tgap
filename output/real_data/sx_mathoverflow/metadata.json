@@ -1,0 +1,19 @@
+{
+  "dataset": "sx-mathoverflow",
+  "source": "snap.stanford.edu/data/sx-mathoverflow.html",
+  "description": "MathOverflow question-answer-comment interactions (SNAP). 506,550 interactions among 24,818 users over 2350.3 days - the longest span in the project.",
+  "raw_file": "sx-mathoverflow.txt.gz",
+  "raw_bytes": 3616495,
+  "raw_sha256_first_1mb": "6f4876971685a35ebc4415e8b429f725af2bc2896334a06363a17907b54322f4",
+  "raw_events": 506550,
+  "raw_nodes": 24818,
+  "raw_span_days": 2350.3398958333332,
+  "graph_family": "unipartite (observed actor-actor edges, no projection)",
+  "graph_nodes_are": "MathOverflow users",
+  "graph_edges_are": "an answer/comment interaction between two users",
+  "snapshot_interval": "120 days",
+  "snapshot_count": 20,
+  "directed": false,
+  "weighted": false,
+  "node_count": 120
+}

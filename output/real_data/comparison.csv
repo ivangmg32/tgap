@@ -1,0 +1,9 @@
+dataset,domain,family,raw_events,raw_span_days,snapshots,nodes,partition,partition_source,events_dropped_pct,edges_median,density_median,bridge_width_min,bridge_width_max,connected_snapshots,explanation_rows,noop_rows,noop_pct,persistence_blind_to_history,trend_sign_honoured,trend_max_clamped_pct
+decentraland,DAO governance,bipartite (projected),53533,705.0,24,100,52/48,detected,56.0,1230,0.2485,26,1428,0,180,0,0.0,True,3/6,66.7
+tgbl_wiki,wiki editing,bipartite (projected),157474,31.0,16,100,38/62,detected,72.2,141,0.0285,9,87,0,180,0,0.0,True,6/6,43.8
+bitcoin_alpha,crypto trust,unipartite (observed),24186,1901.0,20,120,60/60,detected,88.1,102,0.0144,1,92,0,180,36,20.0,True,6/6,25.0
+bitcoin_otc,crypto trust,unipartite (observed),35592,1903.3,21,120,59/61,detected,91.7,97,0.0136,1,79,0,180,18,10.0,True,6/6,28.6
+email_eu_core,email (institution),unipartite (observed),332334,803.9,16,201,109/92,ground truth,95.0,180,0.009,9,138,0,180,0,0.0,True,6/6,31.2
+sx_mathoverflow,Q&A interaction,unipartite (observed),506550,2350.3,20,120,61/59,detected,93.0,622,0.0872,69,465,0,180,0,0.0,True,6/6,10.0
+tgbl_enron,email (corporate),unipartite (observed),125235,1316.4,22,120,52/68,detected,20.4,158,0.0222,6,118,0,180,0,0.0,True,3/6,63.6
+tgbl_uci,student messaging,unipartite (observed),59835,193.7,20,120,50/70,detected,77.4,39,0.0055,3,204,0,180,6,3.3,True,6/6,20.0

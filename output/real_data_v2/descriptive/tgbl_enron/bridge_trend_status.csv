@@ -1,0 +1,7 @@
+dataset,analysis_mode,transformation,requested_delta,requested_direction,achieved_direction,slope_before,slope_after,slope_change,snapshots,compounding_factor,snapshots_saturated,fraction_saturated,min_bridge_width_before,max_bridge_width_before,min_bridge_width,max_bridge_width,status,valid_for_analysis
+tgbl_enron,descriptive,Bridge Trend,0.1,1,-1,4.0141163184641435,3.635234330886503,-0.37888198757764036,22,7.400249944258173,10,0.45454545454545453,6,118,1,90,wrong_direction,False
+tgbl_enron,descriptive,Bridge Trend,-0.1,-1,-1,4.0141163184641435,-24.529079616036142,-28.543195934500286,22,0.10941898913151242,0,0.0,6,118,6,623,ok,True
+tgbl_enron,descriptive,Bridge Trend,0.25,1,-1,4.0141163184641435,2.5053642010163744,-1.5087521174477692,22,108.42021724855044,12,0.5454545454545454,6,118,1,72,wrong_direction,False
+tgbl_enron,descriptive,Bridge Trend,-0.25,-1,-1,4.0141163184641435,-221.06945228684347,-225.08356860530762,22,0.002378408954200495,0,0.0,6,118,6,3536,ok,True
+tgbl_enron,descriptive,Bridge Trend,0.5,1,-1,4.0141163184641435,1.61038961038961,-2.4037267080745335,22,4987.885095119476,14,0.6363636363636364,6,118,1,58,wrong_direction,False
+tgbl_enron,descriptive,Bridge Trend,-0.5,-1,-1,4.0141163184641435,-165.66685488424613,-169.68097120271028,22,4.76837158203125e-07,0,0.0,6,118,6,3536,ok,True

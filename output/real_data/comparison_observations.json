@@ -1,0 +1,13 @@
+{
+  "datasets": 8,
+  "total_explanation_rows": 1440,
+  "datasets_where_persistence_blind_to_history": 8,
+  "noop_pct_thin_bridge_datasets": 11.1,
+  "noop_pct_thicker_bridge_datasets": 0.0,
+  "datasets_with_trend_sign_failures": [
+    "decentraland",
+    "tgbl_enron"
+  ],
+  "clamp_pct_where_sign_fails": 65.2,
+  "clamp_pct_where_sign_holds": 26.4
+}

@@ -1,0 +1,7 @@
+dataset,analysis_mode,transformation,requested_delta,requested_direction,achieved_direction,slope_before,slope_after,slope_change,snapshots,compounding_factor,snapshots_saturated,fraction_saturated,min_bridge_width_before,max_bridge_width_before,min_bridge_width,max_bridge_width,status,valid_for_analysis
+sx_mathoverflow,temporal_evaluation,Bridge Trend,0.1,1,1,-15.629411764705877,-8.880882352941173,6.748529411764704,16,4.177248169415656,0,0.0,29,386,26,265,ok,True
+sx_mathoverflow,temporal_evaluation,Bridge Trend,-0.1,-1,-1,-15.629411764705877,-38.67352941176469,-23.044117647058812,16,0.20589113209464907,0,0.0,29,386,29,774,ok,True
+sx_mathoverflow,temporal_evaluation,Bridge Trend,0.25,1,1,-15.629411764705877,-5.486764705882349,10.142647058823528,16,28.421709430404007,0,0.0,29,386,5,191,ok,True
+sx_mathoverflow,temporal_evaluation,Bridge Trend,-0.25,-1,-1,-15.629411764705877,-252.55294117647057,-236.9235294117647,16,0.013363461010158062,0,0.0,29,386,29,3591,ok,True
+sx_mathoverflow,temporal_evaluation,Bridge Trend,0.5,1,1,-15.629411764705877,-3.4999999999999982,12.129411764705878,16,437.8938903808594,1,0.0625,29,386,1,136,saturated,False
+sx_mathoverflow,temporal_evaluation,Bridge Trend,-0.5,-1,-1,-15.629411764705877,-275.0485294117647,-259.41911764705884,16,3.0517578125e-05,0,0.0,29,386,29,3591,ok,True

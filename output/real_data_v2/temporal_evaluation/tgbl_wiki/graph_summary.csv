@@ -1,0 +1,14 @@
+analysis_mode,snapshot_index,label,retained_nodes,active_retained_nodes,edges,density,average_degree,max_degree,bridge_width,connected_components,is_connected
+temporal_evaluation,0,d6-d8,100,32,81,0.016363636363636365,1.62,14,16,72,False
+temporal_evaluation,1,d8-d10,100,40,67,0.013535353535353536,1.34,12,29,70,False
+temporal_evaluation,2,d10-d12,100,19,29,0.005858585858585859,0.58,9,13,84,False
+temporal_evaluation,3,d12-d14,100,17,20,0.00404040404040404,0.4,6,8,87,False
+temporal_evaluation,4,d14-d16,100,22,42,0.008484848484848486,0.84,10,21,82,False
+temporal_evaluation,5,d16-d18,100,19,16,0.0032323232323232323,0.32,3,8,87,False
+temporal_evaluation,6,d18-d20,100,19,33,0.006666666666666667,0.66,9,9,83,False
+temporal_evaluation,7,d20-d22,100,13,19,0.0038383838383838384,0.38,5,9,91,False
+temporal_evaluation,8,d22-d24,100,14,11,0.0022222222222222222,0.22,3,3,90,False
+temporal_evaluation,9,d24-d26,100,14,11,0.0022222222222222222,0.22,3,5,91,False
+temporal_evaluation,10,d26-d28,100,9,12,0.0024242424242424242,0.24,6,5,92,False
+temporal_evaluation,11,d28-d30,100,9,7,0.0014141414141414141,0.14,3,4,94,False
+temporal_evaluation,12,d30-d32,100,2,1,0.00020202020202020202,0.02,1,0,99,False

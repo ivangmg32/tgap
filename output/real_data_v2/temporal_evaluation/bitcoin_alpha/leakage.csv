@@ -1,0 +1,21 @@
+dataset,analysis_mode,transformation,property,before,after,change,delta,transformation_status,valid_for_analysis
+bitcoin_alpha,temporal_evaluation,Bridge Width,bridge width,9.846153846153847,10.76923076923077,0.9230769230769234,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Bridge Width,centralization,0.04341919297053893,0.04013235020214082,-0.003286842768398107,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Bridge Width,density,0.003199741435035552,0.003199741435035552,0.0,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Bridge Width,clustering,0.011938339438339439,0.008687932437932437,-0.003250407000407001,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Centralization,bridge width,9.846153846153847,9.846153846153847,0.0,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Centralization,centralization,0.04341919297053893,0.061825512473568295,0.018406319503029366,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Centralization,density,0.003199741435035552,0.003199741435035552,0.0,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Centralization,clustering,0.011938339438339439,0.013355691579375792,0.001417352141036353,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Density,bridge width,9.846153846153847,9.846153846153847,0.0,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Density,centralization,0.04341919297053893,0.044416201943619685,0.0009970089730807555,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Density,density,0.003199741435035552,0.0035121741004093938,0.0003124326653738416,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Density,clustering,0.011938339438339439,0.011605655740271125,-0.0003326836980683135,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Bridge Trend,bridge width,9.846153846153847,7.230769230769231,-2.615384615384616,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Bridge Trend,centralization,0.04341919297053893,0.04341919297053893,0.0,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Bridge Trend,density,0.003199741435035552,0.003199741435035552,0.0,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Bridge Trend,clustering,0.011938339438339439,0.008164506433737203,-0.003773833004602236,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Churn,bridge width,9.846153846153847,9.846153846153847,0.0,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Churn,centralization,0.04341919297053893,0.04341919297053893,0.0,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Churn,density,0.003199741435035552,0.003199741435035552,0.0,0.1,ok,True
+bitcoin_alpha,temporal_evaluation,Churn,clustering,0.011938339438339439,0.011938339438339439,0.0,0.1,ok,True

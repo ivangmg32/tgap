@@ -1,0 +1,31 @@
+dataset,analysis_mode,transformation,requested_delta,declares_edge_count_preservation,feasible,infeasible_reason,edge_count_before,edge_count_after,edge_count_preserved,snapshots_checked,snapshots_violating,strict_mode_raises,strict_mode_reason,strict_agrees_with_measurement,transformation_status
+tgbl_wiki,temporal_evaluation,Bridge Width,0.1,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Bridge Width,-0.1,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Bridge Width,0.25,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Bridge Width,-0.25,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Bridge Width,0.5,True,False,insufficient removable intra-community edges to preserve total edge count,349,352,False,13,3,True,insufficient removable intra-community edges to preserve total edge count,True,edge_count_infeasible
+tgbl_wiki,temporal_evaluation,Bridge Width,-0.5,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Centralization,0.1,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Centralization,-0.1,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Centralization,0.25,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Centralization,-0.25,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Centralization,0.5,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Centralization,-0.5,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Density,0.1,False,True,,349,384,False,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Density,-0.1,False,True,,349,314,False,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Density,0.25,False,True,,349,436,False,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Density,-0.25,False,True,,349,265,False,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Density,0.5,False,True,,349,523,False,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Density,-0.5,False,True,,349,202,False,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Bridge Trend,0.1,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Bridge Trend,-0.1,True,False,insufficient removable intra-community edges to preserve total edge count,349,357,False,13,3,True,insufficient removable intra-community edges to preserve total edge count,True,edge_count_infeasible
+tgbl_wiki,temporal_evaluation,Bridge Trend,0.25,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Bridge Trend,-0.25,True,False,insufficient intra-community edges to preserve total edge count,349,826,False,13,10,True,insufficient intra-community edges to preserve total edge count,True,edge_count_infeasible
+tgbl_wiki,temporal_evaluation,Bridge Trend,0.5,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Bridge Trend,-0.5,True,False,insufficient cross-community non-edges to widen the bridge,349,9883,False,13,12,True,insufficient cross-community non-edges to widen the bridge,True,edge_count_infeasible
+tgbl_wiki,temporal_evaluation,Churn,0.1,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Churn,-0.1,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Churn,0.25,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Churn,-0.25,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Churn,0.5,True,True,,349,349,True,13,0,False,,True,ok
+tgbl_wiki,temporal_evaluation,Churn,-0.5,True,True,,349,349,True,13,0,False,,True,ok

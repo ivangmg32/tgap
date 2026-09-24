@@ -1,0 +1,21 @@
+dataset,analysis_mode,transformation,property,before,after,change,delta,transformation_status,valid_for_analysis
+tgbl_enron,descriptive,Bridge Width,bridge width,57.22727272727273,63.13636363636363,5.9090909090909065,0.1,ok,True
+tgbl_enron,descriptive,Bridge Width,centralization,0.1637749090391164,0.15600600795017544,-0.00776890108894096,0.1,ok,True
+tgbl_enron,descriptive,Bridge Width,density,0.029940157881334348,0.029940157881334348,0.0,0.1,ok,True
+tgbl_enron,descriptive,Bridge Width,clustering,0.22575264375191637,0.20859940632785487,-0.017153237424061496,0.1,ok,True
+tgbl_enron,descriptive,Centralization,bridge width,57.22727272727273,57.22727272727273,0.0,0.1,ok,True
+tgbl_enron,descriptive,Centralization,centralization,0.1637749090391164,0.33663295826805295,0.17285804922893655,0.1,ok,True
+tgbl_enron,descriptive,Centralization,density,0.029940157881334348,0.029940157881334348,0.0,0.1,ok,True
+tgbl_enron,descriptive,Centralization,clustering,0.22575264375191637,0.24415701074770088,0.018404366995784516,0.1,ok,True
+tgbl_enron,descriptive,Density,bridge width,57.22727272727273,57.22727272727273,0.0,0.1,ok,True
+tgbl_enron,descriptive,Density,centralization,0.1637749090391164,0.1634447307428364,-0.00033017829627998707,0.1,ok,True
+tgbl_enron,descriptive,Density,density,0.029940157881334348,0.03293862999745352,0.002998472116119172,0.1,ok,True
+tgbl_enron,descriptive,Density,clustering,0.22575264375191637,0.20196081721820003,-0.023791826533716337,0.1,ok,True
+tgbl_enron,descriptive,Bridge Trend,bridge width,57.22727272727273,28.181818181818183,-29.045454545454543,0.1,wrong_direction,False
+tgbl_enron,descriptive,Bridge Trend,centralization,0.1637749090391164,0.128426409084435,-0.035348499954681395,0.1,wrong_direction,False
+tgbl_enron,descriptive,Bridge Trend,density,0.029940157881334348,0.029940157881334348,0.0,0.1,wrong_direction,False
+tgbl_enron,descriptive,Bridge Trend,clustering,0.22575264375191637,0.17447735089847569,-0.05127529285344068,0.1,wrong_direction,False
+tgbl_enron,descriptive,Churn,bridge width,57.22727272727273,57.22727272727273,0.0,0.1,ok,True
+tgbl_enron,descriptive,Churn,centralization,0.1637749090391164,0.1637749090391164,0.0,0.1,ok,True
+tgbl_enron,descriptive,Churn,density,0.029940157881334348,0.029940157881334348,0.0,0.1,ok,True
+tgbl_enron,descriptive,Churn,clustering,0.22575264375191637,0.22557438771134633,-0.00017825604057003508,0.1,ok,True

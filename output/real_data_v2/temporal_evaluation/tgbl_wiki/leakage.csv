@@ -1,0 +1,21 @@
+dataset,analysis_mode,transformation,property,before,after,change,delta,transformation_status,valid_for_analysis
+tgbl_wiki,temporal_evaluation,Bridge Width,bridge width,10.0,11.153846153846153,1.1538461538461533,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Bridge Width,centralization,0.06106591820877535,0.059480202337345175,-0.0015857158714301725,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Bridge Width,density,0.005423465423465424,0.005423465423465424,0.0,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Bridge Width,clustering,0.0751463493771186,0.06493781859166475,-0.010208530785453848,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Centralization,bridge width,10.0,10.0,0.0,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Centralization,centralization,0.06106591820877535,0.08723023008737293,0.026164311878597586,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Centralization,density,0.005423465423465424,0.005423465423465424,0.0,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Centralization,clustering,0.0751463493771186,0.06184455827573236,-0.01330179110138624,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Density,bridge width,10.0,10.0,0.0,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Density,centralization,0.06106591820877535,0.06130377558948988,0.00023785738071453039,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Density,density,0.005423465423465424,0.005967365967365968,0.0005439005439005443,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Density,clustering,0.0751463493771186,0.0722914094452556,-0.002854939931863004,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Bridge Trend,bridge width,10.0,6.615384615384615,-3.384615384615385,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Bridge Trend,centralization,0.06106591820877535,0.05393019678733963,-0.007135721421435717,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Bridge Trend,density,0.005423465423465424,0.005423465423465424,0.0,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Bridge Trend,clustering,0.0751463493771186,0.05671425156040541,-0.01843209781671319,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Churn,bridge width,10.0,10.0,0.0,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Churn,centralization,0.06106591820877535,0.06106591820877535,0.0,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Churn,density,0.005423465423465424,0.005423465423465424,0.0,0.1,ok,True
+tgbl_wiki,temporal_evaluation,Churn,clustering,0.0751463493771186,0.0751463493771186,0.0,0.1,ok,True

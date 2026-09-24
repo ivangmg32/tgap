@@ -1,0 +1,27 @@
+{
+  "projection": "none - edges are observed directly between actors",
+  "node_selection": "ground-truth labels; kept the 2 largest groups ['4', '14'] with sizes [109, 92]",
+  "nodes_kept": 201,
+  "nodes_dropped": 785,
+  "events_kept": 16643,
+  "events_dropped": 315691,
+  "unique_window_edges": 2611,
+  "events_dropped_node_filter": 315691,
+  "events_dropped_self_loops": 0,
+  "events_dropped_fraction": 0.949920862746514,
+  "direction_dropped": true,
+  "self_loops_dropped": true,
+  "repeated_interactions": "collapsed to one edge per window",
+  "unused_fields": "message direction (graph is undirected)",
+  "window_days": 40,
+  "fixed_node_set": true,
+  "isolated_nodes_included": true,
+  "partition_source": "ground-truth labels (no detection)",
+  "partition_sizes": [
+    109,
+    92
+  ],
+  "aggregate_edges": 724,
+  "cohesion_usable": false,
+  "cohesion_note": "inactive nodes appear isolated, so snapshots are disconnected and algebraic connectivity is 0; cohesion is not used as a prediction target"
+}

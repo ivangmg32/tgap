@@ -1,0 +1,181 @@
+dataset,snapshot_count,model,transformation,direction,requested_delta,achieved_delta,delta_mode,baseline_prediction,after_prediction,prediction_change,impact,normalizer,noop,seed
+sx_mathoverflow,20,persistence_bridge_width,Bridge Width,increase,0.1,0.10029313232830815,relative,69.0,76.0,7.0,69.79540709812113,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Bridge Width,decrease,-0.1,-0.10029313232830828,relative,69.0,62.0,-7.0,-69.79540709812103,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Centralization,increase,0.1,1.2048018513161698,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Centralization,decrease,-0.1,-0.5597338733005496,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Density,increase,0.1,0.10002955082742324,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Density,decrease,-0.1,-0.09995567375886522,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Bridge Trend,increase,0.1,12.459398496240606,absolute,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Bridge Trend,decrease,-0.1,-66.15263157894738,absolute,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Churn,increase,0.1,0.009008729338882884,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Churn,decrease,-0.1,-0.08719680281381326,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Bridge Width,increase,0.25,0.24958123953098812,relative,69.0,86.0,17.0,68.11409395973159,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Bridge Width,decrease,-0.25,-0.24958123953098835,relative,69.0,52.0,-17.0,-68.11409395973152,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Centralization,increase,0.25,1.3002603413364193,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Centralization,decrease,-0.25,-0.7549898756146949,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Density,increase,0.25,0.25014775413711593,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Density,decrease,-0.25,-0.25014775413711576,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Bridge Trend,increase,0.25,15.372932330827076,absolute,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Bridge Trend,decrease,-0.25,-223.35187969924826,absolute,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Churn,increase,0.25,0.022059167069055707,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Churn,decrease,-0.25,-0.23307294369616702,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Bridge Width,increase,0.5,0.5004187604690117,relative,69.0,104.0,35.0,69.94142259414227,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Bridge Width,decrease,-0.5,-0.5004187604690118,relative,69.0,34.0,-35.0,-69.94142259414225,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Centralization,increase,0.5,1.3002603413364193,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Centralization,decrease,-0.5,-0.8996239514029506,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Density,increase,0.5,0.4998522458628843,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Density,decrease,-0.5,-0.4998522458628841,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Bridge Trend,increase,0.5,15.620300751879709,absolute,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Bridge Trend,decrease,-0.5,-145.19248120300765,absolute,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Churn,increase,0.5,0.04284863470750004,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_bridge_width,Churn,decrease,-0.5,-0.3449944859380322,relative,69.0,69.0,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Width,increase,0.1,0.10029313232830815,relative,95.1631578947368,104.75263157894727,9.589473684210475,95.61445994945565,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Width,decrease,-0.1,-0.10029313232830828,relative,95.1631578947368,85.57368421052627,-9.589473684210532,-95.61445994945609,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Centralization,increase,0.1,1.2048018513161698,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Centralization,decrease,-0.1,-0.5597338733005496,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Density,increase,0.1,0.10002955082742324,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Density,decrease,-0.1,-0.09995567375886522,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Trend,increase,0.1,12.459398496240606,absolute,95.1631578947368,109.9368421052631,14.773684210526298,1.1857461830909402,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Trend,decrease,-0.1,-66.15263157894738,absolute,95.1631578947368,-167.389473684211,-262.5526315789478,-3.9688917177182015,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Churn,increase,0.1,0.009008729338882884,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Churn,decrease,-0.1,-0.08719680281381326,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Width,increase,0.25,0.24958123953098812,relative,95.1631578947368,118.81052631578945,23.647368421052647,94.74818085482174,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Width,decrease,-0.25,-0.24958123953098835,relative,95.1631578947368,71.51578947368421,-23.64736842105259,-94.74818085482143,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Centralization,increase,0.25,1.3002603413364193,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Centralization,decrease,-0.25,-0.7549898756146949,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Density,increase,0.25,0.25014775413711593,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Density,decrease,-0.25,-0.25014775413711576,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Trend,increase,0.25,15.372932330827076,absolute,95.1631578947368,86.27894736842104,-8.884210526315755,-0.5779125501320526,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Trend,decrease,-0.25,-223.35187969924826,absolute,95.1631578947368,-323.2315789473705,-418.3947368421073,-1.8732537080300897,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Churn,increase,0.25,0.022059167069055707,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Churn,decrease,-0.25,-0.23307294369616702,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Width,increase,0.5,0.5004187604690117,relative,95.1631578947368,142.94736842105243,47.78421052631563,95.48844747852866,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Width,decrease,-0.5,-0.5004187604690118,relative,95.1631578947368,47.378947368420995,-47.7842105263158,-95.48844747852897,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Centralization,increase,0.5,1.3002603413364193,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Centralization,decrease,-0.5,-0.8996239514029506,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Density,increase,0.5,0.4998522458628843,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Density,decrease,-0.5,-0.4998522458628841,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Trend,increase,0.5,15.620300751879709,absolute,95.1631578947368,60.4263157894737,-34.7368421052631,-2.223826714801439,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Bridge Trend,decrease,-0.5,-145.19248120300765,absolute,95.1631578947368,1264.2421052631562,1169.0789473684194,8.05192484956447,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Churn,increase,0.5,0.04284863470750004,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_bridge_width,Churn,decrease,-0.5,-0.3449944859380322,relative,95.1631578947368,95.1631578947368,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Width,increase,0.1,0.10029313232830815,relative,-13.67969924812031,-15.047368421052635,-1.3676691729323256,-13.636718100051755,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Width,decrease,-0.1,-0.10029313232830828,relative,-13.67969924812031,-12.312030075187973,1.3676691729323363,13.636718100051844,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Centralization,increase,0.1,1.2048018513161698,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Centralization,decrease,-0.1,-0.5597338733005496,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Density,increase,0.1,0.10002955082742324,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Density,decrease,-0.1,-0.09995567375886522,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Trend,increase,0.1,12.459398496240606,absolute,-13.67969924812031,-1.2203007518797029,12.459398496240606,1.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Trend,decrease,-0.1,-66.15263157894738,absolute,-13.67969924812031,-79.8323308270677,-66.15263157894738,-1.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Churn,increase,0.1,0.009008729338882884,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Churn,decrease,-0.1,-0.08719680281381326,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Width,increase,0.25,0.24958123953098812,relative,-13.67969924812031,-17.10375939849624,-3.424060150375931,-13.719220870969343,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Width,decrease,-0.25,-0.24958123953098835,relative,-13.67969924812031,-10.255639097744364,3.4240601503759454,13.719220870969387,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Centralization,increase,0.25,1.3002603413364193,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Centralization,decrease,-0.25,-0.7549898756146949,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Density,increase,0.25,0.25014775413711593,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Density,decrease,-0.25,-0.25014775413711576,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Trend,increase,0.25,15.372932330827076,absolute,-13.67969924812031,1.6932330827067668,15.372932330827076,1.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Trend,decrease,-0.25,-223.35187969924826,absolute,-13.67969924812031,-237.03157894736856,-223.35187969924826,-1.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Churn,increase,0.25,0.022059167069055707,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Churn,decrease,-0.25,-0.23307294369616702,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Width,increase,0.5,0.5004187604690117,relative,-13.67969924812031,-20.50977443609024,-6.83007518796993,-13.648719287759159,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Width,decrease,-0.5,-0.5004187604690118,relative,-13.67969924812031,-6.849624060150383,6.830075187969927,13.648719287759148,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Centralization,increase,0.5,1.3002603413364193,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Centralization,decrease,-0.5,-0.8996239514029506,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Density,increase,0.5,0.4998522458628843,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Density,decrease,-0.5,-0.4998522458628841,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Trend,increase,0.5,15.620300751879709,absolute,-13.67969924812031,1.940601503759399,15.620300751879709,1.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Bridge Trend,decrease,-0.5,-145.19248120300765,absolute,-13.67969924812031,-158.87218045112795,-145.19248120300765,-1.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Churn,increase,0.5,0.04284863470750004,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,slope_bridge_width,Churn,decrease,-0.5,-0.3449944859380322,relative,-13.67969924812031,-13.67969924812031,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Width,increase,0.1,0.10029313232830815,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Width,decrease,-0.1,-0.10029313232830828,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Centralization,increase,0.1,1.2048018513161698,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Centralization,decrease,-0.1,-0.5597338733005496,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Density,increase,0.1,0.10002955082742324,relative,0.032913165266106444,0.03613445378151261,0.003221288515406165,0.03220336879212542,achieved,False,42
+sx_mathoverflow,20,persistence_density,Density,decrease,-0.1,-0.09995567375886522,relative,0.032913165266106444,0.02969187675070028,-0.003221288515406165,-0.03222717024725637,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Trend,increase,0.1,12.459398496240606,absolute,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Trend,decrease,-0.1,-66.15263157894738,absolute,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Churn,increase,0.1,0.009008729338882884,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Churn,decrease,-0.1,-0.08719680281381326,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Width,increase,0.25,0.24958123953098812,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Width,decrease,-0.25,-0.24958123953098835,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Centralization,increase,0.25,1.3002603413364193,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Centralization,decrease,-0.25,-0.7549898756146949,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Density,increase,0.25,0.25014775413711593,relative,0.032913165266106444,0.041176470588235294,0.00826330532212885,0.03303369782644302,achieved,False,42
+sx_mathoverflow,20,persistence_density,Density,decrease,-0.25,-0.25014775413711576,relative,0.032913165266106444,0.02464985994397759,-0.008263305322128853,-0.03303369782644306,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Trend,increase,0.25,15.372932330827076,absolute,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Trend,decrease,-0.25,-223.35187969924826,absolute,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Churn,increase,0.25,0.022059167069055707,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Churn,decrease,-0.25,-0.23307294369616702,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Width,increase,0.5,0.5004187604690117,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Width,decrease,-0.5,-0.5004187604690118,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Centralization,increase,0.5,1.3002603413364193,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Centralization,decrease,-0.5,-0.8996239514029506,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Density,increase,0.5,0.4998522458628843,relative,0.032913165266106444,0.04929971988795518,0.016386554621848737,0.0327827968314136,achieved,False,42
+sx_mathoverflow,20,persistence_density,Density,decrease,-0.5,-0.4998522458628841,relative,0.032913165266106444,0.016526610644257703,-0.01638655462184874,-0.03278279683141362,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Trend,increase,0.5,15.620300751879709,absolute,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Bridge Trend,decrease,-0.5,-145.19248120300765,absolute,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Churn,increase,0.5,0.04284863470750004,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_density,Churn,decrease,-0.5,-0.3449944859380322,relative,0.032913165266106444,0.032913165266106444,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Width,increase,0.1,0.10029313232830815,relative,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Width,decrease,-0.1,-0.10029313232830828,relative,0.18017376442102265,0.17162797322318757,-0.008545791197835079,-0.08520813937549125,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Centralization,increase,0.1,1.2048018513161698,relative,0.18017376442102265,0.38527275316906423,0.20509898874804158,0.17023462283360863,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Centralization,decrease,-0.1,-0.5597338733005496,relative,0.18017376442102265,0.06907847884916679,-0.11109528557185586,-0.19847876083819416,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Density,increase,0.1,0.10002955082742324,relative,0.18017376442102265,0.17689787779518587,-0.003275886625836777,-0.03274918860216144,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Density,decrease,-0.1,-0.09995567375886522,relative,0.18017376442102265,0.17490385984902435,-0.005269904571998302,-0.05272241558504733,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Trend,increase,0.1,12.459398496240606,absolute,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Trend,decrease,-0.1,-66.15263157894738,absolute,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Churn,increase,0.1,0.009008729338882884,relative,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Churn,decrease,-0.1,-0.08719680281381326,relative,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Width,increase,0.25,0.24958123953098812,relative,0.18017376442102265,0.15453639082751744,-0.02563737359350521,-0.10272155728404442,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Width,decrease,-0.25,-0.24958123953098835,relative,0.18017376442102265,0.17162797322318757,-0.008545791197835079,-0.03424051909468148,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Centralization,increase,0.25,1.3002603413364193,relative,0.18017376442102265,0.5732801595214357,0.3931063951004131,0.3023289895132653,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Centralization,decrease,-0.25,-0.7549898756146949,relative,0.18017376442102265,0.04344110525566159,-0.13673265916536106,-0.18110528840408166,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Density,increase,0.25,0.25014775413711593,relative,0.18017376442102265,0.17177040307648483,-0.008403361344537813,-0.03359359100994205,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Density,decrease,-0.25,-0.25014775413711576,relative,0.18017376442102265,0.13730237857855007,-0.042871385842472576,-0.17138425244055197,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Trend,increase,0.25,15.372932330827076,absolute,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Trend,decrease,-0.25,-223.35187969924826,absolute,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Churn,increase,0.25,0.022059167069055707,relative,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Churn,decrease,-0.25,-0.23307294369616702,relative,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Width,increase,0.5,0.5004187604690117,relative,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Width,decrease,-0.5,-0.5004187604690118,relative,0.18017376442102265,0.16308218202535252,-0.01709158239567013,-0.03415455963251905,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Centralization,increase,0.5,1.3002603413364193,relative,0.18017376442102265,0.5732801595214357,0.3931063951004131,0.3023289895132653,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Centralization,decrease,-0.5,-0.8996239514029506,relative,0.18017376442102265,0.026349522859991453,-0.1538242415610312,-0.17098726787025234,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Density,increase,0.5,0.4998522458628843,relative,0.18017376442102265,0.17205526278307934,-0.00811850163794331,-0.016241802863021078,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Density,decrease,-0.5,-0.4998522458628841,relative,0.18017376442102265,0.0771969804871101,-0.10297678393391255,-0.20601444684147802,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Trend,increase,0.5,15.620300751879709,absolute,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Bridge Trend,decrease,-0.5,-145.19248120300765,absolute,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Churn,increase,0.5,0.04284863470750004,relative,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,persistence_centralization,Churn,decrease,-0.5,-0.3449944859380322,relative,0.18017376442102265,0.18017376442102265,0.0,0.0,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Width,increase,0.1,0.10029313232830815,relative,0.15782085336424584,0.13966369859010241,-0.018157154774143425,-0.1810408584578477,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Width,decrease,-0.1,-0.10029313232830828,relative,0.15782085336424584,0.15200890577617696,-0.005811947588068883,-0.0579496068488872,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Centralization,increase,0.1,1.2048018513161698,relative,0.15782085336424584,0.29670319939276724,0.1388823460285214,0.11527401445872715,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Centralization,decrease,-0.1,-0.5597338733005496,relative,0.15782085336424584,0.10197909310721584,-0.05584176025703,-0.09976483990106083,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Density,increase,0.1,0.10002955082742324,relative,0.15782085336424584,0.14236887341024093,-0.015451979954004907,-0.15447415115022917,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Density,decrease,-0.1,-0.09995567375886522,relative,0.15782085336424584,0.12489521533943465,-0.03292563802481119,-0.3294023919466699,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Trend,increase,0.1,12.459398496240606,absolute,0.15782085336424584,0.13344664513026563,-0.024374208233980205,-0.001956290926992557,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Trend,decrease,-0.1,-66.15263157894738,absolute,0.15782085336424584,0.20469522882623725,0.04687437546199141,0.0007085791501136421,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Churn,increase,0.1,0.009008729338882884,relative,0.15782085336424584,0.1512776099706491,-0.006543243393596743,-0.7263225641995067,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Churn,decrease,-0.1,-0.08719680281381326,relative,0.15782085336424584,0.15881667064247734,0.0009958172782315033,0.011420341642087722,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Width,increase,0.25,0.24958123953098812,relative,0.15782085336424584,0.11722295554323242,-0.04059789782101342,-0.16266406039694647,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Width,decrease,-0.25,-0.24958123953098835,relative,0.15782085336424584,0.13802144071748362,-0.019799412646762216,-0.07933053255112107,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Centralization,increase,0.25,1.3002603413364193,relative,0.15782085336424584,0.34160128179752386,0.18378042843327802,0.14134125497082134,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Centralization,decrease,-0.25,-0.7549898756146949,relative,0.15782085336424584,0.052313591043682744,-0.1055072623205631,-0.13974659227669983,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Density,increase,0.25,0.25014775413711593,relative,0.15782085336424584,0.1339841263823524,-0.02383672698189343,-0.09529058961220005,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Density,decrease,-0.25,-0.25014775413711576,relative,0.15782085336424584,0.09963004577866943,-0.058190807585576404,-0.2326257446776026,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Trend,increase,0.25,15.372932330827076,absolute,0.15782085336424584,0.11676228075200809,-0.04105857261223775,-0.0026708354482185355,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Trend,decrease,-0.25,-223.35187969924826,absolute,0.15782085336424584,0.09479863119080241,-0.06302222217344343,-0.0002821656225069842,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Churn,increase,0.25,0.022059167069055707,relative,0.15782085336424584,0.14060303414880032,-0.017217819215445518,-0.7805289819667958,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Churn,decrease,-0.25,-0.23307294369616702,relative,0.15782085336424584,0.1511885750774962,-0.006632278286749643,-0.02845580521519244,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Width,increase,0.5,0.5004187604690117,relative,0.15782085336424584,0.09771634583076405,-0.06010450753348179,-0.12010842174891592,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Width,decrease,-0.5,-0.5004187604690118,relative,0.15782085336424584,0.11871448295620063,-0.03910637040804521,-0.0781472908237757,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Centralization,increase,0.5,1.3002603413364193,relative,0.15782085336424584,0.34160128179752386,0.18378042843327802,0.14134125497082134,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Centralization,decrease,-0.5,-0.8996239514029506,relative,0.15782085336424584,0.04748853528549073,-0.11033231807875511,-0.12264270855249401,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Density,increase,0.5,0.4998522458628843,relative,0.15782085336424584,0.13083013687690626,-0.026990716487339583,-0.05399738965010767,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Density,decrease,-0.5,-0.4998522458628841,relative,0.15782085336424584,0.037204469542861524,-0.12061638382138432,-0.24130407499353507,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Trend,increase,0.5,15.620300751879709,absolute,0.15782085336424584,0.12174760861112766,-0.03607324475311818,-0.0023093822152417402,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Bridge Trend,decrease,-0.5,-145.19248120300765,absolute,0.15782085336424584,0.047976130525524914,-0.10984472283872093,-0.0007565455313428827,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Churn,increase,0.5,0.04284863470750004,relative,0.15782085336424584,0.12552429956274422,-0.03229655380150162,-0.753735889648978,achieved,False,42
+sx_mathoverflow,20,trend_clustering,Churn,decrease,-0.5,-0.3449944859380322,relative,0.15782085336424584,0.13873475398313367,-0.019086099381112165,-0.05532291140601129,achieved,False,42

@@ -219,3 +219,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Real-data raw downloads: large, reproducible via `python -m realdata.download`
+realdata/data/
