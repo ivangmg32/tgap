@@ -41,7 +41,8 @@ repaired by guesswork - inventing a repair strategy would invent a
 different concept.
 '''
 
-from .Communities import interCommunityEdges, intraCommunityEdges
+from .Communities import (asPartition, interCommunityEdges,
+                          intraCommunityEdges)
 
 
 class InfeasibleTransformation(Exception):
@@ -56,7 +57,7 @@ class InfeasibleTransformation(Exception):
         self.detail = dict(detail or {})
 
 
-def bridgeWidthFeasibility(graph, communities, targetWidth):
+def bridgeWidthFeasibility(graph, communities, targetWidth, pair=None):
     ''' Can `graph`'s bridge be set to `targetWidth` while keeping the node
     set AND the total edge count fixed?
 
@@ -70,13 +71,23 @@ def bridgeWidthFeasibility(graph, communities, targetWidth):
     Returns a dict with the verdict and every count behind it. Pure
     inspection: the graph is not modified and no transformation is run.
     '''
-    setA, setB = communities
-    sizeA, sizeB = len(setA), len(setB)
+    partition = asPartition(communities)
+    if pair is None:
+        # Aggregate bridge: every boundary counts, and payment may be taken
+        # from inside any community.
+        payable = range(len(partition))
+        crossPairs = sum(len(partition[i]) * len(partition[j])
+                         for i, j in partition.pairs())
+    else:
+        i, j = pair
+        payable = (i, j)
+        crossPairs = len(partition[i]) * len(partition[j])
 
-    width = len(interCommunityEdges(graph, communities))
-    intraEdges = len(intraCommunityEdges(graph, communities))
-    crossPairs = sizeA * sizeB
-    intraPairs = sizeA * (sizeA - 1) // 2 + sizeB * (sizeB - 1) // 2
+    width = len(interCommunityEdges(graph, partition, pair))
+    intraEdges = sum(len(intraCommunityEdges(graph, partition, c))
+                     for c in payable)
+    intraPairs = sum(len(partition[c]) * (len(partition[c]) - 1) // 2
+                     for c in payable)
 
     crossNonEdges = crossPairs - width
     intraNonEdges = intraPairs - intraEdges
