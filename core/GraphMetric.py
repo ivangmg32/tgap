@@ -62,24 +62,40 @@ class DegreeCentralizationMetric(Metric):
 
 
 class BridgeWidthMetric(Metric):
-    ''' The width of the bridge between two communities = the number of
-    edges crossing between them. This is the most direct operationalization
-    of the CATALYST "wide bridge" concept: each crossing edge is one
-    redundant tie, and the count is how many ties must fail before the
-    two communities disconnect (along this partition).
+    ''' The width of the bridge between communities = the number of edges
+    crossing between them. This is the most direct operationalization of the
+    CATALYST "wide bridge" concept: each crossing edge is one redundant tie,
+    and the count is how many ties must fail before the groups disconnect
+    (along this partition).
 
-    communities: optional (setA, setB) partition. Pass it explicitly for
-    real experiments; if None, it is auto-detected per call (convenient
-    but slower and less stable - see Communities.py). '''
+    communities   : optional partition - a (setA, setB) pair, a list of node
+                    sets, or a Communities.Partition of ANY size N. Pass it
+                    explicitly for real experiments; if None it is
+                    auto-detected per call into two communities (convenient
+                    but slower and less stable - see Communities.py).
+    communityPair : None      measure the AGGREGATE bridge, i.e. every edge
+                              whose endpoints lie in different communities.
+                              With N = 2 there is one boundary, so this is
+                              exactly the historical definition and returns
+                              exactly the historical value.
+                    (i, j)    measure only the bridge between communities i
+                              and j - one cell of the pairwise bridge matrix
+                              (see Communities.bridgeMatrix).
 
-    def __init__(self, communities=None):
+    The aggregate is a SUM over pairs, not an average: that is the only
+    aggregate which reduces to the original two-community count, so every
+    result previously published from this code base remains valid. '''
+
+    def __init__(self, communities=None, communityPair=None):
         self.communities = communities
+        self.communityPair = communityPair
 
     def measure(self, graph):
         communities = self.communities
         if communities is None:
             communities = detectTwoCommunities(graph)
-        return float(len(interCommunityEdges(graph, communities)))
+        return float(len(interCommunityEdges(graph, communities,
+                                             self.communityPair)))
 
 
 class ClusteringMetric(Metric):
