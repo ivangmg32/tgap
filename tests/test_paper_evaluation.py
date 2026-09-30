@@ -17,6 +17,9 @@ What IS new here:
 
 import contextlib
 import io
+import os
+import shutil
+import tempfile
 import unittest
 
 import numpy as np
@@ -31,6 +34,40 @@ from core import (
 )
 
 import paper_evaluation as pe
+
+
+# --------------------------------------------------------------------------
+# Tests must never write into the REAL results directory.
+#
+# paper_evaluation writes its CSVs and figures to output/paper/, and some of
+# the functions exercised below (rq1bMatchedComparison in particular) write
+# as a side effect. Running the test suite therefore used to OVERWRITE the
+# committed publication results with test-scale fixtures - seed 7 instead of
+# 42, 81 rows instead of 201 - which silently corrupted them until someone
+# noticed a stale file. Redirecting the module's OUTPUT constant for the
+# duration of the module fixes it at the right layer: the production code
+# keeps its default, and the tests simply do not touch real output.
+# --------------------------------------------------------------------------
+
+_REAL_OUTPUT = None
+_TEMP_OUTPUT = None
+
+
+def setUpModule():
+    global _REAL_OUTPUT, _TEMP_OUTPUT
+    import paper_evaluation
+    _REAL_OUTPUT = paper_evaluation.OUTPUT
+    _TEMP_OUTPUT = tempfile.mkdtemp(prefix="tgap-paper-test-")
+    paper_evaluation.OUTPUT = _TEMP_OUTPUT
+
+
+def tearDownModule():
+    import paper_evaluation
+    if _REAL_OUTPUT is not None:
+        paper_evaluation.OUTPUT = _REAL_OUTPUT
+    if _TEMP_OUTPUT:
+        shutil.rmtree(_TEMP_OUTPUT, ignore_errors=True)
+
 
 
 class TestLeakageReportStructure(unittest.TestCase):

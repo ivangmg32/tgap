@@ -220,3 +220,100 @@ def makeScenario(name, nSnapshots=6, nPerCommunity=15, seed=42):
         info["groundTruth"] = {"regime": "dense"}
 
     return tg, communities, info
+
+
+##  N-community known-truth generators  ##
+#
+# The two-community generators above are the historical ones and are left
+# untouched: every synthetic result this project reports was produced with
+# them. The generators below extend the SAME idea to N communities, so a
+# known-truth test can state an EXACT expected bridge matrix and check that
+# TGAP recovers it.
+#
+# Known truth is the whole point. On real data nobody knows the right
+# answer, so a wrong implementation looks like an interesting finding. Here
+# the bridge between every pair is placed by construction, so "did we get
+# the right number" has a yes/no answer.
+
+
+def makeNCommunityGraph(nCommunities=3, nPerCommunity=8, pIntra=0.3,
+                        bridgeWidths=None, seed=42):
+    ''' A graph with N communities and an EXACTLY specified bridge between
+    every pair.
+
+    nCommunities  : how many groups, N >= 1.
+    nPerCommunity : nodes in each group (equal sizes keeps the truth simple).
+    pIntra        : Erdos-Renyi probability INSIDE each group.
+    bridgeWidths  : {(i, j): width} for i < j. Missing pairs get `default`
+                    below. Widths are exact: the returned graph has exactly
+                    that many edges between those two groups, so a test can
+                    assert equality rather than a tolerance.
+    seed          : determinism.
+
+    Returns (graph, partition) where partition is a Communities.Partition of
+    length nCommunities, labelled "C0".."C{N-1}".
+    '''
+    from .Communities import Partition
+
+    rng = random.Random(seed)
+    groups, graph = [], nx.Graph()
+    for index in range(nCommunities):
+        members = [index * nPerCommunity + offset
+                   for offset in range(nPerCommunity)]
+        groups.append(set(members))
+        graph.add_nodes_from(members)
+        # Intra edges: Erdos-Renyi within the group.
+        for i, u in enumerate(members):
+            for v in members[i + 1:]:
+                if rng.random() < pIntra:
+                    graph.add_edge(u, v)
+
+    partition = Partition(groups,
+                          labels=[f"C{i}" for i in range(nCommunities)])
+    widths = dict(bridgeWidths or {})
+    default = widths.pop("default", 0)
+    for pair in partition.pairs():
+        wanted = widths.get(pair, default)
+        if wanted <= 0:
+            continue
+        i, j = pair
+        candidates = sorted((a, b) for a in sorted(partition[i])
+                            for b in sorted(partition[j]))
+        if wanted > len(candidates):
+            raise ValueError(
+                f"pair {pair} cannot hold {wanted} edges; at most "
+                f"{len(candidates)} exist")
+        graph.add_edges_from(rng.sample(candidates, wanted))
+    return graph, partition
+
+
+def makeNCommunityTemporalGraph(nSnapshots=6, nCommunities=3,
+                                nPerCommunity=8, pIntra=0.3,
+                                bridgeWidths=None, bridgeDrift=None, seed=42):
+    ''' A temporal graph over N communities whose pairwise bridges follow a
+    KNOWN trajectory.
+
+    bridgeDrift : {(i, j): change per snapshot}. A pair with drift +2 gains
+                  exactly two bridge edges per step, so the true slope of
+                  that pair's bridge width is exactly 2 - which a slope model
+                  must recover and a test can assert.
+
+    The node set is identical in every snapshot (TGAP's anchor rule), and the
+    partition is the same object throughout, so a detected partition can
+    never drift between snapshots and contaminate the truth.
+    '''
+    widths = dict(bridgeWidths or {})
+    drift = dict(bridgeDrift or {})
+    snapshots, partition = [], None
+    for step in range(nSnapshots):
+        stepWidths = {}
+        for key, value in widths.items():
+            if key == "default":
+                stepWidths[key] = value
+                continue
+            stepWidths[key] = max(0, value + drift.get(key, 0) * step)
+        graph, partition = makeNCommunityGraph(
+            nCommunities=nCommunities, nPerCommunity=nPerCommunity,
+            pIntra=pIntra, bridgeWidths=stepWidths, seed=seed + step)
+        snapshots.append(graph)
+    return snapshots, partition
