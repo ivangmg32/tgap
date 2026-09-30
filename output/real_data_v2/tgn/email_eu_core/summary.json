@@ -1,0 +1,32 @@
+{
+  "dataset": "email_eu_core",
+  "analysis_mode": "temporal_evaluation",
+  "model": "TGN (torch_geometric) + link-prediction readout",
+  "nodes": 201,
+  "snapshots": 12,
+  "training_epochs": 5,
+  "training_seconds": 1.08,
+  "loss_by_epoch": [
+    1.3818866511185963,
+    1.3498535950978596,
+    1.319984217484792,
+    1.284440000851949,
+    1.2864074110984802
+  ],
+  "loss_decreased": true,
+  "baseline_prediction": 0.4515158534049988,
+  "model_calls_per_delta": 11,
+  "deltas": [
+    0.1,
+    0.25,
+    0.5
+  ],
+  "seed": 42,
+  "explanation_rows": 30,
+  "largest_absolute_impact": {
+    "transformation": "Churn",
+    "direction": "decrease",
+    "impact": 0.1006046027139779
+  },
+  "scope_note": "The TGN is trained briefly and is not tuned for benchmark performance. The claim demonstrated here is that TGAP can explain a genuinely learned temporal-graph model through the predict(temporalGraph) contract alone - no gradients, no access to memory or attention internals."
+}

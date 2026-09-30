@@ -1,95 +1,283 @@
-# tgap
-Temporal Graph Additive Explanations
+# TGAP — Temporal Graph Additive exPlanations
 
-TGAP is the graph counterpart of [TSAP](../tsap_v2.1) (Time-Series Additive
-exPlanations), built for the CATALYST project. It explains any model that
-reads a (temporal) graph and outputs a number, by asking human-meaningful
-counterfactual questions:
+Model-agnostic, perturbation-based explanations for models that read
+**temporal graphs**.
 
-> *"If the bridges between these two communities were 10% wider, how would
-> the model's prediction change?"*
+TGAP answers one question: *if the ecosystem's recent history had had 10%
+wider bridges between communities (or more centralization, or more churn…),
+how would the model's prediction change?* The size of that change, per
+concept, **is** the explanation.
 
-The impact of each structural nudge, divided by the nudge size, **is** the
-explanation — a numerical sensitivity per interpretable property, at the
-cost of only `1 + 2 × properties` model calls.
+TGAP is the graph counterpart of **TSAP** (Time-Series Additive
+exPlanations) and inherits its architecture: a generic explainer, a minimal
+model interface, and **pluggable transformations**.
 
-## Quickstart
+```
+                    TGAP
+                     │
+          ┌──────────┴──────────┐
+        MODEL             TRANSFORMATIONS
+     predict(...)      pluggable custom classes
+          └──────────┬──────────┘
+                     ↓
+              CONTROLLED CHANGE  →  NEW PREDICTION  →  IMPACT
+```
+
+---
+
+## Install and run
 
 ```bash
+git clone <this repository>
+cd tgap
 pip install -r requirements.txt
-python examples.py            # interactive charts
-python examples.py --no-show  # console only
-python -m unittest discover -s tests   # test suite (75 tests)
-python evaluation.py          # quick check: faithfulness / stability / efficiency / leakage
-python paper_evaluation.py    # full RQ1-RQ8 suite -> output/paper/ (CSVs, figures, summary.json)
+
+python examples.py                       # synthetic demos
+python -m examples.MyCustomTransformation   # the extensibility example
+python -m unittest discover -s tests     # the test suite
 ```
 
-`evaluation.py` is the fast developer-facing check and writes to `output/`.
-`paper_evaluation.py` is the paper artifact: eight research questions
-(known-truth faithfulness, temporal sensitivity, stability, efficiency,
-delta sensitivity, leakage, graph-size robustness, normalization
-ablation), writing CSVs, publication figures and `summary.json` to
-`output/paper/`. Neither overwrites the other's outputs.
+Optional, for the learned-model experiments (§ *TGN* below):
 
-**Normalization note (v0.2):** impacts are normalized by the property
-change the transformation *actually achieved* (graphs are discrete: a
-requested +10% on 6 bridges realizes as +16.7%). This makes the impact a
-true finite-difference sensitivity — for relative-mode concepts, an
-estimate of d(prediction)/d(log property). `normalization="requested"`
-reproduces TSAP's literal formula. Full rationale and audit:
-[docs/03-TGAP-technical-audit.md](../docs/03-TGAP-technical-audit.md).
-
-**Scientific reading:** TGAP measures *model sensitivity to controlled
-counterfactual transformations* — concept attribution for the model's
-behavior, not causal claims about the real-world ecosystem.
-
-## Structure
-
-```
-core/
-├── GraphModel.py                 interface: predict(graph) -> float
-│                                 + MetricGraphModel (wrap a metric as a model)
-├── TemporalGraphModel.py         interface: predict([graphs]) -> float
-│                                 + Persistence / Trend baseline models
-├── GraphMetric.py                interface: measure(graph) -> float
-│                                 + Density, DegreeCentralization,
-│                                   BridgeWidth, Cohesion metrics
-├── TemporalGraphTransformation.py  transformation base class + design rules
-├── Transformations.py            BridgeWidth / Centralization / Density
-├── GraphExplainer.py             shared engine + static-graph explainer
-├── TemporalGraphExplainer.py     TgapExplainer (the temporal explainer)
-├── Communities.py                two-community partition helpers
-└── SyntheticData.py              known-truth synthetic ecosystems
-examples.py                       end-to-end demos incl. sanity check
+```bash
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+pip install torch_geometric
 ```
 
-## Correspondence with TSAP
+> **Windows note.** If `import torch` fails with
+> `WinError 1114 … c10.dll`, install the
+> [Microsoft VC++ 2015–2022 redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe).
+> PyTorch needs `vcruntime140_1.dll`, which older Windows images lack.
 
-| TSAP | TGAP |
-|---|---|
-| `TsModel.predict(series) → float` | `TemporalGraphModel.predict([graphs]) → float` |
-| a `pandas.Series` of values | a `list` of `networkx.Graph` snapshots |
-| `transformVolatility` (how jumpy) | `ChurnTransformation` (how much history differs from the present) |
-| `transformTrendReverse` (trajectory reshaped, last value fixed) | `BridgeTrendTransformation` (bridge trajectory reshaped, last **snapshot** fixed — the "bridge decay" counterfactual) |
-| *(no static analogue)* | structural: `BridgeWidthTransformation`, `CentralizationTransformation`, `DensityTransformation` |
-| anchor: last value kept fixed | anchor: last snapshot untouched (temporal) + node set & edge count kept fixed (structural) |
-| `TsapExplainer.explain / plotSummary / plotTrans / boxplotTrans` | `TgapExplainer` — same methods, same signatures |
+---
 
-## Minimal usage
+## The 60-second version
 
 ```python
-from core import (TgapExplainer, TrendTemporalModel, CohesionMetric,
-                  BridgeWidthTransformation, makeTemporalGraph)
+from core import (TgapExplainer, TrendTemporalModel, BridgeWidthMetric,
+                  BridgeWidthTransformation, CentralizationTransformation,
+                  makeTemporalGraph, detectTwoCommunities)
 
-temporalGraph, communities = makeTemporalGraph(bridgeDrift=1)  # decaying bridge
-model = TrendTemporalModel(CohesionMetric())        # forecasts next cohesion
-explainer = TgapExplainer(model)
+snapshots, communities = makeTemporalGraph(nSnapshots=6, nPerCommunity=8,
+                                           bridgeWidth=10, seed=1)
 
-print(explainer.explain(temporalGraph))   # {'Increase Bridge Width (10.0%)': ..., ...}
-explainer.plotSummary(temporalGraph)      # local bar chart
-explainer.boxplotTrans([temporalGraph])   # global boxplot
+model = TrendTemporalModel(BridgeWidthMetric(communities))
+
+explainer = TgapExplainer(model, [
+    BridgeWidthTransformation(communities, seed=42),
+    CentralizationTransformation(communities, seed=42),
+])
+
+print(explainer.explain(snapshots))
+# {'Increase Bridge Width (10.0%)':   +10.0,
+#  'Decrease Bridge Width (10.0%)':   -10.0,
+#  'Increase Centralization (10.0%)':   0.0,
+#  'Decrease Centralization (10.0%)':   0.0}
 ```
 
-Any real model (e.g. a Temporal Graph Network) plugs in by wrapping it in a
-class with a single `predict(temporalGraph) -> float` method — exactly how
-TSAP wraps Keras LSTMs behind `TsModel`.
+The output is **a number per concept per direction** — a sensitivity, read
+as *"per unit of relative change in this concept, the model's output moves
+this much."* It is a property of the **model**, not a causal claim about the
+world.
+
+---
+
+## How to add your own transformation
+
+**This is the core extensibility feature: you never edit TGAP's core.**
+
+Implement three things and pass an instance to the explainer.
+
+```python
+from core import TemporalGraphTransformation
+
+class MyTransformation(TemporalGraphTransformation):
+    name = "My Concept"                  # 1. labels the explanation row
+
+    # Does your concept promise to keep the total edge count fixed?
+    # Say so honestly - the feasibility gate reads this.
+    preservesEdgeCount = False
+
+    def propertyValue(self, x):          # 2. MEASURE the concept
+        snapshots = x if isinstance(x, list) else [x]
+        return float(...)
+
+    def transformGraph(self, graph, delta):   # 3. CHANGE it by `delta`
+        g = graph.copy()                 # never mutate the input
+        ...
+        return g
+```
+
+Then simply use it:
+
+```python
+explainer = TgapExplainer(model, [MyTransformation()])
+explainer.explain(snapshots)
+```
+
+That is the whole registration mechanism: **an object in a list.** There is
+no registry to edit, no decorator, no configuration file, no plugin
+manifest. `core/Transformations/__init__.py` re-exports the five shipped
+concepts as a convenience — adding yours there is optional and changes
+nothing.
+
+| You implement | Purpose |
+|---|---|
+| `name` | labels the explanation row |
+| `propertyValue(x)` | measures the concept; TGAP divides by its **achieved** change |
+| `transformGraph(graph, delta)` | structural concept, applied per snapshot |
+| `transform(temporalGraph, delta)` | *instead*, for a temporal concept that reshapes the trajectory |
+| `deltaMode` | `"relative"` (default) or `"absolute"` for properties that can legitimately be 0 |
+| `preservesEdgeCount` | `True` (default) if your concept keeps the edge budget fixed |
+
+**A complete worked example**, including feasibility, achieved delta and
+limitations, is in
+[`examples/MyCustomTransformation.py`](examples/MyCustomTransformation.py) —
+run it with `python -m examples.MyCustomTransformation`. Its guarantees are
+enforced by [`tests/test_custom_transformation.py`](tests/test_custom_transformation.py),
+which fails if anyone adds per-transformation special-casing to the
+explainer.
+
+---
+
+## Architecture
+
+Folder and class names follow the original scaffolding by
+**Prof. Iván García-Magariño**, deliberately preserved.
+
+```
+core/                                the TGAP framework
+├── GraphModel.py                    predict(graph) -> float
+├── TemporalGraphModel.py            predict(temporalGraph) -> float
+├── TemporalGraphTransformation.py   the transformation contract
+├── GraphExplainer.py                ExplainerBase + GraphExplainer
+├── TemporalGraphExplainer.py        TgapExplainer
+├── GraphMetric.py                   Metric.measure(graph) -> float
+├── Communities.py                   Partition, bridges, detection  (N communities)
+├── Feasibility.py                   can a transformation keep its promise?
+├── Diagnostics.py                   leakage panel, model-call counting
+├── SyntheticData.py                 known-truth generators
+├── TgnModel.py                      learned model adapter (optional torch)
+└── Transformations/                 ONE CONCEPT PER FILE
+    ├── Base.py                      shared engine (setBridgeWidth, …)
+    ├── BridgeWidth.py               ├── Centralization.py
+    ├── Density.py                   ├── BridgeTrend.py
+    └── Churn.py
+
+realdata/          8 real datasets, leakage-safe preprocessing, runners
+examples/          public API examples
+tests/             the test suite
+output/            generated results (see realdata/README.md)
+```
+
+**The explainer contains no knowledge of any concrete transformation.** It
+uses only `name`, `propertyValue`, `deltaMode`, `transform` /
+`transformGraph` — a fact asserted by a test that reads the explainer's own
+source.
+
+---
+
+## N communities
+
+TGAP supports a partition of **any** size — 1, 2, 3, … N.
+
+```python
+from core.Communities import Partition, bridgeMatrix, detectCommunities
+
+partition = Partition([groupA, groupB, groupC], labels=["A", "B", "C"])
+
+partition.communityOf(node)       # node  -> community id
+partition[i]                      # community id -> nodes
+partition.pairs()                 # [(0,1), (0,2), (1,2)]
+
+bridgeMatrix(graph, partition)    # {(0,1): 12, (0,2): 5, (1,2): 8}
+```
+
+Target one bridge, or all of them:
+
+```python
+BridgeWidthTransformation(partition, communityPair=(0, 2))   # just A–C
+BridgeWidthTransformation(partition)                          # aggregate
+BridgeWidthMetric(partition, communityPair=(1, 2))            # just B–C
+```
+
+**Bridge width was derived, not redefined.** The requirement *"at N = 2 the
+new result must equal the old"* forces the aggregate to be the **sum over
+pairs** — the count of edges crossing any community boundary. Any averaged
+or weighted alternative would disagree at N = 2 and invalidate every result
+previously published from this code base.
+
+**Backward compatibility is asserted, not assumed.** `Partition` subclasses
+`tuple`, so `setA, setB = communities` still works at N = 2. Regression
+tests in [`tests/test_communities.py`](tests/test_communities.py) require
+that `setBridgeWidth` with and without `communityPair=(0,1)` agree **edge
+for edge**.
+
+---
+
+## Explaining a learned model (TGN)
+
+`core/TgnModel.py` trains a Temporal Graph Network (PyTorch Geometric) and
+exposes it through Iván's contract:
+
+```bash
+python -m realdata.run_tgn            # Email-Eu-core
+```
+
+```
+Email-Eu-core events → TGN → TgnTemporalGraphModel.predict(temporalGraph) → TGAP
+```
+
+TGAP sees **only `predict`** — no gradients, no memory internals, no
+attention weights — which is what keeps it reusable with future models.
+A test enforces this by handing the explainer a wrapper exposing nothing
+else.
+
+> **Scope.** The TGN is trained briefly and is **not** tuned for benchmark
+> performance. The claim is *"TGAP explains a real learned temporal-graph
+> model"*, not that this TGN is competitive. Training loss is written to the
+> output so readers can see what was achieved.
+
+---
+
+## Real data
+
+Eight real temporal datasets with leakage-safe preprocessing, validity
+gating and per-dataset reports:
+
+```bash
+python -m realdata.download           # fetch raw files (once)
+python -m realdata.run_real_data      # run TGAP on all 8
+python -m realdata.compare_datasets   # cross-dataset comparison
+```
+
+Full detail, including the two case studies (Decentraland and
+Email-Eu-core), preprocessing decisions and known limitations, is in
+[`realdata/README.md`](realdata/README.md).
+
+> Real data shows **applicability, not correctness** — there is no ground
+> truth on real data. Correctness evidence comes from the synthetic
+> known-truth experiments in `paper_evaluation.py`.
+
+---
+
+## Reproducing the results
+
+```bash
+python paper_evaluation.py            # synthetic evaluation (RQ1–RQ8)
+python -m realdata.download
+python -m realdata.run_real_data
+python -m realdata.compare_datasets
+python -m realdata.run_tgn
+python -m unittest discover -s tests
+```
+
+Every random choice is seeded (`seed=42`). One documented exception to exact
+reproducibility is recorded in `realdata/README.md`.
+
+---
+
+## Citing and license
+
+Part of the **CATALYST** project (PID2025; PIs Samer Hassan and
+Iván García-Magariño). See [LICENSE](LICENSE).
