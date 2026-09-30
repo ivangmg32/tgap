@@ -35,7 +35,7 @@ from ..Communities import (
 from ..GraphMetric import DegreeCentralizationMetric
 # Feasibility imports only Communities, so there is no import cycle here.
 from ..Feasibility import InfeasibleTransformation, bridgeWidthFeasibility
-from .Base import _snapshots, _safeToRemove
+from .Base import _edgeKey, _snapshots, _safeToRemove
 
 
 class DensityTransformation(TemporalGraphTransformation):
@@ -89,7 +89,17 @@ class DensityTransformation(TemporalGraphTransformation):
         k = round(m * (1 + delta)) - m
         if k > 0:
             # Add k edges between (eligible) pairs not connected yet.
-            candidates = sorted(e for e in nx.non_edges(g)
+            # _edgeKey BEFORE sorting. nx.non_edges derives pairs from set
+            # arithmetic, so the ORIENTATION it yields them in depends on the
+            # hash of the node labels - and Python randomises string hashes
+            # per process. Without canonicalisation the same pair arrives as
+            # ('28','3') in one run and ('3','28') in the next, sorting to
+            # different positions, so the seeded sample picked different
+            # edges across runs. Measured: ~30 of 1,440 real-data rows moved
+            # between otherwise identical runs. Integer-labelled synthetic
+            # graphs were unaffected (hash(int) == int), which is why this
+            # survived the synthetic suite.
+            candidates = sorted(_edgeKey(*e) for e in nx.non_edges(g)
                                 if self._isIntra(*e))
             g.add_edges_from(rng.sample(candidates, min(k, len(candidates))))
         elif k < 0:
