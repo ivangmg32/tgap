@@ -53,14 +53,15 @@ TGN_STABILITY = os.path.join("output", "real_data_v2", "tgn_stability",
 OUTPUT = os.path.join("output", "publication")
 CASE_STUDIES = ("decentraland", "email_eu_core")
 
-# One visual language for the whole paper.
-POSITIVE = "#b2182b"
-NEGATIVE = "#2166ac"
-NEUTRAL = "#9e9e9e"
+# One visual language for the whole paper, defined once in realdata.plotting
+# and imported here. It used to be a second rcParams block with the same
+# values copied in - the duplication is exactly the drift that module was
+# added to prevent, so the copy is gone rather than kept in sync by hand.
+from realdata.plotting import (POSITIVE, NEGATIVE, NEUTRAL,     # noqa: E402
+                               savePublicationFigure,
+                               usePublicationTheme)
 
-plt.rcParams.update({"font.size": 9, "axes.grid": True, "grid.alpha": 0.25,
-                     "savefig.dpi": 300, "savefig.bbox": "tight",
-                     "figure.autolayout": False})
+usePublicationTheme()
 
 
 def _load(dataset):
@@ -100,7 +101,7 @@ def figure1ConceptImpacts(datasets, path):
         ax.set_title(name, fontsize=10)
         ax.set_xlim(0, 1.05)
     fig.suptitle("Concept importance (valid perturbations only)", fontsize=11)
-    fig.savefig(path)
+    savePublicationFigure(fig, path)
     plt.close(fig)
 
 
@@ -137,7 +138,7 @@ def figure2ModelConceptHeatmap(datasets, path):
                  fraction=0.02)
     fig.suptitle("Model x concept explanation matrix (delta 0.1, increase)",
                  fontsize=11)
-    fig.savefig(path)
+    savePublicationFigure(fig, path)
     plt.close(fig)
 
 
@@ -180,7 +181,7 @@ def figure3BridgeMatrix(path):
     axB.legend(fontsize=7, ncol=2)
     fig.suptitle("Bridge structure with four communities "
                  "(A-B declining by construction)", fontsize=11)
-    fig.savefig(path)
+    savePublicationFigure(fig, path)
     plt.close(fig)
 
 
@@ -239,7 +240,7 @@ def figure4LocalGraph(path):
         f"{record['achieved_delta']:+.3f}, impact {record['impact']:+.3f}, "
         f"{record['affected_edge_count']} edges and "
         f"{record['affected_node_count']} nodes touched", fontsize=11)
-    fig.savefig(path)
+    savePublicationFigure(fig, path)
     plt.close(fig)
     return record
 
@@ -280,7 +281,7 @@ def figure5TemporalLocal(path):
     axes[0].set_ylabel("bridge width")
     fig.suptitle("Temporal local explanation: when the concept matters",
                  fontsize=11)
-    fig.savefig(path)
+    savePublicationFigure(fig, path)
     plt.close(fig)
 
 
@@ -318,7 +319,7 @@ def figure6ImpactDistribution(path):
                   "(red = raises prediction, blue = lowers)")
     ax.set_title("Impact distribution per concept, 8 datasets, valid rows only",
                  fontsize=11)
-    fig.savefig(path)
+    savePublicationFigure(fig, path)
     plt.close(fig)
 
 
@@ -402,6 +403,16 @@ def writeTables(datasets):
                      & (tgn["direction"] == "increase")][
             ["dataset", "transformation", "achieved_delta",
              "baseline_prediction", "after_prediction", "impact"]].round(6)
+        # SUPERSESSION: every impact here is ONE seed. The five-seed run
+        # (table9) shows Churn's impact has sd 2.79 on a mean of 0.013 and
+        # changes sign between seeds, so this row's -1.62 is one draw, not a
+        # property of the model. Rows stay in registry order, never sorted by
+        # impact, because the achieved deltas are in incompatible units
+        # (Churn 0.0067 against Bridge Trend 5.83) - ordering by |impact|
+        # would read as a ranking the units do not support.
+        table3 = table3.assign(
+            seeds=1,
+            single_seed_see_table9=True)
 
     validity = []
     for name in sorted(os.listdir(RESULTS)):
@@ -527,7 +538,7 @@ def figureTgnSeedStability(path):
     ax.set_ylabel("held-out score")
     ax.set_title("TGN held-out performance across 5 fixed seeds\n"
                  "(each point is one seed; bar is the mean)", fontsize=11)
-    fig.savefig(path)
+    savePublicationFigure(fig, path)
     plt.close(fig)
     return True
 
