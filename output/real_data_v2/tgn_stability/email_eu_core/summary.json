@@ -1,0 +1,176 @@
+{
+  "dataset": "email_eu_core",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "epochs": 50,
+  "train_fraction": 0.7,
+  "temporal_split": [
+    8,
+    4
+  ],
+  "split_identical_across_seeds": true,
+  "per_seed": [
+    {
+      "seed": 0,
+      "train_snapshots": 8,
+      "heldout_snapshots": 4,
+      "loss_first": 1.374294176697731,
+      "loss_last": 1.143991470336914,
+      "auc": 0.7727,
+      "average_precision": 0.7332,
+      "accuracy": 0.7133,
+      "baseline_prediction": 0.4999944567680359,
+      "valid_rows": 23,
+      "total_rows": 30
+    },
+    {
+      "seed": 1,
+      "train_snapshots": 8,
+      "heldout_snapshots": 4,
+      "loss_first": 1.3729173392057419,
+      "loss_last": 1.142857626080513,
+      "auc": 0.702,
+      "average_precision": 0.6499,
+      "accuracy": 0.6676,
+      "baseline_prediction": 0.5338995456695557,
+      "valid_rows": 23,
+      "total_rows": 30
+    },
+    {
+      "seed": 2,
+      "train_snapshots": 8,
+      "heldout_snapshots": 4,
+      "loss_first": 1.3876190930604935,
+      "loss_last": 1.1413265615701675,
+      "auc": 0.7686,
+      "average_precision": 0.7295,
+      "accuracy": 0.7216,
+      "baseline_prediction": 0.6429815292358398,
+      "valid_rows": 23,
+      "total_rows": 30
+    },
+    {
+      "seed": 3,
+      "train_snapshots": 8,
+      "heldout_snapshots": 4,
+      "loss_first": 1.3823829889297485,
+      "loss_last": 1.150790885090828,
+      "auc": 0.7444,
+      "average_precision": 0.7125,
+      "accuracy": 0.6814,
+      "baseline_prediction": 0.6571280360221863,
+      "valid_rows": 23,
+      "total_rows": 30
+    },
+    {
+      "seed": 4,
+      "train_snapshots": 8,
+      "heldout_snapshots": 4,
+      "loss_first": 1.359494224190712,
+      "loss_last": 1.140796959400177,
+      "auc": 0.7325,
+      "average_precision": 0.6791,
+      "accuracy": 0.6884,
+      "baseline_prediction": 0.562533974647522,
+      "valid_rows": 23,
+      "total_rows": 30
+    }
+  ],
+  "stability": [
+    {
+      "quantity": "auc",
+      "n": 5,
+      "mean": 0.74404,
+      "std": 0.028832,
+      "min": 0.702,
+      "max": 0.7727,
+      "per_seed": [
+        0.7727,
+        0.702,
+        0.7686,
+        0.7444,
+        0.7325
+      ]
+    },
+    {
+      "quantity": "average_precision",
+      "n": 5,
+      "mean": 0.70084,
+      "std": 0.035609,
+      "min": 0.6499,
+      "max": 0.7332,
+      "per_seed": [
+        0.7332,
+        0.6499,
+        0.7295,
+        0.7125,
+        0.6791
+      ]
+    },
+    {
+      "quantity": "accuracy",
+      "n": 5,
+      "mean": 0.69446,
+      "std": 0.022474,
+      "min": 0.6676,
+      "max": 0.7216,
+      "per_seed": [
+        0.7133,
+        0.6676,
+        0.7216,
+        0.6814,
+        0.6884
+      ]
+    },
+    {
+      "quantity": "baseline_prediction",
+      "n": 5,
+      "mean": 0.579308,
+      "std": 0.068455,
+      "min": 0.499994,
+      "max": 0.657128,
+      "per_seed": [
+        0.499994,
+        0.5339,
+        0.642982,
+        0.657128,
+        0.562534
+      ]
+    },
+    {
+      "quantity": "valid_rows",
+      "n": 5,
+      "mean": 23.0,
+      "std": 0.0,
+      "min": 23.0,
+      "max": 23.0,
+      "per_seed": [
+        23.0,
+        23.0,
+        23.0,
+        23.0,
+        23.0
+      ]
+    }
+  ],
+  "matched_comparison_rows": 100,
+  "matched_comparison_comparable": 30,
+  "match_tolerance": 0.1,
+  "sweep_deltas": [
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.25,
+    0.4,
+    0.6,
+    0.9
+  ],
+  "no_ranking_note": "No ranking of concepts is produced. Raw impacts across concepts use incompatible perturbation units; only matched pairs are compared, and a matched comparison reports two numbers side by side rather than an ordering.",
+  "pooling_note": "Seeds are reported per seed and summarised by mean/std/min/max. They are five runs of one training procedure, not independent samples of a population, so no confidence interval or significance test is computed."
+}
