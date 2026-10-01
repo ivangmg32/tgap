@@ -75,7 +75,21 @@ def savePublicationFigure(fig, path, formats=("png", VECTOR_FORMAT)):
     written = []
     for suffix in formats:
         target = f"{stem}.{suffix}"
-        fig.savefig(target)
+        # PDF embeds a CreationDate by default, which makes two runs of the
+        # same figure differ byte-for-byte and defeats any reproducibility
+        # check on the vector output. Setting it to None omits it. PNG
+        # carries no timestamp and needs nothing.
+        # dpi is passed EXPLICITLY, never left to ambient rcParams. Several
+        # pipeline modules set savefig.dpi = 200 at import time, so merely
+        # importing one of them mid-run used to silently downgrade every
+        # publication figure drawn afterwards from 300 dpi to 200. Reading
+        # the value from the theme here makes the output independent of
+        # import order.
+        dpi = PUBLICATION_THEME["savefig.dpi"]
+        if suffix == "pdf":
+            fig.savefig(target, dpi=dpi, metadata={"CreationDate": None})
+        else:
+            fig.savefig(target, dpi=dpi)
         written.append(target)
     return written
 
