@@ -16,7 +16,7 @@ email_eu_core,temporal_evaluation,tgn_link_prediction,Centralization,decrease,-0
 email_eu_core,temporal_evaluation,tgn_link_prediction,Density,increase,0.25,0.24973375931842393,0.7128515243530273,0.6842548847198486,-0.02859663963317871,-0.11450850582326141,achieved,False,42
 email_eu_core,temporal_evaluation,tgn_link_prediction,Density,decrease,-0.25,-0.24547390841320557,0.7128515243530273,0.7219313979148865,0.00907987356185913,0.03698915954267125,achieved,False,42
 email_eu_core,temporal_evaluation,tgn_link_prediction,Bridge Trend,increase,0.25,8.262237762237763,0.7128515243530273,0.7481848001480103,0.03533327579498291,0.004276477730581934,achieved,False,42
-email_eu_core,temporal_evaluation,tgn_link_prediction,Bridge Trend,decrease,-0.25,-135.55244755244755,0.7128515243530273,0.6808665990829468,-0.031984925270080566,-0.00023595977680672314,achieved,False,42
+email_eu_core,temporal_evaluation,tgn_link_prediction,Bridge Trend,decrease,-0.25,-135.55244755244755,0.7128515243530273,0.6808762550354004,-0.03197526931762695,-0.00023588854273734288,achieved,False,42
 email_eu_core,temporal_evaluation,tgn_link_prediction,Churn,increase,0.25,0.021729931452452486,0.7128515243530273,0.717248797416687,0.004397273063659668,0.2023601902878245,achieved,False,42
 email_eu_core,temporal_evaluation,tgn_link_prediction,Churn,decrease,-0.25,-0.0448363255333551,0.7128515243530273,0.7263254523277283,0.013473927974700928,0.30051365303513256,achieved,False,42
 email_eu_core,temporal_evaluation,tgn_link_prediction,Bridge Width,increase,0.5,0.4979466119096508,0.7128515243530273,0.6703752279281616,-0.04247629642486572,-0.08530291282024582,achieved,False,42
@@ -26,6 +26,6 @@ email_eu_core,temporal_evaluation,tgn_link_prediction,Centralization,decrease,-0
 email_eu_core,temporal_evaluation,tgn_link_prediction,Density,increase,0.5,0.5005324813631523,0.7128515243530273,0.6829565763473511,-0.02989494800567627,-0.05972628973900004,achieved,False,42
 email_eu_core,temporal_evaluation,tgn_link_prediction,Density,decrease,-0.5,-0.37646432374866884,0.7128515243530273,0.7208457589149475,0.007994234561920166,0.021235038907052434,achieved,False,42
 email_eu_core,temporal_evaluation,tgn_link_prediction,Bridge Trend,increase,0.5,8.227272727272727,0.7128515243530273,0.7343582510948181,0.02150672674179077,0.00261407728353258,achieved,False,42
-email_eu_core,temporal_evaluation,tgn_link_prediction,Bridge Trend,decrease,-0.5,-1168.653846153846,0.7128515243530273,0.6806639432907104,-0.032187581062316895,-2.754244224519465e-05,achieved,False,42
+email_eu_core,temporal_evaluation,tgn_link_prediction,Bridge Trend,decrease,-0.5,-1168.653846153846,0.7128515243530273,0.6806846857070923,-0.03216683864593506,-2.7524693262936044e-05,achieved,False,42
 email_eu_core,temporal_evaluation,tgn_link_prediction,Churn,increase,0.5,0.03818712337498189,0.7128515243530273,0.7035214900970459,-0.009330034255981445,-0.2443240922958332,achieved,False,42
 email_eu_core,temporal_evaluation,tgn_link_prediction,Churn,decrease,-0.5,-0.054300239644397855,0.7128515243530273,0.7262555956840515,0.01340407133102417,0.24685105293834675,achieved,False,42

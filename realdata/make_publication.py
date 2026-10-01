@@ -153,7 +153,10 @@ def figure3BridgeMatrix(path):
     for (i, j), value in bridgeMatrix(snapshots[0], partition).items():
         matrix[i, j] = matrix[j, i] = value
 
-    fig, (axA, axB) = plt.subplots(1, 2, figsize=(9.2, 3.6))
+    # Extra width and explicit spacing: at the default the right panel's
+    # y-label collides with the left panel's colorbar label.
+    fig, (axA, axB) = plt.subplots(1, 2, figsize=(10.6, 3.6))
+    fig.subplots_adjust(wspace=0.45)
     image = axA.imshow(np.ma.masked_invalid(matrix), cmap="viridis")
     axA.set_xticks(range(size)); axA.set_xticklabels(partition.labels)
     axA.set_yticks(range(size)); axA.set_yticklabels(partition.labels)
