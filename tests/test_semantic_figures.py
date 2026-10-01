@@ -660,7 +660,11 @@ class TestMetadata(FigureCase):
 
     def testEveryCandidateIsDocumented(self):
         candidates = {f["candidate"] for f in self.payload["figures"]}
-        self.assertEqual(candidates, {"final", "A", "B", "C"})
+        # Subset, not equality: this test guards that the concept-impact
+        # candidates and the final figure stay documented. Other figures are
+        # documented in the same file and must not make it fail.
+        self.assertTrue({"final", "A", "B", "C"}.issubset(candidates),
+                        f"missing: {{'final','A','B','C'}} - {candidates}")
         for entry in self.payload["figures"]:
             for key in ("figure", "included_concepts", "delta_semantics",
                         "cross_concept_numerical_comparison_allowed",

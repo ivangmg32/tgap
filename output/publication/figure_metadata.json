@@ -49,6 +49,136 @@
       "status": "MAIN publication global-impact figure"
     },
     {
+      "candidate": "dependence",
+      "comparability_scope": "within one panel only; node and edge occlusions are different quantities and are never pooled",
+      "cross_concept_numerical_comparison_allowed": false,
+      "delta_semantics": {},
+      "excluded_concepts": [],
+      "figure": "fig8_dependence",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "generation_function": "realdata.make_publication.figure8Dependence",
+      "included_concepts": [],
+      "source_csv": [
+        "output\\publication\\attribution\\node_attribution.csv",
+        "output\\publication\\attribution\\edge_attribution.csv"
+      ],
+      "status": "element-level dependence",
+      "x_variable": [
+        "total_degree (node)",
+        "snapshots_present (edge)"
+      ],
+      "y_variable": "impact (measured occlusion prediction difference)"
+    },
+    {
+      "candidate": "beeswarm",
+      "comparability_scope": "within a semantic row only",
+      "cross_concept_numerical_comparison_allowed": false,
+      "delta_semantics": {
+        "Bridge Trend": "mechanism / absolute delta",
+        "Bridge Width": "relative delta",
+        "Centralization": "mechanism / absolute delta",
+        "Churn": "relative delta",
+        "Density": "relative delta"
+      },
+      "excluded_concepts": [],
+      "figure": "fig9_true_beeswarm",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "generation_function": "realdata.make_publication.figure9TrueBeeswarm",
+      "included_concepts": [
+        "Bridge Width",
+        "Density",
+        "Churn",
+        "Centralization",
+        "Bridge Trend"
+      ],
+      "layout_algorithm": "realdata.make_publication._beeswarmOffsets - ascending value order, first non-colliding offset; deterministic and seedless",
+      "source_csv": [
+        "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
+        "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+      ],
+      "status": "deterministic non-overlapping packing, no jitter"
+    },
+    {
+      "candidate": "boxplot",
+      "comparability_scope": "within one model panel only; no box spans two models",
+      "cross_concept_numerical_comparison_allowed": false,
+      "delta_semantics": {
+        "Bridge Width": "relative delta",
+        "Churn": "relative delta",
+        "Density": "relative delta"
+      },
+      "excluded_concepts": [
+        "Centralization",
+        "Bridge Trend"
+      ],
+      "figure": "fig10_publication_boxplot",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "generation_function": "realdata.make_publication.figure10PublicationBoxplot",
+      "included_concepts": [
+        "Bridge Width",
+        "Density",
+        "Churn"
+      ],
+      "source_csv": [
+        "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
+        "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+      ],
+      "status": "per-model distributions, valid rows only"
+    },
+    {
+      "candidate": "local",
+      "comparability_scope": "elements within this single explanation; not a concept ranking",
+      "cross_concept_numerical_comparison_allowed": false,
+      "delta_semantics": {},
+      "excluded_concepts": [],
+      "figure": "fig11_local_bar",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "generation_function": "realdata.make_publication.figure11LocalBar",
+      "included_concepts": [],
+      "selection_rule": "top 18 by |impact|, ties broken by endpoint id; complete attribution retained in the source CSV",
+      "source_csv": [
+        "output\\publication\\attribution\\edge_attribution_trend.csv"
+      ],
+      "status": "ONE local explanation; local ordering only",
+      "x_variable": "impact (edge occlusion)",
+      "y_variable": "edge (u, v)"
+    },
+    {
+      "additivity_claimed": false,
+      "candidate": "edge_time",
+      "colour_variable": "impact, diverging around zero",
+      "comparability_scope": "one measured prediction difference per (edge, snapshot); nothing is summed over time",
+      "cross_concept_numerical_comparison_allowed": false,
+      "delta_semantics": {},
+      "excluded_concepts": [],
+      "figure": "fig12_temporal_edge_time",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "generation_function": "realdata.make_publication.figure12TemporalEdgeTime",
+      "included_concepts": [],
+      "selection_rule": "display-only top 22 edges by largest |impact| at any snapshot, then snapshots present, then edge id; deterministic, never sampled. The persisted CSV holds every (edge, snapshot).",
+      "source_csv": [
+        "output\\publication\\attribution\\edge_time_attribution.csv"
+      ],
+      "status": "TGAP edge-time attribution; NOT a TSHAP implementation",
+      "x_variable": "snapshot_index",
+      "y_variable": "edge (u, v)"
+    },
+    {
       "candidate": "A",
       "comparability_scope": "all concepts shown are commensurable",
       "cross_concept_numerical_comparison_allowed": true,
