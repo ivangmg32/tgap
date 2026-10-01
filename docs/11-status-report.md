@@ -1,5 +1,26 @@
 # TGAP — Status Report
 
+> ## ⚠ SUPERSEDED — point-in-time report, retained for history
+>
+> This report describes the repository **as of `8ab1d6e`**. Its numbers were
+> real when written and the body below is left exactly as it was; do not
+> quote it as current. Four of its claims have since been superseded:
+>
+> | Claim in this report | Current source of truth |
+> |---|---|
+> | `362 tests, 360 passed` (header, §252) | **446 tests, 444 passed, 0 failed, 2 skipped** |
+> | TGN `AUC 0.7709` (§3.1) | **five-seed summary: mean 0.744, sd 0.029, range [0.702, 0.773]** — `table6_tgn_seed_stability` |
+> | `Churn … −1.6230` (§3.1 table) | one seed out of five. Across seeds Churn's impact has **mean 0.013, sd 2.79, range [−2.32, 4.54]** — `table9_tgn_concept_stability` |
+> | "**Churn dominates by a factor of five**" (§3.1) | **Not supported.** Churn's impact changes sign between seeds. Bridge Width is the only concept with a stable sign across all five seeds. |
+>
+> The §3.1 concept table is also ordered by `|impact|`. That ordering is not
+> a ranking: the achieved deltas are in incompatible units (Churn 0.0067
+> against Bridge Trend 5.83), and `table8_tgn_not_comparable` records which
+> concept pairs may be compared at all.
+>
+> Limitation 8, "single seed (42)", still holds for the real-data runs but
+> **no longer for TGN**, which is now run over five fixed seeds.
+
 **Repository:** `github.com/ivangmg32/tgap`, branch `real-data` @ `8ab1d6e`
 **Project:** CATALYST (PID2025) — PIs Samer Hassan, Iván García-Magariño
 **Test status:** 362 tests, 360 passed, 0 failed, 2 skipped (deliberate), 157 s
