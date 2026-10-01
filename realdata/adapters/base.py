@@ -109,7 +109,8 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
-from core.Communities import detectTwoCommunities, interCommunityEdges
+from core.Communities import (detectCommunities, detectTwoCommunities,
+                             interCommunityEdges)
 
 # The two analysis modes of DECISION 4. Kept as module constants so every
 # adapter, runner and test spells them the same way.
@@ -296,29 +297,77 @@ def aggregateGraph(snapshots, nodes=None):
     return aggregate
 
 
-def _partitionFromGraph(graph, source):
-    ''' Detect two communities on `graph` and report the partition with the
+def _partitionFromGraph(graph, source, nCommunities=2):
+    ''' Detect communities on `graph` and report the partition with the
     facts a reader needs to judge it.
 
-    Coverage is guaranteed by detectTwoCommunities: side B is defined as
-    "every node not in side A", so every node of `graph` lands on exactly
-    one side, including nodes with no edges at all. Those isolated nodes
-    are counted and reported rather than hidden, because a node that never
-    interacted in the detection period got its side by default.
+    nCommunities = 2 (the default) reproduces the historical behaviour
+    exactly, via detectTwoCommunities. nCommunities = None keeps the number
+    the DATA supports; an integer merges down to that many.
+
+    Coverage is guaranteed by the detector: the last group is defined as
+    "every node not already assigned", so every node lands on exactly one
+    side, including nodes with no edges at all. Those isolated nodes are
+    counted and reported rather than hidden, because a node that never
+    interacted in the detection period got its group by default.
+
+    MODULARITY LOSS is reported whenever the partition was merged down.
+    Collapsing a graph's natural community structure into two groups
+    discards real structure - measured at up to 64% of the modularity on
+    these datasets - and a number that large should never be invisible.
     '''
-    communities = detectTwoCommunities(graph)
+    if nCommunities == 2:
+        communities = detectTwoCommunities(graph)
+    else:
+        communities = detectCommunities(graph, n=nCommunities)
     isolated = sum(1 for _, degree in graph.degree() if degree == 0)
-    sizes = [len(communities[0]), len(communities[1])]
+    sizes = communities.sizes()
+    nonEmpty = [s for s in sizes if s]
     report = {
         "community_mode": source,
+        "n_communities": len(communities),
         "partition_sizes": sizes,
         "partition_graph_edges": graph.number_of_edges(),
         "partition_graph_nodes": graph.number_of_nodes(),
         "nodes_isolated_in_partition_graph": isolated,
-        "smaller_side_pct": round(100.0 * min(sizes) / sum(sizes), 2)
-                            if sum(sizes) else 0.0,
+        "smaller_side_pct": round(100.0 * min(nonEmpty) / sum(sizes), 2)
+                            if nonEmpty and sum(sizes) else 0.0,
+        "community_pairs": len(communities.pairs()),
     }
+    report.update(_modularityReport(graph, communities))
     return communities, graph, report
+
+
+def _modularityReport(graph, communities):
+    ''' How much community structure the chosen partition captures, and how
+    much a merge to this size discarded.
+
+    Reported rather than asserted: whether 2 communities is an acceptable
+    simplification is a scientific judgement about each dataset, and the
+    reader can only make it with the number in front of them. On
+    decentraland the loss is 0.00 (it really is bipolar); on bitcoin-otc it
+    is 0.141 of 0.222.
+    '''
+    from networkx.algorithms import community as _community
+    if graph.number_of_edges() == 0:
+        return {"modularity": None, "natural_n_communities": None,
+                "modularity_natural": None, "modularity_lost_by_merging": None}
+    groups = [g for g in communities if g]
+    try:
+        achieved = float(_community.modularity(graph, groups))
+        natural = _community.greedy_modularity_communities(graph)
+        best = float(_community.modularity(graph, natural))
+    except Exception:
+        # Modularity is undefined for some degenerate partitions; report
+        # None rather than a misleading number.
+        return {"modularity": None, "natural_n_communities": None,
+                "modularity_natural": None, "modularity_lost_by_merging": None}
+    return {
+        "modularity": round(achieved, 4),
+        "natural_n_communities": len(natural),
+        "modularity_natural": round(best, 4),
+        "modularity_lost_by_merging": round(best - achieved, 4),
+    }
 
 
 def fixedPartitionFromAggregate(snapshots):
@@ -336,7 +385,7 @@ def fixedPartitionFromAggregate(snapshots):
 
 
 def fixedPartitionWithReport(snapshots, mode, trainingSnapshots=None,
-                             nodes=None):
+                             nodes=None, nCommunities=2):
     ''' DECISION 5, the mode-aware entry point.
 
     mode == "temporal_evaluation": detect on the selection-period graph
@@ -354,9 +403,9 @@ def fixedPartitionWithReport(snapshots, mode, trainingSnapshots=None,
             raise ValueError("temporal_evaluation mode needs "
                              "trainingSnapshots for community detection")
         graph = aggregateGraph(trainingSnapshots, nodes)
-        return _partitionFromGraph(graph, "temporal_train")
+        return _partitionFromGraph(graph, "temporal_train", nCommunities)
     return _partitionFromGraph(aggregateGraph(snapshots, nodes),
-                               "full_period_descriptive")
+                               "full_period_descriptive", nCommunities)
 
 
 def summariseSnapshots(snapshots, communities, labels):
