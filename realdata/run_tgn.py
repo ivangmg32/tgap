@@ -43,7 +43,10 @@ from core import (
 from core.TemporalGraphExplainer import TgapExplainer
 from core.TgnModel import (TORCH_AVAILABLE, buildTgn, evaluateTgn,
                            requireTorch, splitTemporally, trainTgn)
-from .run_real_data import ADAPTERS, DELTAS, SEED, writeJson
+from .run_real_data import (ADAPTERS, DELTAS, SEED, rowValidity,
+                            screenBridgeTrend, screenFeasibility,
+                            buildTransformations as buildGatedTransformations,
+                            writeJson)
 from .adapters.base import TEMPORAL_EVALUATION
 
 OUTPUT_ROOT = os.path.join("output", "real_data_v2", "tgn")
@@ -114,6 +117,24 @@ def runDataset(key, mode=TEMPORAL_EVALUATION, epochs=EPOCHS):
           f"(mean predicted probability of the present snapshot's edges)")
 
     transformations = buildTransformations(prepared.communities)
+
+    # VALIDITY GATING, identical to the main real-data pipeline.
+    # The same screenFeasibility / screenBridgeTrend / rowValidity functions
+    # are imported from run_real_data rather than reimplemented, so the TGN
+    # rows carry exactly the same validity semantics as the 1,440 rows of
+    # the metric-model pipeline. A second implementation could drift.
+    strictTransformations = buildGatedTransformations(prepared.communities,
+                                                      strict=True)
+    feasibilityFlags, feasibilityFrame = screenFeasibility(
+        prepared, transformations, strictTransformations, DELTAS)
+    trendStatuses, trendFrame = screenBridgeTrend(prepared, transformations,
+                                                 DELTAS)
+    infeasible = feasibilityFrame[~feasibilityFrame["feasible"]]
+    print(f"  validity      : {len(feasibilityFrame) - len(infeasible)}"
+          f"/{len(feasibilityFrame)} settings feasible"
+          + (f"; bridge-trend {trendFrame['status'].value_counts().to_dict()}"
+             if not trendFrame.empty else ""))
+
     rows = []
     for delta in DELTAS:
         counter = CallCountingModel(model)
@@ -121,23 +142,41 @@ def runDataset(key, mode=TEMPORAL_EVALUATION, epochs=EPOCHS):
                                   defaultDelta=delta)
         started = time.perf_counter()
         for record in explainer.explainDetailed(snapshots):
-            rows.append({
+            signed = record["requestedDelta"]
+            flags, blank = rowValidity(record["transformation"], signed,
+                                       feasibilityFlags, trendStatuses)
+            row = {
                 "dataset": key,
                 "analysis_mode": mode,
                 "model": "tgn_link_prediction",
                 "transformation": record["transformation"],
-                "direction": "increase" if record["requestedDelta"] > 0
-                             else "decrease",
-                "requested_delta": record["requestedDelta"],
-                "achieved_delta": record["achievedDelta"],
-                "baseline_prediction": record["baseline"],
-                "after_prediction": record["transformed"],
-                "prediction_change": record["transformed"] - record["baseline"],
-                "impact": record["impact"],
-                "normalizer": record["normalizer"],
-                "noop": record["noop"],
+                "direction": "increase" if signed > 0 else "decrease",
+                "requested_delta": signed,
+                "delta_mode": record["deltaMode"],
                 "seed": SEED,
-            })
+                **flags,
+            }
+            # Invalid rows are PRESERVED in the raw output for transparency,
+            # but their numeric fields are left empty so they cannot enter an
+            # aggregate by accident - the same rule the main pipeline uses.
+            if blank:
+                row.update({"achieved_delta": None,
+                            "baseline_prediction": None,
+                            "after_prediction": None,
+                            "prediction_change": None,
+                            "impact": None, "normalizer": None, "noop": None})
+            else:
+                row.update({
+                    "achieved_delta": record["achievedDelta"],
+                    "baseline_prediction": record["baseline"],
+                    "after_prediction": record["transformed"],
+                    "prediction_change": (record["transformed"]
+                                          - record["baseline"]),
+                    "impact": record["impact"],
+                    "normalizer": record["normalizer"],
+                    "noop": record["noop"],
+                })
+            rows.append(row)
         print(f"  delta {delta:<5} : {counter.calls} model calls "
               f"(= 1 + 2x{len(transformations)}) in "
               f"{time.perf_counter() - started:.1f}s")
@@ -149,8 +188,15 @@ def runDataset(key, mode=TEMPORAL_EVALUATION, epochs=EPOCHS):
     frame = pd.DataFrame(rows)
     frame.to_csv(os.path.join(directory, "tgap_results.csv"), index=False)
 
-    reference = frame[(frame["requested_delta"] == DELTAS[0])
-                      & (frame["direction"] == "increase")]
+    feasibilityFrame.to_csv(
+        os.path.join(directory, "transformation_feasibility.csv"), index=False)
+    if not trendFrame.empty:
+        trendFrame.to_csv(os.path.join(directory, "bridge_trend_status.csv"),
+                          index=False)
+
+    valid = frame[frame["valid_for_analysis"]]
+    reference = valid[(valid["requested_delta"] == DELTAS[0])
+                      & (valid["direction"] == "increase")]
     print()
     print(f"  {'concept':18s} {'achieved':>10s} {'impact':>12s}")
     for _, row in reference.iterrows():
@@ -178,10 +224,26 @@ def runDataset(key, mode=TEMPORAL_EVALUATION, epochs=EPOCHS):
         "deltas": list(DELTAS),
         "seed": SEED,
         "explanation_rows": len(frame),
-        "largest_absolute_impact": (
-            frame.loc[frame["impact"].abs().idxmax(),
-                      ["transformation", "direction", "impact"]].to_dict()
-            if not frame.empty else None),
+        "valid_rows": int(frame["valid_for_analysis"].sum()),
+        "invalid_rows": int((~frame["valid_for_analysis"]).sum()),
+        "invalid_rows_by_status": frame.loc[
+            ~frame["valid_for_analysis"],
+            "transformation_status"].value_counts().to_dict(),
+        "edge_count_infeasible_settings": int(
+            (~feasibilityFrame["feasible"]).sum()),
+        "edge_count_settings_checked": int(len(feasibilityFrame)),
+        "bridge_trend_status_counts": (
+            trendFrame["status"].value_counts().to_dict()
+            if not trendFrame.empty else {}),
+        # Deliberately NOT "largest impact": the concepts use incompatible
+        # perturbation units (Bridge Trend is absolute slope, Centralization
+        # is a rewiring fraction), so a maximum over them would be a ranking
+        # of incomparable quantities. See the matched-comparison output.
+        "ranking_note": (
+            "Raw impacts across concepts are NOT comparable: Bridge Trend "
+            "uses absolute slope units and Centralization's delta is a "
+            "rewiring fraction, while Bridge Width, Density and Churn are "
+            "relative property changes. No ranking is produced here."),
         "scope_note": (
             "The TGN is trained briefly and is not tuned for benchmark "
             "performance. The claim demonstrated here is that TGAP can "

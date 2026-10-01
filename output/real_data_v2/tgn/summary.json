@@ -6,7 +6,7 @@
     "nodes": 201,
     "snapshots": 12,
     "training_epochs": 50,
-    "training_seconds": 12.04,
+    "training_seconds": 11.57,
     "train_snapshots": 8,
     "heldout_snapshots": 4,
     "train_fraction": 0.7,
@@ -91,11 +91,19 @@
     ],
     "seed": 42,
     "explanation_rows": 30,
-    "largest_absolute_impact": {
-      "transformation": "Churn",
-      "direction": "increase",
-      "impact": -1.6230195242306027
+    "valid_rows": 23,
+    "invalid_rows": 7,
+    "invalid_rows_by_status": {
+      "edge_count_infeasible": 5,
+      "saturated": 2
     },
+    "edge_count_infeasible_settings": 5,
+    "edge_count_settings_checked": 30,
+    "bridge_trend_status_counts": {
+      "ok": 4,
+      "saturated": 2
+    },
+    "ranking_note": "Raw impacts across concepts are NOT comparable: Bridge Trend uses absolute slope units and Centralization's delta is a rewiring fraction, while Bridge Width, Density and Churn are relative property changes. No ranking is produced here.",
     "scope_note": "The TGN is trained briefly and is not tuned for benchmark performance. The claim demonstrated here is that TGAP can explain a genuinely learned temporal-graph model through the predict(temporalGraph) contract alone - no gradients, no access to memory or attention internals. Held-out performance is reported so a reader can see whether the explained model actually works; an explanation of a model at chance level would say nothing useful."
   }
 }
