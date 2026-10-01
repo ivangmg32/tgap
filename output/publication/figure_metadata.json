@@ -1,0 +1,108 @@
+{
+  "comparability_rule": {
+    "derived_by": "realdata.run_tgn_stability.comparabilityOf",
+    "groups": {
+      "mechanism / absolute delta": [
+        "Centralization",
+        "Bridge Trend"
+      ],
+      "relative delta": [
+        "Bridge Width",
+        "Density",
+        "Churn"
+      ]
+    },
+    "note": "The stored delta_mode column is NOT the grouping key: it reads 'relative' for Centralization, whose achieved delta is a rewiring fraction."
+  },
+  "figures": [
+    {
+      "candidate": "A",
+      "comparability_scope": "all concepts shown are commensurable",
+      "cross_concept_numerical_comparison_allowed": true,
+      "delta_semantics": {
+        "Bridge Width": "relative delta",
+        "Churn": "relative delta",
+        "Density": "relative delta"
+      },
+      "excluded_concepts": [
+        "Centralization",
+        "Bridge Trend"
+      ],
+      "figure": "fig1A_commensurable_concept_impacts",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "generation_function": "realdata.make_publication.figure1ACommensurable",
+      "included_concepts": [
+        "Bridge Width",
+        "Density",
+        "Churn"
+      ],
+      "source_csv": [
+        "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
+        "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+      ]
+    },
+    {
+      "candidate": "B",
+      "comparability_scope": "within a group only; the two groups never share an axis",
+      "cross_concept_numerical_comparison_allowed": false,
+      "delta_semantics": {
+        "Bridge Trend": "mechanism / absolute delta",
+        "Bridge Width": "relative delta",
+        "Centralization": "mechanism / absolute delta",
+        "Churn": "relative delta",
+        "Density": "relative delta"
+      },
+      "excluded_concepts": [],
+      "figure": "fig1B_grouped_concept_impacts",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "generation_function": "realdata.make_publication.figure1BGrouped",
+      "included_concepts": [
+        "Bridge Width",
+        "Density",
+        "Churn",
+        "Centralization",
+        "Bridge Trend"
+      ],
+      "source_csv": [
+        "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
+        "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+      ]
+    },
+    {
+      "candidate": "C",
+      "comparability_scope": "colour comparable within the commensurable block only; the other block encodes sign only; printed values are the real impacts",
+      "cross_concept_numerical_comparison_allowed": false,
+      "delta_semantics": {
+        "Bridge Trend": "mechanism / absolute delta",
+        "Bridge Width": "relative delta",
+        "Centralization": "mechanism / absolute delta",
+        "Churn": "relative delta",
+        "Density": "relative delta"
+      },
+      "excluded_concepts": [],
+      "figure": "fig2_grouped_semantic_heatmap",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "generation_function": "realdata.make_publication.figure2CGroupedSemanticHeatmap",
+      "included_concepts": [
+        "Bridge Width",
+        "Density",
+        "Churn",
+        "Centralization",
+        "Bridge Trend"
+      ],
+      "source_csv": [
+        "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
+        "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+      ]
+    }
+  ]
+}

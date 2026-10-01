@@ -35,7 +35,9 @@ import os
 
 import matplotlib
 matplotlib.use("Agg")
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
+from matplotlib.colors import BoundaryNorm, ListedColormap
 import networkx as nx
 import numpy as np
 import pandas as pd
@@ -60,6 +62,12 @@ CASE_STUDIES = ("decentraland", "email_eu_core")
 from realdata.plotting import (POSITIVE, NEGATIVE, NEUTRAL,     # noqa: E402
                                savePublicationFigure,
                                usePublicationTheme)
+
+# Imported BEFORE the theme is applied on purpose: this module pulls in
+# paper_evaluation and run_real_data, both of which set savefig.dpi = 200 at
+# import time. Importing it lazily inside semanticGroups() meant that clobber
+# landed halfway through a run and silently downgraded every figure after it.
+from realdata.run_tgn_stability import comparabilityOf   # noqa: E402
 
 usePublicationTheme()
 
@@ -323,6 +331,366 @@ def figure6ImpactDistribution(path):
     plt.close(fig)
 
 
+##  Perturbation-semantics grouping (candidates A, B, C)  ##
+#
+# WHY THESE FIGURES EXIST
+#     fig1 and fig2 place all five concepts on one comparison axis. RQ1b
+#     records that this is not valid for all of them: Centralization's delta
+#     is a rewiring FRACTION (a mechanism knob) and Bridge Trend's is in
+#     absolute slope units, so neither achieved change is the same kind of
+#     quantity as a relative change in bridge width, density or churn.
+#     fig1/fig2 are left exactly as they are; these are alternatives.
+#
+# WHERE THE GROUPING COMES FROM
+#     NOT a hand-written list of names, and NOT the stored `delta_mode`
+#     column - that column says "relative" for Centralization, because
+#     Centralization's REQUESTED delta is relative even though its ACHIEVED
+#     delta is a rewiring fraction. Using it would silently put
+#     Centralization in the commensurable group and reintroduce the exact
+#     error these figures exist to prevent.
+#
+#     The grouping is derived by calling comparabilityOf - the same function
+#     RQ1b's matched comparison uses - against a relative-delta reference
+#     concept. One rule, one implementation, two consumers.
+
+COMMENSURABLE = "relative delta"
+NOT_COMMENSURABLE = "mechanism / absolute delta"
+
+
+def semanticGroups():
+    ''' Split the registered concepts by perturbation semantics.
+
+    Returns an ordered dict {group label: [concept names]}, concepts in
+    REGISTRY order inside each group - never impact order, so no figure
+    built from this can imply a cross-concept ranking.
+
+    The reference concept is the first registered concept that is
+    comparable with itself under a relative delta; every other concept is
+    then asked whether comparabilityOf admits it.
+    '''
+    from core.Communities import Partition
+    from core.TransformationRegistry import entries
+
+    # comparabilityOf inspects deltaMode and the transformation CLASS, so the
+    # objects must be built. The partition is a throwaway - it affects no
+    # attribute the rule reads.
+    partition = Partition([{0, 1}, {2, 3}])
+    built = []
+    for entry in entries():
+        try:
+            built.append((entry.name, entry.build(communities=partition)))
+        except Exception:                       # a concept that cannot build
+            continue                            # cannot appear in a figure
+
+    reference = None
+    for name, transformation in built:
+        if getattr(transformation, "deltaMode", "relative") == "relative":
+            comparable, _ = comparabilityOf(transformation, transformation)
+            if comparable:
+                reference = transformation
+                break
+    if reference is None:                       # no relative concept at all
+        return {NOT_COMMENSURABLE: [n for n, _ in built]}
+
+    groups = {COMMENSURABLE: [], NOT_COMMENSURABLE: []}
+    for name, transformation in built:
+        comparable, _ = comparabilityOf(reference, transformation)
+        groups[COMMENSURABLE if comparable else NOT_COMMENSURABLE].append(name)
+    return groups
+
+
+def _meanAbsImpact(frame, concepts):
+    ''' Mean |impact| per concept over VALID rows, in the given order.
+    Concepts with no valid row are dropped, not plotted as zero - absent
+    evidence is not evidence of no effect. '''
+    valid = _valid(frame)
+    out = []
+    for concept in concepts:
+        values = valid[valid["transformation"] == concept]["impact"]
+        values = values[np.isfinite(values)]
+        if len(values):
+            out.append((concept, float(values.abs().mean()), len(values)))
+    return out
+
+
+def _dotPanel(ax, rows, colour):
+    ''' One concept-impact panel.
+
+    A DOT, not a bar. On a log axis a bar's length depends on where the axis
+    happens to start, so bar length is not proportional to the value; a
+    dot's position is exactly the value. Every candidate figure uses this,
+    so the two groups in candidate B cannot acquire different visual
+    grammar by accident.
+    '''
+    if not rows:
+        ax.text(0.5, 0.5, "no valid rows", ha="center", va="center",
+                fontsize=8, color=NEUTRAL, transform=ax.transAxes)
+        ax.set_xticks([]); ax.set_yticks([]); ax.grid(False)
+        return
+    values = [v for _, v, _ in rows]
+    floor = min(values) / 4
+    ax.hlines(range(len(rows)), floor, values, color=NEUTRAL, linewidth=1.0,
+              zorder=2)
+    ax.scatter(values, range(len(rows)), s=58, color=colour,
+               edgecolors="black", linewidths=0.5, zorder=3)
+    ax.set_yticks(range(len(rows)))
+    ax.set_yticklabels([f"{c}  (n={n})" for c, _, n in rows], fontsize=8)
+    ax.set_xscale("log")
+    for index, value in enumerate(values):
+        ax.annotate(f"{value:.4g}", (value, index), textcoords="offset points",
+                    xytext=(7, 0), va="center", fontsize=7.5)
+    ax.set_xlim(floor, max(values) * 30)
+    ax.set_ylim(-0.6, len(rows) - 0.4)
+
+
+def figure1ACommensurable(datasets, path):
+    ''' CANDIDATE A - only the concepts RQ1b admits as commensurable.
+
+    Shows mean |impact| for the relative-delta concepts (Bridge Width,
+    Density, Churn as currently registered) and omits the other two
+    entirely. Values are the REAL means on a log axis, not rescaled to a
+    per-dataset maximum: inside this group the quantities are commensurable,
+    so there is no reason to hide their size.
+
+    COMPARABILITY: cross-concept numerical comparison IS allowed within this
+    figure. That is the whole point of restricting it.
+
+    Deliberately NOT called "concept importance" - it reports measured
+    prediction impact, which is not the same claim.
+    '''
+    groups = semanticGroups()
+    concepts = groups.get(COMMENSURABLE, [])
+    fig, axes = plt.subplots(1, len(datasets),
+                             figsize=(5.2 * len(datasets), 3.1), squeeze=False)
+    for ax, (name, data) in zip(axes[0], datasets.items()):
+        _dotPanel(ax, _meanAbsImpact(data["results"], concepts), POSITIVE)
+        ax.set_xlabel("mean |impact| (log scale)")
+        ax.set_title(name, fontsize=10)
+    fig.suptitle("Global prediction impact for commensurable transformations\n"
+                 "(relative-delta concepts only; valid perturbations only)",
+                 fontsize=10.5)
+    fig.subplots_adjust(top=0.80, wspace=0.42)
+    savePublicationFigure(fig, path)
+    plt.close(fig)
+    return {"concepts": concepts}
+
+
+def figure1BGrouped(datasets, path):
+    ''' CANDIDATE B - all five concepts, split into two separated panels.
+
+    Each semantic group gets its OWN axes and its own x-axis. Nothing spans
+    the two, so there is no shared bar length to read as a ranking, and the
+    gap between the column pairs is wide enough that the eye does not carry
+    one scale across it.
+
+    COMPARABILITY: allowed WITHIN a group, not across groups. The caption
+    says so, and the two groups never share an axis.
+    '''
+    groups = semanticGroups()
+    order = [g for g in (COMMENSURABLE, NOT_COMMENSURABLE) if groups.get(g)]
+    fig = plt.figure(figsize=(5.4 * len(datasets), 2.6 + 1.7 * len(order)))
+    # Wide hspace/wspace: the separation IS the scientific content here.
+    grid = fig.add_gridspec(len(order), len(datasets), wspace=0.42,
+                            hspace=1.05, top=0.76, bottom=0.12)
+    for rowIndex, group in enumerate(order):
+        for columnIndex, (name, data) in enumerate(datasets.items()):
+            ax = fig.add_subplot(grid[rowIndex, columnIndex])
+            _dotPanel(ax, _meanAbsImpact(data["results"], groups[group]),
+                      POSITIVE if group == COMMENSURABLE else NEUTRAL)
+            ax.set_xlabel("mean |impact| (log scale)", fontsize=8)
+            ax.set_title(f"{name}\ngroup: {group}", fontsize=9)
+    # A hard rule between the groups, so the split cannot be missed.
+    fig.add_artist(plt.Line2D([0.04, 0.96], [0.435, 0.435], color="#444444",
+                              linewidth=1.1, linestyle=(0, (6, 4))))
+    fig.suptitle("Global prediction impact, grouped by perturbation semantics\n"
+                 "Values are NOT comparable across the two groups: a relative "
+                 "property change, a rewiring\nfraction and an absolute slope "
+                 "are different quantities. Each group has its own axis.",
+                 fontsize=10, y=0.97)
+    savePublicationFigure(fig, path)
+    plt.close(fig)
+    return {"groups": {g: groups.get(g, []) for g in order}}
+
+
+def figure2CGroupedSemanticHeatmap(datasets, path):
+    ''' CANDIDATE C - the model x concept matrix, grouped by semantics.
+
+    All five concepts stay visible. What changes is that the matrix is cut
+    into one block per semantic group, each with its own colour treatment,
+    so no single colour scale spans all five columns.
+
+      * commensurable block - colour is impact / row maximum WITHIN THE
+        BLOCK. The three concepts are comparable, so a shared scale across
+        them is meaningful.
+      * non-commensurable block - colour encodes SIGN ONLY. Giving these
+        columns a shared magnitude scale would be exactly the invented
+        transformation-independent score this figure must not contain.
+
+    In both blocks the printed number is the REAL TGAP impact, so no value
+    is lost to normalisation. Concepts are in registry order inside each
+    block and are never sorted by impact.
+
+    COMPARABILITY: colour may be compared within the left block only.
+    '''
+    groups = semanticGroups()
+    order = [g for g in (COMMENSURABLE, NOT_COMMENSURABLE) if groups.get(g)]
+    widths = [max(len(groups[g]), 1) for g in order]
+    fig = plt.figure(figsize=(3.0 + 1.5 * sum(widths), 1.9 * len(datasets) + 1.9))
+    grid = fig.add_gridspec(len(datasets), len(order), width_ratios=widths,
+                            wspace=0.30, hspace=0.80, top=0.84, bottom=0.17)
+
+    image = None
+    for rowIndex, (name, data) in enumerate(datasets.items()):
+        valid = _valid(data["results"])
+        subset = valid[(valid["requested_delta"] == 0.1)
+                       & (valid["direction"] == "increase")]
+        for columnIndex, group in enumerate(order):
+            ax = fig.add_subplot(grid[rowIndex, columnIndex])
+            concepts = [c for c in groups[group]
+                        if c in set(subset["transformation"])]
+            if not concepts:
+                ax.text(0.5, 0.5, "no valid rows", ha="center", va="center",
+                        fontsize=8, color=NEUTRAL, transform=ax.transAxes)
+                ax.set_xticks([]); ax.set_yticks([]); ax.grid(False)
+                ax.set_title(group, fontsize=9)
+                continue
+            matrix = subset.pivot_table(index="model", columns="transformation",
+                                        values="impact", dropna=False)
+            matrix = matrix.reindex(columns=concepts)    # registry order
+            values = matrix.to_numpy(dtype=float)
+
+            if group == COMMENSURABLE:
+                scale = np.nanmax(np.abs(values), axis=1, keepdims=True)
+                scale[~np.isfinite(scale) | (scale == 0)] = 1.0
+                shown = values / scale
+                image = ax.imshow(np.ma.masked_invalid(shown), cmap="RdBu_r",
+                                  vmin=-1, vmax=1, aspect="auto")
+            else:
+                # Sign only, in a DELIBERATELY DIFFERENT palette. Reusing
+                # RdBu_r here would render a +0.000994 cell fully saturated,
+                # and a reader checking it against the continuous colorbar
+                # would read it as a maximal impact. Three flat, muted,
+                # obviously-categorical colours cannot be read off that bar.
+                signColours = ListedColormap(["#9ecae1", "#f0f0f0", "#fcae91"])
+                ax.imshow(np.ma.masked_invalid(np.sign(values)),
+                          cmap=signColours,
+                          norm=BoundaryNorm([-1.5, -0.5, 0.5, 1.5], 3),
+                          aspect="auto")
+
+            ax.set_xticks(range(len(concepts)))
+            ax.set_xticklabels(concepts, rotation=25, ha="right", fontsize=7)
+            ax.set_yticks(range(values.shape[0]))
+            ax.set_yticklabels(matrix.index if columnIndex == 0 else
+                               [""] * values.shape[0], fontsize=7)
+            for i in range(values.shape[0]):
+                for j in range(values.shape[1]):
+                    value = values[i, j]
+                    ax.text(j, i, "n/a" if value != value else f"{value:+.3g}",
+                            ha="center", va="center", fontsize=6)
+            note = ("colour: impact / row max" if group == COMMENSURABLE
+                    else "colour: SIGN ONLY")
+            ax.set_title(f"{name}\n{group}  -  {note}", fontsize=8.5)
+            ax.grid(False)
+
+    if image is not None:
+        bar = fig.colorbar(image, ax=fig.axes, fraction=0.016, pad=0.02)
+        bar.set_label("impact / row maximum\n(commensurable block ONLY)",
+                      fontsize=8)
+    # The sign block gets its own key, never the continuous bar.
+    fig.legend(handles=[mpatches.Patch(facecolor="#fcae91",
+                                       edgecolor="#444444",
+                                       label="raises prediction"),
+                        mpatches.Patch(facecolor="#9ecae1",
+                                       edgecolor="#444444",
+                                       label="lowers prediction")],
+               title="mechanism / absolute block: sign only",
+               loc="lower center", ncol=2, fontsize=8, title_fontsize=8,
+               frameon=True, bbox_to_anchor=(0.5, 0.005))
+    fig.suptitle("Model x concept impacts, grouped by perturbation semantics "
+                 "(delta 0.1, increase)\nPrinted values are the real impacts. "
+                 "No colour scale spans both groups.", fontsize=10, y=0.985)
+    savePublicationFigure(fig, path)
+    plt.close(fig)
+    return {"groups": {g: groups.get(g, []) for g in order}}
+
+
+def writeFigureMetadata(path):
+    ''' Machine-readable comparability metadata for the candidate figures.
+
+    Exists so a caption, a reviewer or a later script can establish which
+    figure permits cross-concept numerical comparison WITHOUT re-reading the
+    plotting code. Concept membership is taken from semanticGroups(), so
+    this file cannot drift from the figures it describes.
+    '''
+    groups = semanticGroups()
+    commensurable = groups.get(COMMENSURABLE, [])
+    other = groups.get(NOT_COMMENSURABLE, [])
+    sources = [os.path.join(RESULTS, d, "tgap_results.csv")
+               for d in CASE_STUDIES]
+    payload = {
+        "comparability_rule": {
+            "derived_by": "realdata.run_tgn_stability.comparabilityOf",
+            "note": "The stored delta_mode column is NOT the grouping key: "
+                    "it reads 'relative' for Centralization, whose achieved "
+                    "delta is a rewiring fraction.",
+            "groups": {COMMENSURABLE: commensurable,
+                       NOT_COMMENSURABLE: other},
+        },
+        "figures": [
+            {
+                "figure": "fig1A_commensurable_concept_impacts",
+                "candidate": "A",
+                "included_concepts": commensurable,
+                "excluded_concepts": other,
+                "delta_semantics": {c: COMMENSURABLE for c in commensurable},
+                "cross_concept_numerical_comparison_allowed": True,
+                "comparability_scope": "all concepts shown are commensurable",
+                "source_csv": sources,
+                "generation_function":
+                    "realdata.make_publication.figure1ACommensurable",
+                "formats": ["png", "pdf"],
+            },
+            {
+                "figure": "fig1B_grouped_concept_impacts",
+                "candidate": "B",
+                "included_concepts": commensurable + other,
+                "excluded_concepts": [],
+                "delta_semantics": {**{c: COMMENSURABLE for c in commensurable},
+                                    **{c: NOT_COMMENSURABLE for c in other}},
+                "cross_concept_numerical_comparison_allowed": False,
+                "comparability_scope": "within a group only; the two groups "
+                                       "never share an axis",
+                "source_csv": sources,
+                "generation_function":
+                    "realdata.make_publication.figure1BGrouped",
+                "formats": ["png", "pdf"],
+            },
+            {
+                "figure": "fig2_grouped_semantic_heatmap",
+                "candidate": "C",
+                "included_concepts": commensurable + other,
+                "excluded_concepts": [],
+                "delta_semantics": {**{c: COMMENSURABLE for c in commensurable},
+                                    **{c: NOT_COMMENSURABLE for c in other}},
+                "cross_concept_numerical_comparison_allowed": False,
+                "comparability_scope": "colour comparable within the "
+                                       "commensurable block only; the other "
+                                       "block encodes sign only; printed "
+                                       "values are the real impacts",
+                "source_csv": sources,
+                "generation_function":
+                    "realdata.make_publication"
+                    ".figure2CGroupedSemanticHeatmap",
+                "formats": ["png", "pdf"],
+            },
+        ],
+    }
+    with open(path, "w", encoding="utf-8") as handle:
+        json.dump(payload, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+    return payload
+
+
 def _asMarkdown(frame):
     ''' Render a DataFrame as a markdown table.
 
@@ -562,6 +930,25 @@ def main():
     figure2ModelConceptHeatmap(
         datasets, os.path.join(OUTPUT, "fig2_model_concept_heatmap.png"))
     print("  fig2_model_concept_heatmap.png  model x concept matrix")
+
+    # Candidates A/B/C: alternatives to fig1/fig2 that do not imply a single
+    # cross-concept ranking. fig1/fig2 above are left untouched so the three
+    # can be compared against what they would replace.
+    groups = semanticGroups()
+    a = figure1ACommensurable(
+        datasets, os.path.join(OUTPUT,
+                               "fig1A_commensurable_concept_impacts.png"))
+    print(f"  fig1A_commensurable_...png      candidate A, "
+          f"{len(a['concepts'])} commensurable concepts")
+    figure1BGrouped(datasets,
+                    os.path.join(OUTPUT, "fig1B_grouped_concept_impacts.png"))
+    print(f"  fig1B_grouped_concept_...png    candidate B, "
+          f"{len(groups)} semantic groups")
+    figure2CGroupedSemanticHeatmap(
+        datasets, os.path.join(OUTPUT, "fig2_grouped_semantic_heatmap.png"))
+    print("  fig2_grouped_semantic_...png    candidate C, grouped heatmap")
+    writeFigureMetadata(os.path.join(OUTPUT, "figure_metadata.json"))
+    print("  figure_metadata.json            comparability metadata")
     figure3BridgeMatrix(os.path.join(OUTPUT, "fig3_bridge_matrix.png"))
     print("  fig3_bridge_matrix.png          N-community bridge structure")
     record = figure4LocalGraph(os.path.join(OUTPUT, "fig4_local_graph.png"))
