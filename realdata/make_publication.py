@@ -53,6 +53,7 @@ TGN_RESULTS = os.path.join("output", "real_data_v2", "tgn")
 TGN_STABILITY = os.path.join("output", "real_data_v2", "tgn_stability",
                              "email_eu_core")
 OUTPUT = os.path.join("output", "publication")
+SUPERSEDED = os.path.join(OUTPUT, "superseded")
 CASE_STUDIES = ("decentraland", "email_eu_core")
 
 # One visual language for the whole paper, defined once in realdata.plotting
@@ -614,6 +615,197 @@ def figure2CGroupedSemanticHeatmap(datasets, path):
     return {"groups": {g: groups.get(g, []) for g in order}}
 
 
+##  The final publication figure  ##
+
+
+def semanticRows():
+    ''' The three row groups, in the order they are drawn.
+
+    Row 1 holds every concept comparabilityOf admits as mutually
+    commensurable. Rows 2 and 3 hold the rest, ONE CONCEPT PER ROW, because
+    Centralization and Bridge Trend are not comparable with the relative
+    group and are not comparable with each other either - a rewiring
+    fraction and an absolute slope are different quantities. Giving them a
+    shared row would imply a comparison that does not exist.
+    '''
+    groups = semanticGroups()
+    rows = [(COMMENSURABLE, list(groups.get(COMMENSURABLE, [])),
+             "comparable under the matched-delta protocol")]
+    for concept in groups.get(NOT_COMMENSURABLE, []):
+        rows.append((concept, [concept], "own perturbation units"))
+    return rows
+
+
+def _stripPanel(ax, frame, concepts, xLabel):
+    ''' Every valid impact for one (dataset, model) cell, as individual
+    points. NOTHING is averaged: each point is one (delta, direction) row
+    straight from the CSV, so no pooled statistic can be read off the panel.
+
+    Returns the number of points drawn, so the caller can tell an empty
+    panel from a panel of zeros - a concept with no valid observation is
+    never drawn at x = 0.
+    '''
+    drawn = 0
+    for position, concept in enumerate(concepts):
+        values = frame[frame["transformation"] == concept]["impact"]
+        values = values[np.isfinite(values)]
+        if not len(values):
+            ax.text(0.5, position, "no valid obs.\n(n=0)",
+                    transform=ax.get_yaxis_transform(), ha="center",
+                    va="center", fontsize=6, color=NEUTRAL, style="italic")
+            continue
+        drawn += len(values)
+        ax.scatter(values, [position] * len(values), s=26, alpha=0.85,
+                   c=[POSITIVE if v > 0 else NEGATIVE for v in values],
+                   edgecolors="black", linewidths=0.3, zorder=3)
+        ax.annotate(f"n={len(values)}", (1.0, position),
+                    xycoords=ax.get_yaxis_transform(),
+                    textcoords="offset points", xytext=(-3, 7),
+                    ha="right", va="center", fontsize=6, color="#555555")
+    ax.set_yticks(range(len(concepts)))
+    ax.set_yticklabels(concepts, fontsize=7)
+    ax.set_ylim(-0.7, len(concepts) - 0.3)
+    ax.tick_params(axis="x", labelsize=6.5)
+    if drawn:
+        # The zero line is the no-effect reference, so it is drawn only
+        # where there is something to reference. An empty panel gets no
+        # axis at all rather than a tick range implying a measured scale.
+        ax.axvline(0, color="black", linewidth=0.9, zorder=2)
+        if xLabel:
+            ax.set_xlabel("impact", fontsize=7)
+    else:
+        ax.set_xticks([])
+    return drawn
+
+
+def figure1FinalModelSeparated(datasets, path):
+    ''' THE final global-impact figure: descriptive, model-separated.
+
+    WHAT IT ANSWERS
+        "How does each individual model respond to each transformation?"
+
+    WHAT IT DOES NOT ANSWER
+        "Which transformation is globally most important?" Nothing here is
+        pooled, averaged or ranked. Formal cross-concept comparison is
+        RQ1b / table7, not this figure.
+
+    TWO INDEPENDENT REASONS FOR THE LAYOUT
+        1. The five transformations do not share perturbation semantics, so
+           rows separate them: row 1 is the mutually commensurable group,
+           rows 2 and 3 are one non-commensurable concept each.
+        2. The six models do not share a prediction scale, so EVERY PANEL
+           CARRIES ITS OWN X-AXIS. An impact of 2 under one model is not
+           claimed to mean what an impact of 2 means under another, and no
+           axis spans two models.
+
+        Datasets are blocked into separate column groups for the same
+        reason: the same model on a different graph is not guaranteed the
+        same prediction scale either.
+
+    AXIS CHOICE
+        Linear. Impacts are signed and roughly symmetric about zero
+        (-45.9 to +45.9 in the current data), so a log axis is
+        mathematically unavailable, and the zero line carries real meaning:
+        it is the no-effect reference, not a plotting convenience.
+
+    EVERY POINT IS ONE VALID CSV ROW. Concepts with no valid observation
+    are labelled, never plotted as zero.
+    '''
+    groups = semanticRows()
+    models = sorted({m for data in datasets.values()
+                     for m in _valid(data["results"])["model"].unique()})
+    # One row per (dataset, semantic group): columns stay the models, which
+    # keeps each row readable, and the two datasets are blocked vertically
+    # rather than doubling the width to 12 columns.
+    rows = [(dataset, label, concepts, note)
+            for dataset in datasets
+            for label, concepts, note in groups]
+    if not models or not rows:
+        return {}
+
+    fig = plt.figure(figsize=(2.05 * len(models) + 1.9,
+                              1.15 * sum(max(len(c), 1) for _, _, c, _ in rows)
+                              + 2.6))
+    grid = fig.add_gridspec(
+        len(rows), len(models),
+        height_ratios=[max(len(c), 1) for _, _, c, _ in rows],
+        wspace=0.40, hspace=0.75, top=0.90, bottom=0.055, left=0.135,
+        right=0.99)
+
+    counts = {}
+    for rowIndex, (dataset, label, concepts, note) in enumerate(rows):
+        valid = _valid(datasets[dataset]["results"])
+        lastOfBlock = (rowIndex + 1) % len(groups) == 0
+        for columnIndex, model in enumerate(models):
+            ax = fig.add_subplot(grid[rowIndex, columnIndex])
+            drawn = _stripPanel(ax, valid[valid["model"] == model], concepts,
+                                xLabel=lastOfBlock)
+            counts[(dataset, model, label)] = drawn
+            # Hide the repeated labels without DISCARDING them: tick_params
+            # keeps the text on the artist, so the panel still reports which
+            # concepts it holds. A single-concept row is already named by the
+            # row label on the left, and repeating it there only collides.
+            if columnIndex or len(concepts) == 1:
+                ax.tick_params(labelleft=False)
+            if not rowIndex:
+                ax.set_title(model, fontsize=7.2, pad=5)
+            if not columnIndex:
+                ax.annotate(f"{dataset}\n{label}\n({note})", (-0.78, 0.5),
+                            xycoords="axes fraction", ha="center",
+                            va="center", fontsize=6.9, fontweight="bold",
+                            linespacing=1.4)
+
+    # A rule between the two dataset blocks, mirroring the row separation.
+    if len(datasets) > 1:
+        above = fig.axes[(len(groups) - 1) * len(models)].get_position().y0
+        below = fig.axes[len(groups) * len(models)].get_position().y1
+        fig.add_artist(plt.Line2D([0.02, 0.995], [(above + below) / 2] * 2,
+                                  color="#444444", linewidth=1.0,
+                                  linestyle=(0, (5, 4))))
+
+    fig.suptitle(
+        "TGAP prediction impacts, reported separately for each model\n"
+        "Bridge Width, Density and Churn share a panel within a model "
+        "because their perturbations are comparable under the matched-delta\n"
+        "protocol. Centralization and Bridge Trend occupy their own rows: "
+        "their perturbation units are not comparable with the relative-delta\n"
+        "concepts, nor with each other. Every panel has its own x-axis "
+        "because prediction scales differ across models and datasets.\n"
+        "The figure is descriptive and gives no global ranking of "
+        "transformations; formal matched comparisons are reported in RQ1b.",
+        fontsize=8.2, y=0.988)
+    savePublicationFigure(fig, path)
+    plt.close(fig)
+    return {"models": models, "datasets": list(datasets),
+            "rows": [(d, l) for d, l, _, _ in rows], "points": counts}
+
+
+SUPERSEDED_NOTICE = """# Superseded figures
+
+Retained for the record. **None of these is the paper's global-impact
+figure.** That is `../fig1_final_model_separated_impacts.png`.
+
+| figure | why it was replaced |
+|---|---|
+| `fig1_concept_impacts` | Pooled mean abs(impact) across six models with different prediction scales, AND placed all five concepts on one axis. Both are invalid. |
+| `fig2_model_concept_heatmap` | Kept models separate, but normalised each model row across all five concepts, so non-commensurable concepts shared one colour scale. |
+| `fig1A_commensurable_concept_impacts` | Fixed the concept axis by dropping the non-commensurable concepts, but still pooled a mean across models. |
+| `fig1B_grouped_concept_impacts` | Separated the semantic groups, but still pooled a mean across models. |
+| `fig2_grouped_semantic_heatmap` | Separated the semantic groups, but still normalised within a model row. |
+
+The common defect in all five is aggregation across models. The final figure
+removes it: every point is one valid CSV row, and every panel carries its own
+axis.
+"""
+
+
+def _writeSupersededNotice(path):
+    ''' Say plainly why these figures are kept and must not be used. '''
+    with open(path, "w", encoding="utf-8") as handle:
+        handle.write(SUPERSEDED_NOTICE)
+    return path
+
+
 def writeFigureMetadata(path):
     ''' Machine-readable comparability metadata for the candidate figures.
 
@@ -638,8 +830,32 @@ def writeFigureMetadata(path):
         },
         "figures": [
             {
-                "figure": "fig1A_commensurable_concept_impacts",
+                "figure": "fig1_final_model_separated_impacts",
+                "candidate": "final",
+                "status": "MAIN publication global-impact figure",
+                "included_concepts": commensurable + other,
+                "excluded_concepts": [],
+                "delta_semantics": {**{c: COMMENSURABLE for c in commensurable},
+                                    **{c: NOT_COMMENSURABLE for c in other}},
+                "cross_concept_numerical_comparison_allowed": False,
+                "cross_model_aggregation": "none - every point is one valid "
+                                           "CSV row; nothing is averaged, "
+                                           "normalised or ranked",
+                "axis_policy": "one independent linear x-axis per "
+                               "(dataset, model, semantic group) panel",
+                "comparability_scope":
+                    "within row 1 of a single panel only, where the model "
+                    "and dataset are fixed and the three concepts share "
+                    "relative-delta semantics; nowhere else",
+                "source_csv": sources,
+                "generation_function":
+                    "realdata.make_publication.figure1FinalModelSeparated",
+                "formats": ["png", "pdf"],
+            },
+            {
+                "figure": "superseded/fig1A_commensurable_concept_impacts",
                 "candidate": "A",
+                "status": "SUPERSEDED - pooled a mean across models",
                 "included_concepts": commensurable,
                 "excluded_concepts": other,
                 "delta_semantics": {c: COMMENSURABLE for c in commensurable},
@@ -651,8 +867,9 @@ def writeFigureMetadata(path):
                 "formats": ["png", "pdf"],
             },
             {
-                "figure": "fig1B_grouped_concept_impacts",
+                "figure": "superseded/fig1B_grouped_concept_impacts",
                 "candidate": "B",
+                "status": "SUPERSEDED - pooled a mean across models",
                 "included_concepts": commensurable + other,
                 "excluded_concepts": [],
                 "delta_semantics": {**{c: COMMENSURABLE for c in commensurable},
@@ -666,8 +883,9 @@ def writeFigureMetadata(path):
                 "formats": ["png", "pdf"],
             },
             {
-                "figure": "fig2_grouped_semantic_heatmap",
+                "figure": "superseded/fig2_grouped_semantic_heatmap",
                 "candidate": "C",
+                "status": "SUPERSEDED - normalised within a model row",
                 "included_concepts": commensurable + other,
                 "excluded_concepts": [],
                 "delta_semantics": {**{c: COMMENSURABLE for c in commensurable},
@@ -924,29 +1142,35 @@ def main():
     print("=" * 66)
     print("PUBLICATION FIGURES AND TABLES")
     print("=" * 66)
-    figure1ConceptImpacts(datasets,
-                          os.path.join(OUTPUT, "fig1_concept_impacts.png"))
-    print("  fig1_concept_impacts.png        global concept importance")
-    figure2ModelConceptHeatmap(
-        datasets, os.path.join(OUTPUT, "fig2_model_concept_heatmap.png"))
-    print("  fig2_model_concept_heatmap.png  model x concept matrix")
+    # THE global-impact figure. Descriptive and model-separated: nothing is
+    # pooled across models, and no axis spans two models or two datasets.
+    final = figure1FinalModelSeparated(
+        datasets,
+        os.path.join(OUTPUT, "fig1_final_model_separated_impacts.png"))
+    print(f"  fig1_final_model_separated_impacts.png   MAIN global-impact "
+          f"figure, {len(final['models'])} models x {len(final['rows'])} rows")
 
-    # Candidates A/B/C: alternatives to fig1/fig2 that do not imply a single
-    # cross-concept ranking. fig1/fig2 above are left untouched so the three
-    # can be compared against what they would replace.
-    groups = semanticGroups()
-    a = figure1ACommensurable(
-        datasets, os.path.join(OUTPUT,
+    # SUPERSEDED. fig1/fig2 pooled impacts across six models with different
+    # prediction scales and put all five concepts on one axis; candidates
+    # A/B/C were the intermediate designs that fixed only the second half of
+    # that. They are kept - they are part of the record - but they are
+    # written to a subdirectory so nothing downstream can pick one up as the
+    # paper's global-impact figure by accident.
+    os.makedirs(SUPERSEDED, exist_ok=True)
+    figure1ConceptImpacts(datasets,
+                          os.path.join(SUPERSEDED, "fig1_concept_impacts.png"))
+    figure2ModelConceptHeatmap(
+        datasets, os.path.join(SUPERSEDED, "fig2_model_concept_heatmap.png"))
+    figure1ACommensurable(
+        datasets, os.path.join(SUPERSEDED,
                                "fig1A_commensurable_concept_impacts.png"))
-    print(f"  fig1A_commensurable_...png      candidate A, "
-          f"{len(a['concepts'])} commensurable concepts")
-    figure1BGrouped(datasets,
-                    os.path.join(OUTPUT, "fig1B_grouped_concept_impacts.png"))
-    print(f"  fig1B_grouped_concept_...png    candidate B, "
-          f"{len(groups)} semantic groups")
+    figure1BGrouped(datasets, os.path.join(
+        SUPERSEDED, "fig1B_grouped_concept_impacts.png"))
     figure2CGroupedSemanticHeatmap(
-        datasets, os.path.join(OUTPUT, "fig2_grouped_semantic_heatmap.png"))
-    print("  fig2_grouped_semantic_...png    candidate C, grouped heatmap")
+        datasets, os.path.join(SUPERSEDED, "fig2_grouped_semantic_heatmap.png"))
+    _writeSupersededNotice(os.path.join(SUPERSEDED, "README.md"))
+    print(f"  superseded/                     5 earlier designs, retained "
+          f"for the record, not for the paper")
     writeFigureMetadata(os.path.join(OUTPUT, "figure_metadata.json"))
     print("  figure_metadata.json            comparability metadata")
     figure3BridgeMatrix(os.path.join(OUTPUT, "fig3_bridge_matrix.png"))
