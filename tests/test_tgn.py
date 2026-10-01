@@ -138,5 +138,97 @@ class TestTgnOptionalDependency(unittest.TestCase):
         self.assertTrue(hasattr(core, "TgapExplainer"))
 
 
+
+@unittest.skipUnless(TORCH_AVAILABLE, "PyTorch / PyTorch Geometric absent")
+class TestHeldOutEvaluation(unittest.TestCase):
+    ''' Training loss falling does not prove a model learned anything
+    GENERALISABLE - it can fall while the model memorises. These tests cover
+    the held-out protocol, and the regression that made it necessary. '''
+
+    @classmethod
+    def setUpClass(cls):
+        from core.TgnModel import evaluateTgn, splitTemporally
+        cls.evaluateTgn, cls.splitTemporally = staticmethod(evaluateTgn), \
+            staticmethod(splitTemporally)
+        cls.snapshots, _ = makeTemporalGraph(
+            nSnapshots=10, nPerCommunity=8, bridgeWidth=6, seed=1)
+
+    def testSplitIsTemporalNotRandom(self):
+        ''' Every test snapshot must come strictly AFTER every training one.
+        A random split would leak the future into training and report a
+        score nobody could achieve in practice. '''
+        train, test = self.splitTemporally(self.snapshots, 0.7)
+        self.assertTrue(train and test)
+        self.assertEqual(len(train) + len(test), len(self.snapshots))
+        # Identity, not equality: the test part must be the literal tail.
+        for index, graph in enumerate(test):
+            self.assertIs(graph, self.snapshots[len(train) + index])
+
+    def testSplitAlwaysLeavesSomethingToEvaluate(self):
+        for fraction in (0.1, 0.5, 0.9, 0.99):
+            train, test = self.splitTemporally(self.snapshots, fraction)
+            self.assertTrue(train, f"fraction {fraction} left no training data")
+            self.assertTrue(test, f"fraction {fraction} left nothing held out")
+
+    def testMemoryDiffersAcrossNodes(self):
+        ''' REGRESSION. TGN was given all-zero messages while memory also
+        starts at zero, so every node's memory updated identically - a
+        symmetry that never broke. Every embedding was then the same, every
+        candidate link scored the same, and held-out AUC was EXACTLY 0.500
+        however long it trained. Messages now carry endpoint degrees, which
+        is real structural signal. If memory ever becomes uniform again,
+        this test fails before anyone publishes an explanation of a model
+        that cannot tell two nodes apart. '''
+        import torch
+        train, _ = self.splitTemporally(self.snapshots, 0.7)
+        model = buildTgn(self.snapshots[0].number_of_nodes() + 1, seed=42)
+        trainTgn(model, train, epochs=5, seed=42)
+        model.memory.reset_state()
+        model.neighborLoader.reset_state()
+        with torch.no_grad():
+            for source, destination, time, message in model._eventsFrom(train):
+                model.memory.update_state(source, destination, time, message)
+                model.neighborLoader.insert(source, destination)
+            memory, _ = model.memory(torch.arange(10))
+        self.assertGreater(float(memory.std(dim=0).mean()), 0.0,
+                           "TGN memory is identical for every node")
+
+    def testEvaluationReportsBalancedClassesAndChanceLevel(self):
+        train, test = self.splitTemporally(self.snapshots, 0.7)
+        model = buildTgn(self.snapshots[0].number_of_nodes() + 1, seed=42)
+        result = self.evaluateTgn(model, train, test, seed=42)
+        self.assertEqual(result["positives"], result["negatives"],
+                         "classes must be balanced for chance to be 0.5")
+        self.assertEqual(result["chance_level"], 0.5)
+        for key in ("average_precision", "auc", "accuracy"):
+            self.assertGreaterEqual(result[key], 0.0)
+            self.assertLessEqual(result[key], 1.0)
+
+    def testEvaluationIsDeterministic(self):
+        train, test = self.splitTemporally(self.snapshots, 0.7)
+        model = buildTgn(self.snapshots[0].number_of_nodes() + 1, seed=42)
+        trainTgn(model, train, epochs=3, seed=42)
+        first = self.evaluateTgn(model, train, test, seed=42)
+        second = self.evaluateTgn(model, train, test, seed=42)
+        self.assertEqual(first["auc"], second["auc"])
+        self.assertEqual(first["average_precision"],
+                         second["average_precision"])
+
+    def testAveragePrecisionAndAucOnKnownInput(self):
+        ''' The two metrics are implemented by hand (to avoid a
+        scikit-learn dependency), so they are checked against cases whose
+        answer is known by inspection. '''
+        from core.TgnModel import _areaUnderRoc, _averagePrecision
+        # Perfect ranking: every positive above every negative.
+        self.assertAlmostEqual(_averagePrecision([0.9, 0.8, 0.2, 0.1],
+                                                 [1, 1, 0, 0]), 1.0)
+        self.assertAlmostEqual(_areaUnderRoc([0.9, 0.8, 0.2, 0.1],
+                                             [1, 1, 0, 0]), 1.0)
+        # Inverted ranking.
+        self.assertAlmostEqual(_areaUnderRoc([0.1, 0.2, 0.8, 0.9],
+                                             [1, 1, 0, 0]), 0.0)
+        # All tied - the degenerate case the regression above produced.
+        self.assertAlmostEqual(_areaUnderRoc([0.5] * 4, [1, 1, 0, 0]), 0.5)
+
 if __name__ == "__main__":
     unittest.main()

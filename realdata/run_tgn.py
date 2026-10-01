@@ -41,12 +41,14 @@ from core import (
     CentralizationTransformation, ChurnTransformation, DensityTransformation,
 )
 from core.TemporalGraphExplainer import TgapExplainer
-from core.TgnModel import TORCH_AVAILABLE, buildTgn, requireTorch, trainTgn
+from core.TgnModel import (TORCH_AVAILABLE, buildTgn, evaluateTgn,
+                           requireTorch, splitTemporally, trainTgn)
 from .run_real_data import ADAPTERS, DELTAS, SEED, writeJson
 from .adapters.base import TEMPORAL_EVALUATION
 
 OUTPUT_ROOT = os.path.join("output", "real_data_v2", "tgn")
-EPOCHS = 5
+EPOCHS = 50
+TRAIN_FRACTION = 0.7
 
 
 def buildTransformations(communities):
@@ -80,16 +82,32 @@ def runDataset(key, mode=TEMPORAL_EVALUATION, epochs=EPOCHS):
     # a perturbation introduces a node the replay had not yet numbered.
     model = buildTgn(nodeCount + 1, seed=SEED)
 
+    # TEMPORAL split: train on earlier snapshots, evaluate on strictly
+    # later ones. A random split would leak the future into training and
+    # report a score nobody could achieve in practice - the same mistake the
+    # preprocessing layer was fixed for.
+    trainSnapshots, testSnapshots = splitTemporally(snapshots, TRAIN_FRACTION)
+    print(f"  split         : {len(trainSnapshots)} train / "
+          f"{len(testSnapshots)} held-out snapshots (strictly later)")
+
+    untrained = evaluateTgn(model, trainSnapshots, testSnapshots, seed=SEED)
     started = time.perf_counter()
-    losses = trainTgn(model, snapshots, epochs=epochs, seed=SEED)
+    losses = trainTgn(model, trainSnapshots, epochs=epochs, seed=SEED)
     trainingSeconds = time.perf_counter() - started
+    heldOut = evaluateTgn(model, trainSnapshots, testSnapshots, seed=SEED)
+
     print(f"  training      : {epochs} epochs in {trainingSeconds:.1f}s")
-    print(f"  loss by epoch : {[round(l, 4) for l in losses]}")
-    if len(losses) > 1 and losses[-1] < losses[0]:
-        print(f"  -> loss fell {losses[0]:.4f} -> {losses[-1]:.4f}: the model "
-              f"learned something")
+    print(f"  loss          : {losses[0]:.4f} -> {losses[-1]:.4f}")
+    print(f"  held-out      : AP {untrained['average_precision']} -> "
+          f"{heldOut['average_precision']}, "
+          f"AUC {untrained['auc']} -> {heldOut['auc']}, "
+          f"accuracy {heldOut['accuracy']}  (chance 0.5)")
+    if heldOut["auc"] and heldOut["auc"] > 0.6:
+        print(f"  -> the model generalises to unseen snapshots; the "
+              f"explanation below is of a model that works")
     else:
-        print(f"  -> loss did NOT fall; treat the explanation with caution")
+        print(f"  -> held-out AUC is near chance; treat the explanation as "
+              f"an explanation of a WEAK model")
 
     baseline = model.predict(snapshots)
     print(f"  baseline      : {baseline:.6f} "
@@ -147,8 +165,14 @@ def runDataset(key, mode=TEMPORAL_EVALUATION, epochs=EPOCHS):
         "snapshots": len(snapshots),
         "training_epochs": epochs,
         "training_seconds": round(trainingSeconds, 2),
+        "train_snapshots": len(trainSnapshots),
+        "heldout_snapshots": len(testSnapshots),
+        "train_fraction": TRAIN_FRACTION,
         "loss_by_epoch": losses,
         "loss_decreased": bool(len(losses) > 1 and losses[-1] < losses[0]),
+        "heldout_before_training": untrained,
+        "heldout_after_training": heldOut,
+        "generalises": bool(heldOut.get("auc") and heldOut["auc"] > 0.6),
         "baseline_prediction": baseline,
         "model_calls_per_delta": 1 + 2 * len(transformations),
         "deltas": list(DELTAS),
@@ -163,7 +187,10 @@ def runDataset(key, mode=TEMPORAL_EVALUATION, epochs=EPOCHS):
             "performance. The claim demonstrated here is that TGAP can "
             "explain a genuinely learned temporal-graph model through the "
             "predict(temporalGraph) contract alone - no gradients, no access "
-            "to memory or attention internals."),
+            "to memory or attention internals. Held-out performance is "
+            "reported so a reader can see whether the explained model "
+            "actually works; an explanation of a model at chance level "
+            "would say nothing useful."),
     }
     writeJson(summary, os.path.join(directory, "summary.json"))
     print(f"\n  wrote {directory}")
