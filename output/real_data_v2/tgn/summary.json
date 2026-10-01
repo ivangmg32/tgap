@@ -6,7 +6,7 @@
     "nodes": 201,
     "snapshots": 12,
     "training_epochs": 5,
-    "training_seconds": 1.08,
+    "training_seconds": 2.19,
     "loss_by_epoch": [
       1.3818866511185963,
       1.3498535950978596,

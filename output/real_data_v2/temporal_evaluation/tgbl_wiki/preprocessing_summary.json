@@ -34,6 +34,7 @@
   "edge_sign_used": false,
   "partition_source": "greedy modularity on the selection-period co-edit graph only, then frozen",
   "community_mode": "temporal_train",
+  "n_communities": 2,
   "partition_sizes": [
     25,
     75
@@ -42,6 +43,12 @@
   "partition_graph_nodes": 100,
   "nodes_isolated_in_partition_graph": 24,
   "smaller_side_pct": 25.0,
+  "community_pairs": 1,
+  "empty_communities": 0,
+  "modularity": 0.1682,
+  "natural_n_communities": 33,
+  "modularity_natural": 0.2203,
+  "modularity_lost_by_merging": 0.0521,
   "cohesion_usable": false,
   "cohesion_note": "snapshots contain isolated inactive pages, so they are disconnected and algebraic connectivity is 0; cohesion is not used as a prediction target"
 }

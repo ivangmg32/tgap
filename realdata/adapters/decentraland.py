@@ -89,7 +89,7 @@ def readVotes():
 
 
 def prepare(topVoters=100, windowFreq="MS", mode=TEMPORAL_EVALUATION,
-            selectionFraction=SELECTION_FRACTION):
+            selectionFraction=SELECTION_FRACTION, nCommunities=2):
     ''' Download (if needed), preprocess, and return a PreparedDataset.
     windowFreq is a pandas offset alias; "MS" = calendar month start.
 
@@ -145,12 +145,14 @@ def prepare(topVoters=100, windowFreq="MS", mode=TEMPORAL_EVALUATION,
             actorKey="Member", itemKey="Snapshot ID", windowKey="window",
             keepActors=keptVoters)
         communities, partitionGraph, partitionReport = _partitionFromGraph(
-            aggregateGraph(trainingSnapshots, keptVoters), "temporal_train")
+            aggregateGraph(trainingSnapshots, keptVoters), "temporal_train",
+            nCommunities)
         partitionSource = ("greedy modularity on the selection-period "
                            "co-voting graph only, then frozen")
     else:
         communities, partitionGraph, partitionReport = _partitionFromGraph(
-            aggregateGraph(snapshots, keptVoters), "full_period_descriptive")
+            aggregateGraph(snapshots, keptVoters), "full_period_descriptive",
+            nCommunities)
         partitionSource = ("greedy modularity on the full-period aggregate "
                            "graph (descriptive; not leakage-safe)")
 

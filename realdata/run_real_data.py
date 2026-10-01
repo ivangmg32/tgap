@@ -124,9 +124,10 @@ BIPARTITE = {
     "tgbl_wiki": tgbl_wiki.prepare,
     "decentraland": decentraland.prepare,
 }
-UNIPARTITE = {name: (lambda mode, n=name: edgelist.prepare(n, mode=mode))
+UNIPARTITE = {name: (lambda mode, k=2, n=name:
+                     edgelist.prepare(n, mode=mode, nCommunities=k))
               for name in edgelist.DATASETS}
-ADAPTERS = {**{k: (lambda mode, f=f: f(mode=mode))
+ADAPTERS = {**{k: (lambda mode, n=2, f=f: f(mode=mode, nCommunities=n))
                for k, f in BIPARTITE.items()},
             **UNIPARTITE}
 
@@ -830,11 +831,11 @@ def makeFigures(prepared, summary, metricFrame, resultFrame, figureDir):
                       os.path.join(figureDir, "validity_map.png"))
 
 
-def runDataset(key, mode):
+def runDataset(key, mode, nCommunities=2):
     print("=" * 72)
     print(f"REAL DATA: {key}   [analysis_mode = {mode}]")
     print("=" * 72)
-    prepared = ADAPTERS[key](mode)
+    prepared = ADAPTERS[key](mode, nCommunities)
     directory = os.path.join(OUTPUT_ROOT, mode, key)
     os.makedirs(directory, exist_ok=True)
 
@@ -1087,6 +1088,14 @@ def main(argv=None):
     ''' CLI. --mode selects the analysis mode(s); remaining arguments are
     dataset keys. The default is the leakage-safe temporal evaluation. '''
     argv = list(argv if argv is not None else sys.argv[1:])
+    # --communities N: the partition size. Default 2, which reproduces every
+    # earlier result exactly. N > 2 gives N(N-1)/2 bridges; see
+    # realdata/run_ncommunity.py for the dedicated N-community experiment.
+    nCommunities = 2
+    if "--communities" in argv:
+        index = argv.index("--communities")
+        nCommunities = int(argv[index + 1])
+        del argv[index:index + 2]
     modes = [TEMPORAL_EVALUATION]
     if "--mode" in argv:
         index = argv.index("--mode")
@@ -1105,9 +1114,10 @@ def main(argv=None):
         os.makedirs(root, exist_ok=True)
         headlines = {}
         for key in keys:
-            headlines[key] = runDataset(key, mode)
+            headlines[key] = runDataset(key, mode, nCommunities)
             print()
         writeJson({"analysis_mode": mode,
+                   "n_communities": nCommunities,
                    "selection_fraction_of_span": SELECTION_FRACTION,
                    "leakage_safe": mode == TEMPORAL_EVALUATION,
                    "datasets": headlines},
