@@ -411,6 +411,242 @@ class TestProvenanceAndReproducibility(FigureCase):
                              f"{name} is not reproducible")
 
 
+class TestFinalFigure(FigureCase):
+    ''' fig1_final_model_separated_impacts - THE publication global-impact
+    figure. Two independent invariants are protected here:
+
+      1. no aggregation across models, ever;
+      2. no non-commensurable concept sharing a panel with the relative
+         group.
+    '''
+
+    def setUp(self):
+        self.fig = _capture(M.figure1FinalModelSeparated, self.datasets,
+                            self.directory, "final.png")
+        self.panels = []
+        for ax in self.fig.axes:
+            concepts = [_conceptOf(t) for t in _yLabels(ax)]
+            self.panels.append((ax, concepts))
+
+    def _points(self, ax):
+        return sum(len(c.get_offsets()) for c in ax.collections)
+
+    # 1
+    def testNoAggregationAcrossModels(self):
+        ''' Every point is one valid CSV row. Totals are compared per
+        (dataset, model, concept): any mean, median or pooled statistic
+        would collapse several rows into one point and fail here. '''
+        drawn = 0
+        for ax, _ in self.panels:
+            drawn += self._points(ax)
+        expected = sum(len(M._valid(d["results"])) for d in
+                       self.datasets.values())
+        self.assertEqual(drawn, expected,
+                         "the number of plotted points must equal the "
+                         "number of valid rows - nothing may be aggregated")
+
+    def testPanelPointCountsMatchThePerModelRowCounts(self):
+        counts = {}
+        for dataset, data in self.datasets.items():
+            valid = M._valid(data["results"])
+            for (model, concept), group in valid.groupby(
+                    ["model", "transformation"]):
+                counts[(dataset, model, concept)] = len(group)
+        self.assertEqual(sum(counts.values()),
+                         sum(self._points(ax) for ax, _ in self.panels))
+        self.assertGreater(max(counts.values()), 1,
+                           "fixture must contain multi-row cells, else the "
+                           "no-aggregation test proves nothing")
+
+    # 2
+    def testEveryModelIsRepresented(self):
+        titles = {t for ax, _ in self.panels for t in [ax.get_title()] if t}
+        models = {m for data in self.datasets.values()
+                  for m in M._valid(data["results"])["model"].unique()}
+        self.assertTrue(models)
+        self.assertTrue(models.issubset(titles),
+                        f"models missing from the figure: {models - titles}")
+
+    # 3, 4, 5
+    def testCommensurableConceptsShareAPanel(self):
+        shared = [c for _, c in self.panels
+                  if set(c) == set(self.commensurable)]
+        self.assertTrue(shared,
+                        "Bridge Width, Density and Churn must appear "
+                        "together in a panel")
+
+    def testNonCommensurableConceptsNeverJoinThatPanel(self):
+        for _, concepts in self.panels:
+            if not concepts:
+                continue
+            for concept in self.other:
+                if concept in concepts:
+                    self.assertEqual(
+                        concepts, [concept],
+                        f"{concept} must occupy a panel alone, not share "
+                        f"one with {concepts}")
+
+    def testCentralizationAndBridgeTrendAreNotInTheSameRow(self):
+        ''' They are not comparable with each other either. '''
+        for _, concepts in self.panels:
+            self.assertFalse(set(self.other).issubset(set(concepts)),
+                             "the two non-commensurable concepts must not "
+                             "share a row")
+
+    # 6
+    def testEachModelPanelHasItsOwnAxis(self):
+        populated = [ax for ax, _ in self.panels if self._points(ax)]
+        limits = {ax.get_xlim() for ax in populated}
+        self.assertGreater(
+            len(limits), 1,
+            "every panel sharing one x-range would imply a common scale")
+        # Specifically: panels in the same row must not all share a range.
+        byRow = {}
+        for ax in populated:
+            byRow.setdefault(round(ax.get_position().y0, 3), set()).add(
+                ax.get_xlim())
+        self.assertTrue(any(len(v) > 1 for v in byRow.values()),
+                        "models within a row share an x-axis")
+
+    # 7
+    def testInsufficientCellsAreLabelledNotPlottedAsZero(self):
+        ''' decentraland has no valid Bridge Trend row. It must be stated,
+        never drawn as a point at zero. '''
+        empty = []
+        for dataset, data in self.datasets.items():
+            valid = M._valid(data["results"])
+            present = set(valid["transformation"])
+            for concept in self.commensurable + self.other:
+                if concept not in present:
+                    empty.append((dataset, concept))
+        self.assertTrue(empty, "fixture must contain an empty cell")
+
+        labels = [t.get_text() for t in self.fig.findobj(matplotlib.text.Text)]
+        self.assertTrue(any("n=0" in l for l in labels),
+                        "an empty cell must be labelled n=0")
+        for ax, concepts in self.panels:
+            if concepts and not self._points(ax):
+                self.assertEqual(
+                    ax.get_xticks().size, 0,
+                    "an empty panel must not carry a numeric axis")
+
+    def testEveryPlottedPointIsARealValidImpact(self):
+        real = set()
+        for data in self.datasets.values():
+            real.update(round(float(v), 9)
+                        for v in M._valid(data["results"])["impact"])
+        for ax, _ in self.panels:
+            for collection in ax.collections:
+                for x, _y in collection.get_offsets():
+                    self.assertIn(round(float(x), 9), real,
+                                  f"plotted value {x} is not a valid impact")
+
+    # 12
+    def testNoGlobalRankingLanguage(self):
+        text = " ".join(t.get_text() for t in self.fig.findobj(
+            matplotlib.text.Text)).lower()
+        for banned in ("concept importance", "most important", "dominant",
+                       "strongest", "best concept", "ranking of concepts"):
+            self.assertNotIn(banned, text)
+        self.assertIn("no global ranking", text)
+        self.assertIn("descriptive", text)
+
+
+class TestFinalFigureOutputs(FigureCase):
+
+    # 9, 10, 11
+    def testPngAndPdfAreBothProducedAndReproducible(self):
+        digests = []
+        for run in range(2):
+            directory = os.path.join(self.directory, f"final{run}")
+            os.makedirs(directory, exist_ok=True)
+            target = os.path.join(directory, "final.png")
+            M.figure1FinalModelSeparated(self.datasets, target)
+            produced = {}
+            for suffix in ("png", "pdf"):
+                name = target[:-4] + "." + suffix
+                self.assertTrue(os.path.exists(name), f"{suffix} not written")
+                produced[suffix] = hashlib.md5(
+                    open(name, "rb").read()).hexdigest()
+            digests.append(produced)
+        self.assertEqual(digests[0], digests[1],
+                         "the final figure is not reproducible")
+
+    # 8
+    def testNoScientificNumberIsHardCoded(self):
+        real = set()
+        for data in self.datasets.values():
+            real.update(round(abs(float(v)), 6)
+                        for v in M._valid(data["results"])["impact"])
+        real.discard(0.0)
+        for function in (M.figure1FinalModelSeparated, M._stripPanel,
+                         M.semanticRows):
+            tree = ast.parse(inspect.getsource(function).lstrip())
+            for node in ast.walk(tree):
+                if (isinstance(node, ast.Constant)
+                        and isinstance(node.value, float)
+                        and node.value != int(node.value)):
+                    self.assertNotIn(
+                        round(abs(node.value), 6), real,
+                        f"{function.__name__} hard-codes {node.value}")
+
+    def testNoConceptOrModelNameIsHardCoded(self):
+        from core.TransformationRegistry import conceptNames
+        models = {m for data in self.datasets.values()
+                  for m in M._valid(data["results"])["model"].unique()}
+        for function in (M.figure1FinalModelSeparated, M._stripPanel,
+                         M.semanticRows):
+            tree = ast.parse(inspect.getsource(function).lstrip())
+            literals = {n.value for n in ast.walk(tree)
+                        if isinstance(n, ast.Constant)
+                        and isinstance(n.value, str)}
+            for name in set(conceptNames()) | models:
+                self.assertNotIn(name, literals,
+                                 f"{function.__name__} hard-codes {name!r}")
+
+    # 13
+    def testThePipelineUsesTheFinalFigureAsTheMainOne(self):
+        ''' The final figure must be written to the publication root, and
+        the superseded designs must not be. '''
+        tree = ast.parse(inspect.getsource(M.main).lstrip())
+        targets = {}
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
+                continue
+            name = getattr(node.func, "id", getattr(node.func, "attr", None))
+            for argument in ast.walk(node):
+                if (isinstance(argument, ast.Call)
+                        and getattr(argument.func, "attr", None) == "join"):
+                    roots = [a.id for a in argument.args
+                             if isinstance(a, ast.Name)]
+                    if roots:
+                        targets.setdefault(name, set()).update(roots)
+        self.assertEqual(targets.get("figure1FinalModelSeparated"), {"OUTPUT"},
+                         "the final figure must be written to OUTPUT")
+        for superseded in ("figure1ConceptImpacts", "figure2ModelConceptHeatmap",
+                           "figure1ACommensurable", "figure1BGrouped",
+                           "figure2CGroupedSemanticHeatmap"):
+            self.assertEqual(
+                targets.get(superseded), {"SUPERSEDED"},
+                f"{superseded} must be written to the superseded directory, "
+                f"not used as a main publication figure")
+
+    def testSupersededFiguresAreNotInThePublicationRoot(self):
+        ''' Guards the generated tree, not just the source. '''
+        if not os.path.exists(M.OUTPUT):
+            self.skipTest("publication output not generated")
+        root = set(os.listdir(M.OUTPUT))
+        for name in ("fig1_concept_impacts.png",
+                     "fig2_model_concept_heatmap.png",
+                     "fig1A_commensurable_concept_impacts.png",
+                     "fig1B_grouped_concept_impacts.png",
+                     "fig2_grouped_semantic_heatmap.png"):
+            self.assertNotIn(name, root,
+                             f"{name} is superseded and must not sit beside "
+                             f"the paper's figures")
+        self.assertIn("fig1_final_model_separated_impacts.png", root)
+
+
 class TestMetadata(FigureCase):
 
     def setUp(self):
@@ -424,7 +660,7 @@ class TestMetadata(FigureCase):
 
     def testEveryCandidateIsDocumented(self):
         candidates = {f["candidate"] for f in self.payload["figures"]}
-        self.assertEqual(candidates, {"A", "B", "C"})
+        self.assertEqual(candidates, {"final", "A", "B", "C"})
         for entry in self.payload["figures"]:
             for key in ("figure", "included_concepts", "delta_semantics",
                         "cross_concept_numerical_comparison_allowed",
