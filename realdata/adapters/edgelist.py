@@ -71,7 +71,7 @@ import networkx as nx
 from .base import (PreparedDataset, TEMPORAL_EVALUATION, SELECTION_FRACTION,
                    aggregateGraph, checkMode, fixedPartitionWithReport,
                    retentionSummary, selectionWindowSummary, temporalSplit,
-                   _partitionFromGraph)
+                   _modularityReport, _partitionFromGraph)
 from ..download import download, fileDigest
 
 SECONDS_PER_DAY = 86400.0
@@ -288,8 +288,14 @@ def selectNodes(config, events):
         sizes = Counter(labels.values())
         groups = [g for g, _ in sizes.most_common(config["labelGroups"])]
         keep = {n for n, g in labels.items() if g in groups}
-        partition = tuple(
-            {n for n in keep if labels[n] == g} for g in groups)
+        # A labelled Partition, not a bare tuple: with N real departments
+        # the figures and tables can then say "dept4-dept14" instead of
+        # "0-1". These are real organisational units, which is a stronger
+        # notion of "community" than any detector can provide.
+        from core.Communities import Partition
+        partition = Partition(
+            [{n for n in keep if labels[n] == g} for g in groups],
+            labels=[f"dept{g}" for g in groups])
         note = (f"ground-truth labels; kept the {config['labelGroups']} "
                 f"largest groups {groups} with sizes "
                 f"{[len(p) for p in partition]}")
@@ -367,7 +373,7 @@ def makeLabels(config, windowIds, start, dayOffset=0.0):
 
 
 def prepare(name, mode=TEMPORAL_EVALUATION,
-            selectionFraction=SELECTION_FRACTION):
+            selectionFraction=SELECTION_FRACTION, nCommunities=2):
     ''' Download (if needed), preprocess, and return a PreparedDataset.
 
     mode == "temporal_evaluation" (default, leakage-safe)
@@ -382,7 +388,11 @@ def prepare(name, mode=TEMPORAL_EVALUATION,
         behaviour. Not leakage-safe; every output file records the mode.
     '''
     checkMode(mode)
-    config = DATASETS[name]
+    config = dict(DATASETS[name])
+    # Ground-truth datasets express N by keeping N real groups, which is a
+    # stronger notion of "N communities" than a detector can give.
+    if config.get("nodeSelection") == "labels":
+        config["labelGroups"] = nCommunities
     events, path = readEdgeList(config)
 
     times = [t for _, _, t in events]
@@ -413,28 +423,33 @@ def prepare(name, mode=TEMPORAL_EVALUATION,
         # populated rather than left absent.
         partitionGraph = aggregateGraph(snapshots, keep)
         isolated = sum(1 for _, d in partitionGraph.degree() if d == 0)
+        sizes = communities.sizes()
         partitionReport = {
             "community_mode": "ground_truth_labels",
-            "partition_sizes": [len(communities[0]), len(communities[1])],
+            "n_communities": len(communities),
+            "partition_sizes": sizes,
             "partition_graph_edges": partitionGraph.number_of_edges(),
             "partition_graph_nodes": partitionGraph.number_of_nodes(),
             "nodes_isolated_in_partition_graph": isolated,
-            "smaller_side_pct": round(
-                100.0 * min(len(communities[0]), len(communities[1]))
-                / len(keep), 2),
+            "smaller_side_pct": round(100.0 * min(sizes) / len(keep), 2),
+            "community_pairs": len(communities.pairs()),
         }
+        partitionReport.update(_modularityReport(partitionGraph,
+                                                 communities))
         partitionSource = ("ground-truth labels (no detection, no temporal "
                            "leakage: labels are a static attribute)")
     elif mode == TEMPORAL_EVALUATION:
         trainingSnapshots, _, _, _ = buildSnapshots(
             selectionEvents, keep, config["windowDays"], start=tMin)
         communities, partitionGraph, partitionReport = _partitionFromGraph(
-            aggregateGraph(trainingSnapshots, keep), "temporal_train")
+            aggregateGraph(trainingSnapshots, keep), "temporal_train",
+            nCommunities)
         partitionSource = ("greedy modularity on the selection-period graph "
                            "only, then frozen for every later snapshot")
     else:
         communities, partitionGraph, partitionReport = \
-            fixedPartitionWithReport(snapshots, mode, nodes=keep)
+            fixedPartitionWithReport(snapshots, mode, nodes=keep,
+                                     nCommunities=nCommunities)
         partitionSource = ("greedy modularity on the full-period aggregate "
                            "graph (descriptive; not leakage-safe)")
 
