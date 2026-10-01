@@ -44,6 +44,8 @@ TORCH IS AN OPTIONAL DEPENDENCY
     working. The test suite skips TGN tests when torch is absent.
 '''
 
+import random
+
 import numpy as np
 
 try:
@@ -185,11 +187,27 @@ class TgnTemporalGraphModel(TemporalGraphModel):
         return self.nodeIndex[node]
 
     def _eventsFrom(self, temporalGraph):
-        ''' One (source, destination, time) batch per snapshot.
+        ''' One (source, destination, time, message) batch per snapshot.
 
         The snapshot index is the timestamp: TGAP hands us discrete
         snapshots, not the original event stream, so time resolution is the
-        snapshot. Edges are sorted so the replay order is deterministic. '''
+        snapshot. Edges are sorted so the replay order is deterministic.
+
+        THE MESSAGE MATTERS, and getting it wrong produces a model that
+        silently cannot learn. TGN drives memory from per-event messages. An
+        all-zero message, with memory also initialised to zero, makes every
+        node's memory update IDENTICALLY - a symmetry that never breaks, so
+        every node ends with the same memory, every embedding is the same,
+        every candidate link scores the same, and held-out AUC is exactly
+        0.500 no matter how long you train. (Measured: memory std across
+        nodes was 0.0.)
+
+        These datasets have no edge features, so the message carries real
+        structural information instead: the degrees of the two endpoints in
+        that snapshot, scaled by the node count. Degree is genuine signal
+        from the graph - not noise injected to break ties - and it differs
+        between nodes, which is what the memory needs.
+        '''
         batches = []
         for index, graph in enumerate(temporalGraph):
             edges = sorted((self._identifier(u), self._identifier(v))
@@ -203,22 +221,27 @@ class TgnTemporalGraphModel(TemporalGraphModel):
             # be integers - a Float here fails with a dtype mismatch deep
             # inside memory.update_state.
             time = torch.full((len(edges),), index, dtype=torch.long)
-            batches.append((source, destination, time))
+            size = max(graph.number_of_nodes(), 1)
+            degrees = {self._identifier(n): d for n, d in graph.degree()}
+            message = torch.tensor(
+                [[degrees.get(int(u), 0) / size, degrees.get(int(v), 0) / size]
+                 for u, v in zip(source.tolist(), destination.tolist())],
+                dtype=torch.float)
+            batches.append((source, destination, time, message))
         return [b for b in batches if b is not None]
 
     def _replay(self, batches):
         ''' Feed history into TGN memory without scoring anything. '''
-        for source, destination, time in batches:
+        for source, destination, time, message in batches:
             nodes = torch.cat([source, destination])
             if int(nodes.max()) >= self.nodeCount:
                 continue                    # node outside the trained space
-            message = torch.zeros(source.size(0), self.memory.raw_msg_dim)
             self.memory.update_state(source, destination, time, message)
             self.neighborLoader.insert(source, destination)
 
     def _scoreSnapshot(self, batch):
         ''' Mean predicted probability of the edges in this snapshot. '''
-        source, destination, time = batch
+        source, destination, time, _message = batch
         nodes = torch.cat([source, destination])
         if int(nodes.max()) >= self.nodeCount:
             return 0.0
@@ -249,13 +272,13 @@ def buildTgn(nodeCount, memoryDimension=32, timeDimension=32,
     device = device or torch.device("cpu")
 
     memory = TGNMemory(
-        nodeCount, raw_msg_dim=1, memory_dim=memoryDimension,
+        nodeCount, raw_msg_dim=2, memory_dim=memoryDimension,
         time_dim=timeDimension,
-        message_module=IdentityMessage(1, memoryDimension, timeDimension),
+        message_module=IdentityMessage(2, memoryDimension, timeDimension),
         aggregator_module=LastAggregator(),
     ).to(device)
     embedding = GraphAttentionEmbedding(
-        memoryDimension, embeddingDimension, 1, memory.time_enc).to(device)
+        memoryDimension, embeddingDimension, 2, memory.time_enc).to(device)
     predictor = LinkPredictor(embeddingDimension).to(device)
     loader = LastNeighborLoader(nodeCount, size=10, device=device)
 
@@ -294,7 +317,7 @@ def trainTgn(model, temporalGraph, epochs=3, learningRate=1e-3, seed=42):
         model.memory.reset_state()
         model.neighborLoader.reset_state()
         losses = []
-        for source, destination, time in batches:
+        for source, destination, time, message in batches:
             if int(torch.cat([source, destination]).max()) >= model.nodeCount:
                 continue
             optimizer.zero_grad()
@@ -321,8 +344,173 @@ def trainTgn(model, temporalGraph, epochs=3, learningRate=1e-3, seed=42):
             # detach_() stops gradients flowing back through memory into a
             # previous batch; without it the graph is retained across the
             # whole replay and training fails on the second batch.
+            model.memory.update_state(source, destination, time, message)
             model.memory.detach()
             model.neighborLoader.insert(source, destination)
             losses.append(float(loss))
         history.append(float(np.mean(losses)) if losses else float("nan"))
     return history
+
+
+##  Held-out evaluation  ##
+#
+# Training loss alone does not establish that a model learned anything
+# GENERALISABLE - it can fall while the model memorises. For TGAP's purposes
+# the model only has to be a non-trivial learned function, but "non-trivial"
+# should be demonstrated rather than asserted, so the split below is
+# temporal: train on the earlier snapshots, evaluate on strictly later ones.
+#
+# A RANDOM split would be wrong here for the same reason it is wrong in the
+# preprocessing layer: future interactions would leak into training, and the
+# reported score would be unearnable in practice.
+
+
+def splitTemporally(temporalGraph, trainFraction=0.7):
+    ''' Split snapshots into an earlier training part and a strictly later
+    evaluation part. Returns (train, test); the test part is never empty as
+    long as there are at least two snapshots. '''
+    if len(temporalGraph) < 2:
+        return temporalGraph, []
+    cut = max(1, int(round(len(temporalGraph) * trainFraction)))
+    cut = min(cut, len(temporalGraph) - 1)
+    return temporalGraph[:cut], temporalGraph[cut:]
+
+
+def _averagePrecision(scores, labels):
+    ''' Area under the precision-recall curve, computed directly.
+
+    Implemented here rather than imported from scikit-learn: TGAP's install
+    should not grow a dependency for two metrics, and the definition is
+    short enough to read and check.
+    '''
+    order = sorted(range(len(scores)), key=lambda i: -scores[i])
+    positives = sum(labels)
+    if positives == 0:
+        return 0.0
+    hits = 0
+    total = 0.0
+    for rank, index in enumerate(order, start=1):
+        if labels[index]:
+            hits += 1
+            total += hits / rank           # precision at this recall step
+    return total / positives
+
+
+def _areaUnderRoc(scores, labels):
+    ''' AUC via the rank-sum (Mann-Whitney U) identity, with ties shared
+    equally - the standard treatment, and it matters here because an
+    untrained model produces many identical scores. '''
+    positives = [s for s, l in zip(scores, labels) if l]
+    negatives = [s for s, l in zip(scores, labels) if not l]
+    if not positives or not negatives:
+        return 0.5
+    wins = 0.0
+    for p in positives:
+        for n in negatives:
+            wins += 1.0 if p > n else (0.5 if p == n else 0.0)
+    return wins / (len(positives) * len(negatives))
+
+
+def evaluateTgn(model, trainSnapshots, testSnapshots, seed=42):
+    ''' Held-out link prediction on snapshots the model never trained on.
+
+    For each test snapshot the edges that really exist are the positives,
+    and an equal number of non-existent node pairs are the negatives. Both
+    are scored and we report:
+
+        average_precision  area under the precision-recall curve
+        auc                area under the ROC curve
+        accuracy           at threshold 0.5
+
+    Positives and negatives are BALANCED by construction, so a model that
+    learned nothing sits at AP ~ 0.5 and AUC ~ 0.5. Anything clearly above
+    that is evidence of a learned signal. Anything at or below it says the
+    model does not work - which is worth reporting, not hiding, because it
+    would change how the explanation should be read.
+
+    The split is TEMPORAL (see splitTemporally): training snapshots strictly
+    precede test snapshots. A random split would leak the future into
+    training and report a score nobody could achieve in practice.
+    '''
+    requireTorch()
+    rng = random.Random(seed)
+
+    model.memory.eval()
+    model.embedding.eval()
+    model.predictor.eval()
+    model.memory.reset_state()
+    model.neighborLoader.reset_state()
+
+    scores, labels = [], []
+    with torch.no_grad():
+        # Replay the training history so memory reflects what the model saw.
+        for batch in model._eventsFrom(trainSnapshots):
+            source, destination, time, message = batch
+            if int(torch.cat([source, destination]).max()) >= model.nodeCount:
+                continue
+            model.memory.update_state(source, destination, time, message)
+            model.neighborLoader.insert(source, destination)
+
+        for graph, batch in zip(testSnapshots,
+                                model._eventsFrom(testSnapshots)):
+            source, destination, time, message = batch
+            if int(torch.cat([source, destination]).max()) >= model.nodeCount:
+                continue
+            # Negatives: pairs that are genuinely absent from this snapshot.
+            nodes = sorted(graph.nodes())
+            negatives = []
+            attempts = 0
+            while len(negatives) < source.size(0) and attempts < 50 * source.size(0):
+                attempts += 1
+                u, v = rng.choice(nodes), rng.choice(nodes)
+                if u != v and not graph.has_edge(u, v):
+                    negatives.append(model._identifier(v))
+            if len(negatives) < source.size(0):
+                continue                   # near-complete snapshot; skip
+            negativeTensor = torch.tensor(negatives, dtype=torch.long)
+
+            allNodes = torch.cat([source, destination, negativeTensor])
+            if int(allNodes.max()) >= model.nodeCount:
+                continue
+            neighbourNodes, edgeIndex, _ = model.neighborLoader(
+                torch.unique(allNodes))
+            model.assoc[neighbourNodes] = torch.arange(
+                neighbourNodes.size(0), device=model.device)
+            memoryState, lastUpdate = model.memory(neighbourNodes)
+            messages = torch.zeros(edgeIndex.size(1), model.memory.raw_msg_dim)
+            embeddings = model.embedding(
+                memoryState, lastUpdate, edgeIndex,
+                torch.zeros(edgeIndex.size(1), dtype=torch.long), messages)
+            positiveOut = torch.sigmoid(model.predictor(
+                embeddings[model.assoc[source]],
+                embeddings[model.assoc[destination]])).flatten()
+            negativeOut = torch.sigmoid(model.predictor(
+                embeddings[model.assoc[source]],
+                embeddings[model.assoc[negativeTensor]])).flatten()
+            scores.extend(positiveOut.tolist() + negativeOut.tolist())
+            labels.extend([1] * positiveOut.numel()
+                          + [0] * negativeOut.numel())
+
+            # Keep memory current for the next test snapshot: the model is
+            # allowed to see an interaction AFTER it has been scored, which
+            # is the standard streaming protocol and leaks nothing.
+            model.memory.update_state(source, destination, time, message)
+            model.neighborLoader.insert(source, destination)
+
+    if not scores:
+        return {"average_precision": None, "auc": None, "accuracy": None,
+                "positives": 0, "negatives": 0,
+                "note": "no test snapshot could be scored"}
+    correct = sum(1 for s, l in zip(scores, labels)
+                  if (s >= 0.5) == bool(l))
+    return {
+        "average_precision": round(_averagePrecision(scores, labels), 4),
+        "auc": round(_areaUnderRoc(scores, labels), 4),
+        "accuracy": round(correct / len(scores), 4),
+        "positives": int(sum(labels)),
+        "negatives": int(len(labels) - sum(labels)),
+        "chance_level": 0.5,
+        "note": ("Balanced positives and negatives, so chance is 0.5. "
+                 "Temporal split: every test snapshot is strictly later "
+                 "than every training snapshot."),
+    }

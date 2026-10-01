@@ -1,0 +1,114 @@
+{
+  "dataset": "bitcoin_otc",
+  "by_n": [
+    {
+      "dataset": "bitcoin_otc",
+      "n_communities": 2,
+      "community_labels": [
+        "0",
+        "1"
+      ],
+      "partition_sizes": [
+        45,
+        75
+      ],
+      "community_mode": "temporal_train",
+      "community_pairs": 1,
+      "modularity": 0.2158,
+      "modularity_natural": 0.2672,
+      "modularity_lost_by_merging": 0.0514,
+      "natural_n_communities": 5,
+      "retained_nodes": 120,
+      "snapshots": 14,
+      "bridge_matrix_last_snapshot": {
+        "0-1": 1
+      },
+      "seed": 42,
+      "pair_selectivity": {
+        "rows": 2,
+        "own_pair_rows": 2,
+        "own_pair_nonzero": 0,
+        "other_pair_rows": 0,
+        "other_pair_exactly_zero": 0,
+        "selectivity_holds": true
+      }
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "n_communities": 3,
+      "community_labels": [
+        "0",
+        "1",
+        "2"
+      ],
+      "partition_sizes": [
+        45,
+        41,
+        34
+      ],
+      "community_mode": "temporal_train",
+      "community_pairs": 3,
+      "modularity": 0.2638,
+      "modularity_natural": 0.2672,
+      "modularity_lost_by_merging": 0.0034,
+      "natural_n_communities": 5,
+      "retained_nodes": 120,
+      "snapshots": 14,
+      "bridge_matrix_last_snapshot": {
+        "0-1": 0,
+        "0-2": 1,
+        "1-2": 0
+      },
+      "seed": 42,
+      "pair_selectivity": {
+        "rows": 18,
+        "own_pair_rows": 6,
+        "own_pair_nonzero": 4,
+        "other_pair_rows": 12,
+        "other_pair_exactly_zero": 12,
+        "selectivity_holds": true
+      }
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "n_communities": 4,
+      "community_labels": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "partition_sizes": [
+        45,
+        41,
+        24,
+        10
+      ],
+      "community_mode": "temporal_train",
+      "community_pairs": 6,
+      "modularity": 0.2672,
+      "modularity_natural": 0.2672,
+      "modularity_lost_by_merging": 0.0,
+      "natural_n_communities": 5,
+      "retained_nodes": 120,
+      "snapshots": 14,
+      "bridge_matrix_last_snapshot": {
+        "0-1": 0,
+        "0-2": 1,
+        "0-3": 0,
+        "1-2": 0,
+        "1-3": 0,
+        "2-3": 0
+      },
+      "seed": 42,
+      "pair_selectivity": {
+        "rows": 72,
+        "own_pair_rows": 12,
+        "own_pair_nonzero": 10,
+        "other_pair_rows": 60,
+        "other_pair_exactly_zero": 60,
+        "selectivity_holds": true
+      }
+    }
+  ]
+}
