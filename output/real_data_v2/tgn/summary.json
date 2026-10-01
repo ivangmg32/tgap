@@ -6,7 +6,7 @@
     "nodes": 201,
     "snapshots": 12,
     "training_epochs": 50,
-    "training_seconds": 12.11,
+    "training_seconds": 12.28,
     "train_snapshots": 8,
     "heldout_snapshots": 4,
     "train_fraction": 0.7,

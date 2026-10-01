@@ -158,6 +158,8 @@
       ]
     }
   ],
+  "per_concept_settings": 23,
+  "per_concept_sufficient": 23,
   "matched_comparison_rows": 100,
   "matched_comparison_comparable": 30,
   "match_tolerance": 0.1,

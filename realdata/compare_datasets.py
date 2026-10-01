@@ -234,8 +234,11 @@ def figureImpactHeatmap(datasets, path):
     that row) because their raw magnitudes differ by orders of magnitude.
     The scaling makes the PATTERN comparable, not the magnitudes. Cells with
     no valid row are left blank rather than drawn as zero. '''
-    concepts = ["Bridge Width", "Centralization", "Density",
-                "Bridge Trend", "Churn"]
+    # Concepts come from the registry, not a literal list, so a newly
+    # registered transformation appears in this figure automatically
+    # instead of running through the explainer and then vanishing here.
+    from core.TransformationRegistry import conceptNames
+    concepts = conceptNames()
     names, matrix = [], []
     for name, data in datasets.items():
         results = data["results"]

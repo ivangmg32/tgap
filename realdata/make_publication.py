@@ -450,6 +450,18 @@ def tgnTables():
         tables["table6_tgn_seed_stability"] = stability[
             ["quantity", "n", "mean", "std", "min", "max", "per_seed"]]
 
+    conceptPath = os.path.join(TGN_STABILITY, "per_concept_stability.csv")
+    if os.path.exists(conceptPath):
+        # Generated from per-seed machine-readable rows, never typed in.
+        # Column order puts `sufficient` and the comparability flag beside
+        # the statistics, so a reader cannot take a mean without seeing how
+        # many seeds produced it or whether the concept may be compared.
+        tables["table9_tgn_concept_stability"] = pd.read_csv(conceptPath)[
+            ["concept", "direction", "requested_delta", "delta_mode",
+             "valid_seeds", "sufficient", "mean_impact", "std_impact",
+             "min_impact", "max_impact", "mean_achieved_delta",
+             "std_achieved_delta", "comparable_with_relative_concepts"]]
+
     matchedPath = os.path.join(TGN_STABILITY, "matched_comparison.csv")
     if os.path.exists(matchedPath):
         matched = pd.read_csv(matchedPath)
