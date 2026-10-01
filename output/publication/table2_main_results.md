@@ -22,7 +22,7 @@
 | decentraland | persistence_centralization | Churn | 0.014381 | 0 |
 | decentraland | trend_clustering | Bridge Width | 0.099635 | -0.196019 |
 | decentraland | trend_clustering | Centralization | 0.185613 | 0.000994 |
-| decentraland | trend_clustering | Density | 0.10022 | -0.157714 |
+| decentraland | trend_clustering | Density | 0.10022 | -0.14385 |
 | decentraland | trend_clustering | Churn | 0.014381 | -0.271837 |
 | email_eu_core | persistence_bridge_width | Bridge Width | 0.100616 | 9.93878 |
 | email_eu_core | persistence_bridge_width | Centralization | 1.50024 | 0 |
@@ -51,6 +51,6 @@
 | email_eu_core | persistence_centralization | Churn | 0.006749 | 0 |
 | email_eu_core | trend_clustering | Bridge Width | 0.100616 | -0.146734 |
 | email_eu_core | trend_clustering | Centralization | 1.50024 | -0.006939 |
-| email_eu_core | trend_clustering | Density | 0.101171 | -0.040313 |
+| email_eu_core | trend_clustering | Density | 0.101171 | -0.028145 |
 | email_eu_core | trend_clustering | Bridge Trend | 5.83217 | 0.000387 |
 | email_eu_core | trend_clustering | Churn | 0.006749 | -0.147468 |

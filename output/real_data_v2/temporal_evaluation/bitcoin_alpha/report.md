@@ -46,7 +46,7 @@ Impact = change in the model's answer, divided by the change we actually achieve
 | `persistence_density` | 0 | 0 | 0 | 0 | 0 |
 | `slope_bridge_width` | +1.00 | -2.58 | 0 | 0 | 0 |
 | `trend_bridge_width` | +3.53 | -8.21 | 0 | 0 | 0 |
-| `trend_clustering` | +0.007 | -0.003 | -0.013 | 0 | +0.015 |
+| `trend_clustering` | +0.007 | -0.003 | -0.013 | 0 | +0.005 |
 
 ## Largest responses (valid rows only)
 

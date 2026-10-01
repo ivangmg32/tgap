@@ -97,7 +97,7 @@ def readEvents(path):
 
 
 def prepare(topItems=100, windowDays=2, mode=TEMPORAL_EVALUATION,
-            selectionFraction=SELECTION_FRACTION):
+            selectionFraction=SELECTION_FRACTION, nCommunities=2):
     ''' Download (if needed), preprocess, and return a PreparedDataset.
 
     mode == "temporal_evaluation" (default, leakage-safe): the page ranking
@@ -147,12 +147,14 @@ def prepare(topItems=100, windowDays=2, mode=TEMPORAL_EVALUATION,
             trainingKept, actorKey="item", itemKey="user", windowKey="window",
             keepActors=keptItems)
         communities, partitionGraph, partitionReport = _partitionFromGraph(
-            aggregateGraph(trainingSnapshots, keptItems), "temporal_train")
+            aggregateGraph(trainingSnapshots, keptItems), "temporal_train",
+            nCommunities)
         partitionSource = ("greedy modularity on the selection-period "
                            "co-edit graph only, then frozen")
     else:
         communities, partitionGraph, partitionReport = _partitionFromGraph(
-            aggregateGraph(snapshots, keptItems), "full_period_descriptive")
+            aggregateGraph(snapshots, keptItems), "full_period_descriptive",
+            nCommunities)
         partitionSource = ("greedy modularity on the full-period aggregate "
                            "graph (descriptive; not leakage-safe)")
 

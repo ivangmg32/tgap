@@ -39,6 +39,7 @@
   "isolated_nodes_included": true,
   "partition_source": "ground-truth labels (no detection, no temporal leakage: labels are a static attribute)",
   "community_mode": "ground_truth_labels",
+  "n_communities": 2,
   "partition_sizes": [
     109,
     92
@@ -47,6 +48,11 @@
   "partition_graph_nodes": 201,
   "nodes_isolated_in_partition_graph": 35,
   "smaller_side_pct": 45.77,
+  "community_pairs": 1,
+  "modularity": -0.021,
+  "natural_n_communities": 42,
+  "modularity_natural": 0.4716,
+  "modularity_lost_by_merging": 0.4927,
   "cohesion_usable": false,
   "cohesion_note": "inactive nodes appear isolated, so snapshots are disconnected and algebraic connectivity is 0; cohesion is not used as a prediction target"
 }

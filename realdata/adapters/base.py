@@ -333,6 +333,14 @@ def _partitionFromGraph(graph, source, nCommunities=2):
         "smaller_side_pct": round(100.0 * min(nonEmpty) / sum(sizes), 2)
                             if nonEmpty and sum(sizes) else 0.0,
         "community_pairs": len(communities.pairs()),
+        # Asking for more communities than the data supports yields EMPTY
+        # groups rather than an error, because the partition must still
+        # cover every node exactly once. An empty community contributes
+        # zero-width bridges to every pair it belongs to, which is correct
+        # but easy to misread as "these groups do not interact" - so the
+        # count is surfaced explicitly instead of being inferable only from
+        # a 0 in partition_sizes.
+        "empty_communities": sum(1 for g in communities if not g),
     }
     report.update(_modularityReport(graph, communities))
     return communities, graph, report

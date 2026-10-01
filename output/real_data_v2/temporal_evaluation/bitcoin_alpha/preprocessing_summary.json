@@ -39,6 +39,7 @@
   "isolated_nodes_included": true,
   "partition_source": "greedy modularity on the selection-period graph only, then frozen for every later snapshot",
   "community_mode": "temporal_train",
+  "n_communities": 2,
   "partition_sizes": [
     39,
     81
@@ -47,6 +48,12 @@
   "partition_graph_nodes": 120,
   "nodes_isolated_in_partition_graph": 1,
   "smaller_side_pct": 32.5,
+  "community_pairs": 1,
+  "empty_communities": 0,
+  "modularity": 0.1957,
+  "natural_n_communities": 6,
+  "modularity_natural": 0.267,
+  "modularity_lost_by_merging": 0.0714,
   "cohesion_usable": false,
   "cohesion_note": "inactive nodes appear isolated, so snapshots are disconnected and algebraic connectivity is 0; cohesion is not used as a prediction target"
 }
