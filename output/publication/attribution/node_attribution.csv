@@ -1,0 +1,25 @@
+dataset,model,element,u,v,node,snapshots_present,total_degree,baseline_prediction,after_prediction,impact,method,coverage,elements_evaluated,elements_total,model_calls,seed
+synthetic_3community,PersistenceTemporalModel,node,,,14,,20,8.0,5.0,-3.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,3,,19,8.0,6.0,-2.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,4,,19,8.0,6.0,-2.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,9,,20,8.0,6.0,-2.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,0,,17,8.0,7.0,-1.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,1,,21,8.0,7.0,-1.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,5,,22,8.0,7.0,-1.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,6,,16,8.0,7.0,-1.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,10,,23,8.0,7.0,-1.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,11,,13,8.0,7.0,-1.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,12,,20,8.0,7.0,-1.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,2,,21,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,7,,27,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,8,,14,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,13,,19,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,15,,23,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,16,,17,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,17,,21,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,18,,12,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,19,,20,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,20,,18,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,21,,20,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,22,,16,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42
+synthetic_3community,PersistenceTemporalModel,node,,,23,,10,8.0,8.0,0.0,occlusion (node isolated; node set preserved),1.0,24,24,25,42

@@ -44,8 +44,9 @@ import pandas as pd
 
 from core import (
     BridgeWidthMetric, BridgeWidthTransformation, PersistenceTemporalModel,
-    bridgeMatrix, graphDifference, localExplanation,
-    makeNCommunityTemporalGraph, temporalAttribution,
+    bridgeMatrix, edgeAttribution, edgeTimeAttribution, graphDifference,
+    localExplanation, makeNCommunityTemporalGraph, nodeAttribution,
+    temporalAttribution, writeElementAttribution,
 )
 
 RESULTS = os.path.join("output", "real_data_v2", "temporal_evaluation")
@@ -780,6 +781,525 @@ def figure1FinalModelSeparated(datasets, path):
             "rows": [(d, l) for d, l, _, _ in rows], "points": counts}
 
 
+##  Element-level attribution: compute once, persist, then plot  ##
+#
+# WHY THESE ARE COMPUTED HERE
+#     Same reason fig4/fig5 already are: element-level attribution is
+#     per-EXAMPLE, not per-dataset, and the real-data runs persist results
+#     rather than model objects, so there is no stored model to re-occlude
+#     against. A seeded synthetic world is used, exactly as fig4/fig5 do.
+#
+# WHAT IS NEW HERE IS THE PERSISTENCE
+#     The attribution is written to CSV through the EXISTING
+#     writeElementAttribution / ELEMENT_ATTRIBUTION_COLUMNS writers before
+#     anything is drawn, and the figures then read that file. Two
+#     consequences that matter: the complete attribution survives even where
+#     a figure shows only a top-K view, and no figure can contain a number
+#     that is not in a machine-readable file.
+#
+# NO NEW EXPLANATION ALGORITHM. edgeAttribution, nodeAttribution and
+# edgeTimeAttribution already existed and are unchanged; this calls them.
+
+ATTRIBUTION = os.path.join(OUTPUT, "attribution")
+ATTRIBUTION_SEED = 42
+LOCAL_BAR_TOP_K = 18
+EDGE_TIME_TOP_K = 22
+
+
+def _attributionWorld():
+    ''' One small, seeded, deterministic world shared by the element-level
+    figures, so they all describe the SAME explanation rather than three
+    unrelated ones. '''
+    snapshots, partition = makeNCommunityTemporalGraph(
+        nSnapshots=5, nCommunities=3, nPerCommunity=8,
+        bridgeWidths={(0, 1): 8, "default": 4}, seed=7)
+    model = PersistenceTemporalModel(
+        BridgeWidthMetric(partition, communityPair=(0, 1)))
+    return snapshots, partition, model
+
+
+def buildAttributionData(directory=ATTRIBUTION):
+    ''' Compute and PERSIST element-level and edge-time attribution.
+
+    Returns the paths written. Everything downstream reads these files, not
+    the in-memory objects, so a figure and its data file cannot disagree.
+    '''
+    os.makedirs(directory, exist_ok=True)
+    snapshots, partition, model = _attributionWorld()
+    name = "synthetic_3community"
+
+    edges = edgeAttribution(snapshots, model, communities=partition,
+                            seed=ATTRIBUTION_SEED)
+    nodes = nodeAttribution(snapshots, model, seed=ATTRIBUTION_SEED)
+    edgePath = os.path.join(directory, "edge_attribution.csv")
+    nodePath = os.path.join(directory, "node_attribution.csv")
+    writeElementAttribution(edges, edgePath, dataset=name,
+                            model=type(model).__name__, seed=ATTRIBUTION_SEED)
+    writeElementAttribution(nodes, nodePath, dataset=name,
+                            model=type(model).__name__, seed=ATTRIBUTION_SEED)
+
+    # A SECOND model on the SAME world. The persistence model reads only the
+    # last snapshot, so removing any edge can only lower bridge width: its
+    # local explanation is entirely non-positive and never exercises the
+    # diverging layout. A trajectory model responds to the whole history, so
+    # removing an edge can raise or lower the fitted trend. Both are real
+    # measured explanations; fig11 uses the trajectory one because it has
+    # both signs, fig12 keeps the persistence model because its all-zero
+    # response before the last snapshot IS the temporal result worth seeing.
+    from core import TrendTemporalModel
+    trendModel = TrendTemporalModel(
+        BridgeWidthMetric(partition, communityPair=(0, 1)))
+    trendEdges = edgeAttribution(snapshots, trendModel,
+                                 communities=partition, seed=ATTRIBUTION_SEED)
+    trendPath = os.path.join(directory, "edge_attribution_trend.csv")
+    writeElementAttribution(trendEdges, trendPath, dataset=name,
+                            model=type(trendModel).__name__,
+                            seed=ATTRIBUTION_SEED)
+
+    # Edge-time: one (edge, snapshot) pair per row. topK is NOT used here -
+    # the COMPLETE attribution is persisted, every edge at every snapshot,
+    # so the top-K in fig12 is purely a display choice applied to a file
+    # that already holds everything. Note that the library's topK is applied
+    # PER SNAPSHOT, so passing topK=14 would have persisted a different set
+    # of edges for each snapshot and made the figure's grid sparse and its
+    # "top K edges" caption wrong.
+    edgeTime = edgeTimeAttribution(snapshots, model, seed=ATTRIBUTION_SEED)
+    edgeTimePath = os.path.join(directory, "edge_time_attribution.csv")
+    rows = [dict(row, dataset=name, model=type(model).__name__,
+                 seed=ATTRIBUTION_SEED) for row in edgeTime["rows"]]
+    pd.DataFrame(rows).drop(columns=["edge"]).to_csv(edgeTimePath,
+                                                     index=False)
+    with open(os.path.join(directory, "provenance.json"), "w",
+              encoding="utf-8") as handle:
+        json.dump({
+            "dataset": name,
+            "model": type(model).__name__,
+            "seed": ATTRIBUTION_SEED,
+            "snapshots": len(snapshots),
+            "edge_method": edges["method_note"],
+            "edge_coverage": edges["coverage"],
+            "edge_selection": edges["selection"],
+            "node_coverage": nodes["coverage"],
+            "edge_time_method": edgeTime["method_note"],
+            "edge_time_rows_persisted": len(edgeTime["rows"]),
+            "edge_time_selection_rule":
+                "none at persistence time - every edge at every snapshot is "
+                "stored; fig12 applies a display-only top-K",
+            "edge_time_snapshots_with_any_response":
+                edgeTime["snapshots_with_any_response"],
+            "edge_time_all_zero": edgeTime["all_zero"],
+        }, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+    return {"edge": edgePath, "node": nodePath, "edge_time": edgeTimePath,
+            "edge_trend": trendPath}
+
+
+def figure8Dependence(paths, path):
+    ''' FIG 8 - dependence: a structural property against the measured
+    impact of perturbing that element.
+
+    NOT a feature-importance plot. Nothing here is a learned feature
+    attribution; x is a property the graph actually has and y is one
+    measured prediction difference from occluding that element.
+
+    The two properties are the ones the persisted schema genuinely carries:
+    `total_degree` for nodes and `snapshots_present` for edges. No property
+    is synthesised to fill an axis.
+
+    Panels are separate per element type because a node degree and an edge
+    presence count are different quantities, and the impacts come from
+    different occlusions - pooling them would be the same unit error the
+    concept figures avoid.
+    '''
+    panels = [("node", paths["node"], "total_degree", "node total degree"),
+              ("edge", paths["edge"], "snapshots_present",
+               "edge: snapshots present")]
+    fig, axes = plt.subplots(1, len(panels), figsize=(5.4 * len(panels), 3.6),
+                             squeeze=False)
+    summary = []
+    for ax, (element, source, xColumn, xLabel) in zip(axes[0], panels):
+        frame = pd.read_csv(source)
+        frame = frame[np.isfinite(frame["impact"])
+                      & np.isfinite(frame[xColumn])]
+        # Both properties are discrete, so many elements land on exactly the
+        # same (x, y). Plain markers would hide that: 139 edges would look
+        # like seven. Marker AREA encodes how many coincide - it adds no
+        # value that is not in the data and moves no point off its true
+        # coordinates, which jitter would.
+        tally = frame.groupby([xColumn, "impact"]).size().reset_index(
+            name="count")
+        ax.scatter(tally[xColumn], tally["impact"],
+                   s=22 + 16 * tally["count"], alpha=0.8,
+                   c=[POSITIVE if v > 0 else NEGATIVE if v < 0 else NEUTRAL
+                      for v in tally["impact"]],
+                   edgecolors="black", linewidths=0.3, zorder=3)
+        for row in tally.itertuples():
+            if row.count > 1:
+                ax.annotate(str(row.count),
+                            (getattr(row, xColumn), row.impact),
+                            ha="center", va="center", fontsize=5.5,
+                            zorder=4, color="white", fontweight="bold")
+        ax.axhline(0, color="black", linewidth=0.9, zorder=2)
+        ax.set_xlabel(xLabel, fontsize=8)
+        ax.set_ylabel("impact (prediction difference)", fontsize=8)
+        coverage = frame["coverage"].iloc[0] if len(frame) else float("nan")
+        ax.set_title(f"{frame['dataset'].iloc[0]} - {element} occlusion\n"
+                     f"n={len(frame)}, coverage={coverage:.0%}, "
+                     f"model={frame['model'].iloc[0]}", fontsize=8)
+        summary.append({"element": element, "x": xColumn, "n": len(frame),
+                        "source": source})
+    fig.suptitle("Dependence: structural property against measured "
+                 "occlusion impact\nEach point is one element; impact is a "
+                 "measured prediction difference, not a learned attribution.",
+                 fontsize=9.5)
+    fig.subplots_adjust(top=0.78, wspace=0.28)
+    savePublicationFigure(fig, path)
+    plt.close(fig)
+    return summary
+
+
+def _beeswarmOffsets(values, pointWidth):
+    ''' A real beeswarm: deterministic, collision-free vertical packing.
+
+    For each value in ascending order, try candidate offsets 0, +s, -s,
+    +2s, -2s ... and take the FIRST that collides with no already-placed
+    point, where two points collide when they are within pointWidth on x
+    and within one step on y. Ascending order makes the result independent
+    of input order, so the layout is reproducible.
+
+    This is NOT jitter. Nothing random is involved, and no seed is needed:
+    the same values always produce the same offsets.
+    '''
+    order = sorted(range(len(values)), key=lambda i: (values[i], i))
+    step = 1.0
+    placed = []                       # (value, offset) already positioned
+    offsets = [0.0] * len(values)
+    for index in order:
+        value = values[index]
+        level = 0
+        while True:
+            for candidate in ({0.0} if not level else {level * step,
+                                                       -level * step}):
+                clash = any(abs(value - other) < pointWidth
+                            and abs(candidate - taken) < step * 0.999
+                            for other, taken in placed)
+                if not clash:
+                    offsets[index] = candidate
+                    placed.append((value, candidate))
+                    break
+            else:
+                level += 1
+                continue
+            break
+    return offsets
+
+
+def figure9TrueBeeswarm(datasets, path):
+    ''' FIG 9 - a true beeswarm, not a jittered strip plot.
+
+    Points are packed by _beeswarmOffsets so that none overlaps, which
+    makes the DENSITY of the distribution readable - the thing a jittered
+    scatter only approximates. The packing is deterministic.
+
+    Every valid row is drawn; nothing is thinned. Semantic groups get
+    separate panels, because the x-axis is an impact and the groups'
+    perturbation units are not comparable.
+    '''
+    groups = semanticRows()
+    fig = plt.figure(figsize=(6.6 * len(datasets),
+                              1.1 * sum(max(len(c), 1) for _, c, _ in groups)
+                              + 2.4))
+    grid = fig.add_gridspec(len(groups), len(datasets),
+                            height_ratios=[max(len(c), 1)
+                                           for _, c, _ in groups],
+                            wspace=0.22, hspace=0.62, top=0.82, bottom=0.09,
+                            left=0.20, right=0.985)
+    drawn = 0
+    for rowIndex, (label, concepts, note) in enumerate(groups):
+        for columnIndex, (name, data) in enumerate(datasets.items()):
+            ax = fig.add_subplot(grid[rowIndex, columnIndex])
+            valid = _valid(data["results"])
+            span = valid["impact"].abs().max() or 1.0
+            empty = 0
+            for position, concept in enumerate(concepts):
+                values = [float(v) for v in
+                          valid[valid["transformation"] == concept]["impact"]
+                          if np.isfinite(v)]
+                if not values:
+                    ax.text(0.5, position, "no valid obs. (n=0)",
+                            transform=ax.get_yaxis_transform(), ha="center",
+                            va="center", fontsize=6.5, color=NEUTRAL,
+                            style="italic")
+                    empty += 1
+                    continue
+                offsets = _beeswarmOffsets(values, pointWidth=span * 0.022)
+                scale = 0.34 / max(1.0, max(abs(o) for o in offsets))
+                ax.scatter(values, [position + o * scale for o in offsets],
+                           s=16, alpha=0.85,
+                           c=[POSITIVE if v > 0 else NEGATIVE if v < 0
+                              else NEUTRAL for v in values],
+                           edgecolors="black", linewidths=0.2, zorder=3)
+                ax.annotate(f"n={len(values)}", (0.0, position),
+                            xycoords=ax.get_yaxis_transform(),
+                            textcoords="offset points", xytext=(3, 11),
+                            ha="left", fontsize=6, color="#555555")
+                drawn += len(values)
+            if empty < len(concepts):
+                ax.axvline(0, color="black", linewidth=0.9, zorder=2)
+            else:
+                # Nothing measured: no tick range, so an empty panel cannot
+                # read as a measured scale.
+                ax.set_xticks([])
+            ax.set_yticks(range(len(concepts)))
+            ax.set_yticklabels(concepts, fontsize=7)
+            ax.set_ylim(-0.7, len(concepts) - 0.3)
+            ax.tick_params(axis="x", labelsize=6.5)
+            if columnIndex or len(concepts) == 1:
+                ax.tick_params(labelleft=False)
+            if not rowIndex:
+                ax.set_title(name, fontsize=8.5)
+            if rowIndex == len(groups) - 1:
+                ax.set_xlabel("impact", fontsize=8)
+            if not columnIndex:
+                ax.annotate(f"{label}\n({note})", (-0.30, 0.5),
+                            xycoords="axes fraction", ha="center",
+                            va="center", fontsize=7, fontweight="bold")
+    fig.suptitle("Beeswarm of TGAP impacts, valid rows only\n"
+                 "Points are packed to avoid overlap by a deterministic "
+                 "layout - no random jitter. Semantic groups are shown in\n"
+                 "separate rows because their perturbation units are not "
+                 "comparable; no ordering across rows is implied.",
+                 fontsize=9.3)
+    savePublicationFigure(fig, path)
+    plt.close(fig)
+    return {"points": drawn}
+
+
+def figure10PublicationBoxplot(datasets, path):
+    ''' FIG 10 - distribution of impacts per model, valid rows only.
+
+    Models get their OWN panel, because their prediction scales differ and
+    a box drawn across them would describe nothing. Within a panel only the
+    mutually commensurable concepts are boxed together; the other concepts
+    keep their own rows for the same reason as everywhere else.
+
+    n is printed on every box. Individual observations are overlaid, so a
+    box summarising three points cannot pass for a distribution.
+    '''
+    groups = semanticGroups()
+    concepts = list(groups.get(COMMENSURABLE, []))
+    models = sorted({m for data in datasets.values()
+                     for m in _valid(data["results"])["model"].unique()})
+    fig, axes = plt.subplots(len(datasets), len(models),
+                             figsize=(2.0 * len(models) + 1.6,
+                                      2.5 * len(datasets) + 1.6),
+                             squeeze=False)
+    summary = []
+    for rowIndex, (name, data) in enumerate(datasets.items()):
+        valid = _valid(data["results"])
+        for columnIndex, model in enumerate(models):
+            ax = axes[rowIndex][columnIndex]
+            cell = valid[valid["model"] == model]
+            series, labels = [], []
+            for concept in concepts:
+                values = [float(v) for v in
+                          cell[cell["transformation"] == concept]["impact"]
+                          if np.isfinite(v)]
+                series.append(values)
+                labels.append(concept)
+                summary.append({"dataset": name, "model": model,
+                                "concept": concept, "n": len(values)})
+            populated = [s for s in series if s]
+            if populated:
+                ax.boxplot(series, vert=False, widths=0.55,
+                           patch_artist=True, showfliers=False,
+                           medianprops=dict(color="black", linewidth=1.2),
+                           boxprops=dict(facecolor="#dfe7ef",
+                                         edgecolor="#444444", linewidth=0.8),
+                           whiskerprops=dict(color="#444444", linewidth=0.8),
+                           capprops=dict(color="#444444", linewidth=0.8))
+                for position, values in enumerate(series, start=1):
+                    if values:
+                        offsets = _beeswarmOffsets(
+                            values, pointWidth=(max(map(abs, values)) or 1.0)
+                            * 0.03)
+                        scale = 0.18 / max(1.0,
+                                           max(abs(o) for o in offsets))
+                        ax.scatter(values,
+                                   [position + o * scale for o in offsets],
+                                   s=9, alpha=0.8, zorder=4,
+                                   c=[POSITIVE if v > 0 else NEGATIVE
+                                      if v < 0 else NEUTRAL for v in values],
+                                   edgecolors="none")
+                    ax.annotate(f"n={len(values)}", (0.0, position),
+                                xycoords=ax.get_yaxis_transform(),
+                                textcoords="offset points", xytext=(3, 10),
+                                ha="left", fontsize=5.6, color="#555555")
+                ax.axvline(0, color="black", linewidth=0.9, zorder=2)
+            else:
+                ax.text(0.5, 0.5, "no valid obs. (n=0)", ha="center",
+                        va="center", transform=ax.transAxes, fontsize=7,
+                        color=NEUTRAL, style="italic")
+                ax.set_xticks([])
+            ax.set_yticks(range(1, len(labels) + 1))
+            ax.set_yticklabels(labels, fontsize=6.5)
+            if columnIndex:
+                ax.tick_params(labelleft=False)
+            ax.tick_params(axis="x", labelsize=6)
+            if not rowIndex:
+                ax.set_title(model, fontsize=6.8)
+            if rowIndex == len(datasets) - 1:
+                ax.set_xlabel("impact", fontsize=7)
+            if not columnIndex:
+                ax.annotate(name, (-0.52, 0.5), xycoords="axes fraction",
+                            ha="center", va="center", fontsize=7.4,
+                            fontweight="bold", rotation=90)
+    fig.suptitle("Distribution of TGAP impacts per model, valid rows only\n"
+                 "One panel per model because prediction scales differ; only "
+                 "the commensurable relative-delta concepts share a panel.\n"
+                 "Boxes show median and quartiles; every observation is "
+                 "overlaid and n is printed. No ranking is implied.",
+                 fontsize=9.3)
+    fig.subplots_adjust(top=0.84, bottom=0.08, left=0.16, right=0.99,
+                        wspace=0.18, hspace=0.42)
+    savePublicationFigure(fig, path)
+    plt.close(fig)
+    return summary
+
+
+def figure11LocalBar(paths, path, topK=LOCAL_BAR_TOP_K, source="edge_trend"):
+    ''' FIG 11 - diverging bar chart for ONE local explanation.
+
+    Sorted by |impact| WITHIN THIS SINGLE EXPLANATION. That is a local
+    ordering of elements in one graph under one model - it is not a concept
+    ranking and says nothing about any other explanation.
+
+    TOP-K IS EXPLICIT: the title states K and how many elements exist, and
+    the complete attribution stays in edge_attribution.csv. Nothing is
+    silently dropped.
+    '''
+    frame = pd.read_csv(paths[source])
+    frame = frame[np.isfinite(frame["impact"])]
+    total = len(frame)
+    # Deterministic: |impact| descending, ties broken by endpoint ids.
+    frame = frame.assign(magnitude=frame["impact"].abs()).sort_values(
+        ["magnitude", "u", "v"], ascending=[False, True, True])
+    nonZero = int((frame["impact"] != 0).sum())
+    # Never pad the chart with exact zeros. Drawing K bars when only
+    # `nonZero` elements moved the prediction fills most of the axis with
+    # invisible bars and makes a complete result look like a broken figure.
+    # The count of exact zeros is stated in the title instead, so nothing is
+    # hidden - a zero here is a measured no-effect, not a missing value.
+    shown = frame.head(min(topK, nonZero) or 1).iloc[::-1]
+    labels = [f"({int(r.u)}, {int(r.v)})" for r in shown.itertuples()]
+
+    fig, ax = plt.subplots(figsize=(7.4, 0.27 * len(shown) + 2.2))
+    ax.barh(range(len(shown)), shown["impact"],
+            color=[POSITIVE if v > 0 else NEGATIVE if v < 0 else NEUTRAL
+                   for v in shown["impact"]],
+            edgecolor="black", linewidth=0.4, alpha=0.9)
+    ax.axvline(0, color="black", linewidth=1.0, zorder=3)
+    ax.set_yticks(range(len(shown)))
+    ax.set_yticklabels(labels, fontsize=7)
+    ax.set_xlabel("impact of removing this edge "
+                  "(prediction difference)", fontsize=8)
+    ax.set_ylabel("edge (u, v)", fontsize=8)
+    ax.set_title(
+        f"Local explanation: per-edge occlusion impact\n"
+        f"{frame['dataset'].iloc[0]}, model={frame['model'].iloc[0]}, "
+        f"seed={int(frame['seed'].iloc[0])}\n"
+        f"Showing top {len(shown)} of {nonZero} edges with a non-zero "
+        f"impact (top-K cap {topK}); the other {total - nonZero} of {total} "
+        f"evaluated edges have an impact of exactly 0.\n"
+        f"Sorted by |impact| WITHIN this explanation only - a local "
+        f"ordering of elements, not a concept ranking.\n"
+        f"Complete attribution: attribution/{os.path.basename(paths[source])}",
+        fontsize=8.2)
+    fig.subplots_adjust(top=0.84, left=0.17, right=0.97, bottom=0.12)
+    savePublicationFigure(fig, path)
+    plt.close(fig)
+    return {"shown": len(shown), "total": total, "non_zero": nonZero,
+            "top_k": topK}
+
+
+def figure12TemporalEdgeTime(paths, path, topK=EDGE_TIME_TOP_K):
+    ''' FIG 12 - edge-time attribution: one point per (edge, snapshot).
+
+    x = snapshot index, y = edge, colour = impact on a diverging scale
+    centred at zero. Nothing is summed over time: each point is its own
+    measured prediction difference, and the figure makes no additivity
+    claim, because edgeTimeAttribution does not support one.
+
+    A flat result is a RESULT. This model reads only the last snapshot, so
+    every earlier (edge, snapshot) impact is exactly zero - the figure says
+    so in the caption rather than showing blank cells that look like
+    missing data.
+    '''
+    frame = pd.read_csv(paths["edge_time"])
+    frame = frame[np.isfinite(frame["impact"])]
+    allEdges = {(int(r.u), int(r.v)) for r in frame.itertuples()}
+
+    # DISPLAY-ONLY top-K. The persisted file holds every (edge, snapshot);
+    # this picks which rows to draw. The rule is deterministic and stated in
+    # the caption: edges ranked by their largest |impact| at any snapshot,
+    # then by how many snapshots they appear in, then by edge id. No
+    # sampling, so no seed governs the selection.
+    ranking = frame.assign(magnitude=frame["impact"].abs()).groupby(
+        ["u", "v"]).agg(peak=("magnitude", "max"),
+                        seen=("snapshot_index", "count")).reset_index()
+    ranking = ranking.sort_values(["peak", "seen", "u", "v"],
+                                  ascending=[False, False, True, True])
+    edges = sorted((int(r.u), int(r.v))
+                   for r in ranking.head(topK).itertuples())
+    frame = frame[[(int(r.u), int(r.v)) in set(edges)
+                   for r in frame.itertuples()]]
+    index = {edge: position for position, edge in enumerate(edges)}
+    span = frame["impact"].abs().max()
+    limit = span if span > 0 else 1.0
+
+    fig, ax = plt.subplots(figsize=(7.8, 0.26 * len(edges) + 2.6))
+    scatter = ax.scatter(
+        frame["snapshot_index"],
+        [index[(int(r.u), int(r.v))] for r in frame.itertuples()],
+        c=frame["impact"], cmap="RdBu_r", vmin=-limit, vmax=limit,
+        s=66, edgecolors="black", linewidths=0.35, zorder=3)
+    ax.set_yticks(range(len(edges)))
+    ax.set_yticklabels([f"({u}, {v})" for u, v in edges], fontsize=6.5)
+    ax.set_xticks(sorted(frame["snapshot_index"].unique()))
+    ax.set_xlabel("snapshot index (time)", fontsize=8)
+    ax.set_ylabel("edge (u, v)", fontsize=8)
+    ax.grid(True, axis="x", alpha=0.25)
+    bar = fig.colorbar(scatter, ax=ax, fraction=0.03, pad=0.02)
+    bar.set_label("impact of removing this edge from this snapshot",
+                  fontsize=7.5)
+
+    responsive = sorted(frame[frame["impact"] != 0]["snapshot_index"].unique())
+    total = len(pd.read_csv(paths["edge_time"]))
+    where = (", ".join(str(int(s)) for s in responsive) if responsive
+             else "none - this model has no temporal dependence on these edges")
+    ax.set_title(
+        "TGAP edge-time attribution: impact of removing one edge from one "
+        "snapshot\n"
+        f"{frame['dataset'].iloc[0]}, model={frame['model'].iloc[0]} - "
+        f"showing {len(edges)} of {len(allEdges)} edges "
+        f"({len(frame)} of {total} edge-time observations)\n"
+        f"DISPLAY-ONLY selection: largest |impact| at any snapshot, then "
+        f"snapshots present, then edge id. Deterministic, never sampled.\n"
+        f"Complete attribution: attribution/edge_time_attribution.csv. "
+        f"Snapshots with any non-zero response: {where}\n"
+        "TGAP edge-time attribution is shown here; this visualization is "
+        "inspired by temporal XAI visualization\nstyles but is not a TSHAP "
+        "implementation. No additivity across time is claimed.",
+        fontsize=7.8)
+    fig.subplots_adjust(top=0.78, left=0.14, right=0.99, bottom=0.11)
+    savePublicationFigure(fig, path)
+    plt.close(fig)
+    return {"points": len(frame), "edges": len(edges),
+            "edges_total": len(allEdges), "observations_total": total,
+            "top_k": topK,
+            "snapshots_with_response": [int(s) for s in responsive]}
+
+
 SUPERSEDED_NOTICE = """# Superseded figures
 
 Retained for the record. **None of these is the paper's global-impact
@@ -850,6 +1370,111 @@ def writeFigureMetadata(path):
                 "source_csv": sources,
                 "generation_function":
                     "realdata.make_publication.figure1FinalModelSeparated",
+                "formats": ["png", "pdf"],
+            },
+            {
+                "figure": "fig8_dependence",
+                "candidate": "dependence",
+                "status": "element-level dependence",
+                "included_concepts": [],
+                "excluded_concepts": [],
+                "delta_semantics": {},
+                "x_variable": ["total_degree (node)",
+                               "snapshots_present (edge)"],
+                "y_variable": "impact (measured occlusion prediction "
+                              "difference)",
+                "cross_concept_numerical_comparison_allowed": False,
+                "comparability_scope": "within one panel only; node and edge "
+                                       "occlusions are different quantities "
+                                       "and are never pooled",
+                "source_csv": [os.path.join(ATTRIBUTION,
+                                            "node_attribution.csv"),
+                               os.path.join(ATTRIBUTION,
+                                            "edge_attribution.csv")],
+                "generation_function":
+                    "realdata.make_publication.figure8Dependence",
+                "formats": ["png", "pdf"],
+            },
+            {
+                "figure": "fig9_true_beeswarm",
+                "candidate": "beeswarm",
+                "status": "deterministic non-overlapping packing, no jitter",
+                "included_concepts": commensurable + other,
+                "excluded_concepts": [],
+                "delta_semantics": {**{c: COMMENSURABLE for c in commensurable},
+                                    **{c: NOT_COMMENSURABLE for c in other}},
+                "cross_concept_numerical_comparison_allowed": False,
+                "comparability_scope": "within a semantic row only",
+                "layout_algorithm":
+                    "realdata.make_publication._beeswarmOffsets - ascending "
+                    "value order, first non-colliding offset; deterministic "
+                    "and seedless",
+                "source_csv": sources,
+                "generation_function":
+                    "realdata.make_publication.figure9TrueBeeswarm",
+                "formats": ["png", "pdf"],
+            },
+            {
+                "figure": "fig10_publication_boxplot",
+                "candidate": "boxplot",
+                "status": "per-model distributions, valid rows only",
+                "included_concepts": commensurable,
+                "excluded_concepts": other,
+                "delta_semantics": {c: COMMENSURABLE for c in commensurable},
+                "cross_concept_numerical_comparison_allowed": False,
+                "comparability_scope": "within one model panel only; no box "
+                                       "spans two models",
+                "source_csv": sources,
+                "generation_function":
+                    "realdata.make_publication.figure10PublicationBoxplot",
+                "formats": ["png", "pdf"],
+            },
+            {
+                "figure": "fig11_local_bar",
+                "candidate": "local",
+                "status": "ONE local explanation; local ordering only",
+                "included_concepts": [],
+                "excluded_concepts": [],
+                "delta_semantics": {},
+                "x_variable": "impact (edge occlusion)",
+                "y_variable": "edge (u, v)",
+                "selection_rule": f"top {LOCAL_BAR_TOP_K} by |impact|, ties "
+                                  f"broken by endpoint id; complete "
+                                  f"attribution retained in the source CSV",
+                "cross_concept_numerical_comparison_allowed": False,
+                "comparability_scope": "elements within this single "
+                                       "explanation; not a concept ranking",
+                "source_csv": [os.path.join(ATTRIBUTION,
+                                            "edge_attribution_trend.csv")],
+                "generation_function":
+                    "realdata.make_publication.figure11LocalBar",
+                "formats": ["png", "pdf"],
+            },
+            {
+                "figure": "fig12_temporal_edge_time",
+                "candidate": "edge_time",
+                "status": "TGAP edge-time attribution; NOT a TSHAP "
+                          "implementation",
+                "included_concepts": [],
+                "excluded_concepts": [],
+                "delta_semantics": {},
+                "x_variable": "snapshot_index",
+                "y_variable": "edge (u, v)",
+                "colour_variable": "impact, diverging around zero",
+                "selection_rule":
+                    f"display-only top {EDGE_TIME_TOP_K} edges by largest "
+                    f"|impact| at any snapshot, then snapshots present, then "
+                    f"edge id; deterministic, never sampled. The persisted "
+                    f"CSV holds every (edge, snapshot).",
+                "additivity_claimed": False,
+                "cross_concept_numerical_comparison_allowed": False,
+                "comparability_scope": "one measured prediction difference "
+                                       "per (edge, snapshot); nothing is "
+                                       "summed over time",
+                "source_csv": [os.path.join(ATTRIBUTION,
+                                            "edge_time_attribution.csv")],
+                "generation_function":
+                    "realdata.make_publication.figure12TemporalEdgeTime",
                 "formats": ["png", "pdf"],
             },
             {
@@ -1171,6 +1796,31 @@ def main():
     _writeSupersededNotice(os.path.join(SUPERSEDED, "README.md"))
     print(f"  superseded/                     5 earlier designs, retained "
           f"for the record, not for the paper")
+    # Element-level attribution: persisted FIRST, then plotted from the
+    # files, so every number in figs 8/11/12 exists in a readable CSV.
+    attributionPaths = buildAttributionData()
+    print(f"  attribution/                    persisted element and "
+          f"edge-time attribution ({len(attributionPaths)} csv)")
+    dependence = figure8Dependence(attributionPaths,
+                                   os.path.join(OUTPUT, "fig8_dependence.png"))
+    print(f"  fig8_dependence.png             structural property vs impact, "
+          f"{sum(d['n'] for d in dependence)} elements")
+    swarm = figure9TrueBeeswarm(
+        datasets, os.path.join(OUTPUT, "fig9_true_beeswarm.png"))
+    print(f"  fig9_true_beeswarm.png          deterministic packing, "
+          f"{swarm['points']} points")
+    figure10PublicationBoxplot(
+        datasets, os.path.join(OUTPUT, "fig10_publication_boxplot.png"))
+    print("  fig10_publication_boxplot.png   per-model impact distributions")
+    local = figure11LocalBar(attributionPaths,
+                             os.path.join(OUTPUT, "fig11_local_bar.png"))
+    print(f"  fig11_local_bar.png             top {local['shown']} of "
+          f"{local['total']} edges, full data retained")
+    temporal = figure12TemporalEdgeTime(
+        attributionPaths, os.path.join(OUTPUT, "fig12_temporal_edge_time.png"))
+    print(f"  fig12_temporal_edge_time.png    {temporal['points']} "
+          f"(edge, snapshot) observations")
+
     writeFigureMetadata(os.path.join(OUTPUT, "figure_metadata.json"))
     print("  figure_metadata.json            comparability metadata")
     figure3BridgeMatrix(os.path.join(OUTPUT, "fig3_bridge_matrix.png"))
