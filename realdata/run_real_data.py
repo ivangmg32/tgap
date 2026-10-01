@@ -167,13 +167,18 @@ def buildTransformations(communities, strict=False):
     the feasibility cross-check; the explanations themselves run on the
     permissive list, so gating never changes a number it keeps.
     '''
-    return [
-        BridgeWidthTransformation(communities, seed=SEED, strict=strict),
-        CentralizationTransformation(communities, seed=SEED),
-        DensityTransformation(communities, seed=SEED),
-        BridgeTrendTransformation(communities, seed=SEED, strict=strict),
-        ChurnTransformation(communities, seed=SEED),
-    ]
+    # Built from the registry so a newly registered concept joins the real-
+    # data pipeline without editing this function. `strict` is passed only
+    # to the transformations whose constructors accept it, which is exactly
+    # the set that promises to preserve the edge count by paying for it.
+    from core.TransformationRegistry import entries
+    built = []
+    for entry in entries():
+        try:
+            built.append(entry.build(communities, seed=SEED, strict=strict))
+        except TypeError:
+            built.append(entry.build(communities, seed=SEED))
+    return built
 
 
 def signedDeltas(deltas):

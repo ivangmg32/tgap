@@ -237,6 +237,69 @@ def matchedComparison(model, snapshots, transformations, seed):
     return rows
 
 
+def perConceptStability(rows, minSeeds=2):
+    ''' Per-concept spread of TGAP impacts across seeds.
+
+    WHY THIS IS NEEDED. TGAP's impact is a difference from the model's
+    baseline prediction, and the baseline itself moves between seeds
+    (measured: 0.500 to 0.657). Concept impacts are therefore seed
+    dependent, and a single-seed impact should not be quoted as though it
+    were a property of the model.
+
+    WHAT THIS IS NOT. The rows below are NOT a ranking and must never be
+    read as one. Each concept is summarised ONLY against itself across
+    seeds; no concept is compared with another here, because the five
+    concepts do not share perturbation units (see comparabilityOf and the
+    matched-comparison output, which is the only place a between-concept
+    statement is legitimate). A `comparable_with` column carries that
+    restriction into the table so a reader cannot lose it.
+
+    INSUFFICIENT DATA IS REPORTED, NOT PAPERED OVER. A concept with fewer
+    than `minSeeds` valid observations gets `sufficient=False` and empty
+    statistics rather than a mean computed from one number. A standard
+    deviation over a single observation is undefined, and emitting 0.0
+    there would assert perfect stability from no evidence.
+    '''
+    frame = pd.DataFrame(rows)
+    if frame.empty:
+        return pd.DataFrame()
+    valid = frame[frame["valid_for_analysis"]].copy()
+
+    summaries = []
+    for (concept, direction, delta), group in valid.groupby(
+            ["transformation", "direction", "requested_delta"]):
+        impacts = group["impact"].dropna()
+        achieved = group["achieved_delta"].dropna()
+        seeds = sorted(group["seed"].unique())
+        sufficient = len(impacts) >= minSeeds
+        deltaMode = group["delta_mode"].iloc[0]
+        summaries.append({
+            "concept": concept,
+            "direction": direction,
+            "requested_delta": delta,
+            "delta_mode": deltaMode,
+            "valid_seeds": len(seeds),
+            "seeds": seeds,
+            "sufficient": sufficient,
+            "insufficient_reason": None if sufficient else
+                (f"only {len(impacts)} valid observation(s); a mean and "
+                 f"standard deviation need at least {minSeeds}"),
+            "mean_impact": round(float(impacts.mean()), 6) if sufficient else None,
+            "std_impact": round(float(impacts.std(ddof=1)), 6) if sufficient else None,
+            "min_impact": round(float(impacts.min()), 6) if sufficient else None,
+            "max_impact": round(float(impacts.max()), 6) if sufficient else None,
+            "mean_achieved_delta": round(float(achieved.mean()), 6)
+                                   if sufficient and len(achieved) else None,
+            "std_achieved_delta": round(float(achieved.std(ddof=1)), 6)
+                                  if sufficient and len(achieved) > 1 else None,
+            # Carries the RQ1b restriction into the table itself.
+            "comparable_with_relative_concepts": deltaMode == "relative"
+                and concept != "Centralization",
+        })
+    return pd.DataFrame(summaries).sort_values(
+        ["concept", "direction", "requested_delta"])
+
+
 def main(argv=None):
     if not TORCH_AVAILABLE:
         print("PyTorch / PyTorch Geometric not available - skipping.")
@@ -281,6 +344,10 @@ def main(argv=None):
     matched.to_csv(os.path.join(directory, "matched_comparison.csv"),
                    index=False)
 
+    concepts = perConceptStability(allRows)
+    concepts.to_csv(os.path.join(directory, "per_concept_stability.csv"),
+                    index=False)
+
     stability = [summarise([s[key] for s in perSeed], key)
                  for key in ("auc", "average_precision", "accuracy",
                              "baseline_prediction", "valid_rows")]
@@ -293,6 +360,19 @@ def main(argv=None):
         print(f"  {row['quantity']:22s} {str(row['mean']):>10s} "
               f"{str(row['std']):>10s} {str(row['min']):>10s} "
               f"{str(row['max']):>10s}")
+
+    if not concepts.empty:
+        enough = concepts[concepts["sufficient"]]
+        print()
+        print(f"  per-concept impact spread across seeds "
+              f"({len(enough)}/{len(concepts)} settings with enough seeds):")
+        for _, row in enough[enough["requested_delta"] == DELTAS[0]].iterrows():
+            print(f"      {row['concept']:16s} {row['direction']:8s} "
+                  f"mean {row['mean_impact']:>9.4f}  sd "
+                  f"{row['std_impact']:>8.4f}  "
+                  f"[{row['min_impact']:.4f}, {row['max_impact']:.4f}]")
+        print("      (each concept is summarised against ITSELF across "
+              "seeds; this is not a ranking)")
 
     comparablePairs = int(matched["comparable"].sum()) if not matched.empty else 0
     print()
@@ -312,6 +392,9 @@ def main(argv=None):
         "split_identical_across_seeds": True,
         "per_seed": perSeed,
         "stability": stability,
+        "per_concept_settings": int(len(concepts)),
+        "per_concept_sufficient": int(concepts["sufficient"].sum())
+                                  if not concepts.empty else 0,
         "matched_comparison_rows": len(matched),
         "matched_comparison_comparable": comparablePairs,
         "match_tolerance": MATCH_TOLERANCE,
