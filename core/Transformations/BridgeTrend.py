@@ -123,6 +123,19 @@ class BridgeTrendTransformation(TemporalGraphTransformation):
             "with TgapExplainer (temporal), not GraphExplainer.")
 
     def transform(self, temporalGraph, delta):
+        # delta = -1 makes the recursion below divide by (1 + delta) = 0.
+        # Previously that surfaced as a bare ZeroDivisionError from inside
+        # the loop, which told the caller nothing about why. The value is
+        # genuinely outside the transformation's domain - "scale the
+        # trajectory by a factor of zero" has no meaning - so it is rejected
+        # explicitly rather than repaired. This is a guard, NOT a change of
+        # semantics: every other delta behaves exactly as before.
+        if delta == -1:
+            raise ValueError(
+                "BridgeTrendTransformation is undefined at delta = -1: the "
+                "backward recursion divides by (1 + delta), which is zero. "
+                "Use a delta strictly greater than -1.")
+
         # 1. Read the current trajectory of the property.
         widths = [len(interCommunityEdges(g, self.communities,
                                           self.communityPair))

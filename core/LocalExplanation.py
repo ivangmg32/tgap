@@ -341,3 +341,173 @@ def temporalAttribution(temporalGraph, model, transformation, delta):
                 "the all-snapshot impact, because the model is not additive "
                 "over time - reporting them as a decomposition would be "
                 "wrong.")}
+
+
+##  Persistence: attribution results as first-class output files  ##
+#
+# edgeAttribution / nodeAttribution / temporalAttribution return dicts. Until
+# these writers existed the detailed results were produced only inside a
+# plotting function and then discarded, so a figure could not be regenerated
+# from stored data and no reviewer could inspect the rows behind it.
+#
+# The schemas below are deliberately FLAT and stable: one row per element or
+# per snapshot, no nested graph objects. Storing the perturbed graphs would
+# multiply the output size by the number of elements for no analytical gain -
+# any of them can be reconstructed deterministically from the seed.
+
+
+ELEMENT_ATTRIBUTION_COLUMNS = (
+    "dataset", "model", "element", "u", "v", "node", "snapshots_present",
+    "total_degree", "baseline_prediction", "after_prediction", "impact",
+    "method", "coverage", "elements_evaluated", "elements_total",
+    "model_calls", "seed",
+)
+
+TEMPORAL_ATTRIBUTION_COLUMNS = (
+    "dataset", "model", "snapshot_index", "concept", "requested_delta",
+    "achieved_delta", "baseline_prediction", "after_prediction", "impact",
+    "edges_added", "edges_removed", "nodes_affected", "attribution_level",
+    "seed",
+)
+
+
+def _writeRows(rows, columns, path):
+    ''' Write a flat table with a FIXED column order, so the schema is
+    stable across runs and a stale column cannot appear silently. '''
+    import csv
+    import os
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    with open(path, "w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(columns),
+                                extrasaction="ignore")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({k: row.get(k) for k in columns})
+    return path
+
+
+def writeElementAttribution(attribution, path, dataset=None, model=None,
+                            seed=None):
+    ''' Persist edgeAttribution / nodeAttribution to CSV.
+
+    Provenance that must survive: the METHOD string ("occlusion ..."), and
+    the coverage figures. A truncated ranking that loses its coverage looks
+    exhaustive, which would be a misrepresentation rather than a rounding
+    error.
+    '''
+    evaluated = attribution.get("edges_evaluated",
+                                attribution.get("nodes_evaluated"))
+    total = attribution.get("edges_total", attribution.get("nodes_total"))
+    rows = []
+    for row in attribution.get("rows", []):
+        enriched = dict(row)
+        enriched.update({
+            "dataset": dataset, "model": model, "seed": seed,
+            "coverage": attribution.get("coverage"),
+            "elements_evaluated": evaluated,
+            "elements_total": total,
+            "model_calls": attribution.get("model_calls"),
+        })
+        if "edge" in row:
+            enriched["u"], enriched["v"] = row["edge"]
+        rows.append(enriched)
+    return _writeRows(rows, ELEMENT_ATTRIBUTION_COLUMNS, path)
+
+
+def writeTemporalAttribution(attribution, path, dataset=None, model=None,
+                             seed=None, achievedDelta=None,
+                             level="snapshot_concept"):
+    ''' Persist temporalAttribution to CSV.
+
+    `attribution_level` is written into every row and is NOT decoration. It
+    distinguishes
+
+        snapshot_concept   a CONCEPT applied to one snapshot at a time
+        edge_time          one EDGE at one time
+
+    which are different scientific objects. Recording the level in the data
+    means a later reader cannot mistake one for the other - the mistake this
+    column exists to prevent.
+    '''
+    rows = []
+    for row in attribution.get("rows", []):
+        enriched = dict(row)
+        enriched.update({
+            "dataset": dataset, "model": model, "seed": seed,
+            "achieved_delta": achievedDelta,
+            "attribution_level": level,
+        })
+        rows.append(enriched)
+    return _writeRows(rows, TEMPORAL_ATTRIBUTION_COLUMNS, path)
+
+
+def edgeTimeAttribution(temporalGraph, model, snapshotIndex=None,
+                        topK=None, seed=42):
+    ''' TRUE edge-time attribution: remove ONE edge from ONE snapshot.
+
+    This is a different object from temporalAttribution, which perturbs a
+    whole CONCEPT in one snapshot. Here the perturbed unit is a single
+    (edge, snapshot) pair:
+
+        impact(e, t) = model(graph with e removed from snapshot t ONLY)
+                       - model(graph)
+
+    WHEN THIS IS MEANINGFUL, AND WHEN IT IS NOT. A model that reads only the
+    last snapshot cannot respond to an edge removed from an earlier one, so
+    every such impact is exactly 0 - a correct answer, not a failure, and
+    the caller should read it as "this model has no temporal dependence on
+    that element" rather than "this element does not matter". The returned
+    record states which snapshots produced any non-zero response at all, so
+    a flat result is visible rather than silently plotted as blank.
+
+    COST: 1 + (edges x snapshots) model calls, which grows fast. snapshotIndex
+    restricts to one snapshot and topK restricts the edges; whatever was
+    skipped is reported.
+    '''
+    indices = ([snapshotIndex] if snapshotIndex is not None
+               else list(range(len(temporalGraph))))
+    baseline = model.predict(temporalGraph)
+    calls = 1
+    rows = []
+    for index in indices:
+        edges = sorted(tuple(sorted(e)) for e in temporalGraph[index].edges())
+        total = len(edges)
+        if topK is not None and topK < len(edges):
+            degree = temporalGraph[index].degree()
+            edges = sorted(sorted(
+                edges, key=lambda e: (-(degree[e[0]] + degree[e[1]]), e)
+            )[:topK])
+        for edge in edges:
+            perturbed = list(temporalGraph)
+            copy = temporalGraph[index].copy()
+            copy.remove_edge(*edge)
+            perturbed[index] = copy
+            value = model.predict(perturbed)
+            calls += 1
+            rows.append({
+                "element": "edge_time", "edge": edge,
+                "u": edge[0], "v": edge[1],
+                "snapshot_index": index,
+                "baseline_prediction": baseline,
+                "after_prediction": value,
+                "impact": value - baseline,
+                "edges_in_snapshot": total,
+                "method": ("occlusion (single edge removed from a single "
+                           "snapshot)"),
+            })
+    responsive = sorted({r["snapshot_index"] for r in rows if r["impact"] != 0})
+    return {
+        "rows": sorted(rows, key=lambda r: (-abs(r["impact"]),
+                                            r["snapshot_index"], r["edge"])),
+        "baseline": baseline,
+        "model_calls": calls,
+        "snapshots_evaluated": indices,
+        "snapshots_with_any_response": responsive,
+        "all_zero": not responsive,
+        "method_note": (
+            "impact(e, t) = model(graph with edge e removed from snapshot t "
+            "only) - model(graph). One measured prediction difference per "
+            "(edge, snapshot). An all-zero result means the model has no "
+            "temporal dependence on these elements - it does NOT mean the "
+            "elements are unimportant."),
+    }

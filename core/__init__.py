@@ -93,6 +93,16 @@ from .LocalExplanation import (
     edgeAttribution,
     nodeAttribution,
     temporalAttribution,
+    edgeTimeAttribution,
+    writeElementAttribution,
+    writeTemporalAttribution,
+    ELEMENT_ATTRIBUTION_COLUMNS,
+    TEMPORAL_ATTRIBUTION_COLUMNS,
+)
+from .Sparsity import (
+    conceptSparsity,
+    elementSparsity,
+    sparsityReport,
 )
 from .Diagnostics import (
     CallCountingModel,
