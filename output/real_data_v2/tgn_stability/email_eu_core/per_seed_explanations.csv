@@ -1,0 +1,151 @@
+seed,transformation,direction,requested_delta,delta_mode,feasible,infeasible_reason,edge_count_before,edge_count_after,edge_count_preserved,snapshots_violating_edge_count,transformation_status,valid_for_analysis,achieved_delta,impact
+0,Bridge Width,increase,0.1,relative,True,,1878,1878,True,0,ok,True,0.1006160164271046,-0.44712510340067857
+0,Bridge Width,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.10061601642710477,0.45677495732599355
+0,Centralization,increase,0.1,relative,True,,1878,1878,True,0,ok,True,1.5002382086707962,-0.004082150688698344
+0,Centralization,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.4069795140543115,0.05563678000452647
+0,Density,increase,0.1,relative,True,,1878,2068,False,0,ok,True,0.1011714589989351,0.06837909786324749
+0,Density,decrease,-0.1,relative,True,,1878,1690,False,0,ok,True,-0.1001064962726304,-0.5723609664338704
+0,Bridge Trend,increase,0.1,absolute,True,,1878,1878,True,0,ok,True,5.832167832167834,0.0015508923456251473
+0,Bridge Trend,decrease,-0.1,absolute,False,insufficient intra-community edges to preserve total edge count,1878,2135,False,5,edge_count_infeasible,False,,
+0,Churn,increase,0.1,relative,True,,1878,1878,True,0,ok,True,0.00674945623336414,4.54147154619722
+0,Churn,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.0307607512306026,-0.09198868657438425
+0,Bridge Width,increase,0.25,relative,False,insufficient removable intra-community edges to preserve total edge count,1878,1880,False,1,edge_count_infeasible,False,,
+0,Bridge Width,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.25051334702258726,-0.10876102256970328
+0,Centralization,increase,0.25,relative,True,,1878,1878,True,0,ok,True,3.742615531205337,0.01102315055926805
+0,Centralization,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.5825393044306812,0.01931602480562156
+0,Density,increase,0.25,relative,True,,1878,2347,False,0,ok,True,0.24973375931842393,0.03374665708684209
+0,Density,decrease,-0.25,relative,True,,1878,1417,False,0,ok,True,-0.24547390841320557,0.17602697525520902
+0,Bridge Trend,increase,0.25,absolute,True,"bridge widths clamped to the width-1 floor, so the intended trend shape was not realised",1878,1878,True,0,saturated,False,8.262237762237763,0.007881632559490162
+0,Bridge Trend,decrease,-0.25,absolute,False,insufficient intra-community edges to preserve total edge count,1878,6663,False,10,edge_count_infeasible,False,,
+0,Churn,increase,0.25,relative,True,,1878,1878,True,0,ok,True,0.021729931452452486,0.7365846192281963
+0,Churn,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.0448363255333551,0.7979421491652154
+0,Bridge Width,increase,0.5,relative,False,insufficient removable intra-community edges to preserve total edge count,1878,1890,False,2,edge_count_infeasible,False,,
+0,Bridge Width,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.49794661190965095,0.07285462040262124
+0,Centralization,increase,0.5,relative,True,,1878,1878,True,0,ok,True,4.867794187708434,-0.013121596548240515
+0,Centralization,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.758099094807051,0.03288755656599718
+0,Density,increase,0.5,relative,True,,1878,2818,False,0,ok,True,0.5005324813631523,0.05432244628033739
+0,Density,decrease,-0.5,relative,True,,1878,1171,False,0,ok,True,-0.37646432374866884,0.11101684863698869
+0,Bridge Trend,increase,0.5,absolute,True,"bridge widths clamped to the width-1 floor, so the intended trend shape was not realised",1878,1878,True,0,saturated,False,8.227272727272727,0.0034649457720761804
+0,Bridge Trend,decrease,-0.5,absolute,False,insufficient cross-community non-edges to widen the bridge,1878,52864,False,11,edge_count_infeasible,False,,
+0,Churn,increase,0.5,relative,True,,1878,1878,True,0,ok,True,0.03818712337498189,-0.18912828112743696
+0,Churn,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.054300239644397855,0.6530203372390981
+1,Bridge Width,increase,0.1,relative,True,,1878,1878,True,0,ok,True,0.1006160164271046,-0.0752225943974087
+1,Bridge Width,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.10061601642710477,0.8585594612724923
+1,Centralization,increase,0.1,relative,True,,1878,1878,True,0,ok,True,1.5002382086707962,0.0022747083178169193
+1,Centralization,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.4069795140543115,0.021708752838951965
+1,Density,increase,0.1,relative,True,,1878,2068,False,0,ok,True,0.1011714589989351,-0.13655729733015354
+1,Density,decrease,-0.1,relative,True,,1878,1690,False,0,ok,True,-0.1001064962726304,-0.44661404477789074
+1,Bridge Trend,increase,0.1,absolute,True,,1878,1878,True,0,ok,True,5.832167832167834,-0.0010929758743130613
+1,Bridge Trend,decrease,-0.1,absolute,False,insufficient intra-community edges to preserve total edge count,1878,2135,False,5,edge_count_infeasible,False,,
+1,Churn,increase,0.1,relative,True,,1878,1878,True,0,ok,True,0.00674945623336414,-0.40070794789572434
+1,Churn,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.0307607512306026,-0.024536904548673
+1,Bridge Width,increase,0.25,relative,False,insufficient removable intra-community edges to preserve total edge count,1878,1880,False,1,edge_count_infeasible,False,,
+1,Bridge Width,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.25051334702258726,-0.0735037199786452
+1,Centralization,increase,0.25,relative,True,,1878,1878,True,0,ok,True,3.742615531205337,0.00035748942153358143
+1,Centralization,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.5825393044306812,-0.010824394040837949
+1,Density,increase,0.25,relative,True,,1878,2347,False,0,ok,True,0.24973375931842393,-0.017425259293269497
+1,Density,decrease,-0.25,relative,True,,1878,1417,False,0,ok,True,-0.24547390841320557,0.1642065185269668
+1,Bridge Trend,increase,0.25,absolute,True,"bridge widths clamped to the width-1 floor, so the intended trend shape was not realised",1878,1878,True,0,saturated,False,8.262237762237763,0.002379904144455001
+1,Bridge Trend,decrease,-0.25,absolute,False,insufficient intra-community edges to preserve total edge count,1878,6663,False,10,edge_count_infeasible,False,,
+1,Churn,increase,0.25,relative,True,,1878,1878,True,0,ok,True,0.021729931452452486,1.072952821776596
+1,Churn,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.0448363255333551,0.19990462525272618
+1,Bridge Width,increase,0.5,relative,False,insufficient removable intra-community edges to preserve total edge count,1878,1890,False,2,edge_count_infeasible,False,,
+1,Bridge Width,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.49794661190965095,0.09249801267053663
+1,Centralization,increase,0.5,relative,True,,1878,1878,True,0,ok,True,4.867794187708434,-0.029506269054305496
+1,Centralization,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.758099094807051,-0.042133402992961734
+1,Density,increase,0.5,relative,True,,1878,2818,False,0,ok,True,0.5005324813631523,0.026679832250513926
+1,Density,decrease,-0.5,relative,True,,1878,1171,False,0,ok,True,-0.37646432374866884,0.03911005219779223
+1,Bridge Trend,increase,0.5,absolute,True,"bridge widths clamped to the width-1 floor, so the intended trend shape was not realised",1878,1878,True,0,saturated,False,8.227272727272727,0.00038451582028720924
+1,Bridge Trend,decrease,-0.5,absolute,False,insufficient cross-community non-edges to widen the bridge,1878,52864,False,11,edge_count_infeasible,False,,
+1,Churn,increase,0.5,relative,True,,1878,1878,True,0,ok,True,0.03818712337498189,0.38401456430224656
+1,Churn,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.054300239644397855,0.16270239911278564
+2,Bridge Width,increase,0.1,relative,True,,1878,1878,True,0,ok,True,0.1006160164271046,-0.21612544935576794
+2,Bridge Width,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.10061601642710477,-0.014657091121284322
+2,Centralization,increase,0.1,relative,True,,1878,1878,True,0,ok,True,1.5002382086707962,-0.024245663592458784
+2,Centralization,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.4069795140543115,-0.003529299830078626
+2,Density,increase,0.1,relative,True,,1878,2068,False,0,ok,True,0.1011714589989351,0.06699284001400592
+2,Density,decrease,-0.1,relative,True,,1878,1690,False,0,ok,True,-0.1001064962726304,-0.11623937715875349
+2,Bridge Trend,increase,0.1,absolute,True,,1878,1878,True,0,ok,True,5.832167832167834,-0.0011264054323557751
+2,Bridge Trend,decrease,-0.1,absolute,False,insufficient intra-community edges to preserve total edge count,1878,2135,False,5,edge_count_infeasible,False,,
+2,Churn,increase,0.1,relative,True,,1878,1878,True,0,ok,True,0.00674945623336414,-2.316255312876649
+2,Churn,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.0307607512306026,-0.1575919171557747
+2,Bridge Width,increase,0.25,relative,False,insufficient removable intra-community edges to preserve total edge count,1878,1880,False,1,edge_count_infeasible,False,,
+2,Bridge Width,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.25051334702258726,-0.24476122514146273
+2,Centralization,increase,0.25,relative,True,,1878,1878,True,0,ok,True,3.742615531205337,0.0021484083826293103
+2,Centralization,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.5825393044306812,-0.024161120617323874
+2,Density,increase,0.25,relative,True,,1878,2347,False,0,ok,True,0.24973375931842393,-0.02282355970411158
+2,Density,decrease,-0.25,relative,True,,1878,1417,False,0,ok,True,-0.24547390841320557,0.09422031400519182
+2,Bridge Trend,increase,0.25,absolute,True,"bridge widths clamped to the width-1 floor, so the intended trend shape was not realised",1878,1878,True,0,saturated,False,8.262237762237763,-0.0013678518836900836
+2,Bridge Trend,decrease,-0.25,absolute,False,insufficient intra-community edges to preserve total edge count,1878,6663,False,10,edge_count_infeasible,False,,
+2,Churn,increase,0.25,relative,True,,1878,1878,True,0,ok,True,0.021729931452452486,0.9579097342273015
+2,Churn,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.0448363255333551,-0.24232390443123603
+2,Bridge Width,increase,0.5,relative,False,insufficient removable intra-community edges to preserve total edge count,1878,1890,False,2,edge_count_infeasible,False,,
+2,Bridge Width,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.49794661190965095,-0.00413135597386311
+2,Centralization,increase,0.5,relative,True,,1878,1878,True,0,ok,True,4.867794187708434,-0.0007121758266156827
+2,Centralization,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.758099094807051,0.04896707070313939
+2,Density,increase,0.5,relative,True,,1878,2818,False,0,ok,True,0.5005324813631523,-0.03975746923304618
+2,Density,decrease,-0.5,relative,True,,1878,1171,False,0,ok,True,-0.37646432374866884,0.13102595792632796
+2,Bridge Trend,increase,0.5,absolute,True,"bridge widths clamped to the width-1 floor, so the intended trend shape was not realised",1878,1878,True,0,saturated,False,8.227272727272727,-0.002923841634507996
+2,Bridge Trend,decrease,-0.5,absolute,False,insufficient cross-community non-edges to widen the bridge,1878,52864,False,11,edge_count_infeasible,False,,
+2,Churn,increase,0.5,relative,True,,1878,1878,True,0,ok,True,0.03818712337498189,0.34641975885008697
+2,Churn,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.054300239644397855,-0.20096446050591874
+3,Bridge Width,increase,0.1,relative,True,,1878,1878,True,0,ok,True,0.1006160164271046,-0.6663958856037693
+3,Bridge Width,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.10061601642710477,0.45174905961873557
+3,Centralization,increase,0.1,relative,True,,1878,1878,True,0,ok,True,1.5002382086707962,-0.024131916257531794
+3,Centralization,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.4069795140543115,0.008011882612849665
+3,Density,increase,0.1,relative,True,,1878,2068,False,0,ok,True,0.1011714589989351,-0.15403840353614398
+3,Density,decrease,-0.1,relative,True,,1878,1690,False,0,ok,True,-0.1001064962726304,-0.4996283701125615
+3,Bridge Trend,increase,0.1,absolute,True,,1878,1878,True,0,ok,True,5.832167832167834,0.00220192557902073
+3,Bridge Trend,decrease,-0.1,absolute,False,insufficient intra-community edges to preserve total edge count,1878,2135,False,5,edge_count_infeasible,False,,
+3,Churn,increase,0.1,relative,True,,1878,1878,True,0,ok,True,0.00674945623336414,-2.2079427402939262
+3,Churn,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.0307607512306026,0.31361624718528575
+3,Bridge Width,increase,0.25,relative,False,insufficient removable intra-community edges to preserve total edge count,1878,1880,False,1,edge_count_infeasible,False,,
+3,Bridge Width,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.25051334702258726,-0.17782841842682637
+3,Centralization,increase,0.25,relative,True,,1878,1878,True,0,ok,True,3.742615531205337,0.016752791678628923
+3,Centralization,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.5825393044306812,0.012203751983049823
+3,Density,increase,0.25,relative,True,,1878,2347,False,0,ok,True,0.24973375931842393,0.1785374849335725
+3,Density,decrease,-0.25,relative,True,,1878,1417,False,0,ok,True,-0.24547390841320557,0.2700960157750227
+3,Bridge Trend,increase,0.25,absolute,True,"bridge widths clamped to the width-1 floor, so the intended trend shape was not realised",1878,1878,True,0,saturated,False,8.262237762237763,0.005398097807100855
+3,Bridge Trend,decrease,-0.25,absolute,False,insufficient intra-community edges to preserve total edge count,1878,6663,False,10,edge_count_infeasible,False,,
+3,Churn,increase,0.25,relative,True,,1878,1878,True,0,ok,True,0.021729931452452486,-0.2680736269826684
+3,Churn,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.0448363255333551,0.5327515293511862
+3,Bridge Width,increase,0.5,relative,False,insufficient removable intra-community edges to preserve total edge count,1878,1890,False,2,edge_count_infeasible,False,,
+3,Bridge Width,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.49794661190965095,0.08243104944524077
+3,Centralization,increase,0.5,relative,True,,1878,1878,True,0,ok,True,4.867794187708434,-0.010095198258870616
+3,Centralization,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.758099094807051,0.007517065930722365
+3,Density,increase,0.5,relative,True,,1878,2818,False,0,ok,True,0.5005324813631523,0.048117773203139605
+3,Density,decrease,-0.5,relative,True,,1878,1171,False,0,ok,True,-0.37646432374866884,0.10939763357818041
+3,Bridge Trend,increase,0.5,absolute,True,"bridge widths clamped to the width-1 floor, so the intended trend shape was not realised",1878,1878,True,0,saturated,False,8.227272727272727,0.0037582282861951966
+3,Bridge Trend,decrease,-0.5,absolute,False,insufficient cross-community non-edges to widen the bridge,1878,52864,False,11,edge_count_infeasible,False,,
+3,Churn,increase,0.5,relative,True,,1878,1878,True,0,ok,True,0.03818712337498189,0.01765329443095261
+3,Churn,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.054300239644397855,0.4729580247392626
+4,Bridge Width,increase,0.1,relative,True,,1878,1878,True,0,ok,True,0.1006160164271046,-0.027095062392098596
+4,Bridge Width,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.10061601642710477,0.33581278397112463
+4,Centralization,increase,0.1,relative,True,,1878,1878,True,0,ok,True,1.5002382086707962,-0.011069169136106718
+4,Centralization,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.4069795140543115,0.0693203227227635
+4,Density,increase,0.1,relative,True,,1878,2068,False,0,ok,True,0.1011714589989351,0.4049434153657208
+4,Density,decrease,-0.1,relative,True,,1878,1690,False,0,ok,True,-0.1001064962726304,-0.5609201180173999
+4,Bridge Trend,increase,0.1,absolute,True,,1878,1878,True,0,ok,True,5.832167832167834,0.008101215465463319
+4,Bridge Trend,decrease,-0.1,absolute,False,insufficient intra-community edges to preserve total edge count,1878,2135,False,5,edge_count_infeasible,False,,
+4,Churn,increase,0.1,relative,True,,1878,1878,True,0,ok,True,0.00674945623336414,0.44653215817960124
+4,Churn,decrease,-0.1,relative,True,,1878,1878,True,0,ok,True,-0.0307607512306026,0.26762529484675984
+4,Bridge Width,increase,0.25,relative,False,insufficient removable intra-community edges to preserve total edge count,1878,1880,False,1,edge_count_infeasible,False,,
+4,Bridge Width,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.25051334702258726,-0.02481134211430784
+4,Centralization,increase,0.25,relative,True,,1878,1878,True,0,ok,True,3.742615531205337,0.019731307475103953
+4,Centralization,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.5825393044306812,0.015464340926337843
+4,Density,increase,0.25,relative,True,,1878,2347,False,0,ok,True,0.24973375931842393,0.08897959042205483
+4,Density,decrease,-0.25,relative,True,,1878,1417,False,0,ok,True,-0.24547390841320557,0.1496670240952498
+4,Bridge Trend,increase,0.25,absolute,True,"bridge widths clamped to the width-1 floor, so the intended trend shape was not realised",1878,1878,True,0,saturated,False,8.262237762237763,0.002943484398756701
+4,Bridge Trend,decrease,-0.25,absolute,False,insufficient intra-community edges to preserve total edge count,1878,6663,False,10,edge_count_infeasible,False,,
+4,Churn,increase,0.25,relative,True,,1878,1878,True,0,ok,True,0.021729931452452486,3.26534639474934
+4,Churn,decrease,-0.25,relative,True,,1878,1878,True,0,ok,True,-0.0448363255333551,0.30379191128372085
+4,Bridge Width,increase,0.5,relative,False,insufficient removable intra-community edges to preserve total edge count,1878,1890,False,2,edge_count_infeasible,False,,
+4,Bridge Width,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.49794661190965095,0.1546352152971877
+4,Centralization,increase,0.5,relative,True,,1878,1878,True,0,ok,True,4.867794187708434,-0.017257725229932998
+4,Centralization,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.758099094807051,0.0936837378394763
+4,Density,increase,0.5,relative,True,,1878,2818,False,0,ok,True,0.5005324813631523,0.042770613000748005
+4,Density,decrease,-0.5,relative,True,,1878,1171,False,0,ok,True,-0.37646432374866884,0.08996816116478688
+4,Bridge Trend,increase,0.5,absolute,True,"bridge widths clamped to the width-1 floor, so the intended trend shape was not realised",1878,1878,True,0,saturated,False,8.227272727272727,4.2338397621449845e-05
+4,Bridge Trend,decrease,-0.5,absolute,False,insufficient cross-community non-edges to widen the bridge,1878,52864,False,11,edge_count_infeasible,False,,
+4,Churn,increase,0.5,relative,True,,1878,1878,True,0,ok,True,0.03818712337498189,0.710708210418613
+4,Churn,decrease,-0.5,relative,True,,1878,1878,True,0,ok,True,-0.054300239644397855,0.2361420225871574

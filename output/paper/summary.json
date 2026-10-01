@@ -215,7 +215,7 @@
         "expected_model_calls": 3,
         "actual_model_calls": 3,
         "matches_expected": true,
-        "runtime_seconds": 0.01118382252752781
+        "runtime_seconds": 0.0138841662555933
       },
       {
         "experiment": "RQ4",
@@ -226,7 +226,7 @@
         "expected_model_calls": 5,
         "actual_model_calls": 5,
         "matches_expected": true,
-        "runtime_seconds": 0.022944536060094833
+        "runtime_seconds": 0.02534595876932144
       },
       {
         "experiment": "RQ4",
@@ -237,7 +237,7 @@
         "expected_model_calls": 7,
         "actual_model_calls": 7,
         "matches_expected": true,
-        "runtime_seconds": 0.04867071099579334
+        "runtime_seconds": 0.05478266067802906
       },
       {
         "experiment": "RQ4",
@@ -248,7 +248,7 @@
         "expected_model_calls": 9,
         "actual_model_calls": 9,
         "matches_expected": true,
-        "runtime_seconds": 0.06488254852592945
+        "runtime_seconds": 0.06406065542250872
       },
       {
         "experiment": "RQ4",
@@ -259,7 +259,7 @@
         "expected_model_calls": 11,
         "actual_model_calls": 11,
         "matches_expected": true,
-        "runtime_seconds": 0.09487071726471186
+        "runtime_seconds": 0.10700996872037649
       },
       {
         "experiment": "RQ4",
@@ -270,7 +270,7 @@
         "expected_model_calls": 18,
         "actual_model_calls": 18,
         "matches_expected": true,
-        "runtime_seconds": 0.7605349272489548
+        "runtime_seconds": 0.6249467460438609
       }
     ]
   },

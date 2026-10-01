@@ -1,7 +1,7 @@
 experiment,path,transformations,inputs,deltas,expected_model_calls,actual_model_calls,matches_expected,runtime_seconds
-RQ4,local explain,1,1,2,3,3,True,0.01118382252752781
-RQ4,local explain,2,1,2,5,5,True,0.022944536060094833
-RQ4,local explain,3,1,2,7,7,True,0.04867071099579334
-RQ4,local explain,4,1,2,9,9,True,0.06488254852592945
-RQ4,local explain,5,1,2,11,11,True,0.09487071726471186
-RQ4,global boxplot,1,3,5,18,18,True,0.7605349272489548
+RQ4,local explain,1,1,2,3,3,True,0.0138841662555933
+RQ4,local explain,2,1,2,5,5,True,0.02534595876932144
+RQ4,local explain,3,1,2,7,7,True,0.05478266067802906
+RQ4,local explain,4,1,2,9,9,True,0.06406065542250872
+RQ4,local explain,5,1,2,11,11,True,0.10700996872037649
+RQ4,global boxplot,1,3,5,18,18,True,0.6249467460438609

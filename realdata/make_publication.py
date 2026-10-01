@@ -48,6 +48,8 @@ from core import (
 
 RESULTS = os.path.join("output", "real_data_v2", "temporal_evaluation")
 TGN_RESULTS = os.path.join("output", "real_data_v2", "tgn")
+TGN_STABILITY = os.path.join("output", "real_data_v2", "tgn_stability",
+                             "email_eu_core")
 OUTPUT = os.path.join("output", "publication")
 CASE_STUDIES = ("decentraland", "email_eu_core")
 
@@ -389,6 +391,13 @@ def writeTables(datasets):
     tgnPath = os.path.join(TGN_RESULTS, "email_eu_core", "tgap_results.csv")
     if os.path.exists(tgnPath):
         tgn = pd.read_csv(tgnPath)
+        # DATA INTEGRITY: valid rows ONLY. The TGN runner is validity-gated,
+        # but this table was previously built from the raw file, so a
+        # saturated or edge-count-infeasible row could reach the paper. The
+        # raw CSV deliberately keeps every row for transparency; the
+        # publication table must not. _valid() is the same helper every other
+        # publication table uses, so the rule cannot diverge between tables.
+        tgn = _valid(tgn)
         table3 = tgn[(tgn["requested_delta"] == 0.1)
                      & (tgn["direction"] == "increase")][
             ["dataset", "transformation", "achieved_delta",
@@ -428,6 +437,89 @@ def writeTables(datasets):
             "table3": len(table3), "table4": len(table4)}
 
 
+def tgnTables():
+    ''' Seed stability and matched comparison, as publication tables.
+
+    Both are built from the machine-readable outputs of
+    realdata/run_tgn_stability.py - never from numbers typed by hand.
+    '''
+    tables = {}
+    stabilityPath = os.path.join(TGN_STABILITY, "seed_stability.csv")
+    if os.path.exists(stabilityPath):
+        stability = pd.read_csv(stabilityPath)
+        tables["table6_tgn_seed_stability"] = stability[
+            ["quantity", "n", "mean", "std", "min", "max", "per_seed"]]
+
+    matchedPath = os.path.join(TGN_STABILITY, "matched_comparison.csv")
+    if os.path.exists(matchedPath):
+        matched = pd.read_csv(matchedPath)
+        # Comparable pairs only in the publication table, with BOTH sides
+        # shown side by side. There is deliberately no ordering column: a
+        # matched comparison reports two numbers at a matched perturbation,
+        # it does not declare a winner.
+        comparable = matched[matched["comparable"]].copy()
+        if not comparable.empty:
+            summary = comparable.groupby(
+                ["concept_a", "concept_b", "direction"]).agg(
+                seeds=("seed", "nunique"),
+                mean_achieved_a=("achieved_delta_a", "mean"),
+                mean_achieved_b=("achieved_delta_b", "mean"),
+                mean_impact_a=("impact_a", "mean"),
+                mean_impact_b=("impact_b", "mean"),
+                mean_relative_gap=("relative_gap", "mean"),
+            ).round(6).reset_index()
+            tables["table7_tgn_matched_comparison"] = summary
+        # The incomparable pairs are themselves a result and are published.
+        reasons = matched[~matched["comparable"]].groupby(
+            ["concept_a", "concept_b"])["reason"].first().reset_index()
+        reasons["comparable"] = False
+        tables["table8_tgn_not_comparable"] = reasons
+    return tables
+
+
+def figureTgnSeedStability(path):
+    ''' The one TGN figure. Held-out performance across five seeds.
+
+    Chosen deliberately: AUC, AP and accuracy share one scale (0-1, chance
+    0.5), so plotting them together compares commensurable quantities. The
+    concept impacts do NOT share units, so they are not plotted against one
+    another anywhere - that is the figure this project must not produce.
+    '''
+    path_csv = os.path.join(TGN_STABILITY, "seed_stability.csv")
+    if not os.path.exists(path_csv):
+        return False
+    stability = pd.read_csv(path_csv)
+    wanted = ["auc", "average_precision", "accuracy"]
+    rows = stability[stability["quantity"].isin(wanted)]
+    if rows.empty:
+        return False
+
+    fig, ax = plt.subplots(figsize=(6.6, 3.6))
+    for offset, (_, row) in enumerate(rows.iterrows()):
+        values = [v for v in eval(row["per_seed"]) if v is not None]
+        xs = [offset + (i - (len(values) - 1) / 2) * 0.08
+              for i in range(len(values))]
+        ax.scatter(xs, values, s=42, color=POSITIVE, zorder=3,
+                   edgecolors="black", linewidths=0.4)
+        ax.hlines(row["mean"], offset - 0.25, offset + 0.25,
+                  color="black", linewidth=1.6, zorder=4)
+        ax.text(offset, row["max"] + 0.025,
+                f"mean {row['mean']:.3f}\nsd {row['std']:.3f}",
+                ha="center", fontsize=7)
+    ax.axhline(0.5, color=NEUTRAL, linestyle="--", linewidth=1)
+    ax.text(len(rows) - 0.5, 0.508, "chance", fontsize=7, color=NEUTRAL,
+            ha="right")
+    ax.set_xticks(range(len(rows)))
+    ax.set_xticklabels(["AUC", "average precision", "accuracy"])
+    ax.set_ylim(0.45, 0.85)
+    ax.set_ylabel("held-out score")
+    ax.set_title("TGN held-out performance across 5 fixed seeds\n"
+                 "(each point is one seed; bar is the mean)", fontsize=11)
+    fig.savefig(path)
+    plt.close(fig)
+    return True
+
+
 def main():
     os.makedirs(OUTPUT, exist_ok=True)
     available = [d for d in CASE_STUDIES
@@ -458,7 +550,17 @@ def main():
         os.path.join(OUTPUT, "fig6_impact_distribution.png"))
     print("  fig6_impact_distribution.png    impact spread, 8 datasets")
 
+    if figureTgnSeedStability(os.path.join(OUTPUT,
+                                           "fig7_tgn_seed_stability.png")):
+        print("  fig7_tgn_seed_stability.png    TGN held-out, 5 seeds")
+
     counts = writeTables(datasets)
+    for name, frame in tgnTables().items():
+        frame.to_csv(os.path.join(OUTPUT, f"{name}.csv"), index=False)
+        with open(os.path.join(OUTPUT, f"{name}.md"), "w",
+                  encoding="utf-8") as handle:
+            handle.write(_asMarkdown(frame))
+        counts[name] = len(frame)
     print()
     for name, rows in counts.items():
         print(f"  {name}: {rows} rows (csv + md)")
