@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tgap-research"
+version = "0.3.0"
+description = "Temporal Graph Additive exPlanations with a guided self-hosting launcher"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+dependencies = []
+
+[project.scripts]
+tgap = "tgap_cli.cli:main"
+
+[tool.setuptools]
+py-modules = ["evaluation", "paper_evaluation", "examples"]
+
+[tool.setuptools.packages.find]
+include = ["core*", "realdata*", "examples*", "tgap_cli*"]
+exclude = ["tests*", "finance*", "drafts*"]
+
+[tool.setuptools.package-data]
+tgap_cli = ["data/*.zip", "data/*.sha256"]
+realdata = ["README.md"]

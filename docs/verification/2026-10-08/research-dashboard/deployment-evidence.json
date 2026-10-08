@@ -1,0 +1,17 @@
+{
+  "source_sha256": {
+    "sandbox/app.py": "ee3d50283b15450ba354ebc21c3cb7f65406790eabaee5fb157b49a7ca33e155",
+    "sandbox/reporting.py": "65deccb38104697584c06f391471449592da9a58d4bcf3cf382607058da5a814",
+    "static/researcher.js": "ca141fdc8f40d7dc98346255bc9454d0030932f9ad12cd5e40104cffe47e85b0",
+    "static/app.js": "be7b69a33d329d06799259c12e20d25453f7e93de204334f91fad609a0ac8f3c",
+    "static/index.html": "26d688e3ed6971ad3d43d24655523d96f837fb4aca5e12eb3488016248a9d861",
+    "static/style.css": "c3b4f1a96481ac326fcdc32b96dfbd2739484d9b689c61ccc6fd8ce3a4a99dbf"
+  },
+  "portable_bundle_sha256": "bfc96d67c6a0b2f1ff37d48b5a329352b4a1bf3c9cabe03114dd46c05ccf991f",
+  "web_regression_tests_passed": 45,
+  "research_reporting_tests": 7,
+  "research_browser_passed": true,
+  "workbench_browser_passed": true,
+  "live_verification_passed": true,
+  "core_changed": false
+}
