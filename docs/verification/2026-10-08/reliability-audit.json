@@ -1,0 +1,43 @@
+{
+  "home": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\2\\tgap-reliability-6pwjjdmh",
+  "checks": [
+    "Production supervisor starts isolated instance",
+    "One active experiment per account returns 429",
+    "Known-truth worker returns baseline 8",
+    "Repeated experiment 1 completes",
+    "Repeated experiment 2 completes",
+    "Repeated experiment 3 completes",
+    "Repeated experiment 4 completes",
+    "Repeated experiment 5 completes",
+    "Worker crash injected",
+    "Worker crash produces explicit failed job",
+    "Queue recovers after worker crash",
+    "Global queue bound returns 429",
+    "Supervisor restarts killed API process",
+    "Session persists across API restart",
+    "Interrupted queue explicitly marked failed on restart",
+    "Completed result survives restart",
+    "New experiment succeeds after API restart",
+    "Load has no unexpected HTTP errors or connection failures",
+    "Burst limiter rejects excess requests",
+    "Health recovers after bounded burst",
+    "Oversized streamed request rejected",
+    "Malformed JSON rejected without crashing",
+    "Worker scratch inputs and outputs cleaned",
+    "SQLite integrity check passes"
+  ],
+  "load": {
+    "requests": 200,
+    "concurrency": 10,
+    "statuses": {
+      "200": 55,
+      "429": 145
+    },
+    "p50_ms": 15.0,
+    "p95_ms": 31.0,
+    "p99_ms": 31.0
+  },
+  "restart_seconds": 5.219,
+  "api_tree_rss_mib": 67.82,
+  "passed": true
+}

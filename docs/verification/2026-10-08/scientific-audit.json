@@ -1,0 +1,5680 @@
+{
+  "started": 1791469814.123547,
+  "runs": [
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.328,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.203,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.125,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.14,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.266,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.203,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.203,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.281,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.219,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.235,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.25,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.172,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.125,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.218,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.219,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.266,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.297,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.235,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.125,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.235,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.141,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.14,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.188,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.156,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.187,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.172,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.156,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.094,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.172,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.188,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.109,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.171,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.188,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.235,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.375,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.235,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.141,
+      "invalid": 0,
+      "noops": 4,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.188,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.172,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.125,
+      "invalid": 0,
+      "noops": 4,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.204,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.188,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.157,
+      "invalid": 0,
+      "noops": 4,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.203,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.219,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.11,
+      "invalid": 0,
+      "noops": 4,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.203,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.172,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.141,
+      "invalid": 0,
+      "noops": 4,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.25,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.172,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.297,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.406,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "growing-bridge",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.36,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.218,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.219,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.172,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.156,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.25,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.218,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.125,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.203,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.172,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.109,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.266,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.172,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.14,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.188,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.14,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.266,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.313,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "high-churn",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.234,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 87,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.141,
+      "invalid": 0,
+      "noops": 4,
+      "figure_calls": 81,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.235,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 96,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.234,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 81,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.156,
+      "invalid": 0,
+      "noops": 4,
+      "figure_calls": 81,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.235,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 96,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.172,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 81,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.234,
+      "invalid": 0,
+      "noops": 4,
+      "figure_calls": 81,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.296,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 96,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.187,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 81,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.156,
+      "invalid": 0,
+      "noops": 4,
+      "figure_calls": 81,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.235,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 96,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.156,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 81,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.156,
+      "invalid": 0,
+      "noops": 4,
+      "figure_calls": 81,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.234,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 96,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.188,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 81,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.266,
+      "invalid": 0,
+      "noops": 4,
+      "figure_calls": 82,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.359,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 97,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.281,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 82,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.11,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 74,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.953,
+      "invalid": 1,
+      "noops": 2,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.985,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 66,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.203,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 74,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.015,
+      "invalid": 1,
+      "noops": 2,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.953,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 66,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.172,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 76,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.062,
+      "invalid": 1,
+      "noops": 2,
+      "figure_calls": 91,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.984,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 68,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.187,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 74,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 3.094,
+      "invalid": 1,
+      "noops": 2,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.406,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 66,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.265,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 74,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.25,
+      "invalid": 1,
+      "noops": 2,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.172,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 66,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.531,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 75,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.328,
+      "invalid": 1,
+      "noops": 2,
+      "figure_calls": 90,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_alpha",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.047,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 67,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.11,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 74,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.938,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.781,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 66,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.281,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 75,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.156,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 90,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.984,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 67,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.219,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 75,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.11,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 90,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.766,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 67,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.14,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 74,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.968,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.875,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 66,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.156,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 74,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.906,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.828,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 66,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.516,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 74,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.422,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "bitcoin_otc",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.234,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 66,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 3.781,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 96,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.813,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 111,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.484,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 96,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 4.391,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.859,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 108,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.235,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 4.141,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.546,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 109,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.344,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 3.969,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 98,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.875,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 113,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.375,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 98,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 3.797,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 96,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.016,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 111,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.562,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 96,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 8.203,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 97,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 10.906,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 112,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 10.047,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 97,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 4.047,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 99,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.672,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 114,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.0,
+      "invalid": 3,
+      "noops": 0,
+      "figure_calls": 91,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 4.813,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 99,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 7.047,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 114,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.109,
+      "invalid": 3,
+      "noops": 0,
+      "figure_calls": 91,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 4.657,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 97,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.547,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 112,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.032,
+      "invalid": 3,
+      "noops": 0,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 4.265,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 101,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.468,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 116,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.828,
+      "invalid": 3,
+      "noops": 0,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 4.188,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 101,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.547,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 116,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.078,
+      "invalid": 3,
+      "noops": 0,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.891,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 98,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 7.594,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 113,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 7.359,
+      "invalid": 3,
+      "noops": 0,
+      "figure_calls": 90,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 3.719,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.937,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 109,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.454,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 4.063,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.891,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 109,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.672,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.344,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 7.141,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 108,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.657,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 3.765,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 95,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.734,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 110,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.39,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 95,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 3.766,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 95,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.859,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 110,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 5.484,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 95,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 6.187,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 8.422,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 108,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 11.906,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.484,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 90,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.968,
+      "invalid": 2,
+      "noops": 1,
+      "figure_calls": 105,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.641,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 90,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.625,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.0,
+      "invalid": 2,
+      "noops": 1,
+      "figure_calls": 104,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.703,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.547,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.937,
+      "invalid": 2,
+      "noops": 1,
+      "figure_calls": 104,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.735,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 89,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.422,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 92,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.625,
+      "invalid": 2,
+      "noops": 1,
+      "figure_calls": 107,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.547,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 92,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.468,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 92,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.656,
+      "invalid": 2,
+      "noops": 1,
+      "figure_calls": 107,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.593,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 92,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.703,
+      "invalid": 0,
+      "noops": 1,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.032,
+      "invalid": 2,
+      "noops": 1,
+      "figure_calls": 109,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.812,
+      "invalid": 2,
+      "noops": 0,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.36,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 79,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.25,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.297,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 71,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.61,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 78,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.297,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.328,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 70,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.531,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 78,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.578,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.282,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 70,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.375,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 79,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.344,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.313,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 71,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.516,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 79,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.5,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.296,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 71,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.016,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 75,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 3.297,
+      "invalid": 2,
+      "noops": 2,
+      "figure_calls": 90,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.937,
+      "invalid": 3,
+      "noops": 2,
+      "figure_calls": 67,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.969,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 82,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.75,
+      "invalid": 1,
+      "noops": 1,
+      "figure_calls": 97,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.484,
+      "invalid": 3,
+      "noops": 1,
+      "figure_calls": 74,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 0.969,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 75,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.969,
+      "invalid": 1,
+      "noops": 1,
+      "figure_calls": 90,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.672,
+      "invalid": 3,
+      "noops": 1,
+      "figure_calls": 67,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.032,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 77,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.781,
+      "invalid": 1,
+      "noops": 1,
+      "figure_calls": 92,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.547,
+      "invalid": 3,
+      "noops": 1,
+      "figure_calls": 69,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.125,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 83,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.765,
+      "invalid": 1,
+      "noops": 1,
+      "figure_calls": 98,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.5,
+      "invalid": 3,
+      "noops": 1,
+      "figure_calls": 75,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.078,
+      "invalid": 0,
+      "noops": 3,
+      "figure_calls": 83,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.688,
+      "invalid": 1,
+      "noops": 1,
+      "figure_calls": 98,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.547,
+      "invalid": 3,
+      "noops": 1,
+      "figure_calls": 75,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.02,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 1.297,
+      "invalid": 0,
+      "noops": 2,
+      "figure_calls": 77,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.1,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.234,
+      "invalid": 1,
+      "noops": 1,
+      "figure_calls": 92,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.5,
+        "seed": 42,
+        "custom_code": ""
+      },
+      "seconds": 2.047,
+      "invalid": 3,
+      "noops": 1,
+      "figure_calls": 69,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.219,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.25,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.234,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.328,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.235,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.234,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.187,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.234,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.281,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.25,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.343,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "stable",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.297,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.187,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.328,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.234,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.234,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.203,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.25,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.297,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.235,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.25,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.172,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.344,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "decaying-bridge",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.328,
+      "invalid": 0,
+      "noops": 0,
+      "figure_calls": 102,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.297,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.25,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 97,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.219,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.359,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 97,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.312,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 93,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.312,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 97,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.234,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 95,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.359,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 98,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.265,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 96,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.266,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 97,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 0,
+        "custom_code": ""
+      },
+      "seconds": 0.391,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 94,
+      "unavailable": []
+    },
+    {
+      "spec": {
+        "dataset": "three_communities",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "centralization",
+          "density",
+          "bridge_trend",
+          "churn"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "seconds": 0.5,
+      "invalid": 1,
+      "noops": 0,
+      "figure_calls": 97,
+      "unavailable": []
+    }
+  ],
+  "failures": [],
+  "checks": 142651,
+  "completed": 270,
+  "total": 270,
+  "seconds": 617.734
+}

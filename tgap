@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+TGAP_SOURCE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+if command -v python3 >/dev/null 2>&1; then
+    exec python3 "$TGAP_SOURCE_DIR/bootstrap.py" "$@"
+fi
+printf '%s\n' 'Install Python 3.10 or later, then run ./tgap install again.'
+printf '%s\n' 'Ubuntu/Debian: sudo apt install python3 python3-venv'
+printf '%s\n' 'macOS with Homebrew: brew install python@3.11'
+exit 1

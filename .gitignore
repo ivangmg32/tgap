@@ -225,3 +225,10 @@ realdata/data/
 
 # Editor settings are personal, not project configuration
 .vscode/
+
+# Workbench development/runtime state is never published
+workbench/config.json
+workbench/users.txt
+workbench/data/
+workbench/verification/
+workbench/.venv/

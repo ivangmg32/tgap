@@ -1,0 +1,318 @@
+{
+  "schema_version": 1,
+  "figures": [
+    {
+      "id": "fig0_tgap_architecture",
+      "title": "How TGAP works",
+      "description": "Follow the original graph through concept changes, predictions and explanations.",
+      "scope": "Architecture illustration, not an experimental finding.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig0_tgap_architecture.png",
+      "sha256": "f52a03a36a708774c289fe100b5ad084db5dbcb4830fed78de8650fc59e122db",
+      "metadata": {}
+    },
+    {
+      "id": "fig10_publication_boxplot",
+      "title": "Response distributions by model",
+      "description": "Boxes summarize the recorded spread of compatible concept responses.",
+      "scope": "Compare within a single model panel; Centralization and Bridge Trend are excluded.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig10_publication_boxplot.png",
+      "sha256": "f76dd0e0b1df35db2a41ed67a552ec561b777a0f42dee99d4b7a15707d577a03",
+      "metadata": {
+        "candidate": "boxplot",
+        "comparability_scope": "within one model panel only; no box spans two models",
+        "cross_concept_numerical_comparison_allowed": false,
+        "delta_semantics": {
+          "Bridge Width": "relative delta",
+          "Churn": "relative delta",
+          "Density": "relative delta"
+        },
+        "excluded_concepts": [
+          "Centralization",
+          "Bridge Trend"
+        ],
+        "figure": "fig10_publication_boxplot",
+        "formats": [
+          "png",
+          "pdf"
+        ],
+        "generation_function": "realdata.make_publication.figure10PublicationBoxplot",
+        "included_concepts": [
+          "Bridge Width",
+          "Density",
+          "Churn"
+        ],
+        "source_csv": [
+          "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
+          "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+        ],
+        "status": "per-model distributions, valid rows only"
+      }
+    },
+    {
+      "id": "fig11_local_bar",
+      "title": "One local element explanation",
+      "description": "Bars show how one prediction changed when particular elements were removed.",
+      "scope": "A local element-occlusion explanation, not a ranking of TGAP concepts.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig11_local_bar.png",
+      "sha256": "ec71e4fc57e8e2620cad03c6b72fecd9239513d11b84f1d3a8b2bb7268789e1e",
+      "metadata": {
+        "candidate": "local",
+        "comparability_scope": "elements within this single explanation; not a concept ranking",
+        "cross_concept_numerical_comparison_allowed": false,
+        "delta_semantics": {},
+        "excluded_concepts": [],
+        "figure": "fig11_local_bar",
+        "formats": [
+          "png",
+          "pdf"
+        ],
+        "generation_function": "realdata.make_publication.figure11LocalBar",
+        "included_concepts": [],
+        "selection_rule": "top 18 by |impact|, ties broken by endpoint id; complete attribution retained in the source CSV",
+        "source_csv": [
+          "output\\publication\\attribution\\edge_attribution_trend.csv"
+        ],
+        "status": "ONE local explanation; local ordering only",
+        "x_variable": "impact (edge occlusion)",
+        "y_variable": "edge (u, v)"
+      }
+    },
+    {
+      "id": "fig12_temporal_edge_time",
+      "title": "Connections and time",
+      "description": "Cells show the measured response to removing one connection at one time step.",
+      "scope": "TGAP edge-time occlusion, not TSHAP. Values are not summed across time.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig12_temporal_edge_time.png",
+      "sha256": "68e4aa5c62498c1806b244d863537db18c93975f1034d6defa1f51738f0fa362",
+      "metadata": {
+        "additivity_claimed": false,
+        "candidate": "edge_time",
+        "colour_variable": "impact, diverging around zero",
+        "comparability_scope": "one measured prediction difference per (edge, snapshot); nothing is summed over time",
+        "cross_concept_numerical_comparison_allowed": false,
+        "delta_semantics": {},
+        "excluded_concepts": [],
+        "figure": "fig12_temporal_edge_time",
+        "formats": [
+          "png",
+          "pdf"
+        ],
+        "generation_function": "realdata.make_publication.figure12TemporalEdgeTime",
+        "included_concepts": [],
+        "selection_rule": "display-only top 22 edges by largest |impact| at any snapshot, then snapshots present, then edge id; deterministic, never sampled. The persisted CSV holds every (edge, snapshot).",
+        "source_csv": [
+          "output\\publication\\attribution\\edge_time_attribution.csv"
+        ],
+        "status": "TGAP edge-time attribution; NOT a TSHAP implementation",
+        "x_variable": "snapshot_index",
+        "y_variable": "edge (u, v)"
+      }
+    },
+    {
+      "id": "fig1_final_model_separated_impacts",
+      "title": "Concept impacts, separated by model",
+      "description": "Each dot is a valid recorded test. Models and concept-unit groups keep their own panels.",
+      "scope": "Compare only within the permitted semantic group in one dataset/model panel; no global ranking.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig1_final_model_separated_impacts.png",
+      "sha256": "c98572aaec1450a5340625c80c501de169d86a9f797faab42f8bd4c097cb14a2",
+      "metadata": {
+        "axis_policy": "one independent linear x-axis per (dataset, model, semantic group) panel",
+        "candidate": "final",
+        "comparability_scope": "within row 1 of a single panel only, where the model and dataset are fixed and the three concepts share relative-delta semantics; nowhere else",
+        "cross_concept_numerical_comparison_allowed": false,
+        "cross_model_aggregation": "none - every point is one valid CSV row; nothing is averaged, normalised or ranked",
+        "delta_semantics": {
+          "Bridge Trend": "mechanism / absolute delta",
+          "Bridge Width": "relative delta",
+          "Centralization": "mechanism / absolute delta",
+          "Churn": "relative delta",
+          "Density": "relative delta"
+        },
+        "excluded_concepts": [],
+        "figure": "fig1_final_model_separated_impacts",
+        "formats": [
+          "png",
+          "pdf"
+        ],
+        "generation_function": "realdata.make_publication.figure1FinalModelSeparated",
+        "included_concepts": [
+          "Bridge Width",
+          "Density",
+          "Churn",
+          "Centralization",
+          "Bridge Trend"
+        ],
+        "source_csv": [
+          "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
+          "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+        ],
+        "status": "MAIN publication global-impact figure"
+      }
+    },
+    {
+      "id": "fig3_bridge_matrix",
+      "title": "Connections between communities",
+      "description": "A matrix counts cross-community connections; lines show their changes through time.",
+      "scope": "Controlled four-community synthetic demonstration; not a real-data finding.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig3_bridge_matrix.png",
+      "sha256": "31704f4b940660390f4bb5bac39dcef1707b662dea666f63580d9b1f10982611",
+      "metadata": {}
+    },
+    {
+      "id": "fig4_local_graph",
+      "title": "One graph explanation",
+      "description": "Compare the original graph, its changed version, and the edited connections.",
+      "scope": "One controlled synthetic local explanation; edge edits are not individual attribution scores.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig4_local_graph.png",
+      "sha256": "787af90ea8531e4f9c00516d2fc565e392dcbcdf0e78fa9fcfcb35e5822b4ff7",
+      "metadata": {}
+    },
+    {
+      "id": "fig5_temporal_local",
+      "title": "When a concept matters",
+      "description": "Colors show the response to changing one time step at a time.",
+      "scope": "Synthetic demonstration. Present-only and trajectory models have distinct response patterns.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig5_temporal_local.png",
+      "sha256": "98a821773159b2c82132e0aaa8e7f104fb53cc5dd7e2ea94e188a97045cdb097",
+      "metadata": {}
+    },
+    {
+      "id": "fig6_impact_distribution",
+      "title": "Exploratory spread of recorded impacts",
+      "description": "Dots show the spread of recorded valid impacts across datasets.",
+      "scope": "Exploratory mixed-model plot with a signed-log axis. Model scales and concept units differ: do not use it for cross-model or cross-concept numerical ranking.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig6_impact_distribution.png",
+      "sha256": "946b81b9d00bf7f3709382cb528a75ce62929d79eeeafef793c64d9d2db87405",
+      "metadata": {}
+    },
+    {
+      "id": "fig7_tgn_seed_stability",
+      "title": "Learned-model seed stability",
+      "description": "Compare recorded learned-model results across training seeds.",
+      "scope": "Recorded TGN evaluation, not a learned model fitted by the web workbench.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig7_tgn_seed_stability.png",
+      "sha256": "bd9fefa924fb4238eedcaf8dcf1f814bac4dc45ccd2c263146d9afbead9870c8",
+      "metadata": {}
+    },
+    {
+      "id": "fig8_dependence",
+      "title": "Structure and measured response",
+      "description": "Compare node degree or edge persistence with the measured response to removal.",
+      "scope": "Node and edge occlusions are separate quantities. Association does not establish causation.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig8_dependence.png",
+      "sha256": "e556e2da36ff8c3d892c27d03a6daad0fcd48aac390582d2fb3a013baacf1160",
+      "metadata": {
+        "candidate": "dependence",
+        "comparability_scope": "within one panel only; node and edge occlusions are different quantities and are never pooled",
+        "cross_concept_numerical_comparison_allowed": false,
+        "delta_semantics": {},
+        "excluded_concepts": [],
+        "figure": "fig8_dependence",
+        "formats": [
+          "png",
+          "pdf"
+        ],
+        "generation_function": "realdata.make_publication.figure8Dependence",
+        "included_concepts": [],
+        "source_csv": [
+          "output\\publication\\attribution\\node_attribution.csv",
+          "output\\publication\\attribution\\edge_attribution.csv"
+        ],
+        "status": "element-level dependence",
+        "x_variable": [
+          "total_degree (node)",
+          "snapshots_present (edge)"
+        ],
+        "y_variable": "impact (measured occlusion prediction difference)"
+      }
+    },
+    {
+      "id": "fig9_true_beeswarm",
+      "title": "Individual concept responses",
+      "description": "Each dot is a recorded response; dots spread vertically to remain visible.",
+      "scope": "Read within one semantic row; model outputs and incompatible concepts are not pooled into a ranking.",
+      "formats": [
+        "png",
+        "pdf"
+      ],
+      "source": "output/publication/fig9_true_beeswarm.png",
+      "sha256": "24a532834eb5f131b2e13833649f58781a0c7309f1240029899ea4fb9723c7a9",
+      "metadata": {
+        "candidate": "beeswarm",
+        "comparability_scope": "within a semantic row only",
+        "cross_concept_numerical_comparison_allowed": false,
+        "delta_semantics": {
+          "Bridge Trend": "mechanism / absolute delta",
+          "Bridge Width": "relative delta",
+          "Centralization": "mechanism / absolute delta",
+          "Churn": "relative delta",
+          "Density": "relative delta"
+        },
+        "excluded_concepts": [],
+        "figure": "fig9_true_beeswarm",
+        "formats": [
+          "png",
+          "pdf"
+        ],
+        "generation_function": "realdata.make_publication.figure9TrueBeeswarm",
+        "included_concepts": [
+          "Bridge Width",
+          "Density",
+          "Churn",
+          "Centralization",
+          "Bridge Trend"
+        ],
+        "layout_algorithm": "realdata.make_publication._beeswarmOffsets - ascending value order, first non-colliding offset; deterministic and seedless",
+        "source_csv": [
+          "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
+          "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+        ],
+        "status": "deterministic non-overlapping packing, no jitter"
+      }
+    }
+  ]
+}
