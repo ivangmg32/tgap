@@ -79,7 +79,7 @@ Protected backup: sibling `data/backups/before-self-service-auth-2026-10-08.sqli
 and previous portable app ZIP. The self-host bundle is refreshed for the same
 new features. Read the audit and sibling README before further security changes.
 
-## Previous conversation handoff — 2026-10-07
+## Previous conversation handoff â€” 2026-10-07
 
 The user plans to continue later. Read this file and `CODEBASE_MEMORY.md`
 before future changes. Research checkout: `C:\catalyst\tgap`; independent
@@ -122,10 +122,10 @@ Accepted user requirements and completed follow-up changes:
 
 ### How the user views their own publication-style charts
 
-Sign in → Laboratory → select Ecosystem (dataset), Prediction model and
-Transformations → Run experiment → wait for completion → click Open my
-paper-style figures or the Paper-style figures result tab → expand the
-sections → download SVG/PNG as desired. Rerun older saved experiments to
+Sign in â†’ Laboratory â†’ select Ecosystem (dataset), Prediction model and
+Transformations â†’ Run experiment â†’ wait for completion â†’ click Open my
+paper-style figures or the Paper-style figures result tab â†’ expand the
+sections â†’ download SVG/PNG as desired. Rerun older saved experiments to
 obtain new measurements. Full JSON includes the measured rows and coverage.
 The separate Paper figures menu displays reference charts from the paper.
 
@@ -309,8 +309,8 @@ prediction change and +8/-8 impact refer specifically to the seed-42 initial
 stable bridge model, not arbitrary settings. Desktop and mobile screenshots
 are recorded by the browser smoke check.
 
-Readability update: base text is 18px, typical controls/navigation 16–18px,
-help and captions 14–16px, and figure SVG labels are four units larger.
+Readability update: base text is 18px, typical controls/navigation 16â€“18px,
+help and captions 14â€“16px, and figure SVG labels are four units larger.
 Muted instructional text uses darker contrast. Results use a single-column
 figure gallery; the laboratory stacks controls above results below 1150px.
 Mobile uses two-column summary statistics, stacked direction cards, and
@@ -384,29 +384,39 @@ reachability also depends on the VPS provider's firewall.
 
 ## Self-host commands
 
-The bootstrap requires Python 3.10+; Windows offers a signed Python installer
-when no Python is present. The install command is `tgap install`; during first
-setup, run the checkout launcher (`.\tgap.cmd install` on Windows or
-`sh ./tgap install` on Unix). It prompts for optional Torch/PyG and finance
-libraries, creates an isolated environment under `~/.tgap`, installs the
-research checkout and bundled web source, and prints a fresh account. Open a
-new terminal after PATH registration.
+Install TGAP once from a source checkout. The launcher creates the managed
+Python environment and installs the local workbench.
 
-Use `tgap start` to launch the workbench locally on loopback and open the
-browser, `tgap stop` to stop it while keeping data and packages, and
-`tgap status` to check health.
-`tgap run` exposes research workflows including examples, evaluation,
-real-data, learned-model experiments, publication, tests and finance.
-`TGAP_HOME` or global `--home` selects a separate installation. `start --port`
-chooses the port, `--no-browser` suppresses browser launch, and `--host`
-allows an intentional remote binding. Personal installs do not register a
-boot service. See `docs/12-installation-and-self-hosting.md` for details.
+- Windows, in PowerShell: `.\tgap.cmd install`
+- Linux/macOS: `sh ./tgap install` (Python 3.10+ and venv support required)
+
+After installation, open a new terminal and use the same commands on every
+platform:
+
+```text
+tgap start
+tgap status
+tgap stop
+```
+
+`tgap start` opens the local workbench in a browser. The default address is
+`http://127.0.0.1:8080`. `tgap stop` keeps accounts, experiments, and installed
+packages. Run `tgap --help` for the full command list. Research workflows use
+`tgap run`, for example `tgap run examples` or `tgap run real-data
+email_eu_core`.
+
+The bootstrap requires Python 3.10 or newer. Windows offers a signed Python
+installer when Python is missing. Linux/macOS may need `~/.local/bin` on PATH.
+The default installation folder is `~/.tgap`; set `TGAP_HOME` or pass global
+`--home` before a command to choose another folder. `tgap start --port 8090`
+uses another port, and `tgap start --no-browser` suppresses browser launch.
+Personal installs do not register a boot service. See
+`docs/12-installation-and-self-hosting.md` for setup and troubleshooting.
 
 Implementation: `bootstrap.py`, root launchers, `tgap_cli/cli.py`,
-`pyproject.toml`, `scripts/bootstrap-python.ps1`. The CLI imports only the
-standard library before installation. Reinstall preserves optional package
-flags, account files and results.
-
+`pyproject.toml`, and `scripts/bootstrap-python.ps1`. The CLI uses only the
+standard library before installation. Reinstalling preserves optional package
+flags, account files, and results.
 ## Website structure and experiment flow
 
 The sibling uses FastAPI with local HTML/CSS/JavaScript assets, without CDN
@@ -467,7 +477,7 @@ in the research checkout stay editable in personal installations.
 
 ## Guided user study
 
-This is a 10–15 minute single-condition pilot, distinct from the original
+This is a 10â€“15 minute single-condition pilot, distinct from the original
 longer research protocol. `C:\catalyst\tgap-sandbox\STUDY_PROTOCOL.md`
 specifies consent, timing, task instructions, scoring and analysis limits.
 Participants complete bridge, temporal-history and validity tasks, then

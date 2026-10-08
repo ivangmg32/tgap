@@ -1,141 +1,201 @@
-# Easy installation and self-hosting
+# Install and run TGAP
 
-TGAP provides a standard-library bootstrap that creates an isolated Python
-environment, installs core/web dependencies, and asks separately about optional
-TGN and finance libraries. No manual virtual-environment activation is needed.
+This guide takes you from a fresh checkout to a running local workbench. TGAP
+installs into its own Python environment, so you do not need to create or
+activate a virtual environment yourself.
 
-## Windows
+## Before you begin
 
-Open PowerShell in the TGAP checkout for the first install. The checkout
-launcher bootstraps Python and installs the `tgap` command:
+- A TGAP source checkout.
+- Windows: no Python setup is needed; the installer can offer the official
+  Python installer if it cannot find Python.
+- Linux or macOS: Python 3.10 or newer, with `venv` support. Some Linux
+  distributions provide `venv` in a separate package.
+- Internet access during installation to download Python packages.
+
+## 1. Install TGAP
+
+Run the checkout launcher once. It creates the managed environment, installs
+the local workbench, asks whether to add optional research packages, and creates
+a first account.
+
+**Windows — PowerShell, from the TGAP checkout:**
 
 ```powershell
 .\tgap.cmd install
 ```
 
-Answer the two optional-library questions. The launcher offers the official
-signed Python installer when Python is missing. Existing Python must be 3.10
-or newer. After installation **open a new terminal** so the updated user PATH
-is loaded:
+**Linux or macOS — from the TGAP checkout:**
 
-```powershell
+```sh
+sh ./tgap install
+```
+
+The first account is named `researcher`. The installer prints its generated
+password once. Save it securely. The account file is stored in your TGAP home
+folder; do not commit or share it.
+
+The installer adds the `tgap` command to your user PATH. Open a new terminal
+after installation. On Linux/macOS, if the command is still unavailable, add
+`~/.local/bin` to PATH in the current terminal and retry:
+
+```sh
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+## 2. Start the workbench
+
+In the new terminal, run:
+
+```text
 tgap start
+```
+
+TGAP starts the local service and opens the browser. Visit
+`http://127.0.0.1:8080` if the browser does not open, then sign in with the
+account printed by the installer.
+
+The service listens on your own computer only by default. Your experiments and
+account stay in your TGAP home folder. To check service state or stop it:
+
+```text
 tgap status
 tgap stop
 ```
 
-The first installation prints your generated `researcher` password. Accounts
-are in `%USERPROFILE%\.tgap\workbench\users.txt`. Never commit that file.
+Stopping the service keeps your account, experiments, and installed packages.
+Start it again any time with `tgap start`.
 
-## Linux / macOS
+## 3. Try a research example
 
-Install Python 3.10+ first, including venv support on distributions that split
-it into a separate package. From the checkout, run the bootstrap launcher once;
-after that, use the installed `tgap` command:
-
-```sh
-sh ./tgap install
-# If ~/.local/bin is not already on PATH:
-export PATH="$HOME/.local/bin:$PATH"
-tgap start
-tgap stop
-```
-
-The portable code supports these platforms, but this delivery was executed
-and browser-tested on Windows Server. macOS/Linux runtime verification remains
-to be performed on those operating systems.
-
-## What start and stop mean
-
-`start` runs the same local web workbench, opens the browser, and supervises
-its Python server. It does not launch every expensive research evaluation.
-The default is loopback-only `http://127.0.0.1:8080`, protected by the local
-account file. Use `tgap start --port 8090` if 8080 is occupied; use
-`--no-browser` for terminal-only startup. Intentional remote binding is
-available through `--host 0.0.0.0`.
-
-`stop` closes the supervised server and leaves the environment, users and
-results intact. PID checks avoid terminating unrelated processes. Automatic
-machine-boot startup is configured separately for the VPS deployment, not
-silently installed on a participant's own computer.
-
-## Optional dependencies and unattended install
-
-```powershell
-tgap install --yes                  # core/web only; no optional prompts
-tgap install --yes --tgn            # add CPU Torch and torch_geometric
-tgap install --yes --finance        # add yfinance and statsmodels
-```
-
-Interactive installation asks about both groups. Previously installed groups
-remain recorded on a later install. Torch can require the Microsoft VC++
-runtime on Windows. Package downloads require internet; bundled synthetic and
-processed real-data examples then run without external dataset requests.
-
-Custom installation directory:
-
-```powershell
-.\tgap.cmd --home D:\TGAP install
-D:\TGAP\bin\tgap.cmd start
-D:\TGAP\bin\tgap.cmd stop
-```
-
-`TGAP_HOME` also selects the installation directory. `--no-path` skips PATH
-changes for a temporary installation. `--sandbox-source` is an operator/developer
-override; regular users consume the bundled workbench automatically.
-
-## Research workflows
-
-```powershell
+```text
 tgap run examples
+```
+
+This runs the included examples in the managed Python environment. Other
+available workflows include:
+
+```text
 tgap run evaluation
 tgap run paper
 tgap run download
 tgap run real-data email_eu_core
 tgap run compare
 tgap run ncommunity email_eu_core
-tgap run tgn email_eu_core
-tgap run tgn-stability email_eu_core
 tgap run publication
 tgap run tests
+```
+
+Some workflows download data or write generated results into the checkout.
+Check the workflow documentation before starting a large run.
+
+## Optional research packages
+
+During installation, TGAP asks whether you want the optional TGN and finance
+packages. You can install either group later:
+
+```text
+tgap install --tgn --yes
+tgap install --finance --yes
+```
+
+Or install only the base workbench without prompts:
+
+```text
+tgap install --yes
+```
+
+TGN workflows need the TGN group:
+
+```text
+tgap run tgn email_eu_core
+tgap run tgn-stability email_eu_core
+```
+
+The finance workflow needs the finance group:
+
+```text
 tgap run finance --graphs 20
 ```
 
-These run inside the managed environment with the checkout as working directory.
-They can overwrite generated research outputs. Raw data is fetched on demand
-by download/real-data runners. TGN and finance commands check their installation
-flags and explain how to add the optional libraries.
+The TGN group installs CPU PyTorch and PyTorch Geometric. On some Windows
+systems, PyTorch also needs the Microsoft VC++ runtime. Finance workflows use
+yfinance and statsmodels.
 
-## Deployment and source separation
+## Common commands
 
-The VPS website source, accounts and study data are at
-`C:\catalyst\tgap-sandbox`, outside this Git repository. The current online
-service binds port 8080 and is controlled by that directory's `service.ps1`.
-The self-host launcher lives in this repository. Its distribution includes a
-deterministic `tgap_cli/data/sandbox.zip` snapshot of the sibling web project.
-This makes a TGAP checkout self-contained without requiring the sibling folder
-on users' devices. Credentials/config/live data are excluded from the bundle.
+| Command | What it does |
+| --- | --- |
+| `tgap install` | Create or update the managed environment |
+| `tgap start` | Start the workbench and open the browser |
+| `tgap start --port 8090` | Start on another port |
+| `tgap start --no-browser` | Start without opening a browser |
+| `tgap status` | Show whether the workbench is running |
+| `tgap stop` | Stop the service and keep local data |
+| `tgap run examples` | Run the introductory examples |
+| `tgap --help` | Show command help |
 
-After editing the sibling website, refresh its portable snapshot:
+For the first install, use the checkout launcher: `.\tgap.cmd install` in
+PowerShell or `sh ./tgap install` on Linux/macOS. After that, run commands
+using `tgap` from a new terminal.
+
+## Choose a different installation folder
+
+By default, TGAP stores its environment and workbench data in `~/.tgap` (on
+Windows, under your user profile). Choose a custom home during the first
+installation by putting `--home` before `install`:
 
 ```powershell
-python scripts/bundle-sandbox.py --source C:/catalyst/tgap-sandbox
+.\tgap.cmd --home D:\TGAP install
 ```
 
-The archive includes web source, assets, requirements and processed fixtures.
-Core TGAP mathematics remains in `core/`; the website imports it through the
-configured source path. The wheel exposes the `tgap` entry point, but this
-first release's research workflow commands are documented for a source checkout,
-which retains finance scripts, tests, and full research documentation.
+Then use the launcher created in that folder:
+
+```powershell
+D:\TGAP\bin\tgap.cmd start
+D:\TGAP\bin\tgap.cmd status
+D:\TGAP\bin\tgap.cmd stop
+```
+
+You can also set `TGAP_HOME`. `--no-path` skips PATH registration. `--host` can
+change the address that the service listens on; keep the default loopback
+address unless you intend to make the service reachable from other computers
+and have configured appropriate network security.
 
 ## Troubleshooting
 
-- **Command not found:** open a new terminal, or use the checkout launcher.
-- **Port busy:** choose another port; TGAP never takes over another application.
-- **Startup failed:** inspect `.tgap/workbench/data/launcher.log` and `server.log`.
-- **Wrong password:** edit your installation's `users.txt`, not repository files.
-- **Missing optional group:** rerun installation with its explicit flag.
-- **Custom code rejected:** use the documented graph-only Python subset online;
-  run complex transformers locally against the full TGAP contract.
-- **Reproducibility:** retain seed, dataset cohort metadata, achieved deltas,
-  validity flags, and the complete downloaded JSON.
+**`tgap` is not recognized or not found**
+
+Open a new terminal after installation. If it is still unavailable, run the
+checkout launcher to install again, or add `~/.local/bin` to PATH on
+Linux/macOS.
+
+**Port 8080 is already in use**
+
+Choose another port:
+
+```text
+tgap start --port 8090
+```
+
+**The service did not start**
+
+Check `launcher.log` and `server.log` in the workbench data folder under your
+TGAP home directory.
+
+**I lost the generated password**
+
+The account file is `users.txt` under the workbench folder in your TGAP home.
+It contains account credentials; keep it private.
+
+**An optional workflow says its packages are missing**
+
+Install the needed group with `tgap install --tgn --yes` or
+`tgap install --finance --yes`, then run the workflow again.
+
+## More help
+
+- [TGAP overview and examples](../README.md)
+- [Research dashboard guide](15-research-dashboard.md)
+- [Real data workflows](../realdata/README.md)
+- [Self-hosting and deployment notes](13-sandbox-and-self-hosting-knowledge.md)
