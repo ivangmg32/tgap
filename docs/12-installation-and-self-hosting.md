@@ -1,5 +1,7 @@
 # Install and run TGAP
 
+[Documentation index](README.md) · [Project overview](../README.md)
+
 This guide takes you from a fresh checkout to a running local workbench. TGAP
 installs into its own Python environment, so you do not need to create or
 activate a virtual environment yourself.
@@ -37,7 +39,7 @@ folder; do not commit or share it.
 
 The installer adds the `tgap` command to your user PATH. Open a new terminal
 after installation. On Linux/macOS, if the command is still unavailable, add
-`~/.local/bin` to PATH in the current terminal and retry:
+`~/.local/bin` to PATH in the current terminal and continue there:
 
 ```sh
 export PATH="$HOME/.local/bin:$PATH"
@@ -45,7 +47,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 ## 2. Start the workbench
 
-In the new terminal, run:
+In a terminal where the updated PATH is available, run:
 
 ```text
 tgap start
@@ -196,6 +198,6 @@ Install the needed group with `tgap install --tgn --yes` or
 ## More help
 
 - [TGAP overview and examples](../README.md)
-- [Research dashboard guide](15-research-dashboard.md)
+- [Study dashboard and exports](15-research-dashboard.md) (researcher role)
 - [Real data workflows](../realdata/README.md)
 - [Self-hosting and deployment notes](13-sandbox-and-self-hosting-knowledge.md)
