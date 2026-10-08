@@ -27,11 +27,12 @@ model interface, and **pluggable transformations**.
 
 ## Install and run
 
-For a managed Python environment and the private browser workbench, run
-`.\tgap.cmd install` on Windows, or `sh ./tgap install` on Linux/macOS.
-The installer asks about optional TGN and finance libraries and creates your
-first account. Open a new terminal, then use `tgap start`, `tgap status`, and
-`tgap stop`. Use `tgap run examples` for the research demos.
+For a managed Python environment and the private browser workbench, install
+from the checkout with `tgap install` (Windows: `.\tgap.cmd install`;
+Linux/macOS: `sh ./tgap install`). The installer asks about optional TGN and
+finance libraries and creates your first account. Open a new terminal, then
+use `tgap start`, `tgap status`, and `tgap stop`. Use `tgap run examples` for
+the research demos.
 
 See [installation and self-hosting](docs/12-installation-and-self-hosting.md)
 and [deployment knowledge](docs/13-sandbox-and-self-hosting-knowledge.md).

@@ -6,7 +6,8 @@ TGN and finance libraries. No manual virtual-environment activation is needed.
 
 ## Windows
 
-Open PowerShell in the TGAP checkout:
+Open PowerShell in the TGAP checkout for the first install. The checkout
+launcher bootstraps Python and installs the `tgap` command:
 
 ```powershell
 .\tgap.cmd install
@@ -23,14 +24,14 @@ tgap status
 tgap stop
 ```
 
-You can also use `.\tgap.cmd start` immediately from the checkout. The first
-installation prints your generated `researcher` password. Accounts are in
-`%USERPROFILE%\.tgap\workbench\users.txt`. Never commit that file.
+The first installation prints your generated `researcher` password. Accounts
+are in `%USERPROFILE%\.tgap\workbench\users.txt`. Never commit that file.
 
 ## Linux / macOS
 
 Install Python 3.10+ first, including venv support on distributions that split
-it into a separate package. From the checkout:
+it into a separate package. From the checkout, run the bootstrap launcher once;
+after that, use the installed `tgap` command:
 
 ```sh
 sh ./tgap install
@@ -75,8 +76,8 @@ Custom installation directory:
 
 ```powershell
 .\tgap.cmd --home D:\TGAP install
-# The created D:\TGAP\bin\tgap.cmd remembers that home directory.
-.\tgap.cmd --home D:\TGAP start
+D:\TGAP\bin\tgap.cmd start
+D:\TGAP\bin\tgap.cmd stop
 ```
 
 `TGAP_HOME` also selects the installation directory. `--no-path` skips PATH
