@@ -385,14 +385,16 @@ reachability also depends on the VPS provider's firewall.
 ## Self-host commands
 
 The bootstrap requires Python 3.10+; Windows offers a signed Python installer
-when no Python is present. First run `.\tgap.cmd install` on Windows or
-`sh ./tgap install` on Unix. It prompts for optional Torch/PyG and finance
+when no Python is present. The install command is `tgap install`; during first
+setup, run the checkout launcher (`.\tgap.cmd install` on Windows or
+`sh ./tgap install` on Unix). It prompts for optional Torch/PyG and finance
 libraries, creates an isolated environment under `~/.tgap`, installs the
-research checkout and bundled web source, and prints a fresh account.
-Open a new terminal after PATH registration.
+research checkout and bundled web source, and prints a fresh account. Open a
+new terminal after PATH registration.
 
-`tgap start` launches the same workbench locally on loopback and opens the
-browser; `tgap stop` keeps data and packages; `tgap status` reports health.
+Use `tgap start` to launch the workbench locally on loopback and open the
+browser, `tgap stop` to stop it while keeping data and packages, and
+`tgap status` to check health.
 `tgap run` exposes research workflows including examples, evaluation,
 real-data, learned-model experiments, publication, tests and finance.
 `TGAP_HOME` or global `--home` selects a separate installation. `start --port`
