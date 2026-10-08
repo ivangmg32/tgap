@@ -11,52 +11,87 @@ moves.
 > describes model behavior; it does not establish that changing the real world
 > would cause the same outcome.
 
+**Quick links:** [Start here](#get-started) · [Commands](#everyday-commands) ·
+[Python API](#use-tgap-from-python) · [Documentation index](docs/README.md)
+
 ## Get started
 
-TGAP includes a local browser workbench and a command line for research. The
-first install starts from a TGAP checkout. It creates an isolated Python
-environment, installs the workbench, and creates your first account.
+TGAP includes a local browser workbench and a command line for research. Follow
+these steps in order. You only need to install once.
 
-### Windows
+### 1. Get the TGAP checkout
 
-Open PowerShell in the checkout and run:
+If you already have this repository on your computer, open a terminal in its
+folder and continue to step 2. Otherwise, clone the `real-data` branch, which
+contains the current launcher and guides:
+
+```sh
+git clone --branch real-data https://github.com/ivangmg32/tgap.git
+cd tgap
+```
+
+### 2. Install TGAP
+
+The first install creates an isolated Python environment, installs the
+workbench, and creates your first account. Windows can offer to install Python
+if it is missing. Linux and macOS need Python 3.10 or newer with `venv` support.
+
+**Windows (PowerShell):**
 
 ```powershell
 .\tgap.cmd install
 ```
 
-### Linux or macOS
-
-Install Python 3.10 or later first. From the checkout, run:
+**Linux or macOS:** Install Python 3.10 or later first, then run from the
+repository folder:
 
 ```sh
 sh ./tgap install
 ```
 
 If the installer says `~/.local/bin` is missing from your PATH, add it to the
-current terminal and retry `tgap start`:
+current terminal before continuing:
 
 ```sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
 The installer asks whether to add optional TGN and finance packages. It prints
-an initial account and password; save the password somewhere private.
-After installation, open a new terminal and use the `tgap` command:
+the initial `researcher` username and a generated password; save the password
+somewhere private.
 
-```sh
+### 3. Start the workbench
+
+After installation, open a new terminal on Windows. On Linux/macOS, continue
+in the current terminal if you added `~/.local/bin` to PATH; otherwise open a
+new terminal. Run:
+
+```text
 tgap start
-tgap status
+```
+
+TGAP opens the workbench in your browser. If it does not, visit
+`http://127.0.0.1:8080` and sign in with the account from step 2. The service
+runs on your own computer by default.
+
+### 4. Run an example and stop
+
+Open another terminal in the repository folder and try:
+
+```text
+tgap run examples
+```
+
+When you are done, stop the local service:
+
+```text
 tgap stop
 ```
 
-`tgap start` starts the workbench and opens it in your browser. The default
-address is `http://127.0.0.1:8080`. Sign in with the account printed during
-installation. `tgap stop` stops the service and keeps your account, experiments,
-and installed environment.
+Stopping TGAP keeps your account, experiments, and installed environment.
 
 See the [installation guide](docs/12-installation-and-self-hosting.md) for
-options, platform notes, and troubleshooting.
+custom setup, more commands, platform notes, and troubleshooting.
 
 ## What you can do
 
@@ -201,7 +236,7 @@ contract, feasibility checks, and limitations.
 
 - [Documentation index](docs/README.md)
 - [Installation and self-hosting](docs/12-installation-and-self-hosting.md)
-- [Research dashboard guide](docs/15-research-dashboard.md)
+- [Study dashboard and exports](docs/15-research-dashboard.md) (researcher role)
 - [Worked example](docs/05-TGAP-worked-example-trace.md)
 - [Real data and preprocessing](realdata/README.md)
 - [Scientific reliability audit](docs/14-scientific-reliability-audit-2026-10-08.md)
