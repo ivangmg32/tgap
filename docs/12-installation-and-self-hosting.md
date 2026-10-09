@@ -39,11 +39,21 @@ folder; do not commit or share it.
 
 The installer adds the `tgap` command to your user PATH. Open a new terminal
 after installation. On Linux/macOS, if the command is still unavailable, add
-`~/.local/bin` to PATH in the current terminal and continue there:
+`~/.local/bin` to PATH in the current shell and continue there:
 
 ```sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
+
+On Windows, `export` is not a PowerShell command. Normally, close and reopen
+PowerShell after installation. To update the current window for the default
+install, run:
+
+```powershell
+$env:Path = "$env:USERPROFILE\.tgap\bin;$env:Path"
+```
+
+For a custom installation folder, use its `bin` directory instead.
 
 ## 2. Start the workbench
 
