@@ -67,6 +67,16 @@ $env:Path = "$env:USERPROFILE\.tgap\bin;$env:Path"
 For a custom install folder, replace `$env:USERPROFILE\.tgap\bin` with that
 folder's `bin` path.
 
+If PowerShell says `tgap` is not recognized while you are in the repository
+folder, run the Windows launcher directly:
+
+```powershell
+.\tgap.cmd start
+```
+
+Use `.\tgap.cmd status` and `.\tgap.cmd stop` the same way. The file named
+`tgap` without `.cmd` is the Linux/macOS launcher.
+
 The installer asks whether to add optional TGN and finance packages. It prints
 the initial `researcher` username and a generated password; save the password
 somewhere private.
