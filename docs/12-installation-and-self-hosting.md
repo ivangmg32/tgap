@@ -178,9 +178,16 @@ and have configured appropriate network security.
 
 **`tgap` is not recognized or not found**
 
-Open a new terminal after installation. If it is still unavailable, run the
-checkout launcher to install again, or add `~/.local/bin` to PATH on
-Linux/macOS.
+Open a new terminal after installation. In PowerShell, if you are in the TGAP
+repository folder, run the Windows checkout launcher directly:
+
+```powershell
+.\tgap.cmd start
+```
+
+Use `.\tgap.cmd status` and `.\tgap.cmd stop` the same way. The file named
+`tgap` without `.cmd` is the Linux/macOS launcher. On Linux/macOS, add
+`~/.local/bin` to PATH if the command is still unavailable.
 
 **The installer says Python 3.10 or later is missing, but it is installed**
 
