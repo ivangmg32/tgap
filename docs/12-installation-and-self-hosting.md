@@ -172,6 +172,22 @@ Open a new terminal after installation. If it is still unavailable, run the
 checkout launcher to install again, or add `~/.local/bin` to PATH on
 Linux/macOS.
 
+**The installer says Python 3.10 or later is missing, but it is installed**
+
+Close and reopen PowerShell so it reloads your PATH. Check which interpreter
+Windows can find:
+
+```powershell
+py -3 --version
+python --version
+python3 --version
+```
+
+At least one command should report Python 3.10 or later. The checkout launcher
+checks each of these commands and uses the first supported version. If none is
+available, add your Python installation to PATH or allow TGAP to install its
+own Python runtime.
+
 **Port 8080 is already in use**
 
 Choose another port:

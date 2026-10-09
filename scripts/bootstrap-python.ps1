@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 $TgapRoot = Split-Path -Parent $PSScriptRoot
-Write-Host 'Python is missing. TGAP needs Python 3.10 or later to create its environment.'
+Write-Host 'No Python 3.10 or later was found on PATH. TGAP needs Python 3.10 or later to create its environment.'
 $TgapAnswer = Read-Host 'Install the official Python 3.11 Windows runtime for your user? [y/N]'
 if ($TgapAnswer -notin @('y', 'Y', 'yes', 'YES')) { exit 1 }
 $TgapInstaller = Join-Path $env:TEMP 'tgap-python-3.11.9.exe'
