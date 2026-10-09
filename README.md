@@ -49,12 +49,23 @@ repository folder:
 sh ./tgap install
 ```
 
-If the installer says `~/.local/bin` is missing from your PATH, add it to the
-current terminal before continuing:
+If the installer says `~/.local/bin` is missing from your PATH, that is the
+Linux/macOS instruction. In that shell, add it to the current terminal:
 
 ```sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
+
+On Windows, do not use `export`. Usually, close and reopen PowerShell after
+installation. To update the current PowerShell window for the default install,
+run:
+
+```powershell
+$env:Path = "$env:USERPROFILE\.tgap\bin;$env:Path"
+```
+
+For a custom install folder, replace `$env:USERPROFILE\.tgap\bin` with that
+folder's `bin` path.
 
 The installer asks whether to add optional TGN and finance packages. It prints
 the initial `researcher` username and a generated password; save the password
