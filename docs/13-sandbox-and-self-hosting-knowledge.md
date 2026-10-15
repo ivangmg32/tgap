@@ -81,7 +81,7 @@ new features. Read the audit and sibling README before further security changes.
 
 ## Previous conversation handoff â€” 2026-10-07
 
-The user plans to continue later. Read this file and `CODEBASE_MEMORY.md`
+The user plans to continue later. Read this file and `archive/CODEBASE_MEMORY.md` (pre-cleanup layout)
 before future changes. Research checkout: `C:\catalyst\tgap`; independent
 live website source: `C:\catalyst\tgap-sandbox`. The service is running at
 `http://144.172.97.105:8080`, with boot startup/recovery through the
@@ -106,7 +106,7 @@ Accepted user requirements and completed follow-up changes:
    cards, figures, networks, histories and relationships, using actual values.
 6. Add existing publication charts: the Paper figures navigation menu is a
    private reference gallery of 12 reviewed PNG/PDF artifacts copied from
-   `output/publication`. Superseded charts are omitted; scope/provenance is
+   `output/publication/figures`. Superseded charts are omitted; scope/provenance is
    preserved. It is not the participant's own output.
 7. Add graph relationships from the actual experiment: community diagrams,
    before/after connection matrices and node-degree comparisons, selectable
@@ -165,7 +165,7 @@ This does not disable SVG/PNG download assertions. The service remains HTTP;
 HTTPS/domain configuration and cross-platform runtime checks are still
 outside the completed verification. Details and operator instructions follow.
 
-Updated 2026-10-07. This document supplements `CODEBASE_MEMORY.md` and records
+Updated 2026-10-07. This document supplements `archive/CODEBASE_MEMORY.md` and records
 the implementation for future questions and changes. The core explanation
 algorithm and original research protocol were preserved.
 
@@ -233,7 +233,7 @@ beeswarm SVG, legacy rerun prompts and mobile layout. The portable bundle
 includes the new measurement and plotting modules.
 
 The Paper figures menu displays 12 existing top-level charts from
-`output/publication`, with original PNG/PDF files, easy descriptions, scope
+`output/publication/figures`, with original PNG/PDF files, easy descriptions, scope
 notes and provenance. `scripts/publish-paper-figures.py` copies reviewed
 artifacts into sibling `publication/` and creates a checksum manifest.
 Superseded figures are deliberately excluded. The exploratory pooled

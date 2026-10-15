@@ -192,7 +192,7 @@ class ExplainerBase:
             for delta in [self.delta, -self.delta]:
                 direction = "Increase" if delta > 0 else "Decrease"
                 label = direction + " " + trans.name + \
-                    " (" + str(100 * abs(delta)) + "%)"
+                    " (" + str(round(100 * abs(delta), 10)) + "%)"
                 xT = self._applyTransformation(x, trans, delta)
                 transformed = self.model.predict(xT)
                 numerator = transformed - baseline

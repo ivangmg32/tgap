@@ -23,7 +23,7 @@ implements the TemporalGraphTransformation contract (see
 core/TemporalGraphTransformation.py) anywhere you like, and pass an instance
 to TgapExplainer. Re-exporting here is a convenience for the transformations
 that ship with TGAP, not a registration requirement. A worked example lives
-in examples/MyCustomTransformation.py.
+in examples/more/MyCustomTransformation.py.
 
 Each one changes a single interpretable structural property by a ratio
 delta, deterministically (seeded), returning a new graph.

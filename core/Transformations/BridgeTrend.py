@@ -130,11 +130,16 @@ class BridgeTrendTransformation(TemporalGraphTransformation):
         # trajectory by a factor of zero" has no meaning - so it is rejected
         # explicitly rather than repaired. This is a guard, NOT a change of
         # semantics: every other delta behaves exactly as before.
-        if delta == -1:
+        # Below -1 the divisor turns NEGATIVE: every target flips sign and is
+        # clamped to the width-1 floor, producing a zig-zag that is not a
+        # trend at all (measured: delta -1.5 gave widths [64, 1, 24, 1, 6]).
+        # So the guard covers the whole invalid range, not just the pole.
+        if delta <= -1:
             raise ValueError(
-                "BridgeTrendTransformation is undefined at delta = -1: the "
-                "backward recursion divides by (1 + delta), which is zero. "
-                "Use a delta strictly greater than -1.")
+                "BridgeTrendTransformation needs delta > -1 (got {0}): the "
+                "backward recursion divides by (1 + delta), which is zero or "
+                "negative there. Use a delta strictly greater than -1."
+                .format(delta))
 
         # 1. Read the current trajectory of the property.
         widths = [len(interCommunityEdges(g, self.communities,

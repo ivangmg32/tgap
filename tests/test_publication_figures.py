@@ -533,13 +533,13 @@ class TestSharedRequirements(PublicationCase):
             self.assertNotIn("fig.savefig(", source, name)
 
     def testPipelineGeneratesAllFive(self):
-        if not os.path.exists(M.OUTPUT):
+        if not os.path.exists(M.FIGURES):
             self.skipTest("publication output not generated")
         for stem in ("fig8_dependence", "fig9_true_beeswarm",
                      "fig10_publication_boxplot", "fig11_local_bar",
                      "fig12_temporal_edge_time"):
             for suffix in ("png", "pdf"):
-                target = os.path.join(M.OUTPUT, f"{stem}.{suffix}")
+                target = os.path.join(M.FIGURES, f"{stem}.{suffix}")
                 self.assertTrue(os.path.exists(target), target)
 
     def testMetadataDocumentsAllFive(self):

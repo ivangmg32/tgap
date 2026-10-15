@@ -8,9 +8,9 @@
 > and what each function inside it does — and explain it to your professor.
 >
 > Sister documents: [01](01-TSAP-explained-simply.md) (the TSAP idea),
-> [03](03-TGAP-technical-audit.md) (design decisions),
+> [03](archive/03-TGAP-technical-audit.md) (design decisions),
 > [05](05-TGAP-worked-example-trace.md) (one tiny example traced).
-> This document replaces [04](04-TGAP-v02-walkthrough.md) as the current
+> This document replaces [04](archive/04-TGAP-v02-walkthrough.md) as the current
 > full reference — the code has grown since then.
 
 ---
@@ -38,9 +38,9 @@
 16. [`__init__.py` — the front door](#16-coreinitpy)
 
 **Part III — The programs you run**
-17. [`examples.py` — the demos](#17-examplespy)
-18. [`evaluation.py` — the quick check](#18-evaluationpy)
-19. [`paper_evaluation.py` — the experiments](#19-paper_evaluationpy)
+17. [`examples/more/synthetic_demos.py` — the demos](#17-examplessynthetic_demospy)
+18. [`evaluation.py` — removed](#18-evaluationpy--removed)
+19. [`experiments/synthetic_evaluation.py` — the experiments](#19-experimentssynthetic_evaluationpy)
 20. [`tests/` — the safety net](#20-tests)
 
 **Part IV — For your presentation**
@@ -211,18 +211,20 @@ tgap/
 │   ├── SyntheticData.py             builds test worlds from a seed
 │   └── Diagnostics.py               counts model calls, measures leakage
 │
-├── examples.py                  ← RUN THIS FIRST: 4 demos
-├── evaluation.py                ← quick check: 5 experiments
-├── paper_evaluation.py          ← the big one: 9 experiments (RQ1–RQ8)
+├── examples/                    ← RUN THESE FIRST: 01_quickstart.py ... 06_my_project.py
+│   └── more/synthetic_demos.py  ← the 4 guided demos
+├── experiments/
+│   └── synthetic_evaluation.py  ← the big one: 9 experiments (RQ1–RQ8)
+├── paths.py                     ← every output folder, defined once
 │
 ├── tests/                       ← 91 automatic checks
 │   ├── test_transformations.py      do the perturbations behave?
 │   ├── test_metrics.py              do the measurements behave?
 │   ├── test_explainer.py            does the engine behave?
-│   └── test_paper_evaluation.py     does the evaluation behave?
+│   └── test_synthetic_evaluation.py does the evaluation behave?
 │
 ├── output/                      ← results (created by running the code)
-│   └── paper/                       results of paper_evaluation.py
+│   └── synthetic/                   results of synthetic_evaluation.py
 ├── requirements.txt             ← libraries needed
 └── README.md
 ```
@@ -231,11 +233,10 @@ tgap/
 
 | File | Lines | Weight |
 |---|---|---|
-| `paper_evaluation.py` | 1507 | the experiments — biggest |
+| `experiments/synthetic_evaluation.py` | 1507 | the experiments — biggest |
 | `Transformations.py` | 596 | the heart of the method |
 | `GraphExplainer.py` | 387 | the engine |
-| `examples.py` | 313 | demos |
-| `evaluation.py` | 297 | quick check |
+| `examples/more/synthetic_demos.py` | 313 | demos |
 | `SyntheticData.py` | 222 | world builder |
 | `TemporalGraphModel.py` | 144 | 5 models |
 | `GraphMetric.py` | 129 | 6 measurements |
@@ -253,16 +254,15 @@ design — simple agreements, complex behaviour built on top.
 
 ## 4. Where the program starts
 
-There is no single "main". There are **three doors**, and you choose one:
+There is no single "main". There are **two doors**, and you choose one:
 
 ```
-  DOOR 1:  python examples.py           ← start here to LEARN
-  DOOR 2:  python evaluation.py         ← quick numbers
-  DOOR 3:  python paper_evaluation.py   ← full experiments for the paper
+  DOOR 1:  python -m examples.more.synthetic_demos         ← start here to LEARN
+  DOOR 2:  python -m experiments.synthetic_evaluation ← full experiments for the paper
   (plus)   python -m unittest discover -s tests   ← run the 91 checks
 ```
 
-All three doors behave the same way at the bottom:
+Both doors behave the same way at the bottom:
 
 ```
       you run a .py file
@@ -279,8 +279,8 @@ All three doors behave the same way at the bottom:
 ```
 
 > ### 🔬 Science box 10 — What does `if __name__ == "__main__":` mean?
-> Every Python file can be used two ways: **run directly** (`python
-> examples.py`) or **imported** by another file. This line means: *"only do
+> Every Python file can be used two ways: **run directly** (`python -m
+> examples.more.synthetic_demos`) or **imported** by another file. This line means: *"only do
 > this when I am run directly, not when someone imports me."* It stops
 > demos from firing every time another file borrows a function.
 
@@ -288,12 +288,12 @@ All three doors behave the same way at the bottom:
 
 ## 5. The flow, A to Z
 
-Let us follow `python examples.py` from the very first instruction to the
+Let us follow `python -m examples.more.synthetic_demos` from the very first instruction to the
 final printed number. **This is the section to show your professor first.**
 
 ### A. Python loads the imports
 
-`examples.py` line 21 says `from core import (...)`. Python opens
+`examples/more/synthetic_demos.py` line 21 says `from core import (...)`. Python opens
 `core/__init__.py`, which imports every other file in `core/`. Order
 matters — a file cannot use something that is not loaded yet:
 
@@ -395,7 +395,7 @@ program would crash here.
 ### The same flow as a picture
 
 ```
-   examples.py
+   synthetic_demos.py
         │  (1) build world
         ▼
    SyntheticData.py ──► a list of 6 graphs
@@ -1180,11 +1180,11 @@ files later, only this one file changes.
 
 # PART III — THE PROGRAMS YOU RUN
 
-## 17. `examples.py`
+## 17. `examples/more/synthetic_demos.py`
 
 **313 lines, 4 demos.** The teaching file. Run this first.
 
-`SHOW = "--no-show" not in sys.argv` — so `python examples.py --no-show`
+`SHOW = "--no-show" not in sys.argv` — so `python -m examples.more.synthetic_demos --no-show`
 computes everything but opens no windows. That is how the demos double as
 automatic tests.
 
@@ -1226,26 +1226,17 @@ reasons about *trends* from the one that reasons about *levels*.
 
 ---
 
-## 18. `evaluation.py`
+## 18. `evaluation.py` — removed
 
-**297 lines, 5 experiments, writes to `output/`.** The quick check.
-
-| Function | What it measures |
-|---|---|
-| `makeWorld`, `makeTransformations` | shared setup |
-| `evaluateFaithfulness()` | known-truth models vs measured impacts |
-| `evaluateStability()` | same input → same answer; spread across seeds |
-| `evaluateEfficiency()` | model calls + runtime |
-| `evaluateDeltaSensitivity()` | impacts across several deltas |
-| `evaluateLeakage()` | the property panel |
-
-This is the fast developer-facing script. The paper version is next.
+An early quick-check script (five loose experiments writing loose CSVs into
+`output/`). Everything it measured is covered, more carefully, by the
+synthetic evaluation below, so it was deleted; git history keeps it.
 
 ---
 
-## 19. `paper_evaluation.py`
+## 19. `experiments/synthetic_evaluation.py`
 
-**1507 lines, 9 experiments, writes to `output/paper/`.** The research
+**1507 lines, 9 experiments, writes to `output/synthetic/`.** The research
 artifact that answers eight research questions.
 
 ### The helpers at the top
@@ -1346,7 +1337,7 @@ predefined expectation.
 | `test_transformations.py` | exact widths; anchors; determinism; never-mutate-input; tiny/complete/disconnected graphs; zero and huge deltas |
 | `test_metrics.py` | star = 1.0, ring = 0.0; density of a complete graph = 1; cohesion 0 when disconnected and reproducible |
 | `test_explainer.py` | normalization maths; exact model-call counts; stability; known-truth recovery; persistence blindness |
-| `test_paper_evaluation.py` | leakage report structure; the discreteness floor; three graph sizes; the matching rules; multi-seed behaviour |
+| `test_synthetic_evaluation.py` | leakage report structure; the discreteness floor; three graph sizes; the matching rules; multi-seed behaviour |
 
 > ### 🔬 Science box 30 — Why tests are part of the science
 > A test is a **written-down expectation that the computer checks every
@@ -1427,7 +1418,7 @@ design decision (raise a clear error, or clamp) — so it is documented, not
 silently patched.
 
 **"How do I know the numbers are real?"**
-Delete the whole `output/` folder, re-run, and compare with git: 20 of 22
+Delete `output/synthetic/`, re-run, and compare with git: 20 of 22
 files come back **byte-identical**. The only two that differ contain
 wall-clock timings, which naturally vary.
 
@@ -1481,7 +1472,7 @@ To check any claim yourself:*
 
 ```bash
 cd c:\catalyst\tgap
-python examples.py --no-show           # the 4 demos
+python -m examples.more.synthetic_demos --no-show   # the 4 demos
 python -m unittest discover -s tests   # the 91 checks
-python paper_evaluation.py             # the 9 experiments
+python -m experiments.synthetic_evaluation     # the 9 experiments
 ```

@@ -19,9 +19,10 @@ import unittest
 
 import pandas as pd
 
-RESULTS = os.path.join("output", "real_data_v2")
-TGN = os.path.join(RESULTS, "tgn", "email_eu_core")
-MAIN = os.path.join(RESULTS, "temporal_evaluation")
+import paths
+
+TGN = os.path.join(paths.TGN, "email_eu_core")
+MAIN = os.path.join(paths.REAL_DATA, "temporal_evaluation")
 
 VALIDITY_COLUMNS = ("feasible", "infeasible_reason", "edge_count_before",
                     "edge_count_after", "edge_count_preserved",
@@ -112,7 +113,8 @@ class TestInvalidRowsCannotEnterAggregates(unittest.TestCase):
     def testPublicationTableUsesValidRowsOnly(self):
         ''' table2_main_results is built from valid rows; every impact in it
         must be reproducible from a row flagged valid. '''
-        path = os.path.join("output", "publication", "table2_main_results.csv")
+        path = os.path.join(paths.PUBLICATION_TABLES,
+                            "table2_main_results.csv")
         if not os.path.exists(path):
             self.skipTest("publication tables not generated")
         table = pd.read_csv(path)
