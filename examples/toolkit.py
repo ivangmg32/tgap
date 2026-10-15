@@ -294,6 +294,21 @@ def _graphOverTime(snapshots, communities):
     return pd.DataFrame(rows)
 
 
+def saveGraphOverTime(overTime, folder, name):
+    ''' graph_over_time.png: ties (and bridge width) per snapshot. '''
+    columns = [c for c in ("ties", "bridge_width") if c in overTime]
+    fig, ax = plt.subplots(figsize=(7.5, 3.6))
+    for column in columns:
+        ax.plot(overTime["snapshot"], overTime[column], marker="o",
+                label=column.replace("_", " "))
+    ax.set_xlabel("snapshot (oldest -> newest)")
+    ax.set_title("{0}: your temporal graph".format(name), fontsize=10)
+    ax.legend(fontsize=8)
+    fig.tight_layout()
+    fig.savefig(os.path.join(folder, "graph_over_time.png"), dpi=150)
+    plt.close(fig)
+
+
 def explainAndSave(name, theModel, theTransformations, snapshots,
                    communities=None, deltas=(0.1, 0.25), sweep=True):
     ''' Explain `theModel` on `snapshots` with `theTransformations`, print
@@ -406,17 +421,7 @@ def explainAndSave(name, theModel, theTransformations, snapshots,
     # -- the data itself ----------------------------------------------
     overTime = _graphOverTime(snapshots, communities)
     overTime.to_csv(os.path.join(folder, "graph_over_time.csv"), index=False)
-    columns = [c for c in ("ties", "bridge_width") if c in overTime]
-    fig, ax = plt.subplots(figsize=(7.5, 3.6))
-    for column in columns:
-        ax.plot(overTime["snapshot"], overTime[column], marker="o",
-                label=column.replace("_", " "))
-    ax.set_xlabel("snapshot (oldest -> newest)")
-    ax.set_title("{0}: your temporal graph".format(name), fontsize=10)
-    ax.legend(fontsize=8)
-    fig.tight_layout()
-    fig.savefig(os.path.join(folder, "graph_over_time.png"), dpi=150)
-    plt.close(fig)
+    saveGraphOverTime(overTime, folder, name)
 
     print("      Results (CSV + PNG): {0}".format(folder))
     return table

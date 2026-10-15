@@ -43,12 +43,22 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from CorrGraphs import CorrGraphs
+try:                                   # as part of the TGAP package
+    from .CorrGraphs import CorrGraphs
+except ImportError:                    # run as a plain script, like before
+    from CorrGraphs import CorrGraphs
 
-# Folders next to this file, so the script works from any working directory.
+# The price cache lives next to this file; results go to TGAP's single
+# output root (paths.FINANCE_DATAMINING = output/finance/datamining/).
 _HERE = Path(__file__).resolve().parent
 DEFAULT_CACHE = str(_HERE / "Cache") + "/"
-DEFAULT_OUTPUT = str(_HERE / "resultsDatamining")
+try:
+    import sys as _sys
+    _sys.path.insert(0, str(_HERE.parent))
+    import paths as _paths
+    DEFAULT_OUTPUT = _paths.FINANCE_DATAMINING
+except ImportError:
+    DEFAULT_OUTPUT = str(_HERE / "resultsDatamining")
 
 try:
     import statsmodels.api as sm
@@ -637,6 +647,20 @@ def experiment_rq4_null_model(
         else np.nan
     )
 
+    # A statistic that does not depend on WHICH edge carries which weight
+    # (the mean of all weights is the obvious case) is unchanged by
+    # permuting the weights, so the null equals the observation by
+    # construction and the test cannot detect anything. Report that instead
+    # of a standardized difference made of rounding noise (~1e-15).
+    invariant = bool(
+        np.allclose(null_values, np.repeat(observed_values, iterations)[
+            :len(null_values)], rtol=1e-9, atol=1e-12)
+        if len(null_values) == len(observed_values) * iterations
+        else abs(observed_mean - null_mean) <= 1e-9 * max(1.0, abs(observed_mean))
+    )
+    if invariant:
+        standardized_difference = np.nan
+
     return {
         "statistic": statistic,
         "observed_values": observed_values,
@@ -646,7 +670,19 @@ def experiment_rq4_null_model(
         "null_std": null_std,
         "standardized_difference": float(standardized_difference),
         "iterations_per_window": iterations,
+        "testable": not invariant,
         "interpretation_note": (
+            (f"NOT TESTABLE: '{statistic}' does not change when edge weights "
+             "are permuted, so this null model cannot detect anything. On "
+             "the complete correlation graphs CorrGraphs builds, NONE of the "
+             "available statistics (mean_abs_corr, mean_signed_corr, density, "
+             "strong_edge_fraction, clustering, mean_strength) depends on "
+             "which edge carries which weight. A testable RQ4 needs either a "
+             "statistic that uses the arrangement (e.g. within-sector minus "
+             "cross-sector correlation, as RQ3 does with sector-label "
+             "permutations, or weighted clustering) or a different null model "
+             "(e.g. shuffling returns in time). "
+             if invariant else "") +
             "Null model: edge weights are permuted within each graph. "
             "Graph topology is preserved, but temporal return structure "
             "is not modeled because CorrGraph.py does not retain returns."
@@ -877,6 +913,8 @@ def main() -> None:
         "Standardized difference:",
         results["rq4_null_model"]["standardized_difference"],
     )
+    if not results["rq4_null_model"].get("testable", True):
+        print(results["rq4_null_model"]["interpretation_note"])
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 > **Archived - describes the layout BEFORE the October 2026 cleanup.**
 > File names below are historical: `examples.py` is now `examples/more/synthetic_demos.py`, `examples/MyCustomTransformation.py` is in `examples/more/`,
 > `paper_evaluation.py` is `experiments/synthetic_evaluation.py`, `evaluation.py` was
-> removed, `finance/` and `drafts/` are in `contrib/`, raw data is in `data/`, and
+> removed, `finance/` is a TGAP package again (with `examples/financial/`), `drafts/` is in `contrib/`, raw data is in `data/`, and
 > outputs follow `paths.py` (`output/real_data/`, `output/synthetic/`, ...).
 
 # TGAP codebase memory and navigation guide

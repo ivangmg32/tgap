@@ -1,5 +1,6 @@
 # Project-specific folder ignores
-contrib/finance/Cache/*.csv
+# Downloaded stock prices (Ivan's 8 tickers stay committed for offline use)
+finance/Cache/*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -19,6 +19,12 @@ tgap run examples                        # (same, if you installed the workbench
 | 5 | [`05_real_dataset.py`](05_real_dataset.py) | use one of the 8 real datasets | the dataset name |
 | 6 | [`06_my_project.py`](06_my_project.py) | put it all together — **copy this for your study** | everything |
 
+## Financial markets
+
+[`financial/`](financial/README.md) has seven more examples, from "which
+stocks move together?" to Ivan's full statistical study and a complete
+30-stock TGAP study.
+
 ## What you see
 
 Every example prints its steps, then a small table:
