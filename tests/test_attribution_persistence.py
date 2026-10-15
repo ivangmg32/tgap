@@ -212,6 +212,13 @@ class TestBridgeTrendDeltaGuard(unittest.TestCase):
         except ValueError:
             pass
 
+    def testDeltasBelowMinusOneAreRejectedToo(self):
+        ''' Below -1 the divisor is negative: the result used to be a
+        silent zig-zag clamped to width 1, not a trend. '''
+        for delta in (-1.5, -3):
+            with self.assertRaises(ValueError):
+                self.transformation.transform(self.snapshots, delta)
+
     def testNeighbouringDeltasStillWork(self):
         ''' The guard must not change behaviour anywhere else. '''
         for delta in (-0.99, -0.5, -0.1, 0.1, 0.5, 1.0):

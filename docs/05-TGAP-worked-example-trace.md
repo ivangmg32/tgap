@@ -671,7 +671,7 @@ How to read it:
 | How do you know it is not luck? | 55 automated tests + an evaluation suite where the right answer is derived by mathematics first (error 0.00–0.85%) |
 | Does it prove causality? | **No.** It measures *model sensitivity to a controlled counterfactual*. Nothing more |
 | What is the link to TSAP? | Same method, same function names. `transformTrendReverse` → `BridgeTrendTransformation`, volatility → churn, "keep last value fixed" → "keep last snapshot fixed" |
-| What is still missing? | Real data (FOSS/DeFi), a learned model (TGN), multi-community graphs. See [doc 03 §7](03-TGAP-technical-audit.md) |
+| What is still missing? | Real data (FOSS/DeFi), a learned model (TGN), multi-community graphs. See [doc 03 §7](archive/03-TGAP-technical-audit.md) |
 
 ---
 
@@ -722,9 +722,9 @@ Everything in this document is reproducible:
 
 ```bash
 cd c:\catalyst\tgap
-python examples.py --no-show          # the four built-in demos
-python -m unittest discover -s tests  # 55 tests
-python evaluation.py                  # faithfulness / stability / efficiency / leakage
+python -m examples.synthetic_demos --no-show          # the four built-in demos
+python -m unittest discover -s tests  # the test suite
+python -m experiments.synthetic_evaluation   # RQ1-RQ8, the full synthetic evaluation
 ```
 
 To rebuild *this document's* tiny world in a Python shell:
@@ -763,6 +763,6 @@ for r in ex.explainDetailed(TG):
 ---
 
 *Where to go next: [doc 01](01-TSAP-explained-simply.md) for the TSAP
-background this is built on, [doc 04](04-TGAP-v02-walkthrough.md) for the
-line-by-line tour of the whole codebase, [doc 03](03-TGAP-technical-audit.md)
+background this is built on, [doc 04](archive/04-TGAP-v02-walkthrough.md) for the
+line-by-line tour of the whole codebase, [doc 03](archive/03-TGAP-technical-audit.md)
 for the audit and the open research questions.*

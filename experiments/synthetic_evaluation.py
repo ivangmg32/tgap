@@ -1,11 +1,10 @@
 '''
-TGAP paper evaluation suite - eight research questions, reproducible.
+TGAP synthetic evaluation suite - eight research questions, reproducible.
 
-Relationship to evaluation.py: evaluation.py stays as the quick
-developer-facing check (5 loose experiments, writes to output/). THIS file
-is the paper artifact: it answers RQ1-RQ8, writes machine-readable CSVs
-and publication figures to output/paper/, and emits a structured
-summary.json. Neither overwrites the other's outputs.
+The paper's known-truth evidence: it answers RQ1-RQ8 on synthetic graphs
+whose correct explanation is derivable in advance, writes machine-readable
+CSVs and figures to output/synthetic/ (paths.SYNTHETIC), and emits a
+structured summary.json.
 
     RQ1  known-truth faithfulness      RQ5  delta sensitivity
     RQ2  temporal sensitivity          RQ6  leakage
@@ -35,7 +34,7 @@ explanation to KNOWN model behavior. None of it is causal inference about
 any real-world system, and no comparison against SHAP or any other method
 is claimed, because none is run here.
 
-Run from the tgap root:   python paper_evaluation.py
+Run from the tgap root:   python -m experiments.synthetic_evaluation
 '''
 
 import json
@@ -60,8 +59,10 @@ from core import (
     makeTemporalGraph,
 )
 
-OUTPUT = os.path.join("output", "paper")
-os.makedirs(OUTPUT, exist_ok=True)
+import paths
+
+# Read at call time, not import time, so tests can redirect it.
+OUTPUT = paths.SYNTHETIC
 
 # Expectation kinds (see module docstring).
 EXACT = "exact"
@@ -136,6 +137,7 @@ def meanMetric(metric, tg):
 
 
 def savePlot(fig, name):
+    os.makedirs(OUTPUT, exist_ok=True)
     path = os.path.join(OUTPUT, name)
     fig.savefig(path)
     plt.close(fig)
@@ -144,6 +146,7 @@ def savePlot(fig, name):
 
 def saveCsv(rows, name):
     df = pd.DataFrame(rows)
+    os.makedirs(OUTPUT, exist_ok=True)
     df.to_csv(os.path.join(OUTPUT, name), index=False)
     return df
 
@@ -633,6 +636,7 @@ def rq1bMatchedComparison(seeds=RQ1B_SEEDS):
             "ties": int(outcomes.get("tie", 0)),
         })
     bySeed = pd.DataFrame(perSeed)
+    os.makedirs(OUTPUT, exist_ok=True)
     bySeed.to_csv(os.path.join(OUTPUT, "matched_comparison_by_seed.csv"),
                   index=False)
     print("\nper-seed breakdown:")
@@ -1479,6 +1483,7 @@ def toJson(results):
             "mean_error_requested_all": results["RQ8"]["mean_error_requested"],
         },
     }
+    os.makedirs(OUTPUT, exist_ok=True)
     path = os.path.join(OUTPUT, "summary.json")
     with open(path, "w", encoding="utf-8") as handle:
         json.dump(payload, handle, indent=2, default=str)

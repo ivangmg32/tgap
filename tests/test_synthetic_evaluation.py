@@ -1,4 +1,4 @@
-''' Tests for the paper evaluation suite and for the behaviors it relies
+''' Tests for the synthetic evaluation suite and for the behaviors it relies
 on that were not already covered by test_explainer.py /
 test_transformations.py.
 
@@ -33,13 +33,13 @@ from core import (
     leakageReport, makeTemporalGraph,
 )
 
-import paper_evaluation as pe
+from experiments import synthetic_evaluation as pe
 
 
 # --------------------------------------------------------------------------
 # Tests must never write into the REAL results directory.
 #
-# paper_evaluation writes its CSVs and figures to output/paper/, and some of
+# synthetic_evaluation writes its CSVs and figures to output/synthetic/, and some of
 # the functions exercised below (rq1bMatchedComparison in particular) write
 # as a side effect. Running the test suite therefore used to OVERWRITE the
 # committed publication results with test-scale fixtures - seed 7 instead of
@@ -55,16 +55,16 @@ _TEMP_OUTPUT = None
 
 def setUpModule():
     global _REAL_OUTPUT, _TEMP_OUTPUT
-    import paper_evaluation
-    _REAL_OUTPUT = paper_evaluation.OUTPUT
+    from experiments import synthetic_evaluation
+    _REAL_OUTPUT = synthetic_evaluation.OUTPUT
     _TEMP_OUTPUT = tempfile.mkdtemp(prefix="tgap-paper-test-")
-    paper_evaluation.OUTPUT = _TEMP_OUTPUT
+    synthetic_evaluation.OUTPUT = _TEMP_OUTPUT
 
 
 def tearDownModule():
-    import paper_evaluation
+    from experiments import synthetic_evaluation
     if _REAL_OUTPUT is not None:
-        paper_evaluation.OUTPUT = _REAL_OUTPUT
+        synthetic_evaluation.OUTPUT = _REAL_OUTPUT
     if _TEMP_OUTPUT:
         shutil.rmtree(_TEMP_OUTPUT, ignore_errors=True)
 

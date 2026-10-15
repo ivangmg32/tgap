@@ -39,9 +39,14 @@ THE CONCEPT IMPLEMENTED HERE: "isolation"
     honestly rather than pretend otherwise.
 '''
 
+import os
 import random
+import sys
 
 import networkx as nx
+
+# Runnable both as a file and with  python -m examples.MyCustomTransformation
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core import (
     BridgeWidthMetric, PersistenceTemporalModel, TemporalGraphTransformation,

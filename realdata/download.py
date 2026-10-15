@@ -26,7 +26,10 @@ import hashlib
 import os
 import ssl
 import time
+import urllib.error
 import urllib.request
+
+import paths
 
 try:
     import certifi
@@ -34,7 +37,7 @@ try:
 except ImportError:  # fall back to the system store if certifi is absent
     _SSL_CONTEXT = ssl.create_default_context()
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+DATA_DIR = paths.DATA
 
 # name -> (url, local filename)
 SOURCES = {
@@ -103,25 +106,43 @@ REJECTED = {
 }
 
 
-def download(name, force=False):
+def download(name, force=False, attempts=3):
     ''' Download one source if it is not already cached. Returns the local
     path. Caching makes repeated runs offline and fast; pass force=True to
-    refetch. '''
+    refetch.
+
+    The file is written to `<name>.part` and renamed only once it is
+    complete, so an interrupted download (network drop, Ctrl+C) can never
+    leave a truncated file that a later run would mistake for the real one.
+    Transient network failures are retried a few times before giving up. '''
     url, filename = SOURCES[name]
     os.makedirs(DATA_DIR, exist_ok=True)
     path = os.path.join(DATA_DIR, filename)
     if os.path.exists(path) and not force:
         return path
+    partial = path + ".part"
     request = urllib.request.Request(url, headers={"User-Agent": "python"})
-    start = time.time()
-    with urllib.request.urlopen(request, timeout=300,
-                                context=_SSL_CONTEXT) as response, \
-            open(path, "wb") as handle:
-        while True:
-            chunk = response.read(1 << 20)
-            if not chunk:
-                break
-            handle.write(chunk)
+    for attempt in range(1, attempts + 1):
+        start = time.time()
+        try:
+            with urllib.request.urlopen(request, timeout=300,
+                                        context=_SSL_CONTEXT) as response, \
+                    open(partial, "wb") as handle:
+                while True:
+                    chunk = response.read(1 << 20)
+                    if not chunk:
+                        break
+                    handle.write(chunk)
+            os.replace(partial, path)
+            break
+        except (OSError, urllib.error.URLError) as failure:
+            if os.path.exists(partial):
+                os.remove(partial)
+            if attempt == attempts:
+                raise
+            print(f"  download of {filename} failed ({failure}); "
+                  f"retrying ({attempt + 1}/{attempts})...")
+            time.sleep(2 * attempt)
     print(f"  downloaded {filename}: {os.path.getsize(path) / 1e6:.1f} MB "
           f"in {time.time() - start:.0f}s")
     return path

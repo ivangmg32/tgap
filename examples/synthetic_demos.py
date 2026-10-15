@@ -3,8 +3,8 @@ TGAP end-to-end examples - the counterpart of TSAP's CaseStudy*.py files.
 
 Run from the tgap root folder:
 
-    python examples.py              # with interactive plotly charts
-    python examples.py --no-show    # console output only (CI / smoke test)
+    python -m examples.synthetic_demos              # interactive plotly charts
+    python -m examples.synthetic_demos --no-show    # console only (CI / smoke test)
 
 What it demonstrates, in order:
   1. KNOWN-TRUTH SANITY CHECK: explain a model whose behavior we know
@@ -16,7 +16,11 @@ What it demonstrates, in order:
   3. GLOBAL EXPLANATION across many synthetic ecosystems (boxplots).
 '''
 
+import os
 import sys
+
+# Runnable both as  python examples/synthetic_demos.py  and with -m.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core import (
     # metrics

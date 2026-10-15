@@ -43,8 +43,8 @@
         "Bridge Trend"
       ],
       "source_csv": [
-        "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
-        "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+        "output/real_data/temporal_evaluation/decentraland/tgap_results.csv",
+        "output/real_data/temporal_evaluation/email_eu_core/tgap_results.csv"
       ],
       "status": "MAIN publication global-impact figure"
     },
@@ -62,8 +62,8 @@
       "generation_function": "realdata.make_publication.figure8Dependence",
       "included_concepts": [],
       "source_csv": [
-        "output\\publication\\attribution\\node_attribution.csv",
-        "output\\publication\\attribution\\edge_attribution.csv"
+        "output/publication/attribution/node_attribution.csv",
+        "output/publication/attribution/edge_attribution.csv"
       ],
       "status": "element-level dependence",
       "x_variable": [
@@ -99,8 +99,8 @@
       ],
       "layout_algorithm": "realdata.make_publication._beeswarmOffsets - ascending value order, first non-colliding offset; deterministic and seedless",
       "source_csv": [
-        "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
-        "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+        "output/real_data/temporal_evaluation/decentraland/tgap_results.csv",
+        "output/real_data/temporal_evaluation/email_eu_core/tgap_results.csv"
       ],
       "status": "deterministic non-overlapping packing, no jitter"
     },
@@ -129,8 +129,8 @@
         "Churn"
       ],
       "source_csv": [
-        "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
-        "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+        "output/real_data/temporal_evaluation/decentraland/tgap_results.csv",
+        "output/real_data/temporal_evaluation/email_eu_core/tgap_results.csv"
       ],
       "status": "per-model distributions, valid rows only"
     },
@@ -149,7 +149,7 @@
       "included_concepts": [],
       "selection_rule": "top 18 by |impact|, ties broken by endpoint id; complete attribution retained in the source CSV",
       "source_csv": [
-        "output\\publication\\attribution\\edge_attribution_trend.csv"
+        "output/publication/attribution/edge_attribution_trend.csv"
       ],
       "status": "ONE local explanation; local ordering only",
       "x_variable": "impact (edge occlusion)",
@@ -172,103 +172,11 @@
       "included_concepts": [],
       "selection_rule": "display-only top 22 edges by largest |impact| at any snapshot, then snapshots present, then edge id; deterministic, never sampled. The persisted CSV holds every (edge, snapshot).",
       "source_csv": [
-        "output\\publication\\attribution\\edge_time_attribution.csv"
+        "output/publication/attribution/edge_time_attribution.csv"
       ],
       "status": "TGAP edge-time attribution; NOT a TSHAP implementation",
       "x_variable": "snapshot_index",
       "y_variable": "edge (u, v)"
-    },
-    {
-      "candidate": "A",
-      "comparability_scope": "all concepts shown are commensurable",
-      "cross_concept_numerical_comparison_allowed": true,
-      "delta_semantics": {
-        "Bridge Width": "relative delta",
-        "Churn": "relative delta",
-        "Density": "relative delta"
-      },
-      "excluded_concepts": [
-        "Centralization",
-        "Bridge Trend"
-      ],
-      "figure": "superseded/fig1A_commensurable_concept_impacts",
-      "formats": [
-        "png",
-        "pdf"
-      ],
-      "generation_function": "realdata.make_publication.figure1ACommensurable",
-      "included_concepts": [
-        "Bridge Width",
-        "Density",
-        "Churn"
-      ],
-      "source_csv": [
-        "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
-        "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
-      ],
-      "status": "SUPERSEDED - pooled a mean across models"
-    },
-    {
-      "candidate": "B",
-      "comparability_scope": "within a group only; the two groups never share an axis",
-      "cross_concept_numerical_comparison_allowed": false,
-      "delta_semantics": {
-        "Bridge Trend": "mechanism / absolute delta",
-        "Bridge Width": "relative delta",
-        "Centralization": "mechanism / absolute delta",
-        "Churn": "relative delta",
-        "Density": "relative delta"
-      },
-      "excluded_concepts": [],
-      "figure": "superseded/fig1B_grouped_concept_impacts",
-      "formats": [
-        "png",
-        "pdf"
-      ],
-      "generation_function": "realdata.make_publication.figure1BGrouped",
-      "included_concepts": [
-        "Bridge Width",
-        "Density",
-        "Churn",
-        "Centralization",
-        "Bridge Trend"
-      ],
-      "source_csv": [
-        "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
-        "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
-      ],
-      "status": "SUPERSEDED - pooled a mean across models"
-    },
-    {
-      "candidate": "C",
-      "comparability_scope": "colour comparable within the commensurable block only; the other block encodes sign only; printed values are the real impacts",
-      "cross_concept_numerical_comparison_allowed": false,
-      "delta_semantics": {
-        "Bridge Trend": "mechanism / absolute delta",
-        "Bridge Width": "relative delta",
-        "Centralization": "mechanism / absolute delta",
-        "Churn": "relative delta",
-        "Density": "relative delta"
-      },
-      "excluded_concepts": [],
-      "figure": "superseded/fig2_grouped_semantic_heatmap",
-      "formats": [
-        "png",
-        "pdf"
-      ],
-      "generation_function": "realdata.make_publication.figure2CGroupedSemanticHeatmap",
-      "included_concepts": [
-        "Bridge Width",
-        "Density",
-        "Churn",
-        "Centralization",
-        "Bridge Trend"
-      ],
-      "source_csv": [
-        "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
-        "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
-      ],
-      "status": "SUPERSEDED - normalised within a model row"
     }
   ]
 }

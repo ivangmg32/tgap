@@ -52,8 +52,9 @@
 
 | | |
 |---|---|
-| Raw data in | `C:\catalyst\tgap\realdata\data\` (11 files, ~100 MB) |
-| Results out | `C:\catalyst\tgap\output\real_data_v2\temporal_evaluation\` |
+| Raw data in | `C:\catalyst\tgap\data\` (11 files, ~100 MB) |
+| Results out | `C:\catalyst\tgap\output\real_data\temporal_evaluation\` |
+| Comparison out | `C:\catalyst\tgap\output\comparison\temporal_evaluation\` |
 | Command | `python -m realdata.run_real_data` (3 minutes) |
 | Branch | `real-data` (the files do not exist on `WorkingBranch`) |
 | Random seed | 42, everywhere |
@@ -65,8 +66,9 @@
 ```
 C:\catalyst\tgap\
 │
+├── data\                      ← THE RAW INPUT (11 files, not in git)
+│
 ├── realdata\                  ← the code that reads real data
-│   ├── data\                       ← THE RAW INPUT (11 files, not in git)
 │   ├── download.py                 fetches them; records rejected datasets
 │   ├── adapters\
 │   │   ├── base.py                 shared preprocessing for all 8
@@ -81,12 +83,14 @@ C:\catalyst\tgap\
 ├── tests\test_realdata.py     ← 158 automatic checks
 │
 └── output\
-    └── real_data_v2\
-        └── temporal_evaluation\   ← THE RESULTS  ← look here
+    ├── real_data\
+    │   └── temporal_evaluation\   ← THE RESULTS  ← look here
+    └── comparison\
+        └── temporal_evaluation\   ← all 8 datasets side by side
 ```
 
-**The two folders people confuse.** `realdata\data\` is what we *downloaded*.
-`output\real_data_v2\` is what TGAP *produced*. Only the second one is worth
+**The two folders people confuse.** `data\` is what we *downloaded*.
+`output\` is what TGAP *produced*. Only the second one is worth
 showing anyone.
 
 ---
@@ -98,7 +102,7 @@ is step 2.
 
 ```
  STEP 1   Download the raw file
-          → realdata\data\  (cached; done once, then works offline)
+          → data\  (cached; done once, then works offline)
 
  STEP 2   Read it
           → a plain list of events: (who, whom, when)
@@ -321,17 +325,19 @@ departments of a real organisation. It is the project's control case.
 ## 6. The output folder structure
 
 ```
-output\real_data_v2\
+output\comparison\temporal_evaluation\
+├── comparison.csv                  ★ all 8 datasets in one table
+├── comparison_observations.json    computed cross-dataset facts
+└── figures\                        3 pictures comparing datasets
+    ├── saturation_vs_trend_status.png
+    ├── noop_vs_bridge_width.png
+    └── concept_response_heatmap.png
+
+output\real_data\
 │
 ├── temporal_evaluation\            ← USE THIS ONE (leakage-safe)
 │   │
 │   ├── summary.json                headline numbers for all 8 datasets
-│   ├── comparison.csv              ★ all 8 datasets in one table
-│   ├── comparison_observations.json  computed cross-dataset facts
-│   ├── figures\                    3 pictures comparing datasets
-│   │   ├── saturation_vs_trend_status.png
-│   │   ├── noop_vs_bridge_width.png
-│   │   └── concept_response_heatmap.png
 │   │
 │   ├── bitcoin_alpha\              ← one folder per dataset, 11 files + 6 pictures
 │   ├── bitcoin_otc\
@@ -626,9 +632,8 @@ Valid dataset names: `tgbl_wiki`, `decentraland`, `email_eu_core`,
 - **No internet needed** after step 1.
 - **Same seed (42)** everywhere, so results repeat — with one known
   exception, in §11.
-- ⚠️ After running the **full** test suite (`discover -s tests`), run
-  `git restore -- output/paper/`. Those tests overwrite that folder with
-  test-sized fixtures. This is a known bug.
+- The test suite never writes into `output/` (fixed: the synthetic
+  evaluation tests redirect their output to a temporary folder).
 
 ---
 
@@ -675,7 +680,7 @@ dataset).
 | Date | What |
 |---|---|
 | 11–17 Sep 2026 | TGAP core built, synthetic evaluation (RQ1–RQ8) |
-| 21 Sep 2026 | Iván's separate stock-correlation graph work (`finance/`) |
+| 21 Sep 2026 | Iván's separate stock-correlation graph work (now `contrib/finance/`) |
 | 24 Sep 2026 | real-data layer; methodological clean-up; **the run described here** |
 | 30 Apr 2023 | the date the Decentraland export was frozen |
 
@@ -695,12 +700,12 @@ dataset).
    **40 of 1,440 rows**, all of them `Density` + `increase`. Cause: networkx
    lists "pairs not yet connected" in an order that depends on how Python
    scrambles text labels, which differs in every program run. The synthetic
-   experiments are unaffected because they use whole-number labels. **The fix
-   is one line** and has not yet been applied.
+   experiments are unaffected because they use whole-number labels.
+   **Fixed** since: `DensityTransformation` canonicalises each pair before
+   sorting (see the comment in `core/Transformations/Density.py`).
 
-4. **The full test suite overwrites `output/paper/`.** Run
-   `git restore -- output/paper/` afterwards. Also a one-line fix, not yet
-   applied.
+4. ~~**The full test suite overwrites `output/paper/`.**~~ **Fixed** - the
+   tests now redirect their output to a temporary folder.
 
 5. **We keep very little** — a median of 4.75% of actors and 3.29% of
    events. `bitcoin_otc` and `bitcoin_alpha` keep only ~415 events each;
@@ -725,7 +730,7 @@ dataset).
 
 12. **Real data shows applicability, not correctness.** There is no ground
     truth on real data. Proof of correctness comes from the synthetic
-    experiments in `paper_evaluation.py`.
+    experiments in `experiments/synthetic_evaluation.py`.
 
 ---
 

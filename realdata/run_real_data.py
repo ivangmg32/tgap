@@ -6,7 +6,7 @@ Run TGAP on the real datasets.
     python -m realdata.run_real_data --mode both          # both modes
     python -m realdata.run_real_data bitcoin_otc          # one dataset
 
-Writes to output/real_data_v2/<analysis_mode>/<dataset>/:
+Writes to output/real_data/<analysis_mode>/<dataset>/ (paths.REAL_DATA):
     metadata.json                  dataset facts (measured, not assumed)
     preprocessing_summary.json     every preprocessing decision + what it dropped
     graph_summary.csv              per-snapshot statistics
@@ -71,7 +71,7 @@ SCIENTIFIC CAUTION. These runs demonstrate that the pipeline handles real
 temporal structure and produces interpretable sensitivities. They do NOT
 validate TGAP's correctness: real data has no ground truth. Correctness
 evidence lives in the synthetic known-truth experiments
-(paper_evaluation.py). Nothing here is a causal claim.
+(experiments/synthetic_evaluation.py). Nothing here is a causal claim.
 '''
 
 import json
@@ -87,6 +87,7 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
+import paths
 from core import (
     TgapExplainer,
     PersistenceTemporalModel, TrendTemporalModel, SlopeModel,
@@ -103,16 +104,10 @@ from .adapters import decentraland, edgelist, tgbl_wiki
 from .adapters.base import (ANALYSIS_MODES, DESCRIPTIVE, SELECTION_FRACTION,
                             TEMPORAL_EVALUATION)
 
-# Versioned root. The pre-cleanup v1 results (full-period selection, no
-# validity gating) used to sit beside these under output/real_data/; they
-# were deleted rather than kept, because git history already holds them and
-# two similar-looking result trees invite quoting the wrong one. Recover
-# them with `git show 28df00c:output/real_data/<file>` if ever needed.
-#
 # Only the DEFAULT mode's results are committed. Descriptive-mode results
 # are reproducible on demand with `--mode descriptive` and are deliberately
 # not stored, so nobody can quote a leakage-unsafe number by accident.
-OUTPUT_ROOT = os.path.join("output", "real_data_v2")
+OUTPUT_ROOT = paths.REAL_DATA
 SEED = 42
 DELTAS = (0.1, 0.25, 0.5)
 
@@ -301,8 +296,13 @@ def rowValidity(transformationName, delta, feasibilityFlags, trendStatuses):
     reason = flag.get("infeasible_reason")
     status = "ok" if feasible else "edge_count_infeasible"
 
-    trend = trendStatuses.get(delta) if transformationName == "Bridge Trend" \
-        else None
+    # Match the trend status by the screened transformation's OWN name (it
+    # is stored in each status record), not by a literal: a pair-targeted
+    # trend is called "Bridge Trend 0-1", and a literal "Bridge Trend"
+    # silently let its saturated rows through as valid.
+    trend = trendStatuses.get(delta)
+    if trend is not None and trend.get("transformation") != transformationName:
+        trend = None
     if feasible and trend is not None and trend["status"] != "ok":
         status = trend["status"]
         reason = {

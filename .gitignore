@@ -1,5 +1,5 @@
 # Project-specific folder ignores
-finance/Cache/*.csv
+contrib/finance/Cache/*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -221,7 +221,12 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Real-data raw downloads: large, reproducible via `python -m realdata.download`
-realdata/data/
+/data/
 
 # Editor settings are personal, not project configuration
 .vscode/
+
+# run.py: private environment, caches, logs, and users' own example outputs
+.tgap_cache/
+output/logs/
+output/examples/

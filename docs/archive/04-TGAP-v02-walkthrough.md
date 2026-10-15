@@ -1,6 +1,6 @@
 # TGAP v0.2 — Complete Code Walkthrough: Architecture, Every File, Line by Line
 
-> **Who this is for:** you, after [doc 01](01-TSAP-explained-simply.md)
+> **Who this is for:** you, after [doc 01](../01-TSAP-explained-simply.md)
 > (TSAP concepts), [doc 02](02-TGAP-code-walkthrough.md) (the v0.1 code),
 > and [doc 03](03-TGAP-technical-audit.md) (the audit that produced v0.2).
 > **What this is:** the walkthrough of the codebase **as it exists now** —
@@ -212,7 +212,7 @@ the evaluation output.
 
 ## 5. `TemporalGraphTransformation.py`
 
-File: [core/TemporalGraphTransformation.py](../tgap/core/TemporalGraphTransformation.py).
+File: [core/TemporalGraphTransformation.py](../../core/TemporalGraphTransformation.py).
 The v0.1 parts (the `name` attribute, `transformGraph` contract,
 `transform` = map-over-snapshots, the structural/temporal taxonomy) are as
 in doc 02 §9. New lines:
@@ -247,7 +247,7 @@ doesn't have to.
 
 ## 6. `Transformations.py`
 
-File: [core/Transformations.py](../tgap/core/Transformations.py). The
+File: [core/Transformations.py](../../core/Transformations.py). The
 mechanics of `_edgeKey`, `_safeToRemove`, `setBridgeWidth`, and each
 transformation's edge surgery are unchanged from doc 02 §10 — reread that
 if fuzzy. Here: the new helper, the five `propertyValue`s, and the two
@@ -433,7 +433,7 @@ that silently no-oped in v0.1 — and requires C to strictly drop.
 
 ## 7. `GraphExplainer.py`
 
-File: [core/GraphExplainer.py](../tgap/core/GraphExplainer.py). The plot
+File: [core/GraphExplainer.py](../../core/GraphExplainer.py). The plot
 methods and `summaryData` are as in doc 02 §11 (one `boxplotTrans` change
 below). The constructor, defaults, and explanation core are new.
 
@@ -636,7 +636,7 @@ one perturbed call per (delta, input). The test asserts the exact count:
 
 ## 8. `TemporalGraphModel.py`
 
-File: [core/TemporalGraphModel.py](../tgap/core/TemporalGraphModel.py).
+File: [core/TemporalGraphModel.py](../../core/TemporalGraphModel.py).
 The interface and the Persistence/Trend baselines are doc 02 §6. New: the
 two models whose explanations are *derivable before running anything* —
 the comment block above them states the philosophy: *"If the explainer's
@@ -699,7 +699,7 @@ impact = ±1.0 *exactly* (measured: 1.000), churn impact = 0 exactly.
 
 ## 9. `Diagnostics.py`
 
-File: [core/Diagnostics.py](../tgap/core/Diagnostics.py). New module, three
+File: [core/Diagnostics.py](../../core/Diagnostics.py). New module, three
 tools, all measurement, zero magic.
 
 ### `CallCountingModel`
@@ -848,7 +848,7 @@ loop over names. Two implementation notes:
 
 ## 13. `tests/`
 
-Files: [tests/](../tgap/tests/). 55 tests, stdlib `unittest` (no new
+Files: [tests/](../../tests/). 55 tests, stdlib `unittest` (no new
 dependency), run with `python -m unittest discover -s tests`. The shim in
 `tests/__init__.py` prepends the tgap root to `sys.path` so `core` imports
 regardless of runner quirks.
@@ -887,7 +887,7 @@ sets of frozensets compare exactly. What each class proves:
 
 ## 14. `evaluation.py`
 
-File: [evaluation.py](../tgap/evaluation.py). The research-facing script —
+File: [evaluation.py](../../evaluation.py). The research-facing script —
 TSAP's `GummadiEvaluation.py` + `PerturbationFaithfulness.py` in spirit,
 *not* copied: TSAP evaluates on real stock data where no ground truth
 exists, so it can only correlate explanations with model behavior. TGAP's
