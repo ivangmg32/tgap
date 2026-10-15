@@ -16,7 +16,9 @@ class Cache:
         self.yfDuration = yfDuration
         self.yfInterval = yfInterval
         # Folder where CSV files are stored
-        self.pathFolder = "./finance/Cache/"
+        # (next to this file, so it works from any working directory)
+        self.pathFolder = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "Cache") + os.sep
         # Dictionary for the histories of the stocks
         self.histories = {}
         # Create the folder if it does not exist

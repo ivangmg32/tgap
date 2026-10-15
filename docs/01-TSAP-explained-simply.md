@@ -1104,7 +1104,7 @@ This table *is* your implementation plan.
 | — | `Metric.measure(graph) → float` | `tgap/core/GraphMetric.py` ✔ stub |
 | `transformVolatility`, `transformTrendReverse` | `TemporalGraphTransformation.transform(tg, delta)` | `tgap/core/TemporalGraphTransformation.py` ✔ stub |
 | `TsapExplainer.explain / plotSummary / boxplotTrans` | `TgapExplainer` | `tgap/core/TemporalGraphExplainer.py` — **empty class** |
-| — | concrete metrics, e.g. `CohesionMetric` | `tgap/examples.py` — **returns 0.0** |
+| — | concrete metrics, e.g. `CohesionMetric` | `tgap/examples/synthetic_demos.py` — **returns 0.0** |
 | `LstmStock`, `LstmFromCsv`, `GruTsModel` | concrete graph models (GNN/TGN wrappers) | *not started* |
 | Faithfulness / sparsity / stability / efficiency | same four, on graphs | *not started* |
 

@@ -1,7 +1,7 @@
 # TGAP Code Walkthrough — Every File, Every Part, Line by Line
 
 > **Who this is for:** you, after reading
-> [01-TSAP-explained-simply.md](01-TSAP-explained-simply.md).
+> [01-TSAP-explained-simply.md](../01-TSAP-explained-simply.md).
 > **What this is:** a guided tour of every file in `tgap/`, in the order that
 > makes them easiest to understand. Code blocks are quoted from the real
 > files; under each block, every line (or small group of lines) is explained.
@@ -232,7 +232,7 @@ the contracts are the foundation.
 
 ## 4. `core/__init__.py`
 
-File: [core/\_\_init\_\_.py](../tgap/core/__init__.py)
+File: [core/\_\_init\_\_.py](../../core/__init__.py)
 
 A folder becomes a Python **package** when it contains an `__init__.py`. That
 file runs when someone writes `import core`, and whatever it imports becomes
@@ -260,7 +260,7 @@ from .GraphMetric import (
 
 ## 5. `core/GraphModel.py`
 
-File: [core/GraphModel.py](../tgap/core/GraphModel.py)
+File: [core/GraphModel.py](../../core/GraphModel.py)
 
 ### The interface
 
@@ -303,7 +303,7 @@ class MetricGraphModel(GraphModel):
 
 ## 6. `core/TemporalGraphModel.py`
 
-File: [core/TemporalGraphModel.py](../tgap/core/TemporalGraphModel.py)
+File: [core/TemporalGraphModel.py](../../core/TemporalGraphModel.py)
 
 ### The interface
 
@@ -377,7 +377,7 @@ from the persistence model.
 
 ## 7. `core/Communities.py`
 
-File: [core/Communities.py](../tgap/core/Communities.py)
+File: [core/Communities.py](../../core/Communities.py)
 
 Three small functions used by metrics and transformations alike.
 
@@ -429,7 +429,7 @@ def interCommunityEdges(graph, communities):
 
 ## 8. `core/GraphMetric.py`
 
-File: [core/GraphMetric.py](../tgap/core/GraphMetric.py)
+File: [core/GraphMetric.py](../../core/GraphMetric.py)
 
 ### The interface
 
@@ -526,7 +526,7 @@ def measure(self, graph):
 
 ## 9. `core/TemporalGraphTransformation.py`
 
-File: [core/TemporalGraphTransformation.py](../tgap/core/TemporalGraphTransformation.py)
+File: [core/TemporalGraphTransformation.py](../../core/TemporalGraphTransformation.py)
 
 The base class is tiny; its docstrings carry the design law of the project.
 
@@ -573,7 +573,7 @@ The docstring also records the **anchor rule** translation:
 
 ## 10. `core/Transformations.py`
 
-File: [core/Transformations.py](../tgap/core/Transformations.py)
+File: [core/Transformations.py](../../core/Transformations.py)
 
 The longest and most important file. Its module docstring makes two honest
 points before any code:
@@ -986,7 +986,7 @@ volatility transform is allowed to change volatility).
 
 ## 11. `core/GraphExplainer.py`
 
-File: [core/GraphExplainer.py](../tgap/core/GraphExplainer.py)
+File: [core/GraphExplainer.py](../../core/GraphExplainer.py)
 
 The engine. One base class holds everything; the two public explainers only
 differ in one hook.
@@ -1144,7 +1144,7 @@ politely refuses nonsense.
 
 ## 12. `core/TemporalGraphExplainer.py`
 
-File: [core/TemporalGraphExplainer.py](../tgap/core/TemporalGraphExplainer.py)
+File: [core/TemporalGraphExplainer.py](../../core/TemporalGraphExplainer.py)
 
 ```python
 from .GraphExplainer import ExplainerBase
@@ -1173,7 +1173,7 @@ chain is code you have now read.
 
 ## 13. `core/SyntheticData.py`
 
-File: [core/SyntheticData.py](../tgap/core/SyntheticData.py)
+File: [core/SyntheticData.py](../../core/SyntheticData.py)
 
 Why synthetic data first? With real FOSS/DeFi data everything is uncertain
 at once. Here **we choose the ground truth** — so when the explainer speaks,
@@ -1277,7 +1277,7 @@ drift widens instead. Demo 2's `[8,7,6,5,4,3,2,1]` is this line at work.
 
 ## 14. `examples.py`
 
-File: [examples.py](../tgap/examples.py)
+File: [examples.py](../../examples.py)
 
 ```python
 SHOW = "--no-show" not in sys.argv

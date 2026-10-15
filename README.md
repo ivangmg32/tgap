@@ -25,16 +25,53 @@ model interface, and **pluggable transformations**.
 
 ---
 
-## Install and run
+## Run it: one command
+
+You need **Python 3.9 or newer** ([python.org](https://www.python.org/downloads/);
+on Windows tick *"Add python.exe to PATH"* during installation). Nothing else.
 
 ```bash
 git clone <this repository>
 cd tgap
-pip install -r requirements.txt
+python run.py            # Windows: if "python" is not found, use  py run.py
+```
 
-python examples.py                       # synthetic demos
-python -m examples.MyCustomTransformation   # the extensibility example
-python -m unittest discover -s tests     # the test suite
+That is all. On the first run `run.py`:
+
+1. checks your Python version;
+2. creates a **private environment** in `.venv/` and installs the libraries
+   into it (1–3 minutes, first run only; your system Python is not touched);
+3. keeps temporary files and caches inside the project (`.tgap_cache/`), so a
+   full, locked or non-ASCII system `TEMP` folder cannot break anything;
+4. runs a quick tour: an environment check, the demos and the easy examples.
+
+Results are written as **CSV + PNG** to `output/examples/`. If anything goes
+wrong you get a short message in plain English saying what happened and how
+to fix it; the technical details go to `output/logs/`.
+
+| command | what it runs | time |
+|---|---|---|
+| `python run.py` | check + demos + easy examples | ~2 min |
+| `python run.py examples` | only the easy examples | ~30 s |
+| `python run.py all` | the full research pipeline (downloads 8 datasets, ~100 MB) | ~20 min |
+| `python run.py synthetic` | the synthetic known-truth evaluation (RQ1–RQ8) | |
+| `python run.py realdata publication` | any steps, in the order given | |
+| `python run.py tests` | the automatic test suite | ~8 min |
+| `python run.py tgn --with-torch` | also install PyTorch and explain the learned model | |
+| `python run.py --help` | every step and option | |
+| `python run.py reset` | delete `.venv/` and caches, start fresh | |
+
+Tested from a clean checkout on Python 3.9, 3.11, 3.12 and 3.13, with both the
+newest libraries and the oldest versions `requirements.txt` allows.
+
+<details>
+<summary>Prefer to manage Python yourself?</summary>
+
+```bash
+pip install -r requirements.txt
+python -m examples.synthetic_demos          # synthetic demos
+python -m unittest discover -s tests        # the test suite
+python run.py --no-venv examples            # or use run.py with your own Python
 ```
 
 Optional, for the learned-model experiments (§ *TGN* below):
@@ -48,6 +85,82 @@ pip install torch_geometric
 > `WinError 1114 … c10.dll`, install the
 > [Microsoft VC++ 2015–2022 redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe).
 > PyTorch needs `vcruntime140_1.dll`, which older Windows images lack.
+</details>
+
+---
+
+## Easy examples: your data, your model, your concept
+
+Six short scripts in [`examples/`](examples/). Each starts with a
+**PARAMETERS** block - change the values, run the file, and look at the CSV
+and PNG files it writes to `output/examples/<name>/`.
+
+```bash
+python examples/01_quickstart.py
+```
+
+| file | what you change | what it shows |
+|---|---|---|
+| [`01_quickstart.py`](examples/01_quickstart.py) | size of a made-up graph, model, concepts, delta | TGAP in 30 seconds |
+| [`02_your_own_dataset.py`](examples/02_your_own_dataset.py) | path to **your CSV** and its column names | explaining a model on your own data |
+| [`03_your_own_model.py`](examples/03_your_own_model.py) | the body of `predict()` | plugging in **your own model** |
+| [`04_your_own_transformation.py`](examples/04_your_own_transformation.py) | a 20-line class | writing **your own concept** |
+| [`05_real_dataset.py`](examples/05_real_dataset.py) | the dataset name | one of the 8 real datasets (downloads once) |
+| [`06_my_project.py`](examples/06_my_project.py) | all of the above | **template**: copy it and make it yours |
+
+Every run writes:
+
+| file | contents |
+|---|---|
+| `explanation.csv` / `.png` | impact of each concept, both directions, every delta |
+| `sensitivity.csv` / `.png` | the prediction as each concept goes from −50 % to +50 % |
+| `graph_over_time.csv` / `.png` | your temporal graph: ties and bridge width per snapshot |
+
+**Add your own dataset.** Save one row per interaction - *who, with whom,
+when* - as a CSV:
+
+```text
+source,target,time
+alice,bruno,2024-01-01
+carla,ines,2024-01-02
+```
+
+`time` may be a date or a number. Commas or semicolons, UTF-8 or Excel's
+Windows encoding are all fine. Set `CSV_FILE` and the column names in
+`02_your_own_dataset.py` (or `06_my_project.py`). If you know the groups
+(teams, departments), give a second CSV with `person,group` rows; otherwise
+TGAP finds them.
+
+**Add your own model.** Anything with one method:
+
+```python
+from core import TemporalGraphModel
+
+class MyModel(TemporalGraphModel):
+    def predict(self, snapshots):        # list of networkx graphs, oldest first
+        return snapshots[-1].number_of_edges()   # any number you like
+```
+
+**Add your own concept.** Measure it, and change it by `delta`:
+
+```python
+from core import TemporalGraphTransformation
+
+class MyConcept(TemporalGraphTransformation):
+    name = "My Concept"
+    preservesEdgeCount = False           # say honestly whether ties are added/removed
+
+    def propertyValue(self, snapshots):  # MEASURE: one number
+        ...
+
+    def transformGraph(self, graph, delta):   # CHANGE one snapshot; return a copy
+        g = graph.copy()
+        ...
+        return g
+```
+
+Then put the objects in the lists in your script. Nothing in `core/` is edited
+- see [`examples/README.md`](examples/README.md) for more.
 
 ---
 
@@ -164,10 +277,25 @@ core/                                the TGAP framework
     ├── Density.py                   ├── BridgeTrend.py
     └── Churn.py
 
-realdata/          8 real datasets, leakage-safe preprocessing, runners
-examples/          public API examples
-tests/             the test suite
-output/            generated results (see realdata/README.md)
+realdata/                            the real-data pipeline
+├── download.py                      raw files -> data/
+├── adapters/                        8 datasets, leakage-safe preprocessing
+├── run_real_data.py                 TGAP on every dataset
+├── compare_datasets.py              cross-dataset comparison
+├── run_ncommunity.py                N = 2, 3, 4 community sweep
+├── run_tgn.py, run_tgn_stability.py the learned model (TGN)
+├── make_publication.py              the paper's figures and tables
+└── plotting.py                      the shared publication theme
+
+experiments/synthetic_evaluation.py  known-truth evaluation, RQ1-RQ8
+examples/                            easy examples: your data / model / concept
+tests/                               the test suite
+docs/                                guides (see docs/README.md)
+contrib/                             Iván's finance work, NOT part of TGAP
+run.py                               ONE command: setup + run (start here)
+paths.py                             every input/output folder, defined once
+data/                                raw downloads (gitignored)
+output/                              every generated result (see below)
 ```
 
 **The explainer contains no knowledge of any concrete transformation.** It
@@ -257,20 +385,49 @@ Email-Eu-core), preprocessing decisions and known limitations, is in
 
 > Real data shows **applicability, not correctness** — there is no ground
 > truth on real data. Correctness evidence comes from the synthetic
-> known-truth experiments in `paper_evaluation.py`.
+> known-truth experiments in `experiments/synthetic_evaluation.py`.
 
 ---
 
 ## Reproducing the results
 
-```bash
-python paper_evaluation.py            # synthetic evaluation (RQ1–RQ8)
-python -m realdata.download
-python -m realdata.run_real_data
-python -m realdata.compare_datasets
-python -m realdata.run_tgn
-python -m unittest discover -s tests
+`python run.py all` runs steps 1–8 below in order (step 7 runs only if
+PyTorch is installed). To run them by hand, use the commands below from the
+repository root. Each step writes to exactly one folder under `output/`, and
+every folder is defined once, in [`paths.py`](paths.py).
+
+| step | command | writes to |
+|---|---|---|
+| 1 | `python -m experiments.synthetic_evaluation` | `output/synthetic/` |
+| 2 | `python -m realdata.download` | `data/` |
+| 3 | `python -m realdata.run_real_data` | `output/real_data/<mode>/<dataset>/` |
+| 4 | `python -m realdata.compare_datasets` | `output/comparison/<mode>/` |
+| 5 | `python -m realdata.run_ncommunity` | `output/ncommunity/<dataset>/` |
+| 6 | `python -m realdata.run_tgn` *(torch)* | `output/tgn/<dataset>/` |
+| 7 | `python -m realdata.run_tgn_stability` *(torch)* | `output/tgn_stability/<dataset>/` |
+| 8 | `python -m realdata.make_publication` | `output/publication/` |
+
+`<mode>` is the analysis mode; only `temporal_evaluation` (leakage-safe) is
+committed. Step 8 only *reads* steps 3 and 5–7; it computes no new science
+except the per-example local explanations.
+
 ```
+output/
+├── synthetic/        RQ1–RQ8 CSVs, figures, summary.json
+├── real_data/        per-dataset explanations with validity flags
+├── comparison/       cross-dataset table, observations, figures
+├── ncommunity/       N-community sweep
+├── tgn/              TGN explanation (one seed)
+├── tgn_stability/    TGN over five seeds
+└── publication/      what the paper uses
+    ├── figures/      fig0–fig12, PNG + PDF
+    ├── tables/       table1–table9, CSV + Markdown
+    ├── attribution/  element-level attribution behind fig8/11/12
+    └── figure_metadata.json
+```
+
+Run the tests with `python -m unittest discover -s tests`. They never write
+into `output/`.
 
 Every random choice is seeded (`seed=42`). One documented exception to exact
 reproducibility is recorded in `realdata/README.md`.

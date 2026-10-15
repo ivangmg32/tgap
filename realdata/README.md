@@ -2,21 +2,24 @@
 
 This folder is a **separate integration layer**. It imports from `core/`;
 nothing in `core/` imports from here. The synthetic experiments
-(`examples.py`, `evaluation.py`, `paper_evaluation.py`) and their results are
-unchanged.
+(`examples/`, `experiments/synthetic_evaluation.py`) and their results are
+unchanged. Every folder named below is defined in [`../paths.py`](../paths.py).
 
 ```bash
-python -m realdata.download                            # fetch raw files into realdata/data/
+python -m realdata.download                            # fetch raw files into data/
 python -m realdata.run_real_data                       # leakage-safe evaluation, all 8 datasets
 python -m realdata.run_real_data --mode descriptive    # full-period description
 python -m realdata.run_real_data --mode both           # both
 python -m realdata.run_real_data bitcoin_otc           # one dataset
 python -m realdata.compare_datasets --mode both        # comparison tables + figures
-python -m unittest discover -s tests                   # 269 tests, 101.8 s
+python -m realdata.run_ncommunity                      # N = 2, 3, 4 sweep
+python -m realdata.run_tgn                             # TGN (needs torch)
+python -m realdata.run_tgn_stability                   # TGN over five seeds
+python -m realdata.make_publication                    # paper figures + tables
 ```
 
 > **Only the default mode's results are committed**, under
-> `output/real_data_v2/temporal_evaluation/`. Descriptive-mode results are
+> `output/real_data/temporal_evaluation/`. Descriptive-mode results are
 > reproducible with `--mode descriptive` but are not stored, so a
 > leakage-unsafe number cannot be quoted by accident. The pre-cleanup v1
 > results were deleted; git history still holds them.
@@ -136,14 +139,14 @@ observed actor-to-actor edges needing **no projection at all**.
 appear in the temporal edge list, measured from the file. 201 of them belong
 to the two largest departments and are retained.)
 
-`realdata/data/` is gitignored (large, reproducible from the download
+`data/` is gitignored (large, reproducible from the download
 script).
 
 > **Scope of the claim.** These runs show the pipeline handles real temporal
 > structure and produces interpretable sensitivities. They do **not**
 > validate TGAP's correctness — real data has no ground truth. Correctness
 > evidence comes from the synthetic known-truth experiments in
-> `paper_evaluation.py`. Nothing here is a causal claim; every number is a
+> `experiments/synthetic_evaluation.py`. Nothing here is a causal claim; every number is a
 > **model sensitivity to a controlled counterfactual perturbation**.
 
 ## 2. Datasets rejected, with measured reasons
@@ -303,12 +306,9 @@ that can respond to it**.
 ## 6. Output location
 
 ```
-output/real_data_v2/
+output/real_data/                      <- realdata.run_real_data
 ├── temporal_evaluation/               <- the scientific evaluation
 │   ├── summary.json                   headline results, all 8 datasets
-│   ├── comparison.csv                 cross-dataset table
-│   ├── comparison_observations.json   computed cross-dataset facts
-│   ├── figures/*.png                  3 cross-dataset figures
 │   └── <dataset>/
 │       ├── metadata.json                    measured dataset facts
 │       ├── preprocessing_summary.json       decisions + what they discarded
@@ -322,11 +322,21 @@ output/real_data_v2/
 │       ├── summary.json                     headline results
 │       └── figures/*.png                    4 figures
 └── descriptive/                       <- same layout, NOT leakage-safe
+
+output/comparison/                     <- realdata.compare_datasets
+└── <mode>/
+    ├── comparison.csv                 cross-dataset table
+    ├── comparison_observations.json   computed cross-dataset facts
+    └── figures/*.png                  3 cross-dataset figures
 ```
+
+The other runners follow the same rule, one folder each:
+`output/ncommunity/`, `output/tgn/`, `output/tgn_stability/` and
+`output/publication/` (see the root README).
 
 ## 7. Findings from the new run
 
-All from `output/real_data_v2/*/comparison.csv` and
+All from `output/comparison/*/comparison.csv` and
 `comparison_observations.json`.
 
 ### 1. An expected invariant, verified on 8/8 datasets in both modes

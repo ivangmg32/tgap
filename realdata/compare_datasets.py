@@ -6,9 +6,10 @@ Cross-dataset comparison of the real-data TGAP runs.
     python -m realdata.compare_datasets --mode both
 
 Reads what run_real_data.py already wrote under
-output/real_data_v2/<analysis_mode>/ and produces one comparison table plus
-three figures per mode. It computes nothing new about TGAP - it only lines
-up results that already exist so patterns across datasets become visible.
+output/real_data/<analysis_mode>/ and writes one comparison table plus three
+figures per mode to output/comparison/<analysis_mode>/. It computes nothing
+new about TGAP - it only lines up results that already exist so patterns
+across datasets become visible.
 
 Three things this is good for:
 
@@ -47,9 +48,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+import paths
 from .adapters.base import ANALYSIS_MODES, TEMPORAL_EVALUATION
 
-OUTPUT_ROOT = os.path.join("output", "real_data_v2")
+# Reads one tree, writes another: see paths.py.
+RESULTS_ROOT = paths.REAL_DATA
+OUTPUT_ROOT = paths.COMPARISON
 
 # Which family each dataset belongs to, and therefore whether its edges
 # were observed or derived by projection.
@@ -355,13 +359,14 @@ def observations(table, datasets):
 
 
 def runMode(mode):
+    datasets = loadAll(os.path.join(RESULTS_ROOT, mode))
     root = os.path.join(OUTPUT_ROOT, mode)
-    datasets = loadAll(root)
     if not datasets:
-        print(f"no completed runs found under {root}; run "
+        print(f"no completed runs found under {RESULTS_ROOT}/{mode}; run "
               f"`python -m realdata.run_real_data --mode {mode}`")
         return None
     table = buildTable(datasets)
+    os.makedirs(root, exist_ok=True)
     table.to_csv(os.path.join(root, "comparison.csv"), index=False)
 
     columns = ["dataset", "domain", "family", "snapshots",

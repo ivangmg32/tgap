@@ -2,7 +2,7 @@
 
 Record of the deep review performed on the TGAP research prototype: what
 was found, what was changed, why, and what remains open. Companion to
-[01-TSAP-explained-simply.md](01-TSAP-explained-simply.md) and
+[01-TSAP-explained-simply.md](../01-TSAP-explained-simply.md) and
 [02-TGAP-code-walkthrough.md](02-TGAP-code-walkthrough.md) (note: doc 02
 describes v0.1; the deltas are listed at the end of this file).
 

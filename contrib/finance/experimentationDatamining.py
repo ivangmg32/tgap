@@ -45,6 +45,11 @@ from scipy import stats
 
 from CorrGraphs import CorrGraphs
 
+# Folders next to this file, so the script works from any working directory.
+_HERE = Path(__file__).resolve().parent
+DEFAULT_CACHE = str(_HERE / "Cache") + "/"
+DEFAULT_OUTPUT = str(_HERE / "resultsDatamining")
+
 try:
     import statsmodels.api as sm
 except ImportError:  # pragma: no cover
@@ -652,7 +657,7 @@ def run_all_experiments(
     tickers: Sequence[str] = DEFAULT_TICKERS,
     sectors: Mapping[str, str] = DEFAULT_SECTORS,
     config: Optional[ExperimentConfig] = None,
-    cache_path: str = "./finance/Cache/",
+    cache_path: str = DEFAULT_CACHE,
 ) -> Dict[str, object]:
     """Run the complete experimental workflow and return all results."""
     config = config or ExperimentConfig()
@@ -660,7 +665,7 @@ def run_all_experiments(
     # CorrGraphs and Cache are implemented in CorrGraph.py.
     # The cache_path argument is retained for API compatibility, but
     # the current CorrGraph.py constructor only accepts tickers.
-    if cache_path != "./finance/Cache/":
+    if cache_path != DEFAULT_CACHE:
         warnings.warn(
             "cache_path is not configurable through the supplied "
             "CorrGraph.py constructor; using its default Cache settings."
@@ -716,7 +721,7 @@ def run_all_experiments(
 
 def save_results(
     results: Mapping[str, object],
-    output_directory: str = "./finance/resultsDatamining",
+    output_directory: str = DEFAULT_OUTPUT,
 ) -> Path:
     """Save tabular outputs and a compact text report."""
     output_path = Path(output_directory)
@@ -809,8 +814,8 @@ def _build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--period", default="5y")
     parser.add_argument("--window", default="6mo")
     parser.add_argument("--graphs", type=int, default=20)
-    parser.add_argument("--cache", default="./finance/Cache/")
-    parser.add_argument("--output", default="./finance/resultsDatamining")
+    parser.add_argument("--cache", default=DEFAULT_CACHE)
+    parser.add_argument("--output", default=DEFAULT_OUTPUT)
     parser.add_argument("--bootstrap", type=int, default=2000)
     parser.add_argument("--null-iterations", type=int, default=500)
     parser.add_argument("--threshold", type=float, default=0.70)

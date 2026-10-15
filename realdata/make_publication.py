@@ -3,26 +3,40 @@ Generate the publication figure and table set.
 
     python -m realdata.make_publication
 
-Writes to output/publication/ - kept SEPARATE from the raw per-dataset
-results (design section 44), so the paper's inputs are never mixed with
-diagnostics. Nothing here computes new science: it selects and presents
+Writes to output/publication/ (paths.PUBLICATION) - kept SEPARATE from the
+raw per-dataset results (design section 44), so the paper's inputs are never
+mixed with diagnostics. Nothing here computes new science: it selects and presents
 results that already exist, except for the local/temporal explanations,
 which are computed here because they are per-example rather than
 per-dataset.
 
-FIGURES
-    fig1_concept_impacts.png        global concept importance
-    fig2_model_concept_heatmap.png  model x concept explanation matrix
-    fig3_bridge_matrix.png          N-community pairwise bridge structure
-    fig4_local_graph.png            original / perturbed / difference graph
-    fig5_temporal_local.png         when did the concept matter
-    fig6_impact_distribution.png    beeswarm-style spread across datasets
+figures/   (png + pdf)
+    fig0_tgap_architecture                the method, as one diagram
+    fig1_final_model_separated_impacts    global concept impacts (MAIN)
+    fig3_bridge_matrix                    N-community pairwise bridge structure
+    fig4_local_graph                      original / perturbed / difference graph
+    fig5_temporal_local                   when did the concept matter
+    fig6_impact_distribution              spread across datasets
+    fig7_tgn_seed_stability               TGN held-out, five seeds
+    fig8_dependence                       structural property vs impact
+    fig9_true_beeswarm                    deterministic beeswarm
+    fig10_publication_boxplot             per-model impact distributions
+    fig11_local_bar                       one local explanation
+    fig12_temporal_edge_time              edge x snapshot attribution
 
-TABLES (csv + markdown)
-    table1_datasets.csv             dataset summary
-    table2_main_results.csv         concept impacts, both case studies
-    table3_tgn.csv                  learned-model results
-    table4_validity.csv             how much of each run was usable
+tables/    (csv + md)
+    table1_datasets                       dataset summary
+    table2_main_results                   concept impacts, both case studies
+    table3_tgn                            learned-model results (one seed)
+    table4_validity                       how much of each run was usable
+    table5_ncommunity                     N = 2, 3, 4 community sweep
+    table6..table9                        TGN seed stability and comparability
+
+attribution/                              element-level attribution (csv)
+figure_metadata.json                      comparability metadata per figure
+
+(There is no fig2: the earlier fig1/fig2 designs pooled impacts across
+models and were removed; git history keeps them.)
 
 FIGURE SEMANTICS, used consistently everywhere:
     red / positive  = the perturbation RAISES the prediction
@@ -42,19 +56,25 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
+import paths
 from core import (
     BridgeWidthMetric, BridgeWidthTransformation, PersistenceTemporalModel,
     bridgeMatrix, edgeAttribution, edgeTimeAttribution, graphDifference,
     localExplanation, makeNCommunityTemporalGraph, nodeAttribution,
     temporalAttribution, writeElementAttribution,
 )
+from realdata.adapters.base import TEMPORAL_EVALUATION
 
-RESULTS = os.path.join("output", "real_data_v2", "temporal_evaluation")
-TGN_RESULTS = os.path.join("output", "real_data_v2", "tgn")
-TGN_STABILITY = os.path.join("output", "real_data_v2", "tgn_stability",
-                             "email_eu_core")
-OUTPUT = os.path.join("output", "publication")
-SUPERSEDED = os.path.join(OUTPUT, "superseded")
+# Inputs: the leakage-safe real-data runs and the TGN runs.
+RESULTS = os.path.join(paths.REAL_DATA, TEMPORAL_EVALUATION)
+TGN_RESULTS = paths.TGN
+TGN_STABILITY = os.path.join(paths.TGN_STABILITY, "email_eu_core")
+NCOMMUNITY_RESULTS = paths.NCOMMUNITY
+
+# Outputs.
+OUTPUT = paths.PUBLICATION
+FIGURES = paths.PUBLICATION_FIGURES
+TABLES = paths.PUBLICATION_TABLES
 CASE_STUDIES = ("decentraland", "email_eu_core")
 
 # One visual language for the whole paper, defined once in realdata.plotting
@@ -62,7 +82,7 @@ CASE_STUDIES = ("decentraland", "email_eu_core")
 # values copied in - the duplication is exactly the drift that module was
 # added to prevent, so the copy is gone rather than kept in sync by hand.
 from realdata.plotting import (POSITIVE, NEGATIVE, NEUTRAL,     # noqa: E402
-                               savePublicationFigure,
+                               architectureFigure, savePublicationFigure,
                                usePublicationTheme)
 
 # Imported BEFORE the theme is applied on purpose: this module pulls in
@@ -89,67 +109,6 @@ def _valid(frame):
     ''' Publication figures show VALID rows only (design section 32);
     diagnostics keep the rest. '''
     return frame[frame["valid_for_analysis"]]
-
-
-def figure1ConceptImpacts(datasets, path):
-    ''' Global concept importance: mean |impact| per concept, per case
-    study. Magnitudes differ by orders of magnitude between models, so each
-    dataset is normalised by its own largest value - the comparison is of
-    SHAPE, which is what "which concept matters here" means. '''
-    fig, axes = plt.subplots(1, len(datasets), figsize=(4.2 * len(datasets), 3.2))
-    axes = np.atleast_1d(axes)
-    for ax, (name, data) in zip(axes, datasets.items()):
-        valid = _valid(data["results"])
-        grouped = valid.groupby("transformation")["impact"].apply(
-            lambda s: s.abs().mean()).sort_values(ascending=True)
-        largest = grouped.max() or 1.0
-        ax.barh(range(len(grouped)), grouped / largest, color=POSITIVE,
-                alpha=0.85)
-        ax.set_yticks(range(len(grouped)))
-        ax.set_yticklabels(grouped.index, fontsize=8)
-        ax.set_xlabel("mean |impact|, scaled to this dataset's maximum")
-        ax.set_title(name, fontsize=10)
-        ax.set_xlim(0, 1.05)
-    fig.suptitle("Concept importance (valid perturbations only)", fontsize=11)
-    savePublicationFigure(fig, path)
-    plt.close(fig)
-
-
-def figure2ModelConceptHeatmap(datasets, path):
-    ''' The explanation matrix: which model responds to which concept.
-    Colour is normalised per model row so every model is legible whatever
-    units it predicts in; the printed number is the real impact. '''
-    fig, axes = plt.subplots(1, len(datasets),
-                             figsize=(5.6 * len(datasets), 3.4))
-    axes = np.atleast_1d(axes)
-    for ax, (name, data) in zip(axes, datasets.items()):
-        valid = _valid(data["results"])
-        subset = valid[(valid["requested_delta"] == 0.1)
-                       & (valid["direction"] == "increase")]
-        matrix = subset.pivot_table(index="model", columns="transformation",
-                                    values="impact", dropna=False)
-        values = matrix.to_numpy(dtype=float)
-        scale = np.nanmax(np.abs(values), axis=1, keepdims=True)
-        scale[~np.isfinite(scale) | (scale == 0)] = 1.0
-        image = ax.imshow(np.ma.masked_invalid(values / scale), cmap="RdBu_r",
-                          vmin=-1, vmax=1, aspect="auto")
-        ax.set_xticks(range(len(matrix.columns)))
-        ax.set_xticklabels(matrix.columns, rotation=25, ha="right", fontsize=7)
-        ax.set_yticks(range(len(matrix.index)))
-        ax.set_yticklabels(matrix.index, fontsize=7)
-        for i in range(values.shape[0]):
-            for j in range(values.shape[1]):
-                value = values[i, j]
-                ax.text(j, i, "n/a" if value != value else f"{value:+.3g}",
-                        ha="center", va="center", fontsize=6)
-        ax.set_title(name, fontsize=10)
-        ax.grid(False)
-    fig.colorbar(image, ax=axes.tolist(), label="impact / row maximum",
-                 fraction=0.02)
-    fig.suptitle("Model x concept explanation matrix (delta 0.1, increase)",
-                 fontsize=11)
-    savePublicationFigure(fig, path)
-    plt.close(fig)
 
 
 def figure3BridgeMatrix(path):
@@ -401,221 +360,6 @@ def semanticGroups():
     return groups
 
 
-def _meanAbsImpact(frame, concepts):
-    ''' Mean |impact| per concept over VALID rows, in the given order.
-    Concepts with no valid row are dropped, not plotted as zero - absent
-    evidence is not evidence of no effect. '''
-    valid = _valid(frame)
-    out = []
-    for concept in concepts:
-        values = valid[valid["transformation"] == concept]["impact"]
-        values = values[np.isfinite(values)]
-        if len(values):
-            out.append((concept, float(values.abs().mean()), len(values)))
-    return out
-
-
-def _dotPanel(ax, rows, colour):
-    ''' One concept-impact panel.
-
-    A DOT, not a bar. On a log axis a bar's length depends on where the axis
-    happens to start, so bar length is not proportional to the value; a
-    dot's position is exactly the value. Every candidate figure uses this,
-    so the two groups in candidate B cannot acquire different visual
-    grammar by accident.
-    '''
-    if not rows:
-        ax.text(0.5, 0.5, "no valid rows", ha="center", va="center",
-                fontsize=8, color=NEUTRAL, transform=ax.transAxes)
-        ax.set_xticks([]); ax.set_yticks([]); ax.grid(False)
-        return
-    values = [v for _, v, _ in rows]
-    floor = min(values) / 4
-    ax.hlines(range(len(rows)), floor, values, color=NEUTRAL, linewidth=1.0,
-              zorder=2)
-    ax.scatter(values, range(len(rows)), s=58, color=colour,
-               edgecolors="black", linewidths=0.5, zorder=3)
-    ax.set_yticks(range(len(rows)))
-    ax.set_yticklabels([f"{c}  (n={n})" for c, _, n in rows], fontsize=8)
-    ax.set_xscale("log")
-    for index, value in enumerate(values):
-        ax.annotate(f"{value:.4g}", (value, index), textcoords="offset points",
-                    xytext=(7, 0), va="center", fontsize=7.5)
-    ax.set_xlim(floor, max(values) * 30)
-    ax.set_ylim(-0.6, len(rows) - 0.4)
-
-
-def figure1ACommensurable(datasets, path):
-    ''' CANDIDATE A - only the concepts RQ1b admits as commensurable.
-
-    Shows mean |impact| for the relative-delta concepts (Bridge Width,
-    Density, Churn as currently registered) and omits the other two
-    entirely. Values are the REAL means on a log axis, not rescaled to a
-    per-dataset maximum: inside this group the quantities are commensurable,
-    so there is no reason to hide their size.
-
-    COMPARABILITY: cross-concept numerical comparison IS allowed within this
-    figure. That is the whole point of restricting it.
-
-    Deliberately NOT called "concept importance" - it reports measured
-    prediction impact, which is not the same claim.
-    '''
-    groups = semanticGroups()
-    concepts = groups.get(COMMENSURABLE, [])
-    fig, axes = plt.subplots(1, len(datasets),
-                             figsize=(5.2 * len(datasets), 3.1), squeeze=False)
-    for ax, (name, data) in zip(axes[0], datasets.items()):
-        _dotPanel(ax, _meanAbsImpact(data["results"], concepts), POSITIVE)
-        ax.set_xlabel("mean |impact| (log scale)")
-        ax.set_title(name, fontsize=10)
-    fig.suptitle("Global prediction impact for commensurable transformations\n"
-                 "(relative-delta concepts only; valid perturbations only)",
-                 fontsize=10.5)
-    fig.subplots_adjust(top=0.80, wspace=0.42)
-    savePublicationFigure(fig, path)
-    plt.close(fig)
-    return {"concepts": concepts}
-
-
-def figure1BGrouped(datasets, path):
-    ''' CANDIDATE B - all five concepts, split into two separated panels.
-
-    Each semantic group gets its OWN axes and its own x-axis. Nothing spans
-    the two, so there is no shared bar length to read as a ranking, and the
-    gap between the column pairs is wide enough that the eye does not carry
-    one scale across it.
-
-    COMPARABILITY: allowed WITHIN a group, not across groups. The caption
-    says so, and the two groups never share an axis.
-    '''
-    groups = semanticGroups()
-    order = [g for g in (COMMENSURABLE, NOT_COMMENSURABLE) if groups.get(g)]
-    fig = plt.figure(figsize=(5.4 * len(datasets), 2.6 + 1.7 * len(order)))
-    # Wide hspace/wspace: the separation IS the scientific content here.
-    grid = fig.add_gridspec(len(order), len(datasets), wspace=0.42,
-                            hspace=1.05, top=0.76, bottom=0.12)
-    for rowIndex, group in enumerate(order):
-        for columnIndex, (name, data) in enumerate(datasets.items()):
-            ax = fig.add_subplot(grid[rowIndex, columnIndex])
-            _dotPanel(ax, _meanAbsImpact(data["results"], groups[group]),
-                      POSITIVE if group == COMMENSURABLE else NEUTRAL)
-            ax.set_xlabel("mean |impact| (log scale)", fontsize=8)
-            ax.set_title(f"{name}\ngroup: {group}", fontsize=9)
-    # A hard rule between the groups, so the split cannot be missed.
-    fig.add_artist(plt.Line2D([0.04, 0.96], [0.435, 0.435], color="#444444",
-                              linewidth=1.1, linestyle=(0, (6, 4))))
-    fig.suptitle("Global prediction impact, grouped by perturbation semantics\n"
-                 "Values are NOT comparable across the two groups: a relative "
-                 "property change, a rewiring\nfraction and an absolute slope "
-                 "are different quantities. Each group has its own axis.",
-                 fontsize=10, y=0.97)
-    savePublicationFigure(fig, path)
-    plt.close(fig)
-    return {"groups": {g: groups.get(g, []) for g in order}}
-
-
-def figure2CGroupedSemanticHeatmap(datasets, path):
-    ''' CANDIDATE C - the model x concept matrix, grouped by semantics.
-
-    All five concepts stay visible. What changes is that the matrix is cut
-    into one block per semantic group, each with its own colour treatment,
-    so no single colour scale spans all five columns.
-
-      * commensurable block - colour is impact / row maximum WITHIN THE
-        BLOCK. The three concepts are comparable, so a shared scale across
-        them is meaningful.
-      * non-commensurable block - colour encodes SIGN ONLY. Giving these
-        columns a shared magnitude scale would be exactly the invented
-        transformation-independent score this figure must not contain.
-
-    In both blocks the printed number is the REAL TGAP impact, so no value
-    is lost to normalisation. Concepts are in registry order inside each
-    block and are never sorted by impact.
-
-    COMPARABILITY: colour may be compared within the left block only.
-    '''
-    groups = semanticGroups()
-    order = [g for g in (COMMENSURABLE, NOT_COMMENSURABLE) if groups.get(g)]
-    widths = [max(len(groups[g]), 1) for g in order]
-    fig = plt.figure(figsize=(3.0 + 1.5 * sum(widths), 1.9 * len(datasets) + 1.9))
-    grid = fig.add_gridspec(len(datasets), len(order), width_ratios=widths,
-                            wspace=0.30, hspace=0.80, top=0.84, bottom=0.17)
-
-    image = None
-    for rowIndex, (name, data) in enumerate(datasets.items()):
-        valid = _valid(data["results"])
-        subset = valid[(valid["requested_delta"] == 0.1)
-                       & (valid["direction"] == "increase")]
-        for columnIndex, group in enumerate(order):
-            ax = fig.add_subplot(grid[rowIndex, columnIndex])
-            concepts = [c for c in groups[group]
-                        if c in set(subset["transformation"])]
-            if not concepts:
-                ax.text(0.5, 0.5, "no valid rows", ha="center", va="center",
-                        fontsize=8, color=NEUTRAL, transform=ax.transAxes)
-                ax.set_xticks([]); ax.set_yticks([]); ax.grid(False)
-                ax.set_title(group, fontsize=9)
-                continue
-            matrix = subset.pivot_table(index="model", columns="transformation",
-                                        values="impact", dropna=False)
-            matrix = matrix.reindex(columns=concepts)    # registry order
-            values = matrix.to_numpy(dtype=float)
-
-            if group == COMMENSURABLE:
-                scale = np.nanmax(np.abs(values), axis=1, keepdims=True)
-                scale[~np.isfinite(scale) | (scale == 0)] = 1.0
-                shown = values / scale
-                image = ax.imshow(np.ma.masked_invalid(shown), cmap="RdBu_r",
-                                  vmin=-1, vmax=1, aspect="auto")
-            else:
-                # Sign only, in a DELIBERATELY DIFFERENT palette. Reusing
-                # RdBu_r here would render a +0.000994 cell fully saturated,
-                # and a reader checking it against the continuous colorbar
-                # would read it as a maximal impact. Three flat, muted,
-                # obviously-categorical colours cannot be read off that bar.
-                signColours = ListedColormap(["#9ecae1", "#f0f0f0", "#fcae91"])
-                ax.imshow(np.ma.masked_invalid(np.sign(values)),
-                          cmap=signColours,
-                          norm=BoundaryNorm([-1.5, -0.5, 0.5, 1.5], 3),
-                          aspect="auto")
-
-            ax.set_xticks(range(len(concepts)))
-            ax.set_xticklabels(concepts, rotation=25, ha="right", fontsize=7)
-            ax.set_yticks(range(values.shape[0]))
-            ax.set_yticklabels(matrix.index if columnIndex == 0 else
-                               [""] * values.shape[0], fontsize=7)
-            for i in range(values.shape[0]):
-                for j in range(values.shape[1]):
-                    value = values[i, j]
-                    ax.text(j, i, "n/a" if value != value else f"{value:+.3g}",
-                            ha="center", va="center", fontsize=6)
-            note = ("colour: impact / row max" if group == COMMENSURABLE
-                    else "colour: SIGN ONLY")
-            ax.set_title(f"{name}\n{group}  -  {note}", fontsize=8.5)
-            ax.grid(False)
-
-    if image is not None:
-        bar = fig.colorbar(image, ax=fig.axes, fraction=0.016, pad=0.02)
-        bar.set_label("impact / row maximum\n(commensurable block ONLY)",
-                      fontsize=8)
-    # The sign block gets its own key, never the continuous bar.
-    fig.legend(handles=[mpatches.Patch(facecolor="#fcae91",
-                                       edgecolor="#444444",
-                                       label="raises prediction"),
-                        mpatches.Patch(facecolor="#9ecae1",
-                                       edgecolor="#444444",
-                                       label="lowers prediction")],
-               title="mechanism / absolute block: sign only",
-               loc="lower center", ncol=2, fontsize=8, title_fontsize=8,
-               frameon=True, bbox_to_anchor=(0.5, 0.005))
-    fig.suptitle("Model x concept impacts, grouped by perturbation semantics "
-                 "(delta 0.1, increase)\nPrinted values are the real impacts. "
-                 "No colour scale spans both groups.", fontsize=10, y=0.985)
-    savePublicationFigure(fig, path)
-    plt.close(fig)
-    return {"groups": {g: groups.get(g, []) for g in order}}
-
-
 ##  The final publication figure  ##
 
 
@@ -800,7 +544,7 @@ def figure1FinalModelSeparated(datasets, path):
 # NO NEW EXPLANATION ALGORITHM. edgeAttribution, nodeAttribution and
 # edgeTimeAttribution already existed and are unchanged; this calls them.
 
-ATTRIBUTION = os.path.join(OUTPUT, "attribution")
+ATTRIBUTION = paths.PUBLICATION_ATTRIBUTION
 ATTRIBUTION_SEED = 42
 LOCAL_BAR_TOP_K = 18
 EDGE_TIME_TOP_K = 22
@@ -1300,32 +1044,6 @@ def figure12TemporalEdgeTime(paths, path, topK=EDGE_TIME_TOP_K):
             "snapshots_with_response": [int(s) for s in responsive]}
 
 
-SUPERSEDED_NOTICE = """# Superseded figures
-
-Retained for the record. **None of these is the paper's global-impact
-figure.** That is `../fig1_final_model_separated_impacts.png`.
-
-| figure | why it was replaced |
-|---|---|
-| `fig1_concept_impacts` | Pooled mean abs(impact) across six models with different prediction scales, AND placed all five concepts on one axis. Both are invalid. |
-| `fig2_model_concept_heatmap` | Kept models separate, but normalised each model row across all five concepts, so non-commensurable concepts shared one colour scale. |
-| `fig1A_commensurable_concept_impacts` | Fixed the concept axis by dropping the non-commensurable concepts, but still pooled a mean across models. |
-| `fig1B_grouped_concept_impacts` | Separated the semantic groups, but still pooled a mean across models. |
-| `fig2_grouped_semantic_heatmap` | Separated the semantic groups, but still normalised within a model row. |
-
-The common defect in all five is aggregation across models. The final figure
-removes it: every point is one valid CSV row, and every panel carries its own
-axis.
-"""
-
-
-def _writeSupersededNotice(path):
-    ''' Say plainly why these figures are kept and must not be used. '''
-    with open(path, "w", encoding="utf-8") as handle:
-        handle.write(SUPERSEDED_NOTICE)
-    return path
-
-
 def writeFigureMetadata(path):
     ''' Machine-readable comparability metadata for the candidate figures.
 
@@ -1337,7 +1055,7 @@ def writeFigureMetadata(path):
     groups = semanticGroups()
     commensurable = groups.get(COMMENSURABLE, [])
     other = groups.get(NOT_COMMENSURABLE, [])
-    sources = [os.path.join(RESULTS, d, "tgap_results.csv")
+    sources = [paths.relative(os.path.join(RESULTS, d, "tgap_results.csv"))
                for d in CASE_STUDIES]
     payload = {
         "comparability_rule": {
@@ -1387,10 +1105,11 @@ def writeFigureMetadata(path):
                 "comparability_scope": "within one panel only; node and edge "
                                        "occlusions are different quantities "
                                        "and are never pooled",
-                "source_csv": [os.path.join(ATTRIBUTION,
-                                            "node_attribution.csv"),
-                               os.path.join(ATTRIBUTION,
-                                            "edge_attribution.csv")],
+                "source_csv": [
+                    paths.relative(os.path.join(ATTRIBUTION,
+                                                "node_attribution.csv")),
+                    paths.relative(os.path.join(ATTRIBUTION,
+                                                "edge_attribution.csv"))],
                 "generation_function":
                     "realdata.make_publication.figure8Dependence",
                 "formats": ["png", "pdf"],
@@ -1444,8 +1163,8 @@ def writeFigureMetadata(path):
                 "cross_concept_numerical_comparison_allowed": False,
                 "comparability_scope": "elements within this single "
                                        "explanation; not a concept ranking",
-                "source_csv": [os.path.join(ATTRIBUTION,
-                                            "edge_attribution_trend.csv")],
+                "source_csv": [paths.relative(os.path.join(
+                    ATTRIBUTION, "edge_attribution_trend.csv"))],
                 "generation_function":
                     "realdata.make_publication.figure11LocalBar",
                 "formats": ["png", "pdf"],
@@ -1471,59 +1190,10 @@ def writeFigureMetadata(path):
                 "comparability_scope": "one measured prediction difference "
                                        "per (edge, snapshot); nothing is "
                                        "summed over time",
-                "source_csv": [os.path.join(ATTRIBUTION,
-                                            "edge_time_attribution.csv")],
+                "source_csv": [paths.relative(os.path.join(
+                    ATTRIBUTION, "edge_time_attribution.csv"))],
                 "generation_function":
                     "realdata.make_publication.figure12TemporalEdgeTime",
-                "formats": ["png", "pdf"],
-            },
-            {
-                "figure": "superseded/fig1A_commensurable_concept_impacts",
-                "candidate": "A",
-                "status": "SUPERSEDED - pooled a mean across models",
-                "included_concepts": commensurable,
-                "excluded_concepts": other,
-                "delta_semantics": {c: COMMENSURABLE for c in commensurable},
-                "cross_concept_numerical_comparison_allowed": True,
-                "comparability_scope": "all concepts shown are commensurable",
-                "source_csv": sources,
-                "generation_function":
-                    "realdata.make_publication.figure1ACommensurable",
-                "formats": ["png", "pdf"],
-            },
-            {
-                "figure": "superseded/fig1B_grouped_concept_impacts",
-                "candidate": "B",
-                "status": "SUPERSEDED - pooled a mean across models",
-                "included_concepts": commensurable + other,
-                "excluded_concepts": [],
-                "delta_semantics": {**{c: COMMENSURABLE for c in commensurable},
-                                    **{c: NOT_COMMENSURABLE for c in other}},
-                "cross_concept_numerical_comparison_allowed": False,
-                "comparability_scope": "within a group only; the two groups "
-                                       "never share an axis",
-                "source_csv": sources,
-                "generation_function":
-                    "realdata.make_publication.figure1BGrouped",
-                "formats": ["png", "pdf"],
-            },
-            {
-                "figure": "superseded/fig2_grouped_semantic_heatmap",
-                "candidate": "C",
-                "status": "SUPERSEDED - normalised within a model row",
-                "included_concepts": commensurable + other,
-                "excluded_concepts": [],
-                "delta_semantics": {**{c: COMMENSURABLE for c in commensurable},
-                                    **{c: NOT_COMMENSURABLE for c in other}},
-                "cross_concept_numerical_comparison_allowed": False,
-                "comparability_scope": "colour comparable within the "
-                                       "commensurable block only; the other "
-                                       "block encodes sign only; printed "
-                                       "values are the real impacts",
-                "source_csv": sources,
-                "generation_function":
-                    "realdata.make_publication"
-                    ".figure2CGroupedSemanticHeatmap",
                 "formats": ["png", "pdf"],
             },
         ],
@@ -1651,10 +1321,7 @@ def writeTables(datasets):
                         ("table4_validity", table4)):
         if frame.empty:
             continue
-        frame.to_csv(os.path.join(OUTPUT, f"{name}.csv"), index=False)
-        with open(os.path.join(OUTPUT, f"{name}.md"), "w",
-                  encoding="utf-8") as handle:
-            handle.write(_asMarkdown(frame))
+        _writeTable(name, frame)
     return {"table1": len(table1), "table2": len(table2),
             "table3": len(table3), "table4": len(table4)}
 
@@ -1754,8 +1421,55 @@ def figureTgnSeedStability(path):
     return True
 
 
+def ncommunityTable():
+    ''' table5: the N = 2, 3, 4 community sweep, one row per (dataset, N).
+
+    Built from the summaries realdata.run_ncommunity writes, so the table
+    cannot drift from the run. "own_pair_nonzero" counts pair-reading models
+    that responded to their own bridge; "cross_pair_exactly_zero" counts the
+    cross-pair rows that were exactly zero, which is what selectivity means.
+    '''
+    rows = []
+    if not os.path.isdir(NCOMMUNITY_RESULTS):
+        return pd.DataFrame()
+    for name in sorted(os.listdir(NCOMMUNITY_RESULTS)):
+        summaryPath = os.path.join(NCOMMUNITY_RESULTS, name, "summary.json")
+        if not os.path.exists(summaryPath):
+            continue
+        with open(summaryPath, encoding="utf-8") as handle:
+            summary = json.load(handle)
+        for byN in summary["by_n"]:
+            selectivity = byN["pair_selectivity"]
+            rows.append({
+                "dataset": byN["dataset"],
+                "N": byN["n_communities"],
+                "pairs": byN["community_pairs"],
+                "sizes": "/".join(map(str, byN["partition_sizes"])),
+                "community_source": byN["community_mode"],
+                "modularity": byN["modularity"],
+                "modularity_natural": byN["modularity_natural"],
+                "modularity_lost": byN["modularity_lost_by_merging"],
+                "own_pair_nonzero": f"{selectivity['own_pair_nonzero']}/"
+                                    f"{selectivity['own_pair_rows']}",
+                "cross_pair_exactly_zero":
+                    f"{selectivity['other_pair_exactly_zero']}/"
+                    f"{selectivity['other_pair_rows']}",
+                "selectivity_holds": selectivity["selectivity_holds"],
+            })
+    return pd.DataFrame(rows)
+
+
+def _writeTable(name, frame):
+    ''' One publication table, as csv AND markdown. '''
+    frame.to_csv(os.path.join(TABLES, f"{name}.csv"), index=False)
+    with open(os.path.join(TABLES, f"{name}.md"), "w",
+              encoding="utf-8") as handle:
+        handle.write(_asMarkdown(frame))
+
+
 def main():
-    os.makedirs(OUTPUT, exist_ok=True)
+    for directory in (OUTPUT, FIGURES, TABLES):
+        os.makedirs(directory, exist_ok=True)
     available = [d for d in CASE_STUDIES
                  if os.path.exists(os.path.join(RESULTS, d, "summary.json"))]
     if not available:
@@ -1764,86 +1478,65 @@ def main():
         return None
     datasets = {name: _load(name) for name in available}
 
+    def figure(name):
+        return os.path.join(FIGURES, name)
+
     print("=" * 66)
     print("PUBLICATION FIGURES AND TABLES")
     print("=" * 66)
+    architectureFigure(figure("fig0_tgap_architecture"))
+    print("  fig0_tgap_architecture.png      the method")
     # THE global-impact figure. Descriptive and model-separated: nothing is
     # pooled across models, and no axis spans two models or two datasets.
     final = figure1FinalModelSeparated(
-        datasets,
-        os.path.join(OUTPUT, "fig1_final_model_separated_impacts.png"))
+        datasets, figure("fig1_final_model_separated_impacts.png"))
     print(f"  fig1_final_model_separated_impacts.png   MAIN global-impact "
           f"figure, {len(final['models'])} models x {len(final['rows'])} rows")
 
-    # SUPERSEDED. fig1/fig2 pooled impacts across six models with different
-    # prediction scales and put all five concepts on one axis; candidates
-    # A/B/C were the intermediate designs that fixed only the second half of
-    # that. They are kept - they are part of the record - but they are
-    # written to a subdirectory so nothing downstream can pick one up as the
-    # paper's global-impact figure by accident.
-    os.makedirs(SUPERSEDED, exist_ok=True)
-    figure1ConceptImpacts(datasets,
-                          os.path.join(SUPERSEDED, "fig1_concept_impacts.png"))
-    figure2ModelConceptHeatmap(
-        datasets, os.path.join(SUPERSEDED, "fig2_model_concept_heatmap.png"))
-    figure1ACommensurable(
-        datasets, os.path.join(SUPERSEDED,
-                               "fig1A_commensurable_concept_impacts.png"))
-    figure1BGrouped(datasets, os.path.join(
-        SUPERSEDED, "fig1B_grouped_concept_impacts.png"))
-    figure2CGroupedSemanticHeatmap(
-        datasets, os.path.join(SUPERSEDED, "fig2_grouped_semantic_heatmap.png"))
-    _writeSupersededNotice(os.path.join(SUPERSEDED, "README.md"))
-    print(f"  superseded/                     5 earlier designs, retained "
-          f"for the record, not for the paper")
+    figure3BridgeMatrix(figure("fig3_bridge_matrix.png"))
+    print("  fig3_bridge_matrix.png          N-community bridge structure")
+    record = figure4LocalGraph(figure("fig4_local_graph.png"))
+    print(f"  fig4_local_graph.png            local explanation "
+          f"({record['affected_edge_count']} edges touched)")
+    figure5TemporalLocal(figure("fig5_temporal_local.png"))
+    print("  fig5_temporal_local.png         temporal local explanation")
+    figure6ImpactDistribution(figure("fig6_impact_distribution.png"))
+    print("  fig6_impact_distribution.png    impact spread, 8 datasets")
+    if figureTgnSeedStability(figure("fig7_tgn_seed_stability.png")):
+        print("  fig7_tgn_seed_stability.png     TGN held-out, 5 seeds")
+
     # Element-level attribution: persisted FIRST, then plotted from the
     # files, so every number in figs 8/11/12 exists in a readable CSV.
     attributionPaths = buildAttributionData()
     print(f"  attribution/                    persisted element and "
           f"edge-time attribution ({len(attributionPaths)} csv)")
     dependence = figure8Dependence(attributionPaths,
-                                   os.path.join(OUTPUT, "fig8_dependence.png"))
+                                   figure("fig8_dependence.png"))
     print(f"  fig8_dependence.png             structural property vs impact, "
           f"{sum(d['n'] for d in dependence)} elements")
-    swarm = figure9TrueBeeswarm(
-        datasets, os.path.join(OUTPUT, "fig9_true_beeswarm.png"))
+    swarm = figure9TrueBeeswarm(datasets, figure("fig9_true_beeswarm.png"))
     print(f"  fig9_true_beeswarm.png          deterministic packing, "
           f"{swarm['points']} points")
-    figure10PublicationBoxplot(
-        datasets, os.path.join(OUTPUT, "fig10_publication_boxplot.png"))
+    figure10PublicationBoxplot(datasets,
+                               figure("fig10_publication_boxplot.png"))
     print("  fig10_publication_boxplot.png   per-model impact distributions")
-    local = figure11LocalBar(attributionPaths,
-                             os.path.join(OUTPUT, "fig11_local_bar.png"))
+    local = figure11LocalBar(attributionPaths, figure("fig11_local_bar.png"))
     print(f"  fig11_local_bar.png             top {local['shown']} of "
           f"{local['total']} edges, full data retained")
     temporal = figure12TemporalEdgeTime(
-        attributionPaths, os.path.join(OUTPUT, "fig12_temporal_edge_time.png"))
+        attributionPaths, figure("fig12_temporal_edge_time.png"))
     print(f"  fig12_temporal_edge_time.png    {temporal['points']} "
           f"(edge, snapshot) observations")
 
     writeFigureMetadata(os.path.join(OUTPUT, "figure_metadata.json"))
     print("  figure_metadata.json            comparability metadata")
-    figure3BridgeMatrix(os.path.join(OUTPUT, "fig3_bridge_matrix.png"))
-    print("  fig3_bridge_matrix.png          N-community bridge structure")
-    record = figure4LocalGraph(os.path.join(OUTPUT, "fig4_local_graph.png"))
-    print(f"  fig4_local_graph.png            local explanation "
-          f"({record['affected_edge_count']} edges touched)")
-    figure5TemporalLocal(os.path.join(OUTPUT, "fig5_temporal_local.png"))
-    print("  fig5_temporal_local.png         temporal local explanation")
-    figure6ImpactDistribution(
-        os.path.join(OUTPUT, "fig6_impact_distribution.png"))
-    print("  fig6_impact_distribution.png    impact spread, 8 datasets")
-
-    if figureTgnSeedStability(os.path.join(OUTPUT,
-                                           "fig7_tgn_seed_stability.png")):
-        print("  fig7_tgn_seed_stability.png    TGN held-out, 5 seeds")
 
     counts = writeTables(datasets)
-    for name, frame in tgnTables().items():
-        frame.to_csv(os.path.join(OUTPUT, f"{name}.csv"), index=False)
-        with open(os.path.join(OUTPUT, f"{name}.md"), "w",
-                  encoding="utf-8") as handle:
-            handle.write(_asMarkdown(frame))
+    extra = {"table5_ncommunity": ncommunityTable(), **tgnTables()}
+    for name, frame in extra.items():
+        if frame.empty:
+            continue
+        _writeTable(name, frame)
         counts[name] = len(frame)
     print()
     for name, rows in counts.items():
