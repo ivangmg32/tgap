@@ -94,35 +94,211 @@ def unpack(home,source=None):
     return destination
 
 
-def register_launcher(home):
-    scripts=home/'bin'
-    scripts.mkdir(exist_ok=True)
-    py=python_path(home)
-    if os.name=='nt':
-        launcher=scripts/'tgap.cmd'
-        launcher.write_text('@echo off\r\n"'+str(py)+'" -B -m tgap_cli --home "'+str(home)+'" %*\r\n',encoding='utf-8')
-        import winreg
-        with winreg.CreateKey(winreg.HKEY_CURRENT_USER,'Environment') as key:
-            try: old,_=winreg.QueryValueEx(key,'Path')
-            except FileNotFoundError: old=''
-            if str(scripts).lower() not in [p.lower() for p in old.split(';')]:
-                winreg.SetValueEx(key,'Path',0,winreg.REG_EXPAND_SZ,old.rstrip(';')+';'+str(scripts))
-        # Existing terminals retain their original environment. Refresh shell notification.
+def _is_windows():
+    ''' One place that decides which launcher layout to use (tests switch it
+    to exercise the Windows logic on any machine). '''
+    return os.name=='nt'
+
+
+def _norm(path):
+    return os.path.normcase(os.path.normpath(os.path.expanduser(str(path))))
+
+
+def _on_path(directory, path_value=None):
+    entries=(path_value if path_value is not None else os.environ.get('PATH','')).split(os.pathsep)
+    return _norm(directory) in {_norm(p) for p in entries if p.strip()}
+
+
+def _is_ours(target):
+    ''' Never overwrite somebody else's "tgap": only a missing file, a
+    symlink, or a launcher that we wrote ourselves. '''
+    target=Path(target)
+    if not target.exists() and not target.is_symlink():
+        return True
+    if target.is_symlink():
+        return True
+    try:
+        return 'tgap_cli' in target.read_text(encoding='utf-8',errors='ignore')
+    except OSError:
+        return False
+
+
+def _place(target,launcher,text):
+    ''' Put a tgap command at `target`: a symlink to the launcher where the
+    system allows it, otherwise a small copy of the launcher script. '''
+    target=Path(target)
+    target.parent.mkdir(parents=True,exist_ok=True)
+    if target.is_symlink() or target.exists():
+        target.unlink()
+    if not _is_windows():
+        try:
+            target.symlink_to(launcher)
+            return
+        except OSError:
+            pass
+    target.write_text(text,encoding='utf-8')
+    if not _is_windows():
+        target.chmod(0o755)
+
+
+def _windows_user_path_add(directory):
+    ''' Add `directory` to the user PATH in the registry (new terminals). '''
+    import winreg
+    with winreg.CreateKey(winreg.HKEY_CURRENT_USER,'Environment') as key:
+        try:
+            old,kind=winreg.QueryValueEx(key,'Path')
+        except FileNotFoundError:
+            old,kind='',winreg.REG_EXPAND_SZ
+        entries=[p for p in old.split(';') if p.strip()]
+        if _norm(directory) in {_norm(os.path.expandvars(p)) for p in entries}:
+            return False
+        entries.append(str(directory))
+        winreg.SetValueEx(key,'Path',0,kind if kind in (winreg.REG_SZ,winreg.REG_EXPAND_SZ)
+                          else winreg.REG_EXPAND_SZ,';'.join(entries))
+    try:                                    # tell Explorer: new windows see it
         import ctypes
         ctypes.windll.user32.SendMessageTimeoutW(0xFFFF,0x1A,0,'Environment',2,5000,None)
-        print('Added tgap to your user PATH. Open a new terminal to use it by name.')
+    except Exception:
+        pass
+    return True
+
+
+SHELL_MARKER='# Added by TGAP: the tgap command'
+
+
+def _unix_profile_add(directory):
+    ''' Make `directory` part of PATH in new terminals, via the startup
+    files of the usual shells. Idempotent: a marked line is added once. '''
+    line=f'export PATH="{directory}:$PATH"  {SHELL_MARKER}'
+    home=Path.home()
+    changed=[]
+    for name in ('.profile','.bashrc','.zshrc','.bash_profile'):
+        rc=home/name
+        if name!='.profile' and not rc.exists():
+            continue
+        try:
+            text=rc.read_text(encoding='utf-8') if rc.exists() else ''
+            if SHELL_MARKER in text:
+                continue
+            with open(rc,'a',encoding='utf-8') as handle:
+                handle.write(('\n' if text and not text.endswith('\n') else '')+line+'\n')
+            changed.append(str(rc))
+        except OSError:
+            continue
+    fish=home/'.config'/'fish'/'conf.d'
+    if fish.parent.is_dir():
+        try:
+            fish.mkdir(exist_ok=True)
+            (fish/'tgap.fish').write_text(f'fish_add_path -g "{directory}"  {SHELL_MARKER}\n',encoding='utf-8')
+            changed.append(str(fish/'tgap.fish'))
+        except OSError:
+            pass
+    return changed
+
+
+def register_launcher(home):
+    ''' Make the word `tgap` work in a terminal - as soon as possible, on
+    any system - and say honestly what happened.
+
+    The launcher itself always lives in <home>/bin. Then, in order:
+      Windows: a copy in %LOCALAPPDATA%\\Microsoft\\WindowsApps, which Windows
+               keeps on every user's PATH, so `tgap` works at once - even in
+               this terminal; plus <home>/bin added to the user PATH in the
+               registry as a backup for new terminals.
+      macOS / Linux: a link in a folder that is ALREADY on PATH and writable
+               (~/.local/bin, ~/bin, /usr/local/bin, /opt/homebrew/bin);
+               otherwise ~/.local/bin plus a PATH line in the shell startup
+               files, for new terminals.
+    Nothing here can fail the installation: every step is best effort, and
+    the full path of the launcher is always printed as a fallback.
+    Returns a report dict (used by tests and by `tgap path`). '''
+    scripts=home/'bin'
+    scripts.mkdir(parents=True,exist_ok=True)
+    py=python_path(home)
+    report={'launcher':None,'works_now':False,'new_terminal':False,'where':[],'problems':[]}
+    if _is_windows():
+        text='@echo off\r\n"'+str(py)+'" -B -m tgap_cli --home "'+str(home)+'" %*\r\n'
+        launcher=scripts/'tgap.cmd'
+        launcher.write_text(text,encoding='utf-8')
+        report['launcher']=str(launcher)
+        apps=Path(os.environ.get('LOCALAPPDATA',str(Path.home()/'AppData'/'Local')))/'Microsoft'/'WindowsApps'
+        if apps.is_dir():
+            target=apps/'tgap.cmd'
+            if _is_ours(target):
+                try:
+                    _place(target,launcher,text)
+                    report['where'].append(str(target))
+                    report['works_now']=report['works_now'] or _on_path(apps)
+                except OSError as failure:
+                    report['problems'].append(f'could not write {target} ({failure})')
+            else:
+                report['problems'].append(f'{target} belongs to another program; left alone')
+        try:
+            if _windows_user_path_add(scripts):
+                report['new_terminal']=True
+            report['where'].append(str(scripts)+' (user PATH)')
+        except Exception as failure:
+            report['problems'].append(f'could not update the user PATH ({failure})')
+        if _on_path(scripts):
+            report['works_now']=True
     else:
         import shlex
+        text='#!/bin/sh\nexec '+shlex.quote(str(py))+' -B -m tgap_cli --home '+shlex.quote(str(home))+' "$@"\n'
         launcher=scripts/'tgap'
-        launcher.write_text('#!/bin/sh\nexec '+shlex.quote(str(py))+' -B -m tgap_cli --home '+shlex.quote(str(home))+' "$@"\n',encoding='utf-8')
+        launcher.write_text(text,encoding='utf-8')
         launcher.chmod(0o755)
-        local_bin=Path.home()/'.local'/'bin'
-        local_bin.mkdir(parents=True,exist_ok=True)
-        link=local_bin/'tgap'
-        if not link.exists() or link.is_symlink():
-            link.unlink(missing_ok=True)
-            link.symlink_to(launcher)
-        print('Command installed in ~/.local/bin. If needed: export PATH="$HOME/.local/bin:$PATH"')
+        report['launcher']=str(launcher)
+        candidates=[Path.home()/'.local'/'bin',Path.home()/'bin',Path('/usr/local/bin'),Path('/opt/homebrew/bin')]
+        for directory in candidates:
+            if not _on_path(directory):
+                continue
+            target=directory/'tgap'
+            try:
+                if not _is_ours(target):
+                    report['problems'].append(f'{target} belongs to another program; left alone')
+                    continue
+                if not directory.exists():
+                    if Path.home() not in directory.parents:
+                        continue
+                    directory.mkdir(parents=True,exist_ok=True)
+                if not os.access(directory,os.W_OK):
+                    continue
+                _place(target,launcher,text)
+                report['where'].append(str(target))
+                report['works_now']=True
+                break
+            except OSError as failure:
+                report['problems'].append(f'could not write {target} ({failure})')
+        if not report['works_now']:
+            local=Path.home()/'.local'/'bin'
+            try:
+                if _is_ours(local/'tgap'):
+                    _place(local/'tgap',launcher,text)
+                    report['where'].append(str(local/'tgap'))
+                changed=_unix_profile_add(local)
+                report['new_terminal']=bool(changed) or _on_path(local)
+                if changed:
+                    report['where'].append('PATH line added to '+', '.join(changed))
+            except OSError as failure:
+                report['problems'].append(f'could not set up ~/.local/bin ({failure})')
+    return report
+
+
+def _print_path_report(report):
+    print()
+    if report['works_now']:
+        print('  The tgap command is ready: type  tgap start')
+    elif report['new_terminal']:
+        print('  The tgap command works in NEW terminals. Open a new terminal, then type:  tgap start')
+    else:
+        print('  The tgap command could not be put on your PATH automatically.')
+    for problem in report['problems']:
+        print('  (note: '+problem+')')
+    print('  Always works, in any terminal:')
+    quoted=f'"{report["launcher"]}"' if ' ' in report['launcher'] else report['launcher']
+    print('    '+('& ' if _is_windows() and ' ' in report['launcher'] else '')+quoted+' start'
+          +('      (PowerShell)' if _is_windows() and ' ' in report['launcher'] else ''))
+    print('    or, from the TGAP folder:  '+('py run.py start' if _is_windows() else 'python3 run.py start'))
 
 
 class StepFailed(Exception):
@@ -212,8 +388,12 @@ def install(args,home):
         if os.name!='nt': users.chmod(0o600)
     execute([py,'-m','pip','freeze'],cwd=root) if args.verbose else None
     (home/'installation.json').write_text(json.dumps(dict(source=str(root),workbench=str(target),tgn=tgn or previous.get('tgn',False),finance=finance or previous.get('finance',False)),indent=2),encoding='utf-8')
+    path_report=None
     if not args.no_path:
-        register_launcher(home)
+        try:
+            path_report=register_launcher(home)
+        except Exception as failure:          # never fail an installation here
+            print(f'  (could not register the tgap command: {failure})')
     print()
     print('TGAP is installed.')
     if password:
@@ -226,8 +406,11 @@ def install(args,home):
     print('  Stop it             :  tgap stop')
     print('  Run the examples    :  tgap run examples')
     print(f'  Accounts file       :  {users}')
-    print('  (Until you open a new terminal, use the launcher in this folder: '
-          + ('.\\tgap.cmd start' if os.name=='nt' else './tgap start') + ')')
+    if path_report:
+        _print_path_report(path_report)
+    else:
+        print('\n  (--no-path: the tgap command was not registered. Run it as: '
+              + ('py run.py start' if os.name=='nt' else 'python3 run.py start')+')')
 
 
 def setup(home):
@@ -358,6 +541,7 @@ def main(argv=None):
     starter.add_argument('--no-browser',action='store_true')
     subs.add_parser('stop',help='Stop the service, keeping accounts and results.')
     subs.add_parser('status',help='Show service status and account file.')
+    subs.add_parser('path',help='Make the tgap command work in your terminal again (repairs PATH).')
     runner=subs.add_parser('run',help='Run a research workflow using the managed Python environment.')
     runner.add_argument('workflow',choices=['examples','demos','paper','evaluation','download','real-data','compare','ncommunity','tgn','tgn-stability','publication','tests','finance','finance-tgap'])
     runner.add_argument('arguments',nargs=argparse.REMAINDER)
@@ -375,6 +559,9 @@ def main(argv=None):
             os.environ.update(child_environment(home))
             tempfile.tempdir=None
         if args.command=='install':install(args,home)
+        elif args.command=='path':
+            setup(home)
+            _print_path_report(register_launcher(home))
         elif args.command=='run':research(args,home)
         else:service(args,home)
     except KeyboardInterrupt:

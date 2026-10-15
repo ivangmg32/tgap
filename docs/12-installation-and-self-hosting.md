@@ -185,16 +185,37 @@ and have configured appropriate network security.
 
 **`tgap` is not recognized or not found**
 
-Open a new terminal after installation. In PowerShell, if you are in the TGAP
-repository folder, run the Windows checkout launcher directly:
+You never need the short `tgap` command. From the TGAP folder, these always
+work, on every system:
 
-```powershell
-.\tgap.cmd start
+```text
+py run.py start        Windows (or: python run.py start)
+python3 run.py start   macOS / Linux
 ```
 
-Use `.\tgap.cmd status` and `.\tgap.cmd stop` the same way. The file named
-`tgap` without `.cmd` is the Linux/macOS launcher. On Linux/macOS, add
-`~/.local/bin` to PATH if the command is still unavailable.
+(`start` installs the workbench the first time; `stop` and `status` work the
+same way.)
+
+To make the short `tgap` command work, run `py run.py path` (or
+`tgap path` / `.\tgap.cmd path`). It tells you exactly what it did:
+
+- **Windows:** it puts a `tgap.cmd` shortcut in
+  `%LOCALAPPDATA%\Microsoft\WindowsApps`, a folder Windows keeps on every
+  user's PATH, so `tgap` works immediately, in the same terminal. It also
+  adds TGAP's own folder to your user PATH as a backup, which only takes
+  effect in terminals opened afterwards. If your organisation blocks both,
+  it prints the full path of the launcher, which you can always run directly.
+- **macOS / Linux:** it links `tgap` into a folder that is already on your
+  PATH (`~/.local/bin`, `~/bin`, `/usr/local/bin` or `/opt/homebrew/bin`) so
+  it works immediately. If none is usable, it adds `~/.local/bin` to the
+  startup file of your shell (`.profile`, `.bashrc`, `.zshrc`, fish), which
+  takes effect in new terminals.
+
+It never overwrites a `tgap` command that belongs to another program.
+
+In PowerShell, a file in the current folder needs `.\` in front:
+`.\tgap.cmd start`, not `tgap.cmd start`. In the classic Command Prompt
+(`cmd`), plain `tgap start` works inside the TGAP folder.
 
 **The installer says Python 3.10 or later is missing, but it is installed**
 

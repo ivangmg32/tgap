@@ -11,6 +11,13 @@ TGAP - one file that sets everything up and runs the project.
     python run.py reset            delete the private environment and caches
     python run.py --help
 
+    The browser workbench - no PATH setup needed, same on every system:
+    python run.py start            start it (installs it the first time)
+    python run.py stop             stop it
+    python run.py status           is it running? where are the accounts?
+    python run.py install          install / update it explicitly
+    python run.py path             make the short `tgap` command work
+
 On Windows, if `python` is not found, use `py run.py` instead.
 
 What it does for you, so nothing has to be set up by hand:
@@ -753,8 +760,53 @@ def printHelp():
     say("         reset          delete .venv/ and .tgap_cache/, start fresh")
 
 
+WORKBENCH_COMMANDS = ("install", "start", "stop", "status", "path")
+
+
+def workbench(argv):
+    ''' The workbench commands, without needing `tgap` on PATH: hand over to
+    bootstrap.py (the same code `tgap` runs). `start` installs first if
+    needed, so one command is enough on a fresh machine. '''
+    if sys.version_info < (3, 10):
+        problem("The browser workbench needs Python 3.10 or newer "
+                "(this is {0}).".format(platform.python_version()),
+                "Everything else in run.py works with this Python.",
+                ["Install Python 3.12 from https://www.python.org/downloads/",
+                 "Windows: then run  py -3.12 run.py start",
+                 "macOS / Linux: then run  python3.12 run.py start"])
+        return 1
+    command, rest = argv[0], list(argv[1:])
+    homeArgs = []
+    if "--home" in rest:
+        index = rest.index("--home")
+        homeArgs = rest[index:index + 2]
+        del rest[index:index + 2]
+    home = (homeArgs[1] if homeArgs else
+            os.environ.get("TGAP_HOME") or
+            os.path.join(os.path.expanduser("~"), ".tgap"))
+    boot = [sys.executable, os.path.join(ROOT, "bootstrap.py")] + homeArgs
+    installed = os.path.exists(os.path.join(home, "installation.json"))
+    if command == "start" and not installed:
+        say("The workbench is not installed yet - installing it first "
+            "(one time, 1-3 minutes).")
+        code = subprocess.call(boot + ["install", "--yes"], cwd=ROOT)
+        if code != 0:
+            return code
+        say()
+    if command in ("stop", "status", "path") and not installed:
+        say("The workbench is not installed yet. Start it (this installs it "
+            "too) with:  python run.py start")
+        return 0
+    try:
+        return subprocess.call(boot + [command] + rest, cwd=ROOT)
+    except KeyboardInterrupt:
+        return 130
+
+
 def main(argv):
     argv = list(argv)
+    if argv and argv[0] in WORKBENCH_COMMANDS:
+        return workbench(argv)
     if any(a in ("-h", "--help", "help", "--list", "list") for a in argv):
         printHelp()
         return 0
