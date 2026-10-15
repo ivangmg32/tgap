@@ -18,6 +18,37 @@ moves.
 
 ## Get started
 
+### The fastest way - one command, nothing to set up
+
+Open a terminal **in the TGAP folder** and run:
+
+```sh
+py run.py start          # Windows   (if "py" is not found:  python run.py start)
+python3 run.py start     # macOS / Linux
+```
+
+That's all. The first time, it installs everything it needs (2-3 minutes),
+prints your account and password, and opens the workbench in your browser.
+Stop it with `py run.py stop` (Windows) or `python3 run.py stop`.
+
+This never depends on PATH settings, so it works even where the short `tgap`
+command is not available.
+
+> **Windows tip - opening a terminal in the right folder:** open the TGAP
+> folder in File Explorer, click the address bar, type `cmd` and press Enter.
+
+| command | does |
+|---|---|
+| `py run.py start` | start the workbench (installs it the first time) |
+| `py run.py stop` | stop it - accounts and results are kept |
+| `py run.py status` | is it running? where is the accounts file? |
+| `py run.py path` | make the short `tgap` command work in your terminal |
+| `py run.py` | run the demos and examples instead (no workbench) |
+
+The rest of this section describes the same things in more detail.
+
+### Two ways to use TGAP
+
 There are two ways to use TGAP. Pick one:
 
 | | **A. Workbench** (`tgap start` / `tgap stop`) | **B. One file** (`python run.py`) |
@@ -79,8 +110,9 @@ $env:Path = "$env:USERPROFILE\.tgap\bin;$env:Path"
 For a custom install folder, replace `$env:USERPROFILE\.tgap\bin` with that
 folder's `bin` path.
 
-If PowerShell says `tgap` is not recognized while you are in the repository
-folder, run the Windows launcher directly:
+If `tgap` is not recognized, use `py run.py start` from the TGAP folder
+(always works), or run `py run.py path` to make `tgap` work. In PowerShell
+you can also run the launcher in the repository folder directly:
 
 ```powershell
 .\tgap.cmd start
