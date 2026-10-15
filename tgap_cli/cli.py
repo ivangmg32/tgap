@@ -199,7 +199,7 @@ def install(args,home):
         quiet_step('Installing PyTorch (CPU, ~300 MB)',[py,'-m','pip','install','torch','--index-url','https://download.pytorch.org/whl/cpu'],home,'install-torch')
         quiet_step('Installing PyTorch Geometric',[py,'-m','pip','install','torch_geometric'],home,'install-torch-geometric')
     if finance:
-        quiet_step('Installing finance libraries',[py,'-m','pip','install','yfinance','statsmodels'],home,'install-finance')
+        quiet_step('Installing finance libraries',[py,'-m','pip','install','-r',root/'requirements-finance.txt'],home,'install-finance')
     config=target/'config.json'
     existing=json.loads(config.read_text(encoding='utf-8')) if config.exists() else {}
     existing.update(tgap_source=str(root),host=existing.get('host','127.0.0.1'),port=existing.get('port',8080),secure_cookies=existing.get('secure_cookies',False))
@@ -332,15 +332,13 @@ def research(args,home):
              'compare':['-m','realdata.compare_datasets'],'ncommunity':['-m','realdata.run_ncommunity'],
              'tgn':['-m','realdata.run_tgn'],'tgn-stability':['-m','realdata.run_tgn_stability'],
              'publication':['-m','realdata.make_publication'],'tests':['-m','unittest','discover','-s','tests'],
-             'finance':['experimentationDatamining.py']}
+             'finance':['-m','finance.experimentationDatamining'],
+             'finance-tgap':['-m','finance.run_finance']}
     if args.workflow.startswith('tgn') and not info['tgn']:
         raise ValueError('TGN was not installed. Run tgap install --tgn --yes.')
-    if args.workflow=='finance' and not info['finance']:
-        raise ValueError('Finance libraries were not installed. Run tgap install --finance --yes.')
-    # The finance scripts import each other by bare name: run them from their
-    # own folder, as contrib/README.md documents.
-    cwd=Path(info['source'])/'contrib'/'finance' if args.workflow=='finance' else info['source']
-    execute([python_path(home),*mapping[args.workflow],*args.arguments],cwd=cwd)
+    # Cached stock prices need no extra library; downloading new ones needs
+    # the finance group, and the workflow says so in plain English if missing.
+    execute([python_path(home),*mapping[args.workflow],*args.arguments],cwd=info['source'])
 
 
 def main(argv=None):
@@ -361,7 +359,7 @@ def main(argv=None):
     subs.add_parser('stop',help='Stop the service, keeping accounts and results.')
     subs.add_parser('status',help='Show service status and account file.')
     runner=subs.add_parser('run',help='Run a research workflow using the managed Python environment.')
-    runner.add_argument('workflow',choices=['examples','demos','paper','evaluation','download','real-data','compare','ncommunity','tgn','tgn-stability','publication','tests','finance'])
+    runner.add_argument('workflow',choices=['examples','demos','paper','evaluation','download','real-data','compare','ncommunity','tgn','tgn-stability','publication','tests','finance','finance-tgap'])
     runner.add_argument('arguments',nargs=argparse.REMAINDER)
     args=parser.parse_args(argv)
     if args.command=='start' and args.port is not None and not 1<=args.port<=65535:

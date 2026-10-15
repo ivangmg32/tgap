@@ -1,0 +1,81 @@
+{
+  "dataset": "ivan_market",
+  "analysis_mode": "temporal_evaluation",
+  "selection_fraction_of_span": 0.0,
+  "node_selection_mode": "user_chosen_tickers",
+  "community_mode": "sector_labels (Technology vs other)",
+  "selection_period": "none - tickers chosen by the user in advance",
+  "evaluation_period": "2022-03-21 .. 2026-09-18",
+  "future_information_used_for_node_selection": false,
+  "snapshot_count": 12,
+  "raw_nodes": 8,
+  "retained_nodes": 8,
+  "nodes_retained_pct": 100.0,
+  "raw_events": 336,
+  "retained_events": 144,
+  "events_retained_pct": 42.86,
+  "partition_sizes": [
+    4,
+    4
+  ],
+  "edges_median": 11.0,
+  "bridge_width_first": 6,
+  "bridge_width_last": 2,
+  "bridge_width_min": 2,
+  "bridge_width_max": 15,
+  "snapshots_with_zero_bridge_width": 0,
+  "connected_snapshots": 1,
+  "explanation_rows": 180,
+  "valid_rows": 120,
+  "invalid_rows": 60,
+  "invalid_rows_by_status": {
+    "edge_count_infeasible": 60
+  },
+  "noop_rows_valid": 36,
+  "noop_fraction_valid": 0.3,
+  "noop_fraction_all_rows_with_numbers": 0.3,
+  "models": [
+    "persistence_bridge_width",
+    "trend_bridge_width",
+    "slope_bridge_width",
+    "persistence_density",
+    "persistence_centralization",
+    "trend_clustering"
+  ],
+  "transformations": [
+    "Bridge Width",
+    "Centralization",
+    "Density",
+    "Bridge Trend",
+    "Churn"
+  ],
+  "deltas": [
+    0.1,
+    0.25,
+    0.5
+  ],
+  "seed": 42,
+  "largest_absolute_impact_valid_rows": {
+    "model": "persistence_centralization",
+    "transformation": "Centralization",
+    "direction": "decrease",
+    "requested_delta": -0.5,
+    "impact": -1.9047619047619078
+  },
+  "expected_invariance_history_only_transformations": {
+    "statement": "Expected by construction, then verified on this dataset: Bridge Trend and Churn return the last snapshot untouched (the TSAP anchor rule in the time dimension), and the persistence models read only the last snapshot, so their prediction change must be exactly 0. A zero here is therefore a VERIFICATION OF AN EXPECTED INVARIANT - a correctness check on the implementation and the pipeline - not an unexpected empirical discovery about the data.",
+    "rows_checked": 18,
+    "verified": true,
+    "max_absolute_impact_observed": 0.0
+  },
+  "edge_count_infeasible_settings": 10,
+  "edge_count_settings_checked": 30,
+  "strict_mode_disagreements": 1,
+  "bridge_trend_status_counts": {
+    "ok": 4,
+    "saturated": 2
+  },
+  "bridge_trend_max_saturated_fraction": 0.5833333333333334,
+  "edge_weight_used": false,
+  "edge_sign_used": false
+}

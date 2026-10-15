@@ -680,7 +680,7 @@ dataset).
 | Date | What |
 |---|---|
 | 11–17 Sep 2026 | TGAP core built, synthetic evaluation (RQ1–RQ8) |
-| 21 Sep 2026 | Iván's separate stock-correlation graph work (now `contrib/finance/`) |
+| 21 Sep 2026 | Iván's separate stock-correlation graph work (now `finance/`, part of TGAP) |
 | 24 Sep 2026 | real-data layer; methodological clean-up; **the run described here** |
 | 30 Apr 2023 | the date the Decentraland export was frozen |
 

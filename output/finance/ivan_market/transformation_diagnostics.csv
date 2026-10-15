@@ -1,0 +1,31 @@
+dataset,analysis_mode,transformation,family,claims_edge_count_preservation,snapshots_edge_count_changed,requested_delta,snapshots,snapshots_modified,modified_fraction,last_snapshot_modified,structurally_blocked
+ivan_market,temporal_evaluation,Bridge Width,structural,True,0,0.1,12,6,0.5,False,True
+ivan_market,temporal_evaluation,Bridge Width,structural,True,0,-0.1,12,6,0.5,False,True
+ivan_market,temporal_evaluation,Bridge Width,structural,True,0,0.25,12,11,0.9166666666666666,False,True
+ivan_market,temporal_evaluation,Bridge Width,structural,True,1,-0.25,12,11,0.9166666666666666,False,True
+ivan_market,temporal_evaluation,Bridge Width,structural,True,2,0.5,12,12,1.0,True,False
+ivan_market,temporal_evaluation,Bridge Width,structural,True,3,-0.5,12,12,1.0,True,False
+ivan_market,temporal_evaluation,Centralization,structural,True,0,0.1,12,3,0.25,False,True
+ivan_market,temporal_evaluation,Centralization,structural,True,0,-0.1,12,10,0.8333333333333334,False,True
+ivan_market,temporal_evaluation,Centralization,structural,True,0,0.25,12,3,0.25,False,True
+ivan_market,temporal_evaluation,Centralization,structural,True,0,-0.25,12,9,0.75,False,True
+ivan_market,temporal_evaluation,Centralization,structural,True,0,0.5,12,3,0.25,False,True
+ivan_market,temporal_evaluation,Centralization,structural,True,0,-0.5,12,9,0.75,True,False
+ivan_market,temporal_evaluation,Density,structural,False,0,0.1,12,11,0.9166666666666666,False,True
+ivan_market,temporal_evaluation,Density,structural,False,0,-0.1,12,11,0.9166666666666666,False,True
+ivan_market,temporal_evaluation,Density,structural,False,0,0.25,12,11,0.9166666666666666,False,True
+ivan_market,temporal_evaluation,Density,structural,False,0,-0.25,12,11,0.9166666666666666,False,True
+ivan_market,temporal_evaluation,Density,structural,False,0,0.5,12,12,1.0,True,False
+ivan_market,temporal_evaluation,Density,structural,False,0,-0.5,12,11,0.9166666666666666,False,True
+ivan_market,temporal_evaluation,Bridge Trend,temporal,True,1,0.1,12,10,0.8333333333333334,False,False
+ivan_market,temporal_evaluation,Bridge Trend,temporal,True,1,-0.1,12,10,0.8333333333333334,False,False
+ivan_market,temporal_evaluation,Bridge Trend,temporal,True,2,0.25,12,11,0.9166666666666666,False,False
+ivan_market,temporal_evaluation,Bridge Trend,temporal,True,7,-0.25,12,11,0.9166666666666666,False,False
+ivan_market,temporal_evaluation,Bridge Trend,temporal,True,3,0.5,12,11,0.9166666666666666,False,False
+ivan_market,temporal_evaluation,Bridge Trend,temporal,True,7,-0.5,12,11,0.9166666666666666,False,False
+ivan_market,temporal_evaluation,Churn,temporal,True,0,0.1,12,0,0.0,False,False
+ivan_market,temporal_evaluation,Churn,temporal,True,0,-0.1,12,0,0.0,False,False
+ivan_market,temporal_evaluation,Churn,temporal,True,0,0.25,12,0,0.0,False,False
+ivan_market,temporal_evaluation,Churn,temporal,True,0,-0.25,12,0,0.0,False,False
+ivan_market,temporal_evaluation,Churn,temporal,True,0,0.5,12,0,0.0,False,False
+ivan_market,temporal_evaluation,Churn,temporal,True,0,-0.5,12,0,0.0,False,False

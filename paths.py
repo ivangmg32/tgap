@@ -15,6 +15,8 @@ script writes to the same place whatever the working directory is.
     ├── ncommunity/<dataset>/      realdata.run_ncommunity
     ├── tgn/<dataset>/             realdata.run_tgn
     ├── tgn_stability/<dataset>/   realdata.run_tgn_stability
+    ├── finance/<study>/           finance.run_finance (stock correlation networks)
+    ├── finance/datamining/        finance.experimentationDatamining (Ivan's RQ1-RQ4)
     ├── publication/               realdata.make_publication - the paper's inputs
     │   ├── figures/
     │   ├── tables/
@@ -33,6 +35,8 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Inputs
 DATA = os.path.join(ROOT, "data")
+# Daily stock prices, cached per ticker (Ivan's Cache.py keeps them here).
+FINANCE_PRICES = os.path.join(ROOT, "finance", "Cache")
 
 # Outputs - one root, one folder per pipeline stage
 OUTPUT = os.path.join(ROOT, "output")
@@ -42,6 +46,8 @@ COMPARISON = os.path.join(OUTPUT, "comparison")
 NCOMMUNITY = os.path.join(OUTPUT, "ncommunity")
 TGN = os.path.join(OUTPUT, "tgn")
 TGN_STABILITY = os.path.join(OUTPUT, "tgn_stability")
+FINANCE = os.path.join(OUTPUT, "finance")
+FINANCE_DATAMINING = os.path.join(FINANCE, "datamining")
 
 PUBLICATION = os.path.join(OUTPUT, "publication")
 PUBLICATION_FIGURES = os.path.join(PUBLICATION, "figures")

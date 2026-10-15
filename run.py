@@ -377,6 +377,20 @@ def ensureEnvironment():
     return python
 
 
+def installFinance(python):
+    ''' Optional: yfinance (download prices) and statsmodels (RQ2 OLS). '''
+    say("  Installing the finance libraries (yfinance, statsmodels)...")
+    code, output, log = _runLogged(
+        [python, "-m", "pip", "install", "-r",
+         os.path.join(ROOT, "requirements-finance.txt")],
+        "setup-finance", "finance libraries")
+    if code != 0:
+        _explainInstallFailure(output, log)
+        return False
+    say("  Finance libraries installed.")
+    return True
+
+
 def installTorch(python):
     ''' Optional: the learned-model (TGN) steps need PyTorch + PyG. '''
     say("  Installing PyTorch (CPU) and PyTorch Geometric - about 300 MB, "
@@ -410,6 +424,15 @@ def explain(failure):
                 ["Run the same command again whenever you like."])
     if isinstance(failure, ModuleNotFoundError):
         module = getattr(failure, "name", "") or message
+        if module and module.split(".")[0] in ("yfinance", "statsmodels"):
+            return ("The finance library '{0}' is not installed.".format(
+                        module.split(".")[0]),
+                    "It is needed only to download NEW stock prices "
+                    "(yfinance) or for the OLS part of RQ2 (statsmodels). "
+                    "Cached prices work without it." + (
+                        "\n" + message if "not cached" in message else ""),
+                    ["Run:  python run.py --with-finance   (then the same "
+                     "command again)"])
         if module and module.split(".")[0] in ("torch", "torch_geometric"):
             return ("PyTorch is not installed.",
                     "This step trains a neural network (TGN) and needs "
@@ -553,9 +576,15 @@ def stepDemos():
 
 
 def exampleScripts():
-    folder = os.path.join(ROOT, "examples")
-    return sorted(os.path.join(folder, name) for name in os.listdir(folder)
-                  if name[:2].isdigit() and name.endswith(".py"))
+    ''' The numbered examples: examples/ first, then examples/financial/. '''
+    scripts = []
+    for folder in (os.path.join(ROOT, "examples"),
+                   os.path.join(ROOT, "examples", "financial")):
+        if os.path.isdir(folder):
+            scripts.extend(sorted(
+                os.path.join(folder, name) for name in os.listdir(folder)
+                if name[:2].isdigit() and name.endswith(".py")))
+    return scripts
 
 
 def stepExamples():
@@ -565,7 +594,7 @@ def stepExamples():
         os.path.join(ROOT, "examples", "more", "MyCustomTransformation.py")]
     failed = []
     for index, path in enumerate(scripts, 1):
-        name = os.path.basename(path)
+        name = os.path.relpath(path, os.path.join(ROOT, "examples"))
         say()
         say("  ---- example {0}/{1}: {2} ----".format(index, len(scripts),
                                                     name))
@@ -615,6 +644,17 @@ def stepTgn():
     run_tgn_stability.main([])
 
 
+def stepFinance():
+    ''' Ivan's stock market, offline from cached prices: the full TGAP
+    protocol, then his data-mining study (RQ1-RQ4). '''
+    from finance import run_finance
+    run_finance.main([])
+    import paths
+    from finance import experimentationDatamining as study
+    _withArgv(["experimentationDatamining", "--output",
+               paths.FINANCE_DATAMINING], study.main)
+
+
 def stepPublication():
     from realdata import make_publication
     make_publication.main()
@@ -648,13 +688,15 @@ STEPS = {
                    "output/ncommunity/"),
     "tgn": ("Learned model (TGN), needs PyTorch", stepTgn,
             "output/tgn/, output/tgn_stability/"),
+    "finance": ("Stock markets: TGAP + Ivan's study (cached prices)",
+                stepFinance, "output/finance/"),
     "publication": ("Paper figures and tables", stepPublication,
                     "output/publication/"),
     "tests": ("The automatic test suite", stepTests, None),
 }
 QUICK = ["check", "demos", "examples"]
 ALL = ["check", "demos", "examples", "synthetic", "download", "realdata",
-       "ncommunity", "tgn", "publication"]
+       "ncommunity", "tgn", "finance", "publication"]
 
 
 def runStep(name, log):
@@ -698,6 +740,8 @@ def printHelp():
     say("         all       = " + " ".join(ALL))
     say()
     say("Options: --with-torch   also install PyTorch for the TGN steps")
+    say("         --with-finance also install yfinance + statsmodels "
+        "(new stock prices)")
     say("         --no-venv      use the current Python and its libraries")
     say("         reset          delete .venv/ and .tgap_cache/, start fresh")
 
@@ -717,6 +761,7 @@ def main(argv):
         return 0
 
     withTorch = "--with-torch" in argv
+    withFinance = "--with-finance" in argv
     noVenv = "--no-venv" in argv
     names = [a for a in argv if not a.startswith("--")]
     if not names:
@@ -748,8 +793,12 @@ def main(argv):
         python = ensureEnvironment()
         if withTorch:
             installTorch(python)
+        if withFinance:
+            installFinance(python)
         child = subprocess.Popen([python, os.path.abspath(__file__)]
-                                 + [a for a in argv if a != "--with-torch"],
+                                 + [a for a in argv
+                                    if a not in ("--with-torch",
+                                                 "--with-finance")],
                                  cwd=ROOT)
         while True:
             try:
@@ -771,6 +820,8 @@ def main(argv):
             return 1
         if withTorch:
             installTorch(sys.executable)
+        if withFinance:
+            installFinance(sys.executable)
 
     global CURRENT_LOG
     log = CURRENT_LOG = _logFile("run")

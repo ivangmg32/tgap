@@ -155,6 +155,8 @@ happened and how to fix it; technical details go to `output/logs/`.
 | `python run.py realdata publication` | any steps, in the order given | |
 | `python run.py tests` | the automatic test suite | ~9 min |
 | `python run.py tgn --with-torch` | also install PyTorch for the learned model | |
+| `python run.py finance` | stock markets: TGAP + Ivan's RQ1-RQ4 (offline) | ~2 min |
+| `python run.py --with-finance` | also install `yfinance` to download new stock prices | |
 | `python run.py --help` | every step and option | |
 | `python run.py reset` | delete `.venv/` and caches, start fresh | |
 
@@ -194,6 +196,25 @@ carla,ines,2024-01-02
 Windows encoding all work. Known groups (teams, departments) can be given as a
 second CSV of `person,group` rows; otherwise TGAP finds them. More in
 [`examples/README.md`](examples/README.md).
+
+## Financial markets
+
+Ivan's stock-market work is part of TGAP ([`finance/`](finance/__init__.py)):
+daily prices become correlation networks over time, strong co-movements
+become ties, sectors become communities, and TGAP explains models of the
+market - with the same validity checks as every other dataset.
+
+```sh
+python examples/financial/01_stock_correlations.py   # start here (offline)
+python -m finance.run_finance                        # full TGAP study, Ivan's 8 stocks
+python -m finance.run_finance --wide                 # 30 stocks, 6 sectors
+python -m finance.experimentationDatamining          # Ivan's RQ1-RQ4
+```
+
+Seven step-by-step examples: [`examples/financial/`](examples/financial/README.md).
+Downloading new stock prices needs `python run.py --with-finance` (or
+`tgap install --finance`); the cached prices of Ivan's eight stocks need
+nothing extra.
 
 ## What you can do
 
@@ -246,6 +267,7 @@ tgap run tgn-stability email_eu_core
 tgap run publication
 tgap run tests
 tgap run finance --graphs 20
+tgap run finance-tgap --wide
 ```
 
 
@@ -269,6 +291,8 @@ Every workflow writes to exactly one folder, defined once in
 | `compare` | `output/comparison/<mode>/` |
 | `ncommunity` | `output/ncommunity/<dataset>/` |
 | `tgn`, `tgn-stability` | `output/tgn/`, `output/tgn_stability/` |
+| `finance` | `output/finance/datamining/` (Ivan's RQ1-RQ4) |
+| `finance-tgap` | `output/finance/<market>/` (TGAP on stock markets) |
 | `publication` | `output/publication/{figures,tables,attribution}/` |
 
 ## Use TGAP from Python
@@ -367,7 +391,8 @@ realdata/     Dataset preparation, research workflows, publication figures
 workbench/    Local browser interface and its service
 tests/        Automated checks
 docs/         Guides (see docs/README.md); old versions in docs/archive/
-contrib/      Iván's finance experiments - separate from TGAP
+finance/      Stock markets: Ivan's correlation networks + the TGAP bridge
+contrib/      Early drafts, kept for the record
 data/         Raw downloads (not in git)
 output/       Every generated result (see the table above)
 ```

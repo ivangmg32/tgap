@@ -18,7 +18,7 @@ tgap = "tgap_cli.cli:main"
 py-modules = ["paths", "run"]
 
 [tool.setuptools.packages.find]
-include = ["core*", "realdata*", "examples*", "experiments*", "tgap_cli*"]
+include = ["core*", "realdata*", "examples*", "experiments*", "finance*", "tgap_cli*"]
 exclude = ["tests*", "contrib*"]
 
 [tool.setuptools.package-data]

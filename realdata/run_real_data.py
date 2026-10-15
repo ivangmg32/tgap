@@ -841,7 +841,15 @@ def runDataset(key, mode, nCommunities=2):
     print(f"REAL DATA: {key}   [analysis_mode = {mode}]")
     print("=" * 72)
     prepared = ADAPTERS[key](mode, nCommunities)
-    directory = os.path.join(OUTPUT_ROOT, mode, key)
+    return runPrepared(prepared, mode,
+                       os.path.join(OUTPUT_ROOT, mode, key))
+
+
+def runPrepared(prepared, mode, directory):
+    ''' The whole real-data protocol - validity gating, six models,
+    leakage, diagnostics, report and figures - on an already prepared
+    dataset, written to `directory`. Shared by every dataset source,
+    including the financial correlation networks (finance/). '''
     os.makedirs(directory, exist_ok=True)
 
     pre = prepared.preprocessing
