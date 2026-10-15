@@ -51,6 +51,243 @@ NEGATIVE = "#2e6fb5"     # blue: pushes it DOWN
 #  Data
 # --------------------------------------------------------------------------
 
+# --------------------------------------------------------------------------
+#  Tutorial-style outputs
+# --------------------------------------------------------------------------
+
+class Tutorial:
+    ''' Builds TUTORIAL.md next to an example's outputs: a step-by-step
+    walk through what was done, every table and figure, and how to read
+    them. Markdown, so it renders on GitHub and in any editor.
+
+        t = Tutorial(folder, "My study")
+        t.section("1. The data", "We used ...")
+        t.table(frame, "caption")
+        t.image("figure.png", "what it shows")
+        t.save()
+    '''
+
+    def __init__(self, folder, title, intro=""):
+        self.folder = folder
+        self.lines = ["# " + title, ""]
+        if intro:
+            self.lines += [intro.strip(), ""]
+        os.makedirs(folder, exist_ok=True)
+
+    def section(self, heading, text=""):
+        self.lines += ["## " + heading, ""]
+        if text:
+            self.lines += [text.strip(), ""]
+        return self
+
+    def text(self, text):
+        self.lines += [text.strip(), ""]
+        return self
+
+    def bullets(self, items):
+        self.lines += ["- " + str(item) for item in items] + [""]
+        return self
+
+    def table(self, frame, caption="", maxRows=25):
+        if caption:
+            self.lines += ["*" + caption + "*", ""]
+        shown = frame.head(maxRows)
+        columns = [str(c) for c in shown.columns]
+        self.lines.append("| " + " | ".join(columns) + " |")
+        self.lines.append("|" + "---|" * len(columns))
+        for _, row in shown.iterrows():
+            cells = []
+            for value in row:
+                if isinstance(value, float):
+                    cells.append("{0:.4g}".format(value))
+                else:
+                    cells.append(str(value))
+            self.lines.append("| " + " | ".join(cells) + " |")
+        if len(frame) > maxRows:
+            self.lines.append("")
+            self.lines.append("*... {0} more rows in the CSV file.*".format(
+                len(frame) - maxRows))
+        self.lines.append("")
+        return self
+
+    def image(self, filename, caption):
+        self.lines += ["![{0}]({1})".format(caption, filename), "",
+                       "*" + caption + "*", ""]
+        return self
+
+    def save(self, filename="TUTORIAL.md"):
+        path = os.path.join(self.folder, filename)
+        with open(path, "w", encoding="utf-8") as handle:
+            handle.write("\n".join(self.lines).rstrip() + "\n")
+        return path
+
+
+# What each built-in concept means, for the tutorials.
+CONCEPT_MEANING = {
+    "Bridge Width": "the number of ties BETWEEN groups (redundant "
+                    "connections across a boundary)",
+    "Centralization": "how much the ties concentrate on one hub",
+    "Density": "the overall number of ties (how active / connected the "
+               "graph is)",
+    "Bridge Trend": "whether ties between groups grow or decay over time",
+    "Churn": "how much the past differs from the present",
+}
+
+
+def _meaning(transformation):
+    if transformation.name in CONCEPT_MEANING:
+        return CONCEPT_MEANING[transformation.name]
+    doc = (type(transformation).__doc__ or "").strip().splitlines()
+    return doc[0].strip() if doc else "a user-defined concept"
+
+
+def _narrateExplanation(tutorial, model, transformations, snapshots,
+                        communities, table, deltas, sweep, description,
+                        step=None):
+    ''' The standard TGAP chapters of a tutorial. '''
+    chapter = [0]
+
+    def heading(title):
+        if step is None:
+            return title
+        chapter[0] += 1
+        return "{0}{1} - {2}".format(step, "abcdefgh"[chapter[0] - 1], title)
+    first = table[table["requested_change"].abs() == float(deltas[0])]
+    groups = ("" if communities is None else
+              ", in {0} groups of sizes {1}".format(
+                  len(communities),
+                  "/".join(str(len(g)) for g in communities)))
+    tutorial.section(
+        heading("What TGAP did"),
+        "TGAP took a temporal graph of **{0} snapshots** with **{1} "
+        "nodes**{2}, and a model that turns that history into one number"
+        "{3}. On this data the model predicts **{4:.4g}**.\n\n"
+        "It then nudged one concept at a time by {5:g}% (up and down), "
+        "re-ran the model, and measured how far the prediction moved. "
+        "That movement, divided by how much the concept really changed, "
+        "is the **impact**.".format(
+            len(snapshots), snapshots[0].number_of_nodes(), groups,
+            ": " + description if description else
+            " (`{0}`)".format(type(model).__name__),
+            table["prediction_before"].iloc[0], 100 * float(deltas[0])))
+    tutorial.section(heading("The concepts that were tested"))
+    tutorial.bullets(["**{0}** - {1}".format(t.name, _meaning(t))
+                      for t in transformations])
+
+    summary = first[["concept", "direction", "achieved_change", "impact",
+                     "nothing_changed"]].copy()
+    tutorial.section(heading("The result"), "Each row is one experiment. "
+                     "`achieved_change` is how much the concept really "
+                     "moved (graphs are discrete, so it is rarely exactly "
+                     "the requested amount).")
+    tutorial.table(summary, "explanation.csv (delta {0:g}; all deltas are in "
+                   "the CSV)".format(float(deltas[0])))
+
+    reading = []
+    for concept, part in first.groupby("concept", sort=False):
+        up = part[part["direction"] == "increase"]
+        down = part[part["direction"] == "decrease"]
+        if up.empty:
+            continue
+        row = up.iloc[0]
+        flat = (not down.empty and not down.iloc[0]["nothing_changed"]
+                and abs(down.iloc[0]["impact"]) < 1e-12)
+        if (not row["nothing_changed"] and abs(row["impact"]) >= 1e-12
+                and flat):
+            reading.append(
+                "**{0}**: more of it pushes the prediction **{1}** (impact "
+                "{2:+.4g}), but LESS of it changes nothing - the model "
+                "reacts in one direction only. Look at sensitivity.png to "
+                "see where the response starts.".format(
+                    concept, "up" if row["impact"] > 0 else "down",
+                    row["impact"]))
+        elif row["nothing_changed"]:
+            reading.append("**{0}**: this graph could not be changed in that "
+                           "direction, so there is no evidence either way."
+                           .format(concept))
+        elif abs(row["impact"]) < 1e-12:
+            reading.append("**{0}**: the model does **not react** to it - "
+                           "changing it leaves the prediction exactly where "
+                           "it was.".format(concept))
+        else:
+            reading.append("**{0}**: more of it pushes the prediction **{1}** "
+                           "(impact {2:+.4g}).".format(
+                               concept, "up" if row["impact"] > 0 else
+                               "down", row["impact"]))
+    tutorial.section(heading("How to read it"))
+    tutorial.bullets(reading)
+    tutorial.text("> Impacts of different concepts are in different units "
+                  "(a relative change, a slope, a rewiring fraction), so "
+                  "compare their **directions**, not their sizes. They "
+                  "describe how the **model** responds - not what would "
+                  "happen in the real world.")
+    tutorial.section(heading("The pictures"))
+    tutorial.image("explanation.png", "The impact of each concept, both "
+                   "directions. Red raises the prediction, blue lowers it.")
+    if sweep:
+        tutorial.image("sensitivity.png", "The prediction as each concept "
+                       "is pushed from -50% to +50%. A straight line means "
+                       "a steady response; steps come from whole ties "
+                       "being added or removed.")
+    tutorial.image("graph_over_time.png", "The data itself: ties (and ties "
+                   "between groups) in every snapshot.")
+    tutorial.section(heading("Files in this folder"))
+    tutorial.bullets([
+        "`explanation.csv` - every experiment, every delta",
+        "`sensitivity.csv` - the curves in sensitivity.png",
+        "`graph_over_time.csv` - the data, snapshot by snapshot",
+    ])
+
+
+# --------------------------------------------------------------------------
+#  A tiny simulator, so every example can make a dataset with a story
+# --------------------------------------------------------------------------
+
+def simulateInteractions(groups, periods, withinPerPeriod, crossPerPeriod,
+                         start="2024-01-01", periodDays=7, seed=1,
+                         hubs=None):
+    ''' Interactions between people in named groups, period by period.
+
+    groups          : {group name: [people]}
+    withinPerPeriod : interactions inside each group per period (number, or
+                      a function of the period index)
+    crossPerPeriod  : interactions between groups per period (same)
+    hubs            : {person: weight} - people who take part more often
+
+    Returns a DataFrame with source, target, time (a date). '''
+    import random
+    rng = random.Random(seed)
+    names = list(groups)
+    everyone = [p for members in groups.values() for p in members]
+    weights = hubs or {}
+
+    def pick(pool):
+        return rng.choices(pool, weights=[weights.get(p, 1.0)
+                                          for p in pool])[0]
+
+    def count(rule, period):
+        return int(round(rule(period) if callable(rule) else rule))
+
+    rows = []
+    day0 = pd.Timestamp(start)
+    for period in range(periods):
+        for _ in range(count(withinPerPeriod, period) * len(names)):
+            members = groups[rng.choice(names)]
+            u = pick(members)
+            v = pick([m for m in members if m != u])
+            rows.append((u, v, period))
+        for _ in range(count(crossPerPeriod, period)):
+            a, b = rng.sample(names, 2)
+            rows.append((pick(groups[a]), pick(groups[b]), period))
+    frame = pd.DataFrame(rows, columns=["source", "target", "period"])
+    frame["time"] = [(day0 + pd.Timedelta(days=int(p * periodDays +
+                                                    rng.randrange(
+                                                        periodDays))))
+                     .strftime("%Y-%m-%d") for p in frame["period"]]
+    _ = everyone
+    return frame[["source", "target", "time"]]
+
+
 def step(number, total, text):
     ''' Print one step of an example: "[1/4] Loading the data". '''
     print("  [{0}/{1}] {2}".format(number, total, text))
@@ -310,9 +547,18 @@ def saveGraphOverTime(overTime, folder, name):
 
 
 def explainAndSave(name, theModel, theTransformations, snapshots,
-                   communities=None, deltas=(0.1, 0.25), sweep=True):
+                   communities=None, deltas=(0.1, 0.25), sweep=True,
+                   folder=None, tutorial=None, modelDescription=None,
+                   step=None):
     ''' Explain `theModel` on `snapshots` with `theTransformations`, print
-    the result, and save CSV + PNG files to output/examples/<name>/.
+    the result, and save CSV + PNG files plus a TUTORIAL.md that walks
+    through them.
+
+    folder   : where to write (default output/examples/<name>/)
+    tutorial : a Tutorial to continue (default: a new one in `folder`)
+    modelDescription : one sentence saying what the model predicts
+    step     : e.g. "Step 4" - number the explanation's chapters as part of
+               that step of a longer tutorial
 
     Returns the explanation as a pandas DataFrame. '''
     if len(snapshots) < 2:
@@ -320,7 +566,7 @@ def explainAndSave(name, theModel, theTransformations, snapshots,
             len(snapshots)))
     if not theTransformations:
         raise ValueError("Choose at least one transformation.")
-    folder = os.path.join(OUTPUT, name)
+    folder = folder or os.path.join(OUTPUT, name)
     os.makedirs(folder, exist_ok=True)
 
     rows = []
@@ -423,5 +669,12 @@ def explainAndSave(name, theModel, theTransformations, snapshots,
     overTime.to_csv(os.path.join(folder, "graph_over_time.csv"), index=False)
     saveGraphOverTime(overTime, folder, name)
 
-    print("      Results (CSV + PNG): {0}".format(folder))
+    tutorial = tutorial or Tutorial(
+        folder, "{0}: a TGAP explanation, step by step".format(name))
+    _narrateExplanation(tutorial, theModel, theTransformations, snapshots,
+                        communities, table, deltas, sweep, modelDescription,
+                        step)
+    path = tutorial.save()
+    print("      Results (CSV + PNG + tutorial): {0}".format(folder))
+    print("      Read first: {0}".format(path))
     return table

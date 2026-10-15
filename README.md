@@ -179,6 +179,12 @@ python examples/01_quickstart.py      # or: python run.py examples   /   tgap ru
 | [`05_real_dataset.py`](examples/05_real_dataset.py) | the dataset name | one of the 8 real datasets (downloads once) |
 | [`06_my_project.py`](examples/06_my_project.py) | all of the above | **template**: copy it and make it yours |
 
+**Complete studies:** [`examples/projects/`](examples/projects/README.md)
+has eleven self-contained projects - each folder with its own dataset,
+model, concept and outputs - including five studies of Ivan's financial
+code. Every example and project writes a **`TUTORIAL.md`** next to its
+results that walks through each step, table and figure.
+
 Every run writes `explanation.csv/.png` (impact of each concept),
 `sensitivity.csv/.png` (the prediction as each concept goes from -50 % to
 +50 %) and `graph_over_time.csv/.png` (your temporal graph per snapshot).

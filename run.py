@@ -576,7 +576,8 @@ def stepDemos():
 
 
 def exampleScripts():
-    ''' The numbered examples: examples/ first, then examples/financial/. '''
+    ''' Every example: the numbered ones in examples/ and
+    examples/financial/, then each project's main.py. '''
     scripts = []
     for folder in (os.path.join(ROOT, "examples"),
                    os.path.join(ROOT, "examples", "financial")):
@@ -584,6 +585,12 @@ def exampleScripts():
             scripts.extend(sorted(
                 os.path.join(folder, name) for name in os.listdir(folder)
                 if name[:2].isdigit() and name.endswith(".py")))
+    projects = os.path.join(ROOT, "examples", "projects")
+    if os.path.isdir(projects):
+        scripts.extend(sorted(
+            os.path.join(projects, name, "main.py")
+            for name in os.listdir(projects)
+            if os.path.isfile(os.path.join(projects, name, "main.py"))))
     return scripts
 
 

@@ -64,7 +64,27 @@ def main():
                              .format(rq4["standardized_difference"])
                              if rq4.get("testable", True) else
                              "NOT testable with this statistic (see report)"))
-    print("      Results (report + CSVs): " + folder)
+    t = toolkit.Tutorial(folder, "Ivan's statistical study (RQ1-RQ4)",
+                         intro="`run_all_experiments` with the settings in "
+                               "this example. For each question explained "
+                               "one at a time, see "
+                               "examples/projects/ivan_rq_walkthrough.")
+    t.section("Settings")
+    t.bullets(["{0} stocks; {1} windows of {2} over {3}".format(
+                   len(SECTORS), WINDOWS, WINDOW, PERIOD),
+               "strong correlation: >= {0}".format(STRONG_CORRELATION),
+               "bootstrap draws: {0}; null-model draws: {1}".format(
+                   BOOTSTRAP, NULL_ITERATIONS)])
+    t.section("RQ3 - Within versus across sectors", (
+        "Within-sector correlation exceeds cross-sector in **{0} of {1}** "
+        "windows.").format(int((rq3["observed_within_minus_cross"] > 0)
+                               .sum()), len(rq3)))
+    t.table(rq3.round(4), "rq3_permutation_tests.csv", maxRows=10)
+    t.section("RQ4 - Null model", rq4["interpretation_note"])
+    t.section("Files", "`report.txt` is Ivan's own summary; one CSV per "
+              "research question sits next to it.")
+    print("      Results (report + CSVs + tutorial): " + folder)
+    print("      Read first: " + t.save())
 
 
 if __name__ == "__main__":

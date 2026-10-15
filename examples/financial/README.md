@@ -66,6 +66,15 @@ New tickers are downloaded once from Yahoo Finance (needs
 `finance/Cache/`. Give at least two stocks per sector, ideally four or more:
 a sector of one stock has no ties inside it, which limits what TGAP can test.
 
+## More on Ivan's code
+
+Five complete studies in [`examples/projects/`](../projects/README.md):
+prices and risk (`ivan_price_cache`), window length
+(`ivan_window_length`), each research question explained
+(`ivan_rq_walkthrough`), a custom contagion model and concept
+(`ivan_market_contagion`), and threshold robustness
+(`ivan_threshold_robustness`).
+
 ## Where the code lives
 
 `finance/` — Ivan's `Cache.py`, `CorrGraphs.py` and
