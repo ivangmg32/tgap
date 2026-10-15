@@ -30,7 +30,7 @@ MATCHED COMPARISON (P0.2)
     over many deltas, then compare two concepts only at perturbations whose
     ACHIEVED changes match within a tolerance. That machinery is imported,
     not reimplemented - sweepConcept, bestMatch and MATCH_TOLERANCE come
-    from paper_evaluation.
+    from experiments.synthetic_evaluation.
 
     Comparability is decided by the DATA, not asserted in advance. A pair
     with different deltaMode cannot be matched at all (the achieved changes
@@ -50,14 +50,15 @@ import pandas as pd
 from core import CallCountingModel, TgapExplainer
 from core.TgnModel import (TORCH_AVAILABLE, buildTgn, evaluateTgn,
                            requireTorch, splitTemporally, trainTgn)
-from paper_evaluation import MATCH_TOLERANCE, bestMatch, sweepConcept
+import paths
+from experiments.synthetic_evaluation import MATCH_TOLERANCE, bestMatch, sweepConcept
 from .adapters.base import TEMPORAL_EVALUATION
 from .run_real_data import (ADAPTERS, DELTAS, rowValidity, screenBridgeTrend,
                             screenFeasibility, writeJson,
                             buildTransformations as buildGated)
 from .run_tgn import EPOCHS, TRAIN_FRACTION, buildTransformations
 
-OUTPUT_ROOT = os.path.join("output", "real_data_v2", "tgn_stability")
+OUTPUT_ROOT = paths.TGN_STABILITY
 
 # Five fixed seeds. Fixed, not sampled: a reproducibility check must be
 # repeatable, and a random choice of seeds would defeat that.
@@ -181,8 +182,8 @@ def comparabilityOf(first, second):
 def matchedComparison(model, snapshots, transformations, seed):
     ''' Pairwise matched comparison for one trained model.
 
-    Reuses sweepConcept and bestMatch from paper_evaluation; the matching
-    algorithm is NOT reimplemented here.
+    Reuses sweepConcept and bestMatch from experiments.synthetic_evaluation;
+    the matching algorithm is NOT reimplemented here.
     '''
     sweeps = {}
     for transformation in transformations:

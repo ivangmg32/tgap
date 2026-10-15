@@ -9,7 +9,7 @@ rots; these tests assert it mechanically:
     explainer and produces a complete explanation record;
   * the explainer contains no per-transformation special casing, verified by
     reading its source rather than by trusting the design;
-  * the shipped example in examples/MyCustomTransformation.py actually runs.
+  * the shipped example in examples/more/MyCustomTransformation.py actually runs.
 
 If someone later adds `if transformation.name == ...` to the explainer, the
 source-inspection test below fails.
@@ -26,7 +26,7 @@ from core import (
 )
 from core.GraphExplainer import ExplainerBase
 from core.GraphMetric import DensityMetric
-from examples.MyCustomTransformation import IsolationTransformation
+from examples.more.MyCustomTransformation import IsolationTransformation
 
 
 class TriangleCountTransformation(TemporalGraphTransformation):
@@ -197,7 +197,7 @@ class TestShippedExample(unittest.TestCase):
     execute is worse than none. '''
 
     def testExampleRunsEndToEnd(self):
-        from examples import MyCustomTransformation
+        from examples.more import MyCustomTransformation
         MyCustomTransformation.main()
 
     def testIsolationMeasuresWhatItClaims(self):

@@ -12,7 +12,7 @@ This is the chain section 18 of the design asks for, end to end:
         -> TgnTemporalGraphModel.predict(temporalGraph) -> float
         -> TgapExplainer with the usual five concepts
         -> impact per concept
-        -> output/real_data_v2/tgn/<dataset>/
+        -> output/tgn/<dataset>/ (paths.TGN)
 
 WHY THIS MATTERS SCIENTIFICALLY
     Every other model in this project is a closed-form graph metric, so a
@@ -36,6 +36,7 @@ import os
 import sys
 import time
 
+import paths
 from core import (
     BridgeTrendTransformation, BridgeWidthTransformation, CallCountingModel,
     CentralizationTransformation, ChurnTransformation, DensityTransformation,
@@ -49,7 +50,7 @@ from .run_real_data import (ADAPTERS, DELTAS, SEED, rowValidity,
                             writeJson)
 from .adapters.base import TEMPORAL_EVALUATION
 
-OUTPUT_ROOT = os.path.join("output", "real_data_v2", "tgn")
+OUTPUT_ROOT = paths.TGN
 EPOCHS = 50
 TRAIN_FRACTION = 0.7
 

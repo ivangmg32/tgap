@@ -142,7 +142,7 @@ impacts. The concept explainer still uses its original achieved-change math.
 Five synthetic datasets are generated from seeds. Eight processed real-data
 fixtures preserve `temporal_evaluation` adapter output and original metadata,
 including retention and the frozen partition. Raw inputs remain in the research
-checkout's ignored `realdata/data/`. Participant requests never fetch raw data.
+checkout's ignored `data/` folder. Participant requests never fetch raw data.
 
 Refresh fixtures only as an operator:
 

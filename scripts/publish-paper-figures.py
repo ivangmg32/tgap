@@ -3,12 +3,18 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import sys
 
 root=Path(__file__).resolve().parents[1]
-source=root/'output'/'publication'
-target=root.parent/'tgap-sandbox'/'publication'
-target.mkdir(exist_ok=True)
-metadata=json.loads((source/'figure_metadata.json').read_text(encoding='utf-8'))
+sys.path.insert(0,str(root))
+import paths                                      # noqa: E402  every folder, defined once
+
+source=Path(paths.PUBLICATION_FIGURES)
+# The workbench lives in this repository; its gallery is bundled from here
+# by scripts/bundle-sandbox.py.
+target=root/'workbench'/'publication'
+target.mkdir(parents=True,exist_ok=True)
+metadata=json.loads((Path(paths.PUBLICATION)/'figure_metadata.json').read_text(encoding='utf-8'))
 records={f['figure']:f for f in metadata['figures'] if '/' not in f['figure']}
 captions={
  'fig0_tgap_architecture':('How TGAP works','Follow the original graph through concept changes, predictions and explanations.','Architecture illustration, not an experimental finding.'),
@@ -37,7 +43,7 @@ for image in sorted(source.glob('*.png')):
             shutil.copy2(path,target/path.name)
             formats.append(suffix)
     figures.append(dict(id=image.stem,title=title,description=description,scope=scope,formats=formats,
-                        source='output/publication/'+image.name,
+                        source=paths.relative(str(image)),
                         sha256=hashlib.sha256(image.read_bytes()).hexdigest(),
                         metadata=record))
 (target/'manifest.json').write_text(json.dumps(dict(schema_version=1,figures=figures),indent=2),encoding='utf-8')

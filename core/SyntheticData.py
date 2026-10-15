@@ -1,4 +1,4 @@
-'''
+r'''
 Synthetic temporal-graph generator for developing and validating TGAP.
 
 Why synthetic data first? Same reason TSAP validated against models whose

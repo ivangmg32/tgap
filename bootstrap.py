@@ -1,5 +1,8 @@
 """Run the standard-library CLI from a checkout before pip installation."""
 import sys
+
+# Keep the checkout free of __pycache__ folders.
+sys.dont_write_bytecode = True
 from pathlib import Path
 
 if sys.version_info < (3,10):

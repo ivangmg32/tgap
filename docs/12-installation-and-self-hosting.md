@@ -84,11 +84,12 @@ Start it again any time with `tgap start`.
 tgap run examples
 ```
 
-This runs the included examples in the managed Python environment. Other
-available workflows include:
+This runs the six easy examples in `examples/` (see
+[examples/README.md](../examples/README.md)) and saves CSV + PNG results to
+`output/examples/`. Other available workflows include:
 
 ```text
-tgap run evaluation
+tgap run demos
 tgap run paper
 tgap run download
 tgap run real-data email_eu_core
@@ -98,8 +99,14 @@ tgap run publication
 tgap run tests
 ```
 
-Some workflows download data or write generated results into the checkout.
-Check the workflow documentation before starting a large run.
+Each workflow writes to one folder under `output/` (the table in the
+[README](../README.md#run-research-workflows) lists them; `paths.py` defines
+them). `tgap run evaluation` still works and runs the same synthetic
+evaluation as `tgap run paper`.
+
+**Prefer no installation at all?** `python run.py` (or `py run.py` on
+Windows) runs the same examples and workflows from this folder without
+`tgap install`; see the [README](../README.md#no-install-one-file-python-runpy).
 
 ## Optional research packages
 
@@ -144,7 +151,7 @@ yfinance and statsmodels.
 | `tgap start --no-browser` | Start without opening a browser |
 | `tgap status` | Show whether the workbench is running |
 | `tgap stop` | Stop the service and keep local data |
-| `tgap run examples` | Run the introductory examples |
+| `tgap run examples` | Run the easy examples (CSV + PNG outputs) |
 | `tgap --help` | Show command help |
 
 For the first install, use the checkout launcher: `.\tgap.cmd install` in
@@ -205,9 +212,18 @@ checks each of these commands and uses the first supported version. If none is
 available, add your Python installation to PATH or allow TGAP to install its
 own Python runtime.
 
+**The install stopped with a message**
+
+Each install step prints one line; if a step fails, TGAP says why (no
+internet, proxy, certificate, locked file, full disk) and shows the last lines
+of the step's log, kept in the `logs` folder of your TGAP home. Fix the cause
+and run the same install command again; it continues safely. Temporary files
+go to the `tmp` folder of your TGAP home, so a broken system `TEMP` folder
+does not affect installation.
+
 **Port 8080 is already in use**
 
-Choose another port:
+TGAP tells you when another program holds the port. Choose another port:
 
 ```text
 tgap start --port 8090

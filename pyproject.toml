@@ -15,11 +15,11 @@ dependencies = []
 tgap = "tgap_cli.cli:main"
 
 [tool.setuptools]
-py-modules = ["evaluation", "paper_evaluation", "examples"]
+py-modules = ["paths", "run"]
 
 [tool.setuptools.packages.find]
-include = ["core*", "realdata*", "examples*", "tgap_cli*"]
-exclude = ["tests*", "finance*", "drafts*"]
+include = ["core*", "realdata*", "examples*", "experiments*", "tgap_cli*"]
+exclude = ["tests*", "contrib*"]
 
 [tool.setuptools.package-data]
 tgap_cli = ["data/*.zip", "data/*.sha256"]

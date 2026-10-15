@@ -10,7 +10,7 @@ explanation logic are untouched by anything in this folder.
                       ->  TGAP-compatible temporal graph (list of nx.Graph)
                       ->  metrics  ->  model  ->  TGAP explanation
                       ->  validity gating
-                      ->  output/real_data_v2/<analysis_mode>/<dataset>/
+                      ->  output/real_data/<analysis_mode>/<dataset>/
 
 Layout:
     download.py            reproducible downloads of the raw files
@@ -21,6 +21,13 @@ Layout:
     adapters/edgelist.py   six unipartite temporal edge lists
     run_real_data.py       runs TGAP on every supported dataset
     compare_datasets.py    cross-dataset comparison table and figures
+    run_ncommunity.py      N = 2, 3, 4 community sweep
+    run_tgn.py             explains a trained TGN (needs torch)
+    run_tgn_stability.py   the TGN over five seeds, matched comparison
+    make_publication.py    the paper's figures and tables
+    plotting.py            the shared publication theme
+
+Every output folder is defined in paths.py at the repository root.
 
 Two analysis modes, always labelled in the output (adapters/base.py
 DECISION 4):
@@ -31,7 +38,7 @@ DECISION 4):
                          leakage-safe; for describing a dataset only.
 
 Only the DEFAULT mode's results are committed, under
-output/real_data_v2/temporal_evaluation/. Descriptive-mode results are
+output/real_data/temporal_evaluation/. Descriptive-mode results are
 reproducible with `--mode descriptive` but are not stored, so a
 leakage-unsafe number cannot be quoted by accident. The pre-cleanup v1
 results were deleted; git history still holds them.
@@ -40,5 +47,5 @@ Scientific caution: running TGAP on real data shows that the pipeline
 works on real temporal structure and produces interpretable sensitivities.
 It does NOT by itself validate TGAP's correctness - there is no ground
 truth on real data. Correctness evidence comes from the synthetic
-known-truth experiments in paper_evaluation.py.
+known-truth experiments in experiments/synthetic_evaluation.py.
 '''

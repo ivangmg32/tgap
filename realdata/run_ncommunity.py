@@ -25,7 +25,7 @@ WHAT IS MEASURED
       model care about" becomes answerable - a question two communities
       cannot even express.
 
-Output: output/real_data_v2/ncommunity/<dataset>/
+Output: output/ncommunity/<dataset>/ (paths.NCOMMUNITY)
 '''
 
 import json
@@ -34,6 +34,7 @@ import sys
 
 import pandas as pd
 
+import paths
 from core import (
     BridgeWidthMetric, BridgeWidthTransformation, CallCountingModel,
     PersistenceTemporalModel, TgapExplainer, TrendTemporalModel,
@@ -42,7 +43,7 @@ from core import (
 from .adapters import edgelist
 from .run_real_data import DELTAS, SEED, writeJson
 
-OUTPUT_ROOT = os.path.join("output", "real_data_v2", "ncommunity")
+OUTPUT_ROOT = paths.NCOMMUNITY
 COMMUNITY_COUNTS = (2, 3, 4)
 
 

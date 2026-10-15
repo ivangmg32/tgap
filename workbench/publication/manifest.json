@@ -10,7 +10,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig0_tgap_architecture.png",
+      "source": "output/publication/figures/fig0_tgap_architecture.png",
       "sha256": "f52a03a36a708774c289fe100b5ad084db5dbcb4830fed78de8650fc59e122db",
       "metadata": {}
     },
@@ -23,7 +23,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig10_publication_boxplot.png",
+      "source": "output/publication/figures/fig10_publication_boxplot.png",
       "sha256": "f76dd0e0b1df35db2a41ed67a552ec561b777a0f42dee99d4b7a15707d577a03",
       "metadata": {
         "candidate": "boxplot",
@@ -50,8 +50,8 @@
           "Churn"
         ],
         "source_csv": [
-          "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
-          "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+          "output/real_data/temporal_evaluation/decentraland/tgap_results.csv",
+          "output/real_data/temporal_evaluation/email_eu_core/tgap_results.csv"
         ],
         "status": "per-model distributions, valid rows only"
       }
@@ -65,7 +65,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig11_local_bar.png",
+      "source": "output/publication/figures/fig11_local_bar.png",
       "sha256": "ec71e4fc57e8e2620cad03c6b72fecd9239513d11b84f1d3a8b2bb7268789e1e",
       "metadata": {
         "candidate": "local",
@@ -82,7 +82,7 @@
         "included_concepts": [],
         "selection_rule": "top 18 by |impact|, ties broken by endpoint id; complete attribution retained in the source CSV",
         "source_csv": [
-          "output\\publication\\attribution\\edge_attribution_trend.csv"
+          "output/publication/attribution/edge_attribution_trend.csv"
         ],
         "status": "ONE local explanation; local ordering only",
         "x_variable": "impact (edge occlusion)",
@@ -98,7 +98,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig12_temporal_edge_time.png",
+      "source": "output/publication/figures/fig12_temporal_edge_time.png",
       "sha256": "68e4aa5c62498c1806b244d863537db18c93975f1034d6defa1f51738f0fa362",
       "metadata": {
         "additivity_claimed": false,
@@ -117,7 +117,7 @@
         "included_concepts": [],
         "selection_rule": "display-only top 22 edges by largest |impact| at any snapshot, then snapshots present, then edge id; deterministic, never sampled. The persisted CSV holds every (edge, snapshot).",
         "source_csv": [
-          "output\\publication\\attribution\\edge_time_attribution.csv"
+          "output/publication/attribution/edge_time_attribution.csv"
         ],
         "status": "TGAP edge-time attribution; NOT a TSHAP implementation",
         "x_variable": "snapshot_index",
@@ -133,7 +133,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig1_final_model_separated_impacts.png",
+      "source": "output/publication/figures/fig1_final_model_separated_impacts.png",
       "sha256": "c98572aaec1450a5340625c80c501de169d86a9f797faab42f8bd4c097cb14a2",
       "metadata": {
         "axis_policy": "one independent linear x-axis per (dataset, model, semantic group) panel",
@@ -163,8 +163,8 @@
           "Bridge Trend"
         ],
         "source_csv": [
-          "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
-          "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+          "output/real_data/temporal_evaluation/decentraland/tgap_results.csv",
+          "output/real_data/temporal_evaluation/email_eu_core/tgap_results.csv"
         ],
         "status": "MAIN publication global-impact figure"
       }
@@ -178,7 +178,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig3_bridge_matrix.png",
+      "source": "output/publication/figures/fig3_bridge_matrix.png",
       "sha256": "31704f4b940660390f4bb5bac39dcef1707b662dea666f63580d9b1f10982611",
       "metadata": {}
     },
@@ -191,7 +191,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig4_local_graph.png",
+      "source": "output/publication/figures/fig4_local_graph.png",
       "sha256": "787af90ea8531e4f9c00516d2fc565e392dcbcdf0e78fa9fcfcb35e5822b4ff7",
       "metadata": {}
     },
@@ -204,7 +204,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig5_temporal_local.png",
+      "source": "output/publication/figures/fig5_temporal_local.png",
       "sha256": "98a821773159b2c82132e0aaa8e7f104fb53cc5dd7e2ea94e188a97045cdb097",
       "metadata": {}
     },
@@ -217,7 +217,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig6_impact_distribution.png",
+      "source": "output/publication/figures/fig6_impact_distribution.png",
       "sha256": "946b81b9d00bf7f3709382cb528a75ce62929d79eeeafef793c64d9d2db87405",
       "metadata": {}
     },
@@ -230,7 +230,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig7_tgn_seed_stability.png",
+      "source": "output/publication/figures/fig7_tgn_seed_stability.png",
       "sha256": "bd9fefa924fb4238eedcaf8dcf1f814bac4dc45ccd2c263146d9afbead9870c8",
       "metadata": {}
     },
@@ -243,7 +243,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig8_dependence.png",
+      "source": "output/publication/figures/fig8_dependence.png",
       "sha256": "e556e2da36ff8c3d892c27d03a6daad0fcd48aac390582d2fb3a013baacf1160",
       "metadata": {
         "candidate": "dependence",
@@ -259,8 +259,8 @@
         "generation_function": "realdata.make_publication.figure8Dependence",
         "included_concepts": [],
         "source_csv": [
-          "output\\publication\\attribution\\node_attribution.csv",
-          "output\\publication\\attribution\\edge_attribution.csv"
+          "output/publication/attribution/node_attribution.csv",
+          "output/publication/attribution/edge_attribution.csv"
         ],
         "status": "element-level dependence",
         "x_variable": [
@@ -279,7 +279,7 @@
         "png",
         "pdf"
       ],
-      "source": "output/publication/fig9_true_beeswarm.png",
+      "source": "output/publication/figures/fig9_true_beeswarm.png",
       "sha256": "24a532834eb5f131b2e13833649f58781a0c7309f1240029899ea4fb9723c7a9",
       "metadata": {
         "candidate": "beeswarm",
@@ -308,8 +308,8 @@
         ],
         "layout_algorithm": "realdata.make_publication._beeswarmOffsets - ascending value order, first non-colliding offset; deterministic and seedless",
         "source_csv": [
-          "output\\real_data_v2\\temporal_evaluation\\decentraland\\tgap_results.csv",
-          "output\\real_data_v2\\temporal_evaluation\\email_eu_core\\tgap_results.csv"
+          "output/real_data/temporal_evaluation/decentraland/tgap_results.csv",
+          "output/real_data/temporal_evaluation/email_eu_core/tgap_results.csv"
         ],
         "status": "deterministic non-overlapping packing, no jitter"
       }

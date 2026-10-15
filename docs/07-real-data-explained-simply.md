@@ -14,7 +14,7 @@
 >
 > Other documents: [01](01-TSAP-explained-simply.md) (the idea),
 > [06](06-TGAP-complete-guide-A-to-Z.md) (all the code),
-> [03](03-TGAP-technical-audit.md) (design decisions).
+> [03](archive/03-TGAP-technical-audit.md) (design decisions).
 
 ---
 
@@ -701,7 +701,7 @@ Valid names: `tgbl_wiki`, `decentraland`, `email_eu_core`, `tgbl_enron`,
   you and your professor get identical results.
 - **Raw files are not in git** (they are big). They come back from step 1.
 - **Only the safe mode's results are stored.** They are in
-  `output/real_data_v2/temporal_evaluation/`. Descriptive-mode results are
+  `output/real_data/temporal_evaluation/`. Descriptive-mode results are
   NOT committed - run `--mode descriptive` to regenerate them. That way a
   leakage-unsafe number cannot be quoted by accident. The old version-1
   results were deleted; git history still has them.
@@ -716,19 +716,22 @@ Valid names: `tgbl_wiki`, `decentraland`, `email_eu_core`, `tgbl_enron`,
 
 ## 12. What the output files mean
 
-Everything lands in `output/real_data_v2/<mode>/` — **236 files** across both
-modes: 10 files plus 4 pictures for each of the 16 dataset-runs (8 datasets
-× 2 modes = 224), plus 6 comparison files per mode.
+The per-dataset results land in `output/real_data/<mode>/`: 10 files plus 4
+pictures for each dataset. The comparison across datasets lands in its own
+folder, `output/comparison/<mode>/`.
 
 ```
-output/real_data_v2/
-├── temporal_evaluation/     ← the safe mode: use these numbers
-│   ├── summary.json
-│   ├── comparison.csv
-│   ├── comparison_observations.json
-│   ├── figures/             (3 pictures comparing datasets)
-│   └── bitcoin_alpha/  ...  (one folder per dataset)
-└── descriptive/             ← the old full-period view, clearly labelled
+output/
+├── real_data/
+│   ├── temporal_evaluation/     ← the safe mode: use these numbers
+│   │   ├── summary.json
+│   │   └── bitcoin_alpha/  ...  (one folder per dataset)
+│   └── descriptive/             ← the old full-period view, clearly labelled
+└── comparison/
+    └── temporal_evaluation/
+        ├── comparison.csv
+        ├── comparison_observations.json
+        └── figures/             (3 pictures comparing datasets)
 ```
 
 For each dataset:
@@ -964,7 +967,7 @@ For anyone comparing this document to the previous one.
 | 7 | Bitcoin trust ratings silently unused | `edge_weight_used: false`, `edge_sign_used: false`, stated per dataset |
 | 8 | one unlabelled analysis | `analysis_mode` in every file, two modes |
 | 9 | 192 tests | 269 tests |
-| 10 | results in `output/real_data/` | results in `output/real_data_v2/temporal_evaluation/`; the v1 folder was deleted (git history keeps it) |
+| 10 | results in `output/real_data/` | results in `output/real_data/temporal_evaluation/` (briefly named `real_data_v2/`); the v1 results were deleted (git history keeps them) |
 
 **Old numbers that are now wrong** (do not reuse them from the earlier
 document or any slide):
@@ -1037,17 +1040,20 @@ tgap/
 │   │   └── edgelist.py              ALL SIX observed-link datasets
 │   ├── run_real_data.py             runs TGAP, checks validity, writes results
 │   ├── compare_datasets.py          compares all 8
-│   ├── README.md                    the technical version of this document
-│   └── data/                        downloaded files (not in git)
+│   └── README.md                    the technical version of this document
+│
+├── data/                        ← downloaded files (not in git)
 │
 ├── tests/
 │   ├── test_realdata.py         ← 158 tests
 │   └── test_feasibility.py      ← 20 tests (NEW)
 │
 └── output/
-    └── real_data_v2/
-        └── temporal_evaluation/   ← 142 result files (the safe mode only;
-                                     descriptive is regenerated on demand)
+    ├── real_data/
+    │   └── temporal_evaluation/   ← per-dataset results (the safe mode only;
+    │                                descriptive is regenerated on demand)
+    └── comparison/
+        └── temporal_evaluation/   ← the cross-dataset comparison
 ```
 
 Three things worth pointing out to your professor:

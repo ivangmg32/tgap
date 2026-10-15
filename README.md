@@ -11,13 +11,25 @@ moves.
 > describes model behavior; it does not establish that changing the real world
 > would cause the same outcome.
 
-**Quick links:** [Start here](#get-started) · [Commands](#everyday-commands) ·
-[Python API](#use-tgap-from-python) · [Documentation index](docs/README.md)
+**Quick links:** [Start here](#get-started) · [One file, no install](#no-install-one-file-python-runpy) ·
+[Easy examples](#easy-examples-your-data-your-model-your-concept) ·
+[Commands](#everyday-commands) · [Python API](#use-tgap-from-python) ·
+[Documentation index](docs/README.md)
 
 ## Get started
 
-TGAP includes a local browser workbench and a command line for research. Follow
-these steps in order. You only need to install once.
+There are two ways to use TGAP. Pick one:
+
+| | **A. Workbench** (`tgap start` / `tgap stop`) | **B. One file** (`python run.py`) |
+|---|---|---|
+| what you get | a browser interface + the research command line | the research pipeline and the easy examples, in the terminal |
+| install | once, into `~/.tgap` (adds `tgap` to your PATH) | nothing - the first run sets itself up inside the project folder |
+| Python | 3.10 or newer | 3.9 or newer |
+| start here | [steps 1-4 below](#1-get-the-tgap-checkout) | [one command](#no-install-one-file-python-runpy) |
+
+Both use the same TGAP code and write the same outputs.
+
+### Workbench: follow these steps in order. You only need to install once.
 
 ### 1. Get the TGAP checkout
 
@@ -114,6 +126,75 @@ Stopping TGAP keeps your account, experiments, and installed environment.
 See the [installation guide](docs/12-installation-and-self-hosting.md) for
 custom setup, more commands, platform notes, and troubleshooting.
 
+## No install: one file, `python run.py`
+
+If you do not want the workbench, one Python file runs everything. You only
+need **Python 3.9 or newer** ([python.org](https://www.python.org/downloads/);
+on Windows tick *"Add python.exe to PATH"*).
+
+```sh
+cd tgap
+python run.py            # Windows: if "python" is not found, use  py run.py
+```
+
+On the first run `run.py` checks your Python, creates a private environment in
+the project's `.venv/` folder and installs the libraries there (1-3 minutes,
+first run only; your system Python is not touched). It keeps temporary files
+and caches inside the project (`.tgap_cache/`), so a full, locked or non-ASCII
+system `TEMP` folder cannot break a run. Then it runs a quick tour: an
+environment check, the demos and the easy examples.
+
+If anything goes wrong you get a short message in plain English saying what
+happened and how to fix it; technical details go to `output/logs/`.
+
+| command | what it runs | time |
+|---|---|---|
+| `python run.py` | check + demos + easy examples | ~2 min |
+| `python run.py examples` | only the easy examples | ~30 s |
+| `python run.py all` | the full research pipeline (downloads 8 datasets, ~100 MB) | ~11 min |
+| `python run.py realdata publication` | any steps, in the order given | |
+| `python run.py tests` | the automatic test suite | ~9 min |
+| `python run.py tgn --with-torch` | also install PyTorch for the learned model | |
+| `python run.py --help` | every step and option | |
+| `python run.py reset` | delete `.venv/` and caches, start fresh | |
+
+## Easy examples: your data, your model, your concept
+
+Six short scripts in [`examples/`](examples/). Each starts with a
+**PARAMETERS** block: change the values, run the file, and look at the CSV and
+PNG files it writes to `output/examples/<name>/`.
+
+```sh
+python examples/01_quickstart.py      # or: python run.py examples   /   tgap run examples
+```
+
+| file | what you change | what it shows |
+|---|---|---|
+| [`01_quickstart.py`](examples/01_quickstart.py) | size of a made-up graph, model, concepts, delta | TGAP in 30 seconds |
+| [`02_your_own_dataset.py`](examples/02_your_own_dataset.py) | path to **your CSV** and its column names | explaining a model on your own data |
+| [`03_your_own_model.py`](examples/03_your_own_model.py) | the body of `predict()` | plugging in **your own model** |
+| [`04_your_own_transformation.py`](examples/04_your_own_transformation.py) | a 20-line class | writing **your own concept** |
+| [`05_real_dataset.py`](examples/05_real_dataset.py) | the dataset name | one of the 8 real datasets (downloads once) |
+| [`06_my_project.py`](examples/06_my_project.py) | all of the above | **template**: copy it and make it yours |
+
+Every run writes `explanation.csv/.png` (impact of each concept),
+`sensitivity.csv/.png` (the prediction as each concept goes from -50 % to
++50 %) and `graph_over_time.csv/.png` (your temporal graph per snapshot).
+
+**Your own dataset** is a CSV with one row per interaction - who, with whom,
+when:
+
+```text
+source,target,time
+alice,bruno,2024-01-01
+carla,ines,2024-01-02
+```
+
+`time` may be a date or a number; commas or semicolons, UTF-8 or Excel's
+Windows encoding all work. Known groups (teams, departments) can be given as a
+second CSV of `person,group` rows; otherwise TGAP finds them. More in
+[`examples/README.md`](examples/README.md).
+
 ## What you can do
 
 - **Explore explanations in your browser.** Choose a sample temporal graph,
@@ -138,7 +219,7 @@ tgap status                  Check whether it is running
 tgap stop                    Stop it; keep your data
 tgap start --port 8090       Use another port
 tgap start --no-browser      Start without opening a browser
-tgap run examples            Run the getting-started examples
+tgap run examples            Run the easy examples (CSV + PNG outputs)
 tgap --help                  Show command help
 ```
 
@@ -154,7 +235,7 @@ managed Python environment and the source checkout.
 
 ```text
 tgap run examples
-tgap run evaluation
+tgap run demos
 tgap run paper
 tgap run download
 tgap run real-data email_eu_core
@@ -176,9 +257,19 @@ tgap install --tgn --yes
 tgap install --finance --yes
 ```
 
-Downloads and some workflows create files under the repository’s output or
-real-data folders. Read the relevant workflow documentation before running
-large evaluations.
+Every workflow writes to exactly one folder, defined once in
+[`paths.py`](paths.py):
+
+| workflow | writes to |
+|---|---|
+| `examples` | `output/examples/<name>/` |
+| `paper` | `output/synthetic/` (the synthetic known-truth evaluation, RQ1-RQ8) |
+| `download` | `data/` (raw files, not in git) |
+| `real-data` | `output/real_data/<mode>/<dataset>/` |
+| `compare` | `output/comparison/<mode>/` |
+| `ncommunity` | `output/ncommunity/<dataset>/` |
+| `tgn`, `tgn-stability` | `output/tgn/`, `output/tgn_stability/` |
+| `publication` | `output/publication/{figures,tables,attribution}/` |
 
 ## Use TGAP from Python
 
@@ -249,7 +340,7 @@ class MyTransformation(TemporalGraphTransformation):
         return changed
 ```
 
-See the [custom transformation example](examples/MyCustomTransformation.py)
+See the [custom transformation example](examples/more/MyCustomTransformation.py)
 and the [worked example](docs/05-TGAP-worked-example-trace.md) for the full
 contract, feasibility checks, and limitations.
 
@@ -265,11 +356,20 @@ contract, feasibility checks, and limitations.
 ## Project layout
 
 ```text
-core/       Explainer, models, metrics, transformations, and graph utilities
-examples/   Small examples and the custom transformation walkthrough
-realdata/   Dataset preparation and research workflows
-tests/      Automated checks
-workbench/  Local browser interface and its service
+run.py        One-file runner: setup + any workflow, no install
+tgap, tgap.cmd, bootstrap.py, tgap_cli/
+              The `tgap` command (install / start / stop / run)
+paths.py      Every input and output folder, defined once
+core/         Explainer, models, metrics, transformations, graph utilities
+examples/     Easy examples (your data / model / concept) + sample data
+experiments/  Synthetic known-truth evaluation (RQ1-RQ8)
+realdata/     Dataset preparation, research workflows, publication figures
+workbench/    Local browser interface and its service
+tests/        Automated checks
+docs/         Guides (see docs/README.md); old versions in docs/archive/
+contrib/      Iván's finance experiments - separate from TGAP
+data/         Raw downloads (not in git)
+output/       Every generated result (see the table above)
 ```
 
 ## Citation and license

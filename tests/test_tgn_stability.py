@@ -17,11 +17,11 @@ import unittest
 
 import pandas as pd
 
+import paths
 from core.TgnModel import TORCH_AVAILABLE
 from realdata.run_tgn_stability import SEEDS, comparabilityOf
 
-RESULTS = os.path.join("output", "real_data_v2", "tgn_stability",
-                       "email_eu_core")
+RESULTS = os.path.join(paths.TGN_STABILITY, "email_eu_core")
 
 
 class TestComparabilityRule(unittest.TestCase):
