@@ -173,3 +173,52 @@ class TestRunnerMessages(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestExampleProjects(unittest.TestCase):
+    ''' Every project in examples/projects runs and writes its outputs,
+    including the tutorial, into the folder it is given. '''
+
+    PROJECTS = os.path.join(paths.ROOT, "examples", "projects")
+
+    def testEveryProjectRunsAndWritesATutorial(self):
+        import contextlib
+        import io
+        names = sorted(n for n in os.listdir(self.PROJECTS)
+                       if os.path.isfile(os.path.join(self.PROJECTS, n,
+                                                      "main.py")))
+        self.assertGreaterEqual(len(names), 11)
+        for name in names:
+            with self.subTest(project=name):
+                folder = tempfile.mkdtemp(prefix="tgap-project-")
+                try:
+                    module = runpy.run_path(
+                        os.path.join(self.PROJECTS, name, "main.py"),
+                        run_name="project_under_test")
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        module["main"](output=folder)
+                    tutorial = os.path.join(folder, "TUTORIAL.md")
+                    self.assertTrue(os.path.exists(tutorial))
+                    with open(tutorial, encoding="utf-8") as handle:
+                        text = handle.read()
+                    self.assertGreater(len(text), 500)
+                    for image in [l.split("](")[1].rstrip(")") for l in
+                                  text.splitlines() if l.startswith("![")]:
+                        self.assertTrue(os.path.exists(os.path.join(
+                            folder, image)), image)
+                finally:
+                    shutil.rmtree(folder, ignore_errors=True)
+
+    def testEveryProjectHasTheStandardFiles(self):
+        for name in sorted(os.listdir(self.PROJECTS)):
+            folder = os.path.join(self.PROJECTS, name)
+            if not os.path.isfile(os.path.join(folder, "main.py")):
+                continue
+            with self.subTest(project=name):
+                self.assertTrue(os.path.exists(os.path.join(folder,
+                                                            "README.md")))
+                if not name.startswith("ivan_") or \
+                        name == "ivan_market_contagion":
+                    for part in ("model.py", "concept.py"):
+                        self.assertTrue(os.path.exists(os.path.join(
+                            folder, part)), part)

@@ -86,7 +86,32 @@ def main():
         summary = runPrepared(market, market.meta["analysis_mode"], folder)
     print("        {0} of {1} explanations passed the validity checks".format(
         summary["valid_rows"], summary["explanation_rows"]))
-    print("      Results (report.md + CSVs + figures): " + folder)
+    t = toolkit.Tutorial(folder, "A full TGAP market study",
+                         intro="{0} stocks in {1} sectors, the complete "
+                               "validity-gated TGAP protocol.".format(
+                                   len(market.meta["tickers"]),
+                                   len(market.communities)))
+    t.section("Step 1 - Prices and networks", (
+        "{0} correlation windows of {1} over {2}; ties = correlation >= "
+        "{3}.").format(WINDOWS, WINDOW, PERIOD, THRESHOLD))
+    t.section("Step 2 - The threshold check")
+    t.table(report, "threshold_check.csv")
+    t.section("Step 3 - The full protocol", (
+        "Six models x five concepts x three deltas x two directions = 180 "
+        "experiments. **{0}** passed the validity checks; the rest are "
+        "kept in tgap_results.csv but flagged and left out of any "
+        "conclusion.").format(summary["valid_rows"]))
+    t.text("Read **report.md** next: it is the full report of this run, in "
+           "the same format as the eight real datasets.")
+    for figure, caption in (
+            ("figures/explanation_heatmap.png", "Which model responds to "
+             "which concept."),
+            ("figures/validity_map.png", "Which experiments passed the "
+             "validity checks.")):
+        if os.path.exists(os.path.join(folder, figure)):
+            t.image(figure, caption)
+    print("      Results (report.md + CSVs + figures + tutorial): " + folder)
+    print("      Read first: " + t.save())
 
 
 if __name__ == "__main__":

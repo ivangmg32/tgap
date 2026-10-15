@@ -73,7 +73,26 @@ def main():
     builder.plotTemporalGraph(nFrames=6, path=os.path.join(folder,
                                                            "networks.png"))
     toolkit.step(3, 3, "Saved the table and two pictures")
-    print("      Results (CSV + PNG): " + folder)
+    t = toolkit.Tutorial(folder, "The market changes over time",
+                         intro="One correlation network per time window, "
+                               "with Ivan's `CorrGraphs.temporalGraph` - a "
+                               "temporal graph of the market.")
+    t.section("Step 1 - One network per window", (
+        "{0} windows of {1} each, spread over {2}. Each window gives one "
+        "complete correlation network, like example 1.").format(
+            WINDOWS, WINDOW, PERIOD))
+    t.section("Step 2 - How synchronized was each window?", (
+        "The most synchronized window ends on **{0}** (mean correlation "
+        "{1:+.2f}), the least on **{2}** ({3:+.2f}).").format(
+            busy["window_end"], busy["mean_correlation"],
+            calm["window_end"], calm["mean_correlation"]))
+    t.table(table, "windows.csv")
+    t.image("synchronization.png", "Mean correlation per window: high = "
+            "the market moves as one.")
+    t.image("networks.png", "Six of the windows: the links change shape "
+            "and strength over time.")
+    print("      Results (CSV + PNG + tutorial): " + folder)
+    print("      Read first: " + t.save())
 
 
 if __name__ == "__main__":

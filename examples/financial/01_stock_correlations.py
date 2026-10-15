@@ -51,7 +51,24 @@ def main():
     CorrGraphs(TICKERS).plotGraph(network, path=os.path.join(
         folder, "network.png"))
     toolkit.step(3, 3, "Saved the network picture and the table")
-    print("      Results (CSV + PNG): " + folder)
+    t = toolkit.Tutorial(folder, "Which stocks move together?",
+                         intro="One correlation network for {0} stocks, "
+                               "built with Ivan's `CorrGraphs.graph`."
+                               .format(len(TICKERS)))
+    t.section("Step 1 - From prices to correlations", (
+        "Daily closing prices over the last {0} (from Ivan's cache) become "
+        "daily returns, and every pair of stocks gets a **correlation** "
+        "between -1 and +1: +1 = they always move together, 0 = unrelated, "
+        "-1 = they move in opposite directions.").format(PERIOD))
+    t.section("Step 2 - Every pair, strongest first")
+    t.table(pairs, "correlations.csv", maxRows=10)
+    t.section("Step 3 - The network")
+    t.image("network.png", "Every stock is a node; every pair is joined. "
+            "Red = moving together, blue = opposite; thicker = stronger.")
+    t.text("Every pair is connected, so the network is **complete**. "
+           "Example 3 shows why TGAP needs a threshold on top of this.")
+    print("      Results (CSV + PNG + tutorial): " + folder)
+    print("      Read first: " + t.save())
 
 
 if __name__ == "__main__":

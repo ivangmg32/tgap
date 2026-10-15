@@ -19,6 +19,14 @@ tgap run examples                        # (same, if you installed the workbench
 | 5 | [`05_real_dataset.py`](05_real_dataset.py) | use one of the 8 real datasets | the dataset name |
 | 6 | [`06_my_project.py`](06_my_project.py) | put it all together — **copy this for your study** | everything |
 
+## Complete example projects
+
+[`projects/`](projects/README.md) has eleven self-contained studies - team
+silos, open-source bus factor, DAO voting blocs, classroom friendships,
+supply chains, epidemics, and five studies of Ivan's financial code. Each
+folder has its own data, model, concept and outputs, and every run writes a
+`TUTORIAL.md` that walks through the results.
+
 ## Financial markets
 
 [`financial/`](financial/README.md) has seven more examples, from "which

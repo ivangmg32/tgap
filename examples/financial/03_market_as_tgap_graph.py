@@ -71,7 +71,29 @@ def main():
         THRESHOLD))
     toolkit.step(4, 4, "With threshold {0}: ties per window {1}".format(
         THRESHOLD, list(overTime["ties"])))
-    print("      Results (CSV + PNG): " + folder)
+    t = toolkit.Tutorial(folder, "Turning the market into a graph TGAP can "
+                         "explain", intro="Ivan's complete, weighted networks "
+                         "become thresholded co-movement graphs with "
+                         "sector communities.")
+    t.section("Step 1 - Why a threshold", (
+        "Ivan's networks connect every pair of stocks. TGAP's concepts "
+        "change which ties EXIST, and nothing can be added to a graph that "
+        "already has every tie. So two stocks count as tied in a window "
+        "only when their correlation is at least the threshold."))
+    t.section("Step 2 - Sectors become communities", "Communities: " + ", "
+              .join("**{0}** ({1} stocks)".format(label, len(group))
+                    for label, group in zip(partition.labels, partition)))
+    t.section("Step 3 - Which thresholds work?", (
+        "`usable` means: no window without ties, and TGAP can keep its "
+        "promise of changing one concept while holding the number of ties "
+        "fixed."))
+    t.table(report, "threshold_check.csv")
+    t.section("Step 4 - The chosen graph (threshold {0})".format(THRESHOLD))
+    t.table(overTime, "graph_over_time.csv")
+    t.image("graph_over_time.png", "Ties, and ties across sectors, in "
+            "every window.")
+    print("      Results (CSV + PNG + tutorial): " + folder)
+    print("      Read first: " + t.save())
 
 
 if __name__ == "__main__":

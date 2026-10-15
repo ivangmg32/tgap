@@ -238,3 +238,5 @@ workbench/.venv/
 .tgap_cache/
 output/logs/
 output/examples/
+# Outputs of the example projects are written next to them when run
+examples/projects/*/output/
