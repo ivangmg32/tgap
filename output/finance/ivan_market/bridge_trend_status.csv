@@ -1,0 +1,7 @@
+dataset,analysis_mode,transformation,requested_delta,requested_direction,achieved_direction,slope_before,slope_after,slope_change,snapshots,compounding_factor,snapshots_saturated,fraction_saturated,min_bridge_width_before,max_bridge_width_before,min_bridge_width,max_bridge_width,status,valid_for_analysis
+ivan_market,temporal_evaluation,Bridge Trend,0.1,1,1,-0.46853146853146843,-0.09790209790209797,0.37062937062937046,12,2.8531167061100025,0,0.0,2,15,2,11,ok,True
+ivan_market,temporal_evaluation,Bridge Trend,-0.1,-1,-1,-0.46853146853146843,-1.1958041958041958,-0.7272727272727274,12,0.31381059609000006,0,0.0,2,15,2,16,ok,True
+ivan_market,temporal_evaluation,Bridge Trend,0.25,1,1,-0.46853146853146843,0.027972027972028,0.49650349650349646,12,11.641532182693481,6,0.5,2,15,1,9,saturated,False
+ivan_market,temporal_evaluation,Bridge Trend,-0.25,-1,-1,-0.46853146853146843,-1.0804195804195809,-0.6118881118881124,12,0.04223513603210449,0,0.0,2,15,2,16,ok,True
+ivan_market,temporal_evaluation,Bridge Trend,0.5,1,1,-0.46853146853146843,0.04895104895104899,0.5174825174825174,12,86.49755859375,7,0.5833333333333334,2,15,1,7,saturated,False
+ivan_market,temporal_evaluation,Bridge Trend,-0.5,-1,-1,-0.46853146853146843,-0.7902097902097898,-0.32167832167832133,12,0.00048828125,0,0.0,2,15,2,16,ok,True

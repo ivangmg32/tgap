@@ -1,0 +1,52 @@
+{
+  "source": "Yahoo Finance daily closing prices (cached in finance/Cache)",
+  "raw_nodes": 30,
+  "retained_nodes": 30,
+  "nodes_retained_pct": 100.0,
+  "raw_events": 5220,
+  "retained_events": 742,
+  "events_retained_pct": 14.21,
+  "event_definition": "a stock pair in one window; retained when its correlation passes the threshold",
+  "price_history": "5y",
+  "correlation_window": "6mo",
+  "windows": 12,
+  "window_end_dates": [
+    "2022-04-18",
+    "2022-09-09",
+    "2023-02-03",
+    "2023-06-30",
+    "2023-11-22",
+    "2024-04-19",
+    "2024-09-12",
+    "2025-02-07",
+    "2025-07-07",
+    "2025-11-26",
+    "2026-04-24",
+    "2026-09-18"
+  ],
+  "correlation_threshold": 0.5,
+  "threshold_sign": "positive",
+  "selection_period": "none - tickers chosen by the user in advance",
+  "evaluation_period": "2022-04-18 .. 2026-09-18",
+  "selection_fraction_of_span": 0.0,
+  "node_selection_mode": "user_chosen_tickers",
+  "future_information_used_for_node_selection": false,
+  "community_mode": "sector_labels",
+  "partition_sizes": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "partition_labels": [
+    "Consumer",
+    "Energy",
+    "Financials",
+    "Healthcare",
+    "Industrials",
+    "Technology"
+  ],
+  "note": "Correlation windows overlap when the window is longer than the spacing between window ends; consecutive snapshots then share part of their data."
+}

@@ -1,0 +1,101 @@
+seed,concept_a,concept_b,direction,comparable,reason,requested_delta_a,requested_delta_b,achieved_delta_a,achieved_delta_b,impact_a,impact_b,relative_gap
+0,Bridge Width,Centralization,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+0,Bridge Width,Centralization,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+0,Bridge Width,Density,increase,True,matched,0.6,0.6,0.6006160164271045,0.6006389776357828,-0.03327901760737102,0.06140080760134027,3.8227969767570045e-05
+0,Bridge Width,Density,decrease,True,matched,-0.05,-0.05,-0.050308008213552476,-0.05005324813631529,0.07167176567778279,-0.2360065725255517,0.005064006433245329
+0,Bridge Width,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+0,Bridge Width,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+0,Bridge Width,Churn,increase,True,matched,0.02,0.25,0.021560574948665298,0.021729931452452486,-0.5968502334186009,0.7365846192281963,0.007793697101979312
+0,Bridge Width,Churn,decrease,True,matched,-0.05,-0.4,-0.050308008213552476,-0.054300239644397855,0.07167176567778279,0.6530203372390981,0.07352143299900256
+0,Centralization,Density,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+0,Centralization,Density,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+0,Centralization,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+0,Centralization,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+0,Centralization,Churn,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+0,Centralization,Churn,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+0,Density,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+0,Density,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+0,Density,Churn,increase,True,matched,0.05,0.6,0.05005324813631529,0.0529976739778205,-0.3370147062108868,-0.018980413894633487,0.055557642826691865
+0,Density,Churn,decrease,True,matched,-0.05,-0.4,-0.05005324813631529,-0.054300239644397855,-0.2360065725255517,0.6530203372390981,0.07821312642255952
+0,Bridge Trend,Churn,increase,False,different delta units (absolute vs relative); achieved changes are not expressed in the same quantity,,,,,,,
+0,Bridge Trend,Churn,decrease,False,different delta units (absolute vs relative); achieved changes are not expressed in the same quantity,,,,,,,
+1,Bridge Width,Centralization,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+1,Bridge Width,Centralization,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+1,Bridge Width,Density,increase,True,matched,0.6,0.6,0.6006160164271045,0.6006389776357828,-0.09993773097665905,0.010220848499460422,3.8227969767570045e-05
+1,Bridge Width,Density,decrease,True,matched,-0.05,-0.05,-0.050308008213552476,-0.05005324813631529,-0.11623780581415889,0.18395741061961376,0.005064006433245329
+1,Bridge Width,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+1,Bridge Width,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+1,Bridge Width,Churn,increase,True,matched,0.02,0.25,0.021560574948665298,0.021729931452452486,-0.655691663424174,1.072952821776596,0.007793697101979312
+1,Bridge Width,Churn,decrease,True,matched,-0.05,-0.4,-0.050308008213552476,-0.054300239644397855,-0.11623780581415889,0.16270239911278564,0.07352143299900256
+1,Centralization,Density,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+1,Centralization,Density,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+1,Centralization,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+1,Centralization,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+1,Centralization,Churn,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+1,Centralization,Churn,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+1,Density,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+1,Density,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+1,Density,Churn,increase,True,matched,0.05,0.6,0.05005324813631529,0.0529976739778205,-0.05072436941430918,0.6642408207351805,0.055557642826691865
+1,Density,Churn,decrease,True,matched,-0.05,-0.4,-0.05005324813631529,-0.054300239644397855,0.18395741061961376,0.16270239911278564,0.07821312642255952
+1,Bridge Trend,Churn,increase,False,different delta units (absolute vs relative); achieved changes are not expressed in the same quantity,,,,,,,
+1,Bridge Trend,Churn,decrease,False,different delta units (absolute vs relative); achieved changes are not expressed in the same quantity,,,,,,,
+2,Bridge Width,Centralization,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+2,Bridge Width,Centralization,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+2,Bridge Width,Density,increase,True,matched,0.6,0.6,0.6006160164271045,0.6006389776357828,-0.08643346097734243,-0.028620678059598233,3.8227969767570045e-05
+2,Bridge Width,Density,decrease,True,matched,-0.05,-0.05,-0.050308008213552476,-0.05005324813631529,-0.7113232880222538,0.4533743566655093,0.005064006433245329
+2,Bridge Width,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+2,Bridge Width,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+2,Bridge Width,Churn,increase,True,matched,0.02,0.25,0.021560574948665298,0.021729931452452486,-0.5562656947544643,0.9579097342273015,0.007793697101979312
+2,Bridge Width,Churn,decrease,True,matched,-0.05,-0.4,-0.050308008213552476,-0.054300239644397855,-0.7113232880222538,-0.20096446050591874,0.07352143299900256
+2,Centralization,Density,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+2,Centralization,Density,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+2,Centralization,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+2,Centralization,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+2,Centralization,Churn,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+2,Centralization,Churn,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+2,Density,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+2,Density,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+2,Density,Churn,increase,True,matched,0.05,0.6,0.05005324813631529,0.0529976739778205,-0.7615347847025437,0.2635124532192285,0.055557642826691865
+2,Density,Churn,decrease,True,matched,-0.05,-0.4,-0.05005324813631529,-0.054300239644397855,0.4533743566655093,-0.20096446050591874,0.07821312642255952
+2,Bridge Trend,Churn,increase,False,different delta units (absolute vs relative); achieved changes are not expressed in the same quantity,,,,,,,
+2,Bridge Trend,Churn,decrease,False,different delta units (absolute vs relative); achieved changes are not expressed in the same quantity,,,,,,,
+3,Bridge Width,Centralization,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+3,Bridge Width,Centralization,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+3,Bridge Width,Density,increase,True,matched,0.6,0.6,0.6006160164271045,0.6006389776357828,-0.061492073230254365,0.05315365182592514,3.8227969767570045e-05
+3,Bridge Width,Density,decrease,True,matched,-0.05,-0.05,-0.050308008213552476,-0.05005324813631529,-0.9206942246884695,0.13523481754546454,0.005064006433245329
+3,Bridge Width,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+3,Bridge Width,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+3,Bridge Width,Churn,increase,True,matched,0.02,0.25,0.021560574948665298,0.021729931452452486,-2.1128398463839577,-0.2680736269826684,0.007793697101979312
+3,Bridge Width,Churn,decrease,True,matched,-0.05,-0.4,-0.050308008213552476,-0.054300239644397855,-0.9206942246884695,0.4729580247392626,0.07352143299900256
+3,Centralization,Density,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+3,Centralization,Density,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+3,Centralization,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+3,Centralization,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+3,Centralization,Churn,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+3,Centralization,Churn,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+3,Density,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+3,Density,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+3,Density,Churn,increase,True,matched,0.05,0.6,0.05005324813631529,0.0529976739778205,-1.044536659058103,0.21512935211727416,0.055557642826691865
+3,Density,Churn,decrease,True,matched,-0.05,-0.4,-0.05005324813631529,-0.054300239644397855,0.13523481754546454,0.4729580247392626,0.07821312642255952
+3,Bridge Trend,Churn,increase,False,different delta units (absolute vs relative); achieved changes are not expressed in the same quantity,,,,,,,
+3,Bridge Trend,Churn,decrease,False,different delta units (absolute vs relative); achieved changes are not expressed in the same quantity,,,,,,,
+4,Bridge Width,Centralization,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+4,Bridge Width,Centralization,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+4,Bridge Width,Density,increase,True,matched,0.6,0.6,0.6006160164271045,0.6006389776357828,-0.15155917701558175,0.09110255602826463,3.8227969767570045e-05
+4,Bridge Width,Density,decrease,True,matched,-0.05,-0.05,-0.050308008213552476,-0.05005324813631529,0.08081956298983808,0.47540342300496147,0.005064006433245329
+4,Bridge Width,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+4,Bridge Width,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+4,Bridge Width,Churn,increase,True,matched,0.02,0.25,0.021560574948665298,0.021729931452452486,0.7172602925981794,3.26534639474934,0.007793697101979312
+4,Bridge Width,Churn,decrease,True,matched,-0.05,-0.4,-0.050308008213552476,-0.054300239644397855,0.08081956298983808,0.2361420225871574,0.07352143299900256
+4,Centralization,Density,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+4,Centralization,Density,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+4,Centralization,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+4,Centralization,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+4,Centralization,Churn,increase,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+4,Centralization,Churn,decrease,False,"Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others",,,,,,,
+4,Density,Bridge Trend,increase,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+4,Density,Bridge Trend,decrease,False,different delta units (relative vs absolute); achieved changes are not expressed in the same quantity,,,,,,,
+4,Density,Churn,increase,True,matched,0.05,0.6,0.05005324813631529,0.0529976739778205,-0.14409574422430468,0.41974533303275685,0.055557642826691865
+4,Density,Churn,decrease,True,matched,-0.05,-0.4,-0.05005324813631529,-0.054300239644397855,0.47540342300496147,0.2361420225871574,0.07821312642255952
+4,Bridge Trend,Churn,increase,False,different delta units (absolute vs relative); achieved changes are not expressed in the same quantity,,,,,,,
+4,Bridge Trend,Churn,decrease,False,different delta units (absolute vs relative); achieved changes are not expressed in the same quantity,,,,,,,

@@ -4,7 +4,10 @@ import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 
-from Cache import Cache
+try:                                   # as part of the TGAP package
+    from .Cache import Cache
+except ImportError:                    # run as a plain script, like before
+    from Cache import Cache
 
 
 class CorrGraphs:
@@ -207,8 +210,10 @@ class CorrGraphs:
             f"Unsupported period: {period}. "
             "Use formats such as '30d', '6mo', or '5y'."
         )
-    def plotGraph(self, graph=None):
-        """Plot the stored graph or a supplied NetworkX graph."""
+    def plotGraph(self, graph=None, path=None):
+        """Plot the stored graph or a supplied NetworkX graph.
+
+        path: save the picture there instead of opening a window."""
 
         # Use the supplied graph or the last stored graph
         G = graph if graph is not None else self.network
@@ -288,10 +293,12 @@ class CorrGraphs:
         plt.title("Stock Correlation Network")
         plt.axis("off")
         plt.tight_layout()
-        plt.show()
+        _showOrSave(path)
 
-    def plotTemporalGraph(self, nFrames=6):
-        """Plot selected temporal graphs with their ending dates."""
+    def plotTemporalGraph(self, nFrames=6, path=None):
+        """Plot selected temporal graphs with their ending dates.
+
+        path: save the picture there instead of opening a window."""
 
         if self.temporalNetworks is None or len(self.temporalNetworks) == 0:
             raise ValueError(
@@ -390,7 +397,18 @@ class CorrGraphs:
         )
 
         plt.tight_layout()
+        _showOrSave(path)
+
+
+def _showOrSave(path):
+    """Open a window (Ivan's original behaviour), or save to a file."""
+    if path is None:
         plt.show()
+        return
+    import os
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    plt.savefig(path, dpi=150)
+    plt.close()
 
 
 def main():

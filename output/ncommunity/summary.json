@@ -1,0 +1,113 @@
+{
+  "email_eu_core": [
+    {
+      "dataset": "email_eu_core",
+      "n_communities": 2,
+      "community_labels": [
+        "dept4",
+        "dept14"
+      ],
+      "partition_sizes": [
+        109,
+        92
+      ],
+      "community_mode": "ground_truth_labels",
+      "community_pairs": 1,
+      "modularity": -0.021,
+      "modularity_natural": 0.4716,
+      "modularity_lost_by_merging": 0.4927,
+      "natural_n_communities": 42,
+      "retained_nodes": 201,
+      "snapshots": 12,
+      "bridge_matrix_last_snapshot": {
+        "dept4-dept14": 11
+      },
+      "seed": 42,
+      "pair_selectivity": {
+        "rows": 2,
+        "own_pair_rows": 2,
+        "own_pair_nonzero": 2,
+        "other_pair_rows": 0,
+        "other_pair_exactly_zero": 0,
+        "selectivity_holds": true
+      }
+    },
+    {
+      "dataset": "email_eu_core",
+      "n_communities": 3,
+      "community_labels": [
+        "dept4",
+        "dept14",
+        "dept1"
+      ],
+      "partition_sizes": [
+        109,
+        92,
+        65
+      ],
+      "community_mode": "ground_truth_labels",
+      "community_pairs": 3,
+      "modularity": -0.0049,
+      "modularity_natural": 0.4127,
+      "modularity_lost_by_merging": 0.4176,
+      "natural_n_communities": 49,
+      "retained_nodes": 266,
+      "snapshots": 12,
+      "bridge_matrix_last_snapshot": {
+        "dept4-dept14": 11,
+        "dept4-dept1": 11,
+        "dept14-dept1": 10
+      },
+      "seed": 42,
+      "pair_selectivity": {
+        "rows": 18,
+        "own_pair_rows": 6,
+        "own_pair_nonzero": 6,
+        "other_pair_rows": 12,
+        "other_pair_exactly_zero": 12,
+        "selectivity_holds": true
+      }
+    },
+    {
+      "dataset": "email_eu_core",
+      "n_communities": 4,
+      "community_labels": [
+        "dept4",
+        "dept14",
+        "dept1",
+        "dept21"
+      ],
+      "partition_sizes": [
+        109,
+        92,
+        65,
+        61
+      ],
+      "community_mode": "ground_truth_labels",
+      "community_pairs": 6,
+      "modularity": -0.0044,
+      "modularity_natural": 0.3904,
+      "modularity_lost_by_merging": 0.3949,
+      "natural_n_communities": 51,
+      "retained_nodes": 327,
+      "snapshots": 12,
+      "bridge_matrix_last_snapshot": {
+        "dept4-dept14": 11,
+        "dept4-dept1": 11,
+        "dept4-dept21": 9,
+        "dept14-dept1": 10,
+        "dept14-dept21": 9,
+        "dept1-dept21": 7
+      },
+      "seed": 42,
+      "pair_selectivity": {
+        "rows": 72,
+        "own_pair_rows": 12,
+        "own_pair_nonzero": 12,
+        "other_pair_rows": 60,
+        "other_pair_exactly_zero": 60,
+        "selectivity_holds": true
+      }
+    }
+  ]
+}
