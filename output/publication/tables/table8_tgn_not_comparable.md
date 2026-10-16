@@ -1,0 +1,9 @@
+| concept_a | concept_b | reason | comparable |
+|---|---|---|---|
+| Bridge Trend | Churn | different delta units (absolute vs relative); achieved changes are not expressed in the same quantity | False |
+| Bridge Width | Bridge Trend | different delta units (relative vs absolute); achieved changes are not expressed in the same quantity | False |
+| Bridge Width | Centralization | Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others | False |
+| Centralization | Bridge Trend | different delta units (relative vs absolute); achieved changes are not expressed in the same quantity | False |
+| Centralization | Churn | Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others | False |
+| Centralization | Density | Centralization's delta is a rewiring fraction (a mechanism knob), not a relative change of the measured property, so its achieved delta is not commensurable with the others | False |
+| Density | Bridge Trend | different delta units (relative vs absolute); achieved changes are not expressed in the same quantity | False |

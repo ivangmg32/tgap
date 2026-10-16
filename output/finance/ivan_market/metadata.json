@@ -1,0 +1,40 @@
+{
+  "dataset": "ivan_market",
+  "description": "Stock co-movement networks: two stocks are tied in a window when the correlation of their daily returns is at least 0.3 (positive). Communities are sectors.",
+  "graph_nodes_are": "stocks (tickers)",
+  "graph_edges_are": "strong return correlation within one window",
+  "snapshot_count": 12,
+  "snapshot_interval": "6mo correlation windows, ends spread evenly over 5y",
+  "raw_nodes": 8,
+  "retained_nodes": 8,
+  "nodes_retained_pct": 100.0,
+  "raw_events": 336,
+  "retained_events": 144,
+  "events_retained_pct": 42.86,
+  "analysis_mode": "temporal_evaluation",
+  "family": "financial correlation network (thresholded)",
+  "domain": "stock market",
+  "tickers": [
+    "AAPL",
+    "AMZN",
+    "GOOGL",
+    "JNJ",
+    "JPM",
+    "MSFT",
+    "NVDA",
+    "XOM"
+  ],
+  "sectors": {
+    "AAPL": "Technology",
+    "AMZN": "Consumer",
+    "GOOGL": "Technology",
+    "JNJ": "Healthcare",
+    "JPM": "Financials",
+    "MSFT": "Technology",
+    "NVDA": "Technology",
+    "XOM": "Energy"
+  },
+  "edge_weight_used": false,
+  "edge_weight_available": "correlation (used only for the threshold)",
+  "edge_sign_used": false
+}

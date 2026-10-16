@@ -1,0 +1,11 @@
+networkx>=3.0
+numpy>=1.24
+pandas>=2.0
+matplotlib>=3.7
+scipy>=1.10
+plotly>=5.0
+certifi
+
+# Optional: the learned-model (TGN) experiments only.
+# pip install torch --index-url https://download.pytorch.org/whl/cpu
+# pip install torch_geometric

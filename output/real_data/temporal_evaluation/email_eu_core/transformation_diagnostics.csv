@@ -1,0 +1,31 @@
+dataset,analysis_mode,transformation,family,claims_edge_count_preservation,snapshots_edge_count_changed,requested_delta,snapshots,snapshots_modified,modified_fraction,last_snapshot_modified,structurally_blocked
+email_eu_core,temporal_evaluation,Bridge Width,structural,True,0,0.1,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Bridge Width,structural,True,0,-0.1,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Bridge Width,structural,True,1,0.25,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Bridge Width,structural,True,0,-0.25,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Bridge Width,structural,True,2,0.5,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Bridge Width,structural,True,0,-0.5,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Centralization,structural,True,0,0.1,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Centralization,structural,True,0,-0.1,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Centralization,structural,True,0,0.25,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Centralization,structural,True,0,-0.25,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Centralization,structural,True,0,0.5,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Centralization,structural,True,0,-0.5,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Density,structural,False,0,0.1,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Density,structural,False,0,-0.1,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Density,structural,False,0,0.25,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Density,structural,False,0,-0.25,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Density,structural,False,0,0.5,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Density,structural,False,0,-0.5,12,12,1.0,True,False
+email_eu_core,temporal_evaluation,Bridge Trend,temporal,True,0,0.1,12,11,0.9166666666666666,False,False
+email_eu_core,temporal_evaluation,Bridge Trend,temporal,True,5,-0.1,12,11,0.9166666666666666,False,False
+email_eu_core,temporal_evaluation,Bridge Trend,temporal,True,0,0.25,12,11,0.9166666666666666,False,False
+email_eu_core,temporal_evaluation,Bridge Trend,temporal,True,10,-0.25,12,11,0.9166666666666666,False,False
+email_eu_core,temporal_evaluation,Bridge Trend,temporal,True,0,0.5,12,11,0.9166666666666666,False,False
+email_eu_core,temporal_evaluation,Bridge Trend,temporal,True,11,-0.5,12,11,0.9166666666666666,False,False
+email_eu_core,temporal_evaluation,Churn,temporal,True,0,0.1,12,6,0.5,False,False
+email_eu_core,temporal_evaluation,Churn,temporal,True,0,-0.1,12,7,0.5833333333333334,False,False
+email_eu_core,temporal_evaluation,Churn,temporal,True,0,0.25,12,10,0.8333333333333334,False,False
+email_eu_core,temporal_evaluation,Churn,temporal,True,0,-0.25,12,7,0.5833333333333334,False,False
+email_eu_core,temporal_evaluation,Churn,temporal,True,0,0.5,12,10,0.8333333333333334,False,False
+email_eu_core,temporal_evaluation,Churn,temporal,True,0,-0.5,12,7,0.5833333333333334,False,False

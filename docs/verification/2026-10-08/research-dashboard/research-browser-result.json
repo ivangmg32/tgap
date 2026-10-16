@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "charts": 12,
+  "errors": [],
+  "checks": [
+    "protected researcher login",
+    "cohort and repeated visitors",
+    "charts",
+    "ZIP provenance",
+    "SVG/PNG",
+    "feedback XSS escaping",
+    "search",
+    "saved experiment and full JSON",
+    "invalid nulls",
+    "date/status filters",
+    "empty cohort",
+    "mobile charts/tables",
+    "logout clears cached records and ignores stale responses"
+  ]
+}

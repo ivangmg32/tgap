@@ -1,0 +1,23 @@
+{
+  "dataset": "synthetic_3community",
+  "edge_coverage": 1.0,
+  "edge_method": "Method: occlusion. impact(e) = model(temporal graph with e removed from every snapshot) - model(temporal graph). Each value is one measured prediction difference; nothing is interpolated. When coverage < 1 the ranking is partial and must be reported as such.",
+  "edge_selection": {
+    "budget": null,
+    "onlyBridges": false,
+    "sample": null,
+    "seed": 42,
+    "topK": null
+  },
+  "edge_time_all_zero": false,
+  "edge_time_method": "impact(e, t) = model(graph with edge e removed from snapshot t only) - model(graph). One measured prediction difference per (edge, snapshot). An all-zero result means the model has no temporal dependence on these elements - it does NOT mean the elements are unimportant.",
+  "edge_time_rows_persisted": 224,
+  "edge_time_selection_rule": "none at persistence time - every edge at every snapshot is stored; fig12 applies a display-only top-K",
+  "edge_time_snapshots_with_any_response": [
+    4
+  ],
+  "model": "PersistenceTemporalModel",
+  "node_coverage": 1.0,
+  "seed": 42,
+  "snapshots": 5
+}
