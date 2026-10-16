@@ -77,3 +77,5 @@ Impact = change in the model's answer, divided by the change we actually achieve
 ---
 
 *Real data has no ground truth, so nothing here validates TGAP's correctness - it shows the pipeline handles real temporal structure. Every number is a model sensitivity to a controlled counterfactual perturbation, not a causal claim.*
+
+**More pictures:** which stocks and ties each model leans on, and in which window - see [insight.md](insight.md).

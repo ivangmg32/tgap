@@ -211,6 +211,10 @@ python examples/01_quickstart.py      # or: python run.py examples   /   tgap ru
 | [`05_real_dataset.py`](examples/05_real_dataset.py) | the dataset name | one of the 8 real datasets (downloads once) |
 | [`06_my_project.py`](examples/06_my_project.py) | all of the above | **template**: copy it and make it yours |
 
+**The shortest way - the wrapper:** your model and your concept are plain
+functions, a study is a few lines. See [`examples/wrapper/`](examples/wrapper/README.md)
+(`from tgap_wrapper import Wrapper`).
+
 **Complete studies:** [`examples/projects/`](examples/projects/README.md)
 has eleven self-contained projects - each folder with its own dataset,
 model, concept and outputs - including five studies of Ivan's financial
@@ -250,6 +254,10 @@ python -m finance.experimentationDatamining          # Ivan's RQ1-RQ4
 ```
 
 Seven step-by-step examples: [`examples/financial/`](examples/financial/README.md).
+A full study (`python -m finance.run_finance`) writes, next to the report and
+the six overview figures, **`insight.md`**: the paper-style pictures drawn on
+the stock network itself - which stocks and ties each concept changes, which
+pair or single stock a model leans on, and in which window.
 Downloading new stock prices needs `python run.py --with-finance` (or
 `tgap install --finance`); the cached prices of Ivan's eight stocks need
 nothing extra.

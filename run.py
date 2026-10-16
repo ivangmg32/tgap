@@ -7,6 +7,8 @@ TGAP - one file that sets everything up and runs the project.
     python run.py all              the full research pipeline (internet, ~20 min)
     python run.py examples         only the easy examples
     python run.py demos examples   any steps, in the order given
+    python run.py FILE.py          run ONE Python file (an example, or your own
+                                   study) - e.g. examples/wrapper/01_five_lines.py
     python run.py --list           list every step
     python run.py reset            delete the private environment and caches
     python run.py --help
@@ -551,6 +553,39 @@ def _withArgv(argv, function):
         sys.argv = saved
 
 
+def scriptStep(path):
+    ''' A step that runs one Python file as a program, like `python FILE`,
+    with TGAP importable and the file's own folder on the path. '''
+    def run():
+        folder = os.path.dirname(path)
+        for entry in (ROOT, folder):
+            if entry not in sys.path:
+                sys.path.insert(0, entry)
+        say("  Running " + path)
+        _withArgv([path], lambda: runpy.run_path(path, run_name="__main__"))
+    return run
+
+
+def resolveScripts(argv):
+    ''' Turn every FILE.py argument into an absolute path: relative to the
+    folder you ran the command from, or else to the project folder. Done
+    before run.py hands over to its private environment, which starts in the
+    project folder. Returns (argv, problem-or-None). '''
+    resolved = []
+    for argument in argv:
+        if argument.startswith("--") or not argument.lower().endswith(".py"):
+            resolved.append(argument)
+            continue
+        for candidate in (os.path.abspath(argument),
+                          os.path.join(ROOT, argument)):
+            if os.path.isfile(candidate):
+                resolved.append(candidate)
+                break
+        else:
+            return argv, argument
+    return resolved, None
+
+
 def stepCheck():
     import paths
     say("  Python      : {0} ({1})".format(platform.python_version(),
@@ -583,10 +618,11 @@ def stepDemos():
 
 
 def exampleScripts():
-    ''' Every example: the numbered ones in examples/ and
-    examples/financial/, then each project's main.py. '''
+    ''' Every example: the numbered ones in examples/,
+    examples/wrapper/ and examples/financial/, then each project's main.py. '''
     scripts = []
     for folder in (os.path.join(ROOT, "examples"),
+                   os.path.join(ROOT, "examples", "wrapper"),
                    os.path.join(ROOT, "examples", "financial")):
         if os.path.isdir(folder):
             scripts.extend(sorted(
@@ -624,7 +660,7 @@ def stepExamples():
             failed.append(name)
     if failed:
         raise PartlyFailed("{0} of {1} examples need attention: {2}".format(
-            len(failed), len(scripts), ", ".join(failed)))
+            len(failed), len(scripts), ", ".join(label(n) for n in failed)))
 
 
 def stepSynthetic():
@@ -713,11 +749,15 @@ ALL = ["check", "demos", "examples", "synthetic", "download", "realdata",
        "ncommunity", "tgn", "finance", "publication"]
 
 
+def label(name):
+    return os.path.basename(name) if os.path.isabs(name) else name
+
+
 def runStep(name, log):
     title, function, _ = STEPS[name]
     say()
     say(LINE)
-    say("  STEP: {0}  ({1})".format(name, title))
+    say("  STEP: {0}  ({1})".format(label(name), title))
     say(LINE)
     start = time.time()
     try:
@@ -749,6 +789,8 @@ def printHelp():
     for name, (title, _, target) in STEPS.items():
         say("  {0:<12s} {1}{2}".format(
             name, title, "  -> " + target if target else ""))
+    say()
+    say("  FILE.py      run one Python file (an example, or your own study)")
     say()
     say("Groups:  (nothing) = " + " ".join(QUICK))
     say("         all       = " + " ".join(ALL))
@@ -819,6 +861,14 @@ def main(argv):
             "up again from scratch.")
         return 0
 
+    argv, missing = resolveScripts(argv)
+    if missing:
+        problem("There is no file called " + missing,
+                "Looked in the current folder and in " + ROOT + ".",
+                ["Check the spelling, e.g.:  python run.py "
+                 "examples/wrapper/01_five_lines.py"])
+        return 2
+
     withTorch = "--with-torch" in argv
     withFinance = "--with-finance" in argv
     noVenv = "--no-venv" in argv
@@ -833,6 +883,10 @@ def main(argv):
             if step not in expanded:
                 expanded.append(step)
     names = expanded
+    for name in names:
+        if name.lower().endswith(".py") and os.path.isabs(name):
+            STEPS[name] = ("Your file: " + os.path.basename(name),
+                           scriptStep(name), None)
     unknown = [n for n in names if n not in STEPS]
     if unknown:
         problem("Unknown step: " + ", ".join(unknown),
@@ -900,12 +954,13 @@ def main(argv):
     for name, status, seconds in results:
         target = STEPS[name][2]
         say("  {0:<8s} {1:<12s} {2:>6.0f} s   {3}".format(
-            status, name, seconds, target or ""))
+            status, label(name), seconds, target or ""))
     failed = [n for n, s, _ in results if s == "FAILED"]
     say()
     if failed:
         say("  {0} step(s) need attention: {1}. The messages above say "
-            "how to fix each one.".format(len(failed), ", ".join(failed)))
+            "how to fix each one.".format(
+                len(failed), ", ".join(label(n) for n in failed)))
         say("  Technical log: " + log)
         return 1
     say("  Everything finished successfully.")

@@ -86,6 +86,9 @@ def main():
         summary = runPrepared(market, market.meta["analysis_mode"], folder)
     print("        {0} of {1} explanations passed the validity checks".format(
         summary["valid_rows"], summary["explanation_rows"]))
+    from finance.insight import insightFigures
+    with contextlib.redirect_stdout(io.StringIO()):
+        insightFigures(market, folder)
     t = toolkit.Tutorial(folder, "A full TGAP market study",
                          intro="{0} stocks in {1} sectors, the complete "
                                "validity-gated TGAP protocol.".format(
@@ -110,7 +113,11 @@ def main():
              "validity checks.")):
         if os.path.exists(os.path.join(folder, figure)):
             t.image(figure, caption)
-    print("      Results (report.md + CSVs + figures + tutorial): " + folder)
+    t.text("Then **insight.md**: the paper-style pictures drawn on the stock "
+           "network - which stocks and ties each concept changes, which "
+           "single stock or pair a model leans on, and in which window.")
+    print("      Results (report.md + insight.md + CSVs + figures + "
+          "tutorial): " + folder)
     print("      Read first: " + t.save())
 
 

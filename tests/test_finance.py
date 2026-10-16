@@ -111,6 +111,39 @@ class TestFullProtocol(unittest.TestCase):
         finally:
             shutil.rmtree(directory, ignore_errors=True)
 
+    def testInsightPicturesAreDrawnOnTheStockNetwork(self):
+        from realdata.run_real_data import runPrepared
+        from finance.insight import INSIGHT_MODELS, insightFigures
+        import contextlib
+        import io
+        directory = tempfile.mkdtemp(prefix="tgap-insight-")
+        try:
+            market = prepare("test", IVAN_TICKERS, IVAN_SECTORS, minimum=0.3,
+                             focus="Technology")
+            with contextlib.redirect_stdout(io.StringIO()):
+                runPrepared(market, market.meta["analysis_mode"], directory)
+                insightFigures(market, directory)
+            for model in INSIGHT_MODELS:
+                for name in ("what_changed", "when_it_mattered",
+                             "edge_impact", "edge_over_time", "node_impact",
+                             "impact_heatmap", "beeswarm", "boxplot",
+                             "how_tgap_works", "side_effects",
+                             "concept_trajectories", "validity_map",
+                             "impacts_by_direction", "impact_distribution",
+                             "sparsity", "tsap_summary"):
+                    path = os.path.join(directory, "figures", "insight",
+                                        model, name + ".png")
+                    self.assertTrue(os.path.exists(path), path)
+                    self.assertGreater(os.path.getsize(path), 5000, path)
+            with open(os.path.join(directory, "insight.md"),
+                      encoding="utf-8") as handle:
+                text = handle.read()
+            self.assertIn("figures/insight/trend_clustering/what_changed.png",
+                          text)
+            self.assertIn("AAPL", ", ".join(IVAN_TICKERS))
+        finally:
+            shutil.rmtree(directory, ignore_errors=True)
+
 
 class TestIvansStudy(unittest.TestCase):
 

@@ -44,7 +44,7 @@ def main(output=None):
                                "threshold. A robust finding keeps its "
                                "direction.")
 
-    toolkit.step(1, 3, "Checking which thresholds are usable")
+    toolkit.step(1, 4, "Checking which thresholds are usable")
     weighted, _ = correlationNetworks(list(SECTORS), "5y", "6mo", 12)
     partition = sectorPartition(list(SECTORS), SECTORS, FOCUS)
     check = thresholdReport(weighted, partition, THRESHOLDS)
@@ -57,7 +57,7 @@ def main(output=None):
             ", ".join("{0:g}".format(x) for x in usable) or "none"))
     t.table(check, "threshold_check.csv")
 
-    toolkit.step(2, 3, "Explaining {0} at {1} thresholds".format(
+    toolkit.step(2, 4, "Explaining {0} at {1} thresholds".format(
         MODEL, len(usable)))
     rows = []
     for value in usable:
@@ -103,7 +103,7 @@ def main(output=None):
     fig.savefig(os.path.join(output, "robustness.png"), dpi=150)
     plt.close(fig)
 
-    toolkit.step(3, 3, "Verdicts: " + "; ".join(
+    toolkit.step(3, 4, "Verdicts: " + "; ".join(
         "{0}: {1}".format(r["concept"], r["verdict"].split(":")[0])
         for _, r in verdicts.iterrows()))
     t.section("Step 2 - The impact at each threshold")
@@ -113,6 +113,22 @@ def main(output=None):
             "robust.")
     t.section("Step 3 - Verdicts")
     t.table(verdicts, "verdicts.csv")
+
+    # STEP 4 - look inside at one threshold: where and when the model reacts
+    chosen = 0.3 if 0.3 in usable else (usable[0] if usable else None)
+    if chosen is not None:
+        toolkit.step(4, 4, "Looking inside at threshold {0:g}".format(chosen))
+        market = prepare("robustness", list(SECTORS), SECTORS,
+                         minimum=chosen, focus=FOCUS)
+        toolkit.addPictures(
+            t, output, toolkit.model(MODEL, market.communities),
+            toolkit.transformations(CONCEPTS, market.communities),
+            market.snapshots, market.communities,
+            "Step 4 - Looking inside at threshold {0:g}".format(chosen),
+            "The robustness test says whether the direction of each effect "
+            "survives; these pictures show WHAT the model reacts to at one "
+            "threshold: which stocks and ties each concept changes, and "
+            "in which window it matters.")
     t.text("Only ROBUST findings should be reported without qualification. "
            "A direction that flips with the threshold says more about the "
            "modelling choice than about the market.")

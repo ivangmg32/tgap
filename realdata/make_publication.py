@@ -82,7 +82,8 @@ CASE_STUDIES = ("decentraland", "email_eu_core")
 # values copied in - the duplication is exactly the drift that module was
 # added to prevent, so the copy is gone rather than kept in sync by hand.
 from realdata.plotting import (POSITIVE, NEGATIVE, NEUTRAL,     # noqa: E402
-                               architectureFigure, savePublicationFigure,
+                               architectureFigure, beeswarmOffsets,
+                               savePublicationFigure,
                                usePublicationTheme)
 
 # Imported BEFORE the theme is applied on purpose: this module pulls in
@@ -702,40 +703,9 @@ def figure8Dependence(paths, path):
     return summary
 
 
-def _beeswarmOffsets(values, pointWidth):
-    ''' A real beeswarm: deterministic, collision-free vertical packing.
-
-    For each value in ascending order, try candidate offsets 0, +s, -s,
-    +2s, -2s ... and take the FIRST that collides with no already-placed
-    point, where two points collide when they are within pointWidth on x
-    and within one step on y. Ascending order makes the result independent
-    of input order, so the layout is reproducible.
-
-    This is NOT jitter. Nothing random is involved, and no seed is needed:
-    the same values always produce the same offsets.
-    '''
-    order = sorted(range(len(values)), key=lambda i: (values[i], i))
-    step = 1.0
-    placed = []                       # (value, offset) already positioned
-    offsets = [0.0] * len(values)
-    for index in order:
-        value = values[index]
-        level = 0
-        while True:
-            for candidate in ({0.0} if not level else {level * step,
-                                                       -level * step}):
-                clash = any(abs(value - other) < pointWidth
-                            and abs(candidate - taken) < step * 0.999
-                            for other, taken in placed)
-                if not clash:
-                    offsets[index] = candidate
-                    placed.append((value, candidate))
-                    break
-            else:
-                level += 1
-                continue
-            break
-    return offsets
+# The packing lives in realdata.plotting so the example figures use the
+# same layout; the old private name stays for this module's figures.
+_beeswarmOffsets = beeswarmOffsets
 
 
 def figure9TrueBeeswarm(datasets, path):
