@@ -137,13 +137,16 @@ CONCEPT_MEANING = {
 def _meaning(transformation):
     if transformation.name in CONCEPT_MEANING:
         return CONCEPT_MEANING[transformation.name]
+    described = getattr(transformation, "description", "")
+    if described:
+        return described
     doc = (type(transformation).__doc__ or "").strip().splitlines()
     return doc[0].strip() if doc else "a user-defined concept"
 
 
 def _narrateExplanation(tutorial, model, transformations, snapshots,
                         communities, table, deltas, sweep, description,
-                        step=None):
+                        step=None, extra=()):
     ''' The standard TGAP chapters of a tutorial. '''
     chapter = [0]
 
@@ -231,12 +234,24 @@ def _narrateExplanation(tutorial, model, transformations, snapshots,
                        "being added or removed.")
     tutorial.image("graph_over_time.png", "The data itself: ties (and ties "
                    "between groups) in every snapshot.")
+    if extra:
+        tutorial.section(
+            heading("Looking inside: where and when it happens"),
+            "The explanation says WHAT the model reacts to. These pictures "
+            "(the same kinds as in the paper) show WHERE in the graph and "
+            "WHEN in time. Colours always mean the same: **red** raises the "
+            "prediction, **blue** lowers it, grey does nothing.")
+        for figure in extra:
+            tutorial.image(figure["file"], figure["caption"])
+            if figure.get("notes"):
+                tutorial.bullets(figure["notes"])
     tutorial.section(heading("Files in this folder"))
     tutorial.bullets([
         "`explanation.csv` - every experiment, every delta",
         "`sensitivity.csv` - the curves in sensitivity.png",
         "`graph_over_time.csv` - the data, snapshot by snapshot",
-    ])
+    ] + ["`{0}` - {1}".format(f["file"], f["caption"].split(".")[0].lower())
+         for f in extra])
 
 
 # --------------------------------------------------------------------------
@@ -546,10 +561,30 @@ def saveGraphOverTime(overTime, folder, name):
     plt.close(fig)
 
 
+def addPictures(tutorial, folder, theModel, theTransformations, snapshots,
+                communities, heading, intro="", delta=0.25, budget=40):
+    ''' Draw the paper-style pictures (see examples/figures.py) for a study
+    that does its own explaining, and add them to its tutorial as a chapter.
+    Returns the list of pictures drawn. '''
+    from examples import figures
+    made = figures.paperFigures(
+        folder, theModel, theTransformations, snapshots, communities,
+        delta=delta, budget=budget,
+        say=lambda text: print("      " + text))
+    tutorial.section(heading, (intro + " " if intro else "") +
+                     "**Red** raises the prediction, **blue** lowers it, "
+                     "grey does nothing.")
+    for figure in made:
+        tutorial.image(figure["file"], figure["caption"])
+        if figure.get("notes"):
+            tutorial.bullets(figure["notes"])
+    return made
+
+
 def explainAndSave(name, theModel, theTransformations, snapshots,
                    communities=None, deltas=(0.1, 0.25), sweep=True,
                    folder=None, tutorial=None, modelDescription=None,
-                   step=None):
+                   step=None, figures=True, figureBudget=40):
     ''' Explain `theModel` on `snapshots` with `theTransformations`, print
     the result, and save CSV + PNG files plus a TUTORIAL.md that walks
     through them.
@@ -559,6 +594,10 @@ def explainAndSave(name, theModel, theTransformations, snapshots,
     modelDescription : one sentence saying what the model predicts
     step     : e.g. "Step 4" - number the explanation's chapters as part of
                that step of a longer tutorial
+    figures  : also draw the paper-style pictures (what changed, when it
+               mattered, which ties / nodes matter, heatmap - see
+               examples/figures.py). They re-ask the model up to
+               `figureBudget` times per picture; pass False to skip them.
 
     Returns the explanation as a pandas DataFrame. '''
     if len(snapshots) < 2:
@@ -669,12 +708,25 @@ def explainAndSave(name, theModel, theTransformations, snapshots,
     overTime.to_csv(os.path.join(folder, "graph_over_time.csv"), index=False)
     saveGraphOverTime(overTime, folder, name)
 
+    extra = []
+    if figures:
+        from examples import figures as paperFigures
+        print()
+        print("      Drawing the paper-style pictures (where and when the "
+              "model reacts) ...")
+        extra = paperFigures.paperFigures(
+            folder, theModel, theTransformations, snapshots, communities,
+            table=table,
+            delta=min(max(abs(float(d)) for d in deltas), 0.5),
+            budget=figureBudget, say=lambda text: print("      " + text))
+
     tutorial = tutorial or Tutorial(
         folder, "{0}: a TGAP explanation, step by step".format(name))
     _narrateExplanation(tutorial, theModel, theTransformations, snapshots,
                         communities, table, deltas, sweep, modelDescription,
-                        step)
+                        step, extra)
     path = tutorial.save()
-    print("      Results (CSV + PNG + tutorial): {0}".format(folder))
+    print("      Results ({0} pictures + CSV + tutorial): {1}".format(
+        2 + (1 if sweep else 0) + len(extra), folder))
     print("      Read first: {0}".format(path))
     return table

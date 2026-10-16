@@ -22,7 +22,11 @@ python run.py examples                                 # all examples
 
 Examples 1–6 use Ivan's eight stocks (AAPL, MSFT, GOOGL, AMZN, NVDA, JPM,
 XOM, JNJ), whose prices are stored in the repository, so they work offline.
-Results go to `output/examples/financial/<example>/`.
+Results go to `output/examples/financial/<example>/`. Examples 4 and 5 also
+draw the paper-style pictures on the stock network (tickers on the nodes):
+what each concept changes, which pair or single stock the model leans on, and
+in which window. Example 7 writes the same pictures for the full study to
+`output/finance/<study>/insight.md`.
 
 ## The idea in one picture
 

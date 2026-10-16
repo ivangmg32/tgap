@@ -15,7 +15,7 @@ dependencies = []
 tgap = "tgap_cli.cli:main"
 
 [tool.setuptools]
-py-modules = ["paths", "run"]
+py-modules = ["paths", "run", "tgap_wrapper"]
 
 [tool.setuptools.packages.find]
 include = ["core*", "realdata*", "examples*", "experiments*", "finance*", "tgap_cli*"]

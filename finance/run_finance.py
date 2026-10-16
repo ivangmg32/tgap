@@ -8,7 +8,8 @@ Run TGAP on a stock market, with the same protocol as the real datasets.
 
 Writes output/finance/<name>/ with exactly the files a real dataset gets
 (tgap_results.csv with validity flags, feasibility, leakage, diagnostics,
-report.md, figures) - realdata.run_real_data.runPrepared does the work, so
+report.md, figures, plus insight.md with the paper-style pictures drawn
+on the stock network) - realdata.run_real_data.runPrepared does the work, so
 finance is explained, gated and reported identically to every other dataset.
 '''
 
@@ -74,8 +75,25 @@ def main(argv=None):
         name, len(prepared.meta["tickers"]), len(prepared.snapshots),
         minimum))
     print("=" * 72)
-    return runPrepared(prepared, prepared.meta["analysis_mode"],
-                       os.path.join(paths.FINANCE, name))
+    directory = os.path.join(paths.FINANCE, name)
+    result = runPrepared(prepared, prepared.meta["analysis_mode"], directory)
+
+    # The paper-style pictures drawn on the stock network itself (where and
+    # when the models react). A failure here never loses the main results.
+    try:
+        from .insight import insightFigures
+        print("  drawing the paper-style pictures (stocks, ties, windows) ...")
+        insightFigures(prepared, directory)
+        with open(os.path.join(directory, "report.md"), "a",
+                  encoding="utf-8") as handle:
+            handle.write("\n**More pictures:** which stocks and ties each "
+                         "model leans on, and in which window - see "
+                         "[insight.md](insight.md).\n")
+        print("  wrote {0}".format(os.path.join(directory, "insight.md")))
+    except Exception as error:                     # noqa: BLE001
+        print("  (could not draw the insight pictures: {0}: {1})".format(
+            type(error).__name__, error))
+    return result
 
 
 if __name__ == "__main__":

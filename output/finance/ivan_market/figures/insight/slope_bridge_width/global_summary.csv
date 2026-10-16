@@ -1,0 +1,6 @@
+concept,observations,graph_changed,median_impact,q1,q3,share_raising_prediction
+Bridge Width,42,42,-6.661338147750939e-16,-0.739413265306122,0.9610389610389616,0.47619047619047616
+Centralization,42,34,0.0,0.0,0.0,0.0
+Density,42,42,0.0,0.0,0.0,0.0
+Bridge Trend,42,42,0.0,-1.0,1.0,0.5
+Churn,42,20,0.0,0.0,0.0,0.0

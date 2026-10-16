@@ -55,9 +55,10 @@ def child_environment(home=None):
 HOME_FOR_CHILDREN=None
 
 
-def execute(args,cwd=None):
-    subprocess.run([str(a) for a in args],cwd=cwd,check=True,
-                   env=child_environment(HOME_FOR_CHILDREN))
+def execute(args,cwd=None,extra_env=None):
+    env=child_environment(HOME_FOR_CHILDREN)
+    env.update(extra_env or {})
+    subprocess.run([str(a) for a in args],cwd=cwd,check=True,env=env)
 
 
 def question(message):
@@ -517,6 +518,19 @@ def research(args,home):
              'publication':['-m','realdata.make_publication'],'tests':['-m','unittest','discover','-s','tests'],
              'finance':['-m','finance.experimentationDatamining'],
              'finance-tgap':['-m','finance.run_finance']}
+    if args.workflow=='script':
+        # Run ANY Python file - an example, or your own study written with the
+        # wrapper - inside the managed environment, with TGAP importable.
+        if not args.arguments:
+            raise ValueError('Say which file to run, for example: tgap run script examples/wrapper/01_five_lines.py')
+        given=Path(args.arguments[0]).expanduser()
+        script=given if given.is_file() else Path(info['source'])/given
+        if not script.is_file():
+            raise ValueError('There is no file called '+args.arguments[0]+' (looked in the current folder and in the TGAP folder '+str(info['source'])+').')
+        existing=os.environ.get('PYTHONPATH')
+        execute([python_path(home),str(script.resolve()),*args.arguments[1:]],cwd=info['source'],
+                extra_env={'PYTHONPATH':os.pathsep.join([str(info['source'])]+([existing] if existing else []))})
+        return
     if args.workflow.startswith('tgn') and not info['tgn']:
         raise ValueError('TGN was not installed. Run tgap install --tgn --yes.')
     # Cached stock prices need no extra library; downloading new ones needs
@@ -543,7 +557,7 @@ def main(argv=None):
     subs.add_parser('status',help='Show service status and account file.')
     subs.add_parser('path',help='Make the tgap command work in your terminal again (repairs PATH).')
     runner=subs.add_parser('run',help='Run a research workflow using the managed Python environment.')
-    runner.add_argument('workflow',choices=['examples','demos','paper','evaluation','download','real-data','compare','ncommunity','tgn','tgn-stability','publication','tests','finance','finance-tgap'])
+    runner.add_argument('workflow',choices=['examples','script','demos','paper','evaluation','download','real-data','compare','ncommunity','tgn','tgn-stability','publication','tests','finance','finance-tgap'])
     runner.add_argument('arguments',nargs=argparse.REMAINDER)
     args=parser.parse_args(argv)
     if args.command=='start' and args.port is not None and not 1<=args.port<=65535:
