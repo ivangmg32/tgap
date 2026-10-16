@@ -1,0 +1,31 @@
+dataset,analysis_mode,transformation,family,claims_edge_count_preservation,snapshots_edge_count_changed,requested_delta,snapshots,snapshots_modified,modified_fraction,last_snapshot_modified,structurally_blocked
+decentraland,temporal_evaluation,Bridge Width,structural,True,0,0.1,19,19,1.0,True,False
+decentraland,temporal_evaluation,Bridge Width,structural,True,0,-0.1,19,19,1.0,True,False
+decentraland,temporal_evaluation,Bridge Width,structural,True,0,0.25,19,19,1.0,True,False
+decentraland,temporal_evaluation,Bridge Width,structural,True,0,-0.25,19,19,1.0,True,False
+decentraland,temporal_evaluation,Bridge Width,structural,True,0,0.5,19,19,1.0,True,False
+decentraland,temporal_evaluation,Bridge Width,structural,True,0,-0.5,19,19,1.0,True,False
+decentraland,temporal_evaluation,Centralization,structural,True,0,0.1,19,18,0.9473684210526315,False,True
+decentraland,temporal_evaluation,Centralization,structural,True,0,-0.1,19,19,1.0,True,False
+decentraland,temporal_evaluation,Centralization,structural,True,0,0.25,19,18,0.9473684210526315,False,True
+decentraland,temporal_evaluation,Centralization,structural,True,0,-0.25,19,19,1.0,True,False
+decentraland,temporal_evaluation,Centralization,structural,True,0,0.5,19,18,0.9473684210526315,False,True
+decentraland,temporal_evaluation,Centralization,structural,True,0,-0.5,19,19,1.0,True,False
+decentraland,temporal_evaluation,Density,structural,False,0,0.1,19,19,1.0,True,False
+decentraland,temporal_evaluation,Density,structural,False,0,-0.1,19,19,1.0,True,False
+decentraland,temporal_evaluation,Density,structural,False,0,0.25,19,19,1.0,True,False
+decentraland,temporal_evaluation,Density,structural,False,0,-0.25,19,19,1.0,True,False
+decentraland,temporal_evaluation,Density,structural,False,0,0.5,19,19,1.0,True,False
+decentraland,temporal_evaluation,Density,structural,False,0,-0.5,19,19,1.0,True,False
+decentraland,temporal_evaluation,Bridge Trend,temporal,True,0,0.1,19,18,0.9473684210526315,False,False
+decentraland,temporal_evaluation,Bridge Trend,temporal,True,10,-0.1,19,18,0.9473684210526315,False,False
+decentraland,temporal_evaluation,Bridge Trend,temporal,True,0,0.25,19,18,0.9473684210526315,False,False
+decentraland,temporal_evaluation,Bridge Trend,temporal,True,16,-0.25,19,18,0.9473684210526315,False,False
+decentraland,temporal_evaluation,Bridge Trend,temporal,True,0,0.5,19,18,0.9473684210526315,False,False
+decentraland,temporal_evaluation,Bridge Trend,temporal,True,17,-0.5,19,18,0.9473684210526315,False,False
+decentraland,temporal_evaluation,Churn,temporal,True,0,0.1,19,18,0.9473684210526315,False,False
+decentraland,temporal_evaluation,Churn,temporal,True,0,-0.1,19,18,0.9473684210526315,False,False
+decentraland,temporal_evaluation,Churn,temporal,True,0,0.25,19,18,0.9473684210526315,False,False
+decentraland,temporal_evaluation,Churn,temporal,True,0,-0.25,19,18,0.9473684210526315,False,False
+decentraland,temporal_evaluation,Churn,temporal,True,0,0.5,19,18,0.9473684210526315,False,False
+decentraland,temporal_evaluation,Churn,temporal,True,0,-0.5,19,18,0.9473684210526315,False,False

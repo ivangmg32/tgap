@@ -1,0 +1,13 @@
+analysis_mode,snapshot_index,label,retained_nodes,active_retained_nodes,edges,density,average_degree,max_degree,bridge_width,connected_components,is_connected
+temporal_evaluation,0,2022-03-21,8,6,13,0.4642857142857143,3.25,5,6,3,False
+temporal_evaluation,1,2022-08-16,8,7,17,0.6071428571428571,4.25,6,9,2,False
+temporal_evaluation,2,2023-01-12,8,8,25,0.8928571428571429,6.25,7,15,1,True
+temporal_evaluation,3,2023-06-09,8,7,12,0.42857142857142855,3.0,5,5,2,False
+temporal_evaluation,4,2023-11-06,8,7,11,0.39285714285714285,2.75,4,4,3,False
+temporal_evaluation,5,2024-04-04,8,7,10,0.35714285714285715,2.5,4,4,3,False
+temporal_evaluation,6,2024-08-30,8,5,9,0.32142857142857145,2.25,4,4,4,False
+temporal_evaluation,7,2025-01-29,8,7,11,0.39285714285714285,2.75,5,4,2,False
+temporal_evaluation,8,2025-06-27,8,7,19,0.6785714285714286,4.75,6,10,2,False
+temporal_evaluation,9,2025-11-20,8,5,7,0.25,1.75,4,5,4,False
+temporal_evaluation,10,2026-04-22,8,6,8,0.2857142857142857,2.0,4,4,3,False
+temporal_evaluation,11,2026-09-18,8,3,2,0.07142857142857142,0.5,2,2,6,False

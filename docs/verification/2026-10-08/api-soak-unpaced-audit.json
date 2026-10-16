@@ -1,0 +1,813 @@
+{
+  "runs": [
+    {
+      "dataset": "stable",
+      "model": "persistence_bridge",
+      "seconds": 2.109,
+      "baseline": 8.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "stable",
+      "model": "persistence_density",
+      "seconds": 1.891,
+      "baseline": 0.23157894736842105,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "persistence_bridge",
+      "seconds": 3.0,
+      "baseline": 3.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "persistence_density",
+      "seconds": 1.891,
+      "baseline": 0.20526315789473684,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "persistence_bridge",
+      "seconds": 2.968,
+      "baseline": 13.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "persistence_density",
+      "seconds": 2.172,
+      "baseline": 0.2578947368421053,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "persistence_bridge",
+      "seconds": 3.0,
+      "baseline": 8.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "persistence_density",
+      "seconds": 2.0,
+      "baseline": 0.23157894736842105,
+      "invalid": 0
+    },
+    {
+      "dataset": "three_communities",
+      "model": "persistence_bridge",
+      "seconds": 2.656,
+      "baseline": 16.0,
+      "invalid": 1
+    },
+    {
+      "dataset": "three_communities",
+      "model": "persistence_density",
+      "seconds": 2.0,
+      "baseline": 0.18840579710144928,
+      "invalid": 1
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "persistence_bridge",
+      "seconds": 3.969,
+      "baseline": 2.0,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "persistence_density",
+      "seconds": 2.953,
+      "baseline": 0.00028011204481792715,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "persistence_bridge",
+      "seconds": 5.031,
+      "baseline": 1.0,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "persistence_density",
+      "seconds": 3.484,
+      "baseline": 0.00014005602240896358,
+      "invalid": 3
+    },
+    {
+      "dataset": "stable",
+      "model": "trend_bridge",
+      "seconds": 2.203,
+      "baseline": 7.999999999999997,
+      "invalid": 0
+    },
+    {
+      "dataset": "stable",
+      "model": "persistence_centralization",
+      "seconds": 3.219,
+      "baseline": 0.15204678362573099,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "trend_bridge",
+      "seconds": 1.937,
+      "baseline": 2.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "persistence_centralization",
+      "seconds": 3.016,
+      "baseline": 0.12280701754385964,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "trend_bridge",
+      "seconds": 1.922,
+      "baseline": 14.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "persistence_centralization",
+      "seconds": 2.922,
+      "baseline": 0.23976608187134502,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "trend_bridge",
+      "seconds": 2.328,
+      "baseline": 7.999999999999997,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "persistence_centralization",
+      "seconds": 2.687,
+      "baseline": 0.21052631578947367,
+      "invalid": 0
+    },
+    {
+      "dataset": "three_communities",
+      "model": "trend_bridge",
+      "seconds": 1.891,
+      "baseline": 15.999999999999995,
+      "invalid": 1
+    },
+    {
+      "dataset": "three_communities",
+      "model": "persistence_centralization",
+      "seconds": 2.734,
+      "baseline": 0.12648221343873517,
+      "invalid": 1
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "trend_bridge",
+      "seconds": 3.204,
+      "baseline": -5.57692307692308,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "persistence_centralization",
+      "seconds": 4.89,
+      "baseline": 0.008260931491240565,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "trend_bridge",
+      "seconds": 3.453,
+      "baseline": -5.714285714285726,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "persistence_centralization",
+      "seconds": 4.813,
+      "baseline": 0.008403361344537815,
+      "invalid": 3
+    },
+    {
+      "dataset": "stable",
+      "model": "slope_bridge",
+      "seconds": 3.703,
+      "baseline": 6.360965705585939e-17,
+      "invalid": 0
+    },
+    {
+      "dataset": "stable",
+      "model": "trend_clustering",
+      "seconds": 1.906,
+      "baseline": 0.2771904761904761,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "slope_bridge",
+      "seconds": 2.922,
+      "baseline": -0.9999999999999996,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "trend_clustering",
+      "seconds": 2.266,
+      "baseline": 0.14673015873015882,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "slope_bridge",
+      "seconds": 2.703,
+      "baseline": 1.0000000000000002,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "trend_clustering",
+      "seconds": 2.047,
+      "baseline": 0.1562857142857143,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "slope_bridge",
+      "seconds": 3.125,
+      "baseline": 6.360965705585939e-17,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "trend_clustering",
+      "seconds": 1.984,
+      "baseline": 0.30626984126984114,
+      "invalid": 0
+    },
+    {
+      "dataset": "three_communities",
+      "model": "slope_bridge",
+      "seconds": 2.547,
+      "baseline": 1.2721931411171878e-16,
+      "invalid": 1
+    },
+    {
+      "dataset": "three_communities",
+      "model": "trend_clustering",
+      "seconds": 2.235,
+      "baseline": 0.275376984126984,
+      "invalid": 1
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "slope_bridge",
+      "seconds": 4.921,
+      "baseline": -2.203296703296703,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "trend_clustering",
+      "seconds": 3.188,
+      "baseline": -0.01360860649322189,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "slope_bridge",
+      "seconds": 4.844,
+      "baseline": -1.9142857142857157,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "trend_clustering",
+      "seconds": 3.687,
+      "baseline": -0.013369996913952978,
+      "invalid": 3
+    }
+  ],
+  "failures": [
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "slope_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "trend_clustering",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "trend_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_centralization",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "decentraland",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "email_eu_core",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "sx_mathoverflow",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_enron",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_uci",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_bridge",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    },
+    {
+      "spec": {
+        "dataset": "tgbl_wiki",
+        "model": "persistence_density",
+        "transformations": [
+          "bridge_width",
+          "bridge_trend"
+        ],
+        "delta": 0.25,
+        "seed": 17,
+        "custom_code": ""
+      },
+      "error": "AssertionError('{\"detail\":\"Too many requests. Please wait.\"}')"
+    }
+  ],
+  "seconds": 44.094,
+  "summary": {
+    "total": 78,
+    "completed": 42,
+    "failures": 36,
+    "p50_seconds": 2.8280000000000003,
+    "p95_seconds": 4.844,
+    "max_seconds": 5.031
+  }
+}

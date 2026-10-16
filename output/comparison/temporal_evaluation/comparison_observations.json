@@ -1,0 +1,50 @@
+{
+  "bridge_trend_status_totals": {
+    "ok": 29,
+    "saturated": 19
+  },
+  "bridge_trend_settings": 48,
+  "bridge_trend_settings_with_clamping": 19,
+  "bridge_trend_rows_total": 288,
+  "bridge_trend_rows_valid": 36,
+  "among_clamped_settings_direction_held": 19,
+  "among_clamped_settings_direction_flipped": 0,
+  "mean_clamped_pct_where_direction_held": 22.0,
+  "mean_clamped_pct_where_direction_flipped": null,
+  "strict_mode_disagreements_total": 0,
+  "analysis_mode": "temporal_evaluation",
+  "datasets": 8,
+  "total_explanation_rows": 1440,
+  "total_valid_rows": 1140,
+  "total_invalid_rows": 300,
+  "datasets_where_expected_invariance_verified": 8,
+  "expected_invariance_note": "Verification of an expected invariant, not an empirical discovery: history-only transformations anchor the last snapshot and the persistence models read only the last snapshot, so zero follows from the definitions.",
+  "noop_pct_thin_bridge_datasets": 20.06,
+  "noop_pct_thicker_bridge_datasets": 0.0,
+  "datasets_with_any_invalid_bridge_trend": [
+    "decentraland",
+    "tgbl_wiki",
+    "bitcoin_alpha",
+    "bitcoin_otc",
+    "email_eu_core",
+    "sx_mathoverflow",
+    "tgbl_enron",
+    "tgbl_uci"
+  ],
+  "datasets_with_all_bridge_trend_settings_ok": [],
+  "datasets_with_wrong_direction_bridge_trend": [],
+  "datasets_with_edge_count_infeasible_settings": [
+    "decentraland",
+    "tgbl_wiki",
+    "bitcoin_alpha",
+    "bitcoin_otc",
+    "email_eu_core",
+    "sx_mathoverflow",
+    "tgbl_enron",
+    "tgbl_uci"
+  ],
+  "edge_count_infeasible_settings_total": 31,
+  "edge_count_settings_checked_total": 240,
+  "median_nodes_retained_pct": 4.75,
+  "median_events_retained_pct": 3.29
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TGAP Laboratory · Temporal graph explanations</title>
+  <meta name="description" content="A private research workbench for exploring temporal graph model explanations and creating your own transformations.">
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+  <script src="/static/figures.js" defer></script>
+  <script src="/static/onboarding.js" defer></script>
+  <script src="/static/relationships.js" defer></script>
+  <script src="/static/live-figures.js" defer></script>
+  <script src="/static/auth.js" defer></script>
+  <script src="/static/researcher.js" defer></script>
+</head>
+<body>
+  <div id="login" class="login-shell" hidden>
+    <section class="login-story">
+      <div class="wordmark"><img src="/static/favicon.svg" alt="" width="38" height="38"><span>TGAP <b>Laboratory</b></span></div>
+      <div class="login-copy"><span class="eyebrow">CATALYST · RESEARCH WORKBENCH</span><h1>Understand what<br>a graph model<br>responds to.</h1><p>Explore the structure. Change one concept.<br>Make the model’s sensitivity visible.</p><div class="login-network" id="login-network" aria-hidden="true"></div><span class="subtle">Temporal Graph Additive exPlanations</span></div>
+      <p class="login-footer">Built for careful experimentation and reproducible research.</p>
+    </section>
+    <section class="login-form-area"><form id="login-form"><span class="eyebrow">YOUR TGAP WORKSPACE</span><h2 id="auth-title">Welcome to the lab.</h2><p id="auth-description" class="muted">Sign in to return to your experiments, or create your own account.</p><div class="auth-tabs" aria-label="Account access"><button type="button" id="auth-login" aria-pressed="true">Sign in</button><button type="button" id="auth-register" aria-pressed="false">Create account</button></div><label for="username">Username</label><input id="username" name="username" autocomplete="username" required maxlength="80"><p id="username-help" class="field-help" hidden>3-32 characters. Start with a letter; use letters, numbers, underscores or hyphens. Usernames are stored in lowercase.</p><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required maxlength="150"><p id="password-help" class="field-help" hidden>Use at least 15 characters. A long, unique passphrase is a good choice.</p><div id="confirm-password-field" hidden><label for="confirm-password">Confirm password</label><input id="confirm-password" type="password" autocomplete="new-password" maxlength="128" disabled></div><fieldset class="captcha-field"><legend>Quick security check</legend><div class="captcha-image-row"><img id="captcha-image" width="270" height="90" alt="Six-character verification code. Use New image if it is hard to read."><button type="button" id="captcha-refresh" class="text-button">New image</button></div><label for="captcha-answer">Type the six characters in the image</label><input id="captcha-answer" name="captcha-answer" required maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false"><p class="field-help">Letters are not case-sensitive. Each image can be used once and expires in five minutes.</p></fieldset><p id="login-error" role="alert" class="error-text"></p><button class="primary wide" id="sign-in" type="submit" disabled>Sign in</button><div class="login-note">No email required. Accounts keep experiment history separate. Creating an account does not enroll you in the optional study.</div></form></section>
+  </div>
+  <div id="shell" class="shell" hidden>
+    <aside class="sidebar">
+      <a class="wordmark" href="#guide" aria-label="TGAP tutorials and overview"><img src="/static/favicon.svg" alt="" width="35" height="35"><span>TGAP <b>Laboratory</b></span></a>
+      <div class="sidebar-caption">RESEARCH WORKBENCH</div>
+      <nav aria-label="Main navigation">
+        <a href="#guide" data-view="guide"><span class="nav-icon">▤</span><span>Start here<small>Overview &amp; step-by-step tutorial</small></span></a>
+        <a href="#examples" data-view="examples"><span class="nav-icon">▦</span><span>Example library<small>Learn from ready-made experiments</small></span></a>
+        <a href="#laboratory" data-view="laboratory"><span class="nav-icon">◈</span><span>Laboratory<small>Build, run &amp; visualize experiments</small></span></a>
+        <a href="#study" data-view="study"><span class="nav-icon">◷</span><span>Guided study<small>Optional 10–15 minute research pilot</small></span></a>
+        <a href="#docs" data-view="docs"><span class="nav-icon">⌘</span><span>Documentation<small>Concepts, code &amp; reproducibility</small></span></a>
+        <a href="#publication" data-view="publication"><span class="nav-icon">?</span><span>Paper figures<small>Publication charts &amp; scope notes</small></span></a>
+        <a href="#researcher" data-view="researcher" id="researcher-nav" hidden><span class="nav-icon">▥</span><span>Researcher<small>Review participation &amp; export data</small></span></a>
+      </nav>
+      <div class="sidebar-bottom"><div class="project-label">CATALYST</div><p>Concepts you can understand.<br>Experiments you can reproduce.</p><a href="#docs" class="version">TGAP workbench · v1.0</a></div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar"><div><span class="breadcrumb">WORKBENCH</span><span id="page-title">Laboratory</span></div><div class="account"><span class="private-badge">Private workspace</span><span id="account-name"></span><button class="text-button" id="logout">Sign out</button></div></header>
+      <main id="main" tabindex="-1">
+        <section id="view-laboratory" class="view">
+          <div class="hero"><div><span class="eyebrow">EXPERIMENT · EXPLAIN · UNDERSTAND</span><h1>A clearer view of<br>temporal graphs.</h1><p>Choose an ecosystem, ask a model, and change a concept.<br>See how its prediction responds.</p></div><div class="hero-aside"><div class="mini-equation"><span>Original</span><b>+ a controlled change</b><span>New prediction</span></div><a href="#guide">New to TGAP? Start with the guide</a></div></div>
+          <div class="lab-layout">
+            <section class="panel controls"><div class="panel-heading"><span class="step-number">01</span><h2>Set up your experiment</h2></div>
+              <label for="dataset">Ecosystem</label><select id="dataset"></select><p id="dataset-desc" class="field-help"></p>
+              <label for="model">Prediction model</label><select id="model"></select><p id="model-desc" class="field-help"></p>
+              <fieldset><legend>Transformations <span>Choose one or more</span></legend><div id="transformations"></div></fieldset>
+              <div class="delta-heading"><label for="delta">Requested change</label><output id="delta-value" for="delta">10%</output></div><input id="delta" type="range" min="2" max="50" value="10" step="1"><div class="range-ends"><span>2%</span><span>50%</span></div>
+              <details class="advanced"><summary>Reproducibility settings</summary><label for="seed">Random seed</label><input id="seed" type="number" value="42" min="0" max="100000"><p class="field-help">The same input and seed reproduce the same experiment.</p></details>
+              <details id="custom-details" class="custom-details"><summary><span>＋</span> Write your own transformer</summary><p class="field-help">A bounded Python subset for graph operations. Copy the starter and change a concept.</p><div class="editor-tools"><button class="text-button" id="custom-starter">Use starter</button><a href="#docs">Language guide</a><button class="text-button" id="custom-clear">Clear</button></div><label for="custom-code" class="sr-only">Custom Python transformer</label><textarea id="custom-code" spellcheck="false" placeholder="class CustomTransformation(TemporalGraphTransformation):" rows="16"></textarea></details>
+              <button class="primary wide run-button" id="run"><span id="run-label">Run experiment</span><kbd>Ctrl ↵</kbd></button><p id="run-status" class="field-help" aria-live="polite">Runs both increase and decrease directions.</p><p id="experiment-error" class="error-text" role="alert"></p>
+            </section>
+            <div class="results-column">
+              <div class="panel results-panel"><div class="results-header"><div class="panel-heading"><span class="step-number">02</span><h2>Your TGAP explanation</h2></div><span id="result-status" class="tag">Ready to explore</span></div>
+                <div id="empty-result" class="empty-state"><div class="empty-network" id="empty-network" aria-hidden="true"></div><span class="eyebrow">FROM STRUCTURE TO SENSITIVITY</span><h3>Every explanation starts<br>with a good question.</h3><p>Try the stable ecosystem with a present-only model.<br>Which changes does it respond to?</p><button class="secondary" id="first-example">Load the first example</button><div class="empty-footnote">Your results will appear here after you run an experiment.</div></div>
+                <div id="result-content" hidden><div class="result-stats" id="result-stats"></div><div class="result-tabs" role="tablist" aria-label="Result view"><button role="tab" data-result="figures" aria-selected="true">Figures</button><button role="tab" data-result="concepts" aria-selected="false">Numbers</button><button role="tab" data-result="network" aria-selected="false">Network</button><button role="tab" data-result="trajectory" aria-selected="false">History</button><button role="tab" data-result="detailed" aria-selected="false">Paper-style figures</button><button role="tab" data-result="relationships" aria-selected="false">Relationships</button><button role="tab" data-result="program" aria-selected="false">Python</button></div><div id="result-body"></div><div class="download-bar"><span id="result-provenance"></span><div><a id="download-csv" class="text-button">Results CSV</a><a id="download-json" class="text-button">Full JSON</a><a id="download-python" class="text-button">Python file</a></div></div></div>
+              </div>
+              <div class="reading-note"><span class="note-symbol">i</span><div><strong>A sensitivity, with context.</strong><p>A result describes the model’s response to a graph change. It is not a causal claim about the ecosystem. Requested and achieved changes can differ.</p></div></div>
+              <section class="recent-panel"><div class="section-heading"><h3>Recent experiments</h3><button id="refresh-history" class="text-button">Refresh</button></div><div id="recent"><p class="muted">Your experiments are saved privately in this workspace.</p></div></section>
+            </div>
+          </div>
+        </section>
+        <section id="view-examples" class="view" hidden><div class="page-intro"><span class="eyebrow">A SMALL LIBRARY OF GOOD QUESTIONS</span><h1>Begin with an example.</h1><p>Each example sets up a complete experiment. Run it, read the result,<br>then change one thing to see what happens.</p></div><div id="example-cards" class="example-grid"></div><div class="reading-note"><span class="note-symbol">i</span><div><strong>Synthetic examples have known structure.</strong><p>They help you learn and check behavior. Real datasets show applicability, without explanation ground truth.</p></div></div></section>
+        <section id="view-guide" class="view" hidden><div class="page-intro"><span class="eyebrow">WELCOME TO TGAP · START HERE</span><h1>Understand the graph.<br>Then ask what changes.</h1><p>TGAP explains a model by changing one graph concept at a time.<br>This tutorial takes you from your first question to a visual, reproducible result.</p></div><div class="welcome-overview"><article><span class="eyebrow">WHAT YOU ARE EXPLORING</span><h2>A model’s response to structure</h2><p>A temporal graph is a sequence of networks. Choose a dataset and a prediction model, then change a concept such as bridge width or density. Compare the new prediction with the original.</p><p>The figures show what changed in the network, how its history moved, and how the model responded. This measures sensitivity; it does not prove real-world causation.</p><div class="welcome-actions"><a class="primary" href="#examples">Try a worked example</a><a class="secondary" href="#laboratory">Open laboratory</a></div></article><div class="learning-path"><h2>Your first experiment</h2><ol><li><b>Choose</b><span>A dataset, model and graph concept.</span></li><li><b>Run</b><span>Test both increase and decrease directions.</span></li><li><b>Inspect</b><span>Read the figures, achieved changes and validity flags.</span></li><li><b>Keep</b><span>Download your images, data and Python program.</span></li></ol></div></div><div class="section-heading tutorial-heading"><h2>Follow the 12-minute tutorial</h2><a href="#docs">Open the full reference →</a></div><div id="guide-content" class="document"></div></section>
+        <section id="view-study" class="view" hidden><div class="page-intro"><span class="eyebrow">GUIDED RESEARCH EXPERIENCE</span><h1>Explore. Observe. Reflect.</h1><p>A 10–15 minute pilot with three reasoning tasks and a short reflection.</p></div><div id="study-content" class="study-layout"></div></section>
+        <section id="view-docs" class="view" hidden><div class="page-intro"><span class="eyebrow">REFERENCE & REPRODUCIBILITY</span><h1>The details, made readable.</h1><p>Learn the concepts, write a transformer, and reproduce your experiment.</p></div><div class="docs-layout"><nav class="doc-nav" aria-label="Documentation topics"><a href="#doc-concepts">The concepts</a><a href="#doc-results">Reading results</a><a href="#doc-custom">Custom transformers</a><a href="#doc-datasets">Datasets & models</a><a href="#doc-local">Run on your device</a><a href="#doc-study">Study & privacy</a></nav><article id="docs-content" class="document"></article></div></section>
+        <section id="view-publication" class="view" hidden><div class="page-intro"><span class="eyebrow">PAPER FIGURE LIBRARY</span><h1>The publication, illustrated.</h1><p>Browse the existing paper figures, read what each shows, and open the original PNG or PDF.</p></div><p class="result-note">These are saved publication artifacts, not the results of your current experiment. For your own graph and relationship views, run an experiment and open Relationships.</p><div id="publication-content"></div></section>
+        <section id="view-researcher" class="view" hidden><div class="page-intro"><span class="eyebrow">RESEARCHER WORKSPACE</span><h1>A careful record of the experience.</h1><p>Explore consented study results, inspect experiments, and export reproducible data and figures.</p></div><div id="researcher-content"></div></section>
+      </main>
+      <footer class="workspace-footer"><span>TGAP · Temporal Graph Additive exPlanations</span><span>Model sensitivity. Reproducible experiments.</span></footer>
+    </div>
+  </div>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

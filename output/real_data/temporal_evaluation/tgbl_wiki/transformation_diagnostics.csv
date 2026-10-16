@@ -1,0 +1,31 @@
+dataset,analysis_mode,transformation,family,claims_edge_count_preservation,snapshots_edge_count_changed,requested_delta,snapshots,snapshots_modified,modified_fraction,last_snapshot_modified,structurally_blocked
+tgbl_wiki,temporal_evaluation,Bridge Width,structural,True,0,0.1,13,11,0.8461538461538461,True,False
+tgbl_wiki,temporal_evaluation,Bridge Width,structural,True,0,-0.1,13,11,0.8461538461538461,True,False
+tgbl_wiki,temporal_evaluation,Bridge Width,structural,True,0,0.25,13,13,1.0,True,False
+tgbl_wiki,temporal_evaluation,Bridge Width,structural,True,0,-0.25,13,13,1.0,True,False
+tgbl_wiki,temporal_evaluation,Bridge Width,structural,True,3,0.5,13,13,1.0,True,False
+tgbl_wiki,temporal_evaluation,Bridge Width,structural,True,0,-0.5,13,13,1.0,True,False
+tgbl_wiki,temporal_evaluation,Centralization,structural,True,0,0.1,13,11,0.8461538461538461,False,True
+tgbl_wiki,temporal_evaluation,Centralization,structural,True,0,-0.1,13,12,0.9230769230769231,False,True
+tgbl_wiki,temporal_evaluation,Centralization,structural,True,0,0.25,13,11,0.8461538461538461,False,True
+tgbl_wiki,temporal_evaluation,Centralization,structural,True,0,-0.25,13,12,0.9230769230769231,False,True
+tgbl_wiki,temporal_evaluation,Centralization,structural,True,0,0.5,13,11,0.8461538461538461,False,True
+tgbl_wiki,temporal_evaluation,Centralization,structural,True,0,-0.5,13,12,0.9230769230769231,False,True
+tgbl_wiki,temporal_evaluation,Density,structural,False,0,0.1,13,12,0.9230769230769231,False,True
+tgbl_wiki,temporal_evaluation,Density,structural,False,0,-0.1,13,12,0.9230769230769231,False,True
+tgbl_wiki,temporal_evaluation,Density,structural,False,0,0.25,13,12,0.9230769230769231,False,True
+tgbl_wiki,temporal_evaluation,Density,structural,False,0,-0.25,13,12,0.9230769230769231,False,True
+tgbl_wiki,temporal_evaluation,Density,structural,False,0,0.5,13,13,1.0,True,False
+tgbl_wiki,temporal_evaluation,Density,structural,False,0,-0.5,13,13,1.0,True,False
+tgbl_wiki,temporal_evaluation,Bridge Trend,temporal,True,0,0.1,13,11,0.8461538461538461,False,False
+tgbl_wiki,temporal_evaluation,Bridge Trend,temporal,True,3,-0.1,13,11,0.8461538461538461,False,False
+tgbl_wiki,temporal_evaluation,Bridge Trend,temporal,True,0,0.25,13,12,0.9230769230769231,False,False
+tgbl_wiki,temporal_evaluation,Bridge Trend,temporal,True,10,-0.25,13,12,0.9230769230769231,False,False
+tgbl_wiki,temporal_evaluation,Bridge Trend,temporal,True,0,0.5,13,12,0.9230769230769231,False,False
+tgbl_wiki,temporal_evaluation,Bridge Trend,temporal,True,12,-0.5,13,12,0.9230769230769231,False,False
+tgbl_wiki,temporal_evaluation,Churn,temporal,True,0,0.1,13,0,0.0,False,False
+tgbl_wiki,temporal_evaluation,Churn,temporal,True,0,-0.1,13,7,0.5384615384615384,False,False
+tgbl_wiki,temporal_evaluation,Churn,temporal,True,0,0.25,13,0,0.0,False,False
+tgbl_wiki,temporal_evaluation,Churn,temporal,True,0,-0.25,13,8,0.6153846153846154,False,False
+tgbl_wiki,temporal_evaluation,Churn,temporal,True,0,0.5,13,0,0.0,False,False
+tgbl_wiki,temporal_evaluation,Churn,temporal,True,0,-0.5,13,8,0.6153846153846154,False,False

@@ -1,0 +1,31 @@
+dataset,analysis_mode,transformation,family,claims_edge_count_preservation,snapshots_edge_count_changed,requested_delta,snapshots,snapshots_modified,modified_fraction,last_snapshot_modified,structurally_blocked
+bitcoin_otc,temporal_evaluation,Bridge Width,structural,True,0,0.1,14,7,0.5,False,True
+bitcoin_otc,temporal_evaluation,Bridge Width,structural,True,0,-0.1,14,7,0.5,False,True
+bitcoin_otc,temporal_evaluation,Bridge Width,structural,True,1,0.25,14,8,0.5714285714285714,False,True
+bitcoin_otc,temporal_evaluation,Bridge Width,structural,True,0,-0.25,14,8,0.5714285714285714,False,True
+bitcoin_otc,temporal_evaluation,Bridge Width,structural,True,4,0.5,14,14,1.0,True,False
+bitcoin_otc,temporal_evaluation,Bridge Width,structural,True,0,-0.5,14,11,0.7857142857142857,False,True
+bitcoin_otc,temporal_evaluation,Centralization,structural,True,0,0.1,14,8,0.5714285714285714,False,True
+bitcoin_otc,temporal_evaluation,Centralization,structural,True,0,-0.1,14,8,0.5714285714285714,False,True
+bitcoin_otc,temporal_evaluation,Centralization,structural,True,0,0.25,14,10,0.7142857142857143,False,True
+bitcoin_otc,temporal_evaluation,Centralization,structural,True,0,-0.25,14,11,0.7857142857142857,False,True
+bitcoin_otc,temporal_evaluation,Centralization,structural,True,0,0.5,14,11,0.7857142857142857,False,True
+bitcoin_otc,temporal_evaluation,Centralization,structural,True,0,-0.5,14,11,0.7857142857142857,False,True
+bitcoin_otc,temporal_evaluation,Density,structural,False,0,0.1,14,9,0.6428571428571429,False,True
+bitcoin_otc,temporal_evaluation,Density,structural,False,0,-0.1,14,9,0.6428571428571429,False,True
+bitcoin_otc,temporal_evaluation,Density,structural,False,0,0.25,14,11,0.7857142857142857,False,True
+bitcoin_otc,temporal_evaluation,Density,structural,False,0,-0.25,14,11,0.7857142857142857,False,True
+bitcoin_otc,temporal_evaluation,Density,structural,False,0,0.5,14,14,1.0,True,False
+bitcoin_otc,temporal_evaluation,Density,structural,False,0,-0.5,14,11,0.7857142857142857,False,True
+bitcoin_otc,temporal_evaluation,Bridge Trend,temporal,True,0,0.1,14,9,0.6428571428571429,False,False
+bitcoin_otc,temporal_evaluation,Bridge Trend,temporal,True,2,-0.1,14,12,0.8571428571428571,False,False
+bitcoin_otc,temporal_evaluation,Bridge Trend,temporal,True,0,0.25,14,10,0.7142857142857143,False,False
+bitcoin_otc,temporal_evaluation,Bridge Trend,temporal,True,12,-0.25,14,13,0.9285714285714286,False,False
+bitcoin_otc,temporal_evaluation,Bridge Trend,temporal,True,0,0.5,14,11,0.7857142857142857,False,False
+bitcoin_otc,temporal_evaluation,Bridge Trend,temporal,True,13,-0.5,14,13,0.9285714285714286,False,False
+bitcoin_otc,temporal_evaluation,Churn,temporal,True,0,0.1,14,0,0.0,False,False
+bitcoin_otc,temporal_evaluation,Churn,temporal,True,0,-0.1,14,0,0.0,False,False
+bitcoin_otc,temporal_evaluation,Churn,temporal,True,0,0.25,14,0,0.0,False,False
+bitcoin_otc,temporal_evaluation,Churn,temporal,True,0,-0.25,14,0,0.0,False,False
+bitcoin_otc,temporal_evaluation,Churn,temporal,True,0,0.5,14,0,0.0,False,False
+bitcoin_otc,temporal_evaluation,Churn,temporal,True,0,-0.5,14,0,0.0,False,False

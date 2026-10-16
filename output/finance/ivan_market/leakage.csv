@@ -1,0 +1,21 @@
+dataset,analysis_mode,transformation,property,before,after,change,delta,transformation_status,valid_for_analysis
+ivan_market,temporal_evaluation,Bridge Width,bridge width,6.0,6.5,0.5,0.1,ok,True
+ivan_market,temporal_evaluation,Bridge Width,centralization,0.3174603174603174,0.3174603174603174,0.0,0.1,ok,True
+ivan_market,temporal_evaluation,Bridge Width,density,0.42857142857142855,0.42857142857142855,0.0,0.1,ok,True
+ivan_market,temporal_evaluation,Bridge Width,clustering,0.5749503968253968,0.5382440476190476,-0.03670634920634919,0.1,ok,True
+ivan_market,temporal_evaluation,Centralization,bridge width,6.0,6.0,0.0,0.1,ok,True
+ivan_market,temporal_evaluation,Centralization,centralization,0.3174603174603174,0.36507936507936506,0.04761904761904767,0.1,ok,True
+ivan_market,temporal_evaluation,Centralization,density,0.42857142857142855,0.42857142857142855,0.0,0.1,ok,True
+ivan_market,temporal_evaluation,Centralization,clustering,0.5749503968253968,0.5746031746031747,-0.0003472222222221655,0.1,ok,True
+ivan_market,temporal_evaluation,Density,bridge width,6.0,6.0,0.0,0.1,ok,True
+ivan_market,temporal_evaluation,Density,centralization,0.3174603174603174,0.3253968253968254,0.00793650793650802,0.1,ok,True
+ivan_market,temporal_evaluation,Density,density,0.42857142857142855,0.4702380952380952,0.04166666666666663,0.1,ok,True
+ivan_market,temporal_evaluation,Density,clustering,0.5749503968253968,0.564781746031746,-0.010168650793650813,0.1,ok,True
+ivan_market,temporal_evaluation,Bridge Trend,bridge width,6.0,3.8333333333333335,-2.1666666666666665,0.1,edge_count_infeasible,False
+ivan_market,temporal_evaluation,Bridge Trend,centralization,0.3174603174603174,0.32539682539682535,0.007936507936507964,0.1,edge_count_infeasible,False
+ivan_market,temporal_evaluation,Bridge Trend,density,0.42857142857142855,0.4226190476190476,-0.005952380952380931,0.1,edge_count_infeasible,False
+ivan_market,temporal_evaluation,Bridge Trend,clustering,0.5749503968253968,0.5348214285714284,-0.04012896825396839,0.1,edge_count_infeasible,False
+ivan_market,temporal_evaluation,Churn,bridge width,6.0,6.0,0.0,0.1,ok,True
+ivan_market,temporal_evaluation,Churn,centralization,0.3174603174603174,0.3174603174603174,0.0,0.1,ok,True
+ivan_market,temporal_evaluation,Churn,density,0.42857142857142855,0.42857142857142855,0.0,0.1,ok,True
+ivan_market,temporal_evaluation,Churn,clustering,0.5749503968253968,0.5749503968253968,0.0,0.1,ok,True

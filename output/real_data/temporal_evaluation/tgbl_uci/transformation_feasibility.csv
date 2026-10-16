@@ -1,0 +1,31 @@
+dataset,analysis_mode,transformation,requested_delta,declares_edge_count_preservation,feasible,infeasible_reason,edge_count_before,edge_count_after,edge_count_preserved,snapshots_checked,snapshots_violating,strict_mode_raises,strict_mode_reason,strict_agrees_with_measurement,transformation_status
+tgbl_uci,temporal_evaluation,Bridge Width,0.1,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Bridge Width,-0.1,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Bridge Width,0.25,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Bridge Width,-0.25,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Bridge Width,0.5,True,False,insufficient intra-community edges to preserve total edge count,444,446,False,16,2,True,insufficient intra-community edges to preserve total edge count,True,edge_count_infeasible
+tgbl_uci,temporal_evaluation,Bridge Width,-0.5,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Centralization,0.1,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Centralization,-0.1,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Centralization,0.25,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Centralization,-0.25,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Centralization,0.5,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Centralization,-0.5,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Density,0.1,False,True,,444,486,False,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Density,-0.1,False,True,,444,402,False,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Density,0.25,False,True,,444,554,False,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Density,-0.25,False,True,,444,337,False,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Density,0.5,False,True,,444,668,False,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Density,-0.5,False,True,,444,246,False,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Bridge Trend,0.1,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Bridge Trend,-0.1,True,False,insufficient intra-community edges to preserve total edge count,444,461,False,16,3,True,insufficient intra-community edges to preserve total edge count,True,edge_count_infeasible
+tgbl_uci,temporal_evaluation,Bridge Trend,0.25,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Bridge Trend,-0.25,True,False,insufficient intra-community edges to preserve total edge count,444,887,False,16,12,True,insufficient intra-community edges to preserve total edge count,True,edge_count_infeasible
+tgbl_uci,temporal_evaluation,Bridge Trend,0.5,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Bridge Trend,-0.5,True,False,insufficient cross-community non-edges to widen the bridge,444,19830,False,16,13,True,insufficient cross-community non-edges to widen the bridge,True,edge_count_infeasible
+tgbl_uci,temporal_evaluation,Churn,0.1,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Churn,-0.1,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Churn,0.25,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Churn,-0.25,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Churn,0.5,True,True,,444,444,True,16,0,False,,True,ok
+tgbl_uci,temporal_evaluation,Churn,-0.5,True,True,,444,444,True,16,0,False,,True,ok

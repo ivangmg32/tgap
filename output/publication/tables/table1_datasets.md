@@ -1,0 +1,10 @@
+| dataset | raw_nodes | retained_nodes | nodes_retained_pct | raw_events | retained_events | snapshots | partition | community_source | bridge_width_min | bridge_width_max |
+|---|---|---|---|---|---|---|---|---|---|---|
+| bitcoin_alpha | 3783 | 120 | 3.17 | 24186 | 415 | 13 | 39/81 | temporal_train | 1 | 25 |
+| bitcoin_otc | 5881 | 120 | 2.04 | 35592 | 414 | 14 | 45/75 | temporal_train | 1 | 25 |
+| decentraland | 4133 | 100 | 2.42 | 53533 | 4996 | 19 | 50/50 | temporal_train | 36 | 493 |
+| email_eu_core | 986 | 201 | 20.39 | 332334 | 12599 | 12 | 109/92 | ground_truth_labels | 11 | 139 |
+| sx_mathoverflow | 24818 | 120 | 0.48 | 506550 | 10685 | 16 | 57/63 | temporal_train | 29 | 386 |
+| tgbl_enron | 184 | 25 | 13.59 | 125235 | 18510 | 18 | 8/17 | temporal_train | 0 | 28 |
+| tgbl_uci | 1899 | 120 | 6.32 | 59835 | 1663 | 16 | 55/65 | temporal_train | 1 | 74 |
+| tgbl_wiki | 1000 | 100 | 10 | 157474 | 13267 | 13 | 25/75 | temporal_train | 0 | 29 |

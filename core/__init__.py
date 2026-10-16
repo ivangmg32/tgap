@@ -62,12 +62,47 @@ from .Transformations import (
 )
 from .GraphExplainer import GraphExplainer
 from .TemporalGraphExplainer import TgapExplainer
-from .Communities import detectTwoCommunities, interCommunityEdges
+from .Communities import (
+    Partition,
+    asPartition,
+    detectCommunities,
+    detectTwoCommunities,
+    interCommunityEdges,
+    intraCommunityEdges,
+    bridgeMatrix,
+    aggregateBridgeWidth,
+)
 from .SyntheticData import (
+    makeNCommunityGraph,
+    makeNCommunityTemporalGraph,
     makeTwoCommunityGraph,
     makeTemporalGraph,
     makeScenario,
     SCENARIOS,
+)
+from .Feasibility import (
+    InfeasibleTransformation,
+    bridgeWidthFeasibility,
+    edgeCountFeasibility,
+    bridgeTrendDirection,
+    declaresEdgeCountPreservation,
+)
+from .LocalExplanation import (
+    localExplanation,
+    graphDifference,
+    edgeAttribution,
+    nodeAttribution,
+    temporalAttribution,
+    edgeTimeAttribution,
+    writeElementAttribution,
+    writeTemporalAttribution,
+    ELEMENT_ATTRIBUTION_COLUMNS,
+    TEMPORAL_ATTRIBUTION_COLUMNS,
+)
+from .Sparsity import (
+    conceptSparsity,
+    elementSparsity,
+    sparsityReport,
 )
 from .Diagnostics import (
     CallCountingModel,

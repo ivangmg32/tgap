@@ -1,0 +1,7 @@
+dataset,analysis_mode,transformation,requested_delta,requested_direction,achieved_direction,slope_before,slope_after,slope_change,snapshots,compounding_factor,snapshots_saturated,fraction_saturated,min_bridge_width_before,max_bridge_width_before,min_bridge_width,max_bridge_width,status,valid_for_analysis
+decentraland,temporal_evaluation,Bridge Trend,0.1,1,1,-14.447368421052621,-5.740350877192977,8.707017543859644,19,5.55991731349224,1,0.05263157894736842,36,493,1,356,saturated,False
+decentraland,temporal_evaluation,Bridge Trend,-0.1,-1,-1,-14.447368421052621,-51.6,-37.15263157894738,19,0.15009463529699918,0,0.0,36,493,36,1021,ok,True
+decentraland,temporal_evaluation,Bridge Trend,0.25,1,1,-14.447368421052621,-2.8771929824561395,11.570175438596483,19,55.51115123125783,4,0.21052631578947367,36,493,1,285,saturated,False
+decentraland,temporal_evaluation,Bridge Trend,-0.25,-1,-1,-14.447368421052621,-178.92456140350873,-164.4771929824561,19,0.005637710113660432,0,0.0,36,493,36,2500,ok,True
+decentraland,temporal_evaluation,Bridge Trend,0.5,1,1,-14.447368421052621,-2.0894736842105246,12.357894736842097,19,1477.8918800354004,5,0.2631578947368421,36,493,1,233,saturated,False
+decentraland,temporal_evaluation,Bridge Trend,-0.5,-1,-1,-14.447368421052621,-139.53684210526316,-125.08947368421055,19,3.814697265625e-06,0,0.0,36,493,36,2500,ok,True
