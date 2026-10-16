@@ -1,0 +1,560 @@
+{
+  "runs": [
+    {
+      "dataset": "stable",
+      "model": "persistence_bridge",
+      "seconds": 2.25,
+      "baseline": 8.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "stable",
+      "model": "persistence_density",
+      "seconds": 3.157,
+      "baseline": 0.23157894736842105,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "persistence_bridge",
+      "seconds": 2.14,
+      "baseline": 3.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "persistence_density",
+      "seconds": 3.141,
+      "baseline": 0.20526315789473684,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "persistence_bridge",
+      "seconds": 3.109,
+      "baseline": 13.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "persistence_density",
+      "seconds": 4.172,
+      "baseline": 0.2578947368421053,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "persistence_bridge",
+      "seconds": 2.156,
+      "baseline": 8.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "persistence_density",
+      "seconds": 4.125,
+      "baseline": 0.23157894736842105,
+      "invalid": 0
+    },
+    {
+      "dataset": "three_communities",
+      "model": "persistence_bridge",
+      "seconds": 3.094,
+      "baseline": 16.0,
+      "invalid": 1
+    },
+    {
+      "dataset": "three_communities",
+      "model": "persistence_density",
+      "seconds": 3.109,
+      "baseline": 0.18840579710144928,
+      "invalid": 1
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "persistence_bridge",
+      "seconds": 6.141,
+      "baseline": 2.0,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "persistence_density",
+      "seconds": 3.234,
+      "baseline": 0.00028011204481792715,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "persistence_bridge",
+      "seconds": 5.11,
+      "baseline": 1.0,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "persistence_density",
+      "seconds": 3.109,
+      "baseline": 0.00014005602240896358,
+      "invalid": 3
+    },
+    {
+      "dataset": "decentraland",
+      "model": "persistence_bridge",
+      "seconds": 7.172,
+      "baseline": 36.0,
+      "invalid": 2
+    },
+    {
+      "dataset": "decentraland",
+      "model": "persistence_density",
+      "seconds": 9.172,
+      "baseline": 0.013737373737373737,
+      "invalid": 2
+    },
+    {
+      "dataset": "email_eu_core",
+      "model": "persistence_bridge",
+      "seconds": 10.172,
+      "baseline": 11.0,
+      "invalid": 3
+    },
+    {
+      "dataset": "email_eu_core",
+      "model": "persistence_density",
+      "seconds": 6.125,
+      "baseline": 0.0009950248756218905,
+      "invalid": 3
+    },
+    {
+      "dataset": "sx_mathoverflow",
+      "model": "persistence_bridge",
+      "seconds": 10.156,
+      "baseline": 29.0,
+      "invalid": 1
+    },
+    {
+      "dataset": "sx_mathoverflow",
+      "model": "persistence_density",
+      "seconds": 5.125,
+      "baseline": 0.010924369747899159,
+      "invalid": 1
+    },
+    {
+      "dataset": "tgbl_enron",
+      "model": "persistence_bridge",
+      "seconds": 2.188,
+      "baseline": 0.0,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_enron",
+      "model": "persistence_density",
+      "seconds": 2.078,
+      "baseline": 0.01,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_uci",
+      "model": "persistence_bridge",
+      "seconds": 5.093,
+      "baseline": 2.0,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_uci",
+      "model": "persistence_density",
+      "seconds": 3.297,
+      "baseline": 0.00028011204481792715,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_wiki",
+      "model": "persistence_bridge",
+      "seconds": 4.172,
+      "baseline": 0.0,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_wiki",
+      "model": "persistence_density",
+      "seconds": 4.172,
+      "baseline": 0.00020202020202020202,
+      "invalid": 2
+    },
+    {
+      "dataset": "stable",
+      "model": "trend_bridge",
+      "seconds": 2.203,
+      "baseline": 7.999999999999997,
+      "invalid": 0
+    },
+    {
+      "dataset": "stable",
+      "model": "persistence_centralization",
+      "seconds": 2.125,
+      "baseline": 0.15204678362573099,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "trend_bridge",
+      "seconds": 3.11,
+      "baseline": 2.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "persistence_centralization",
+      "seconds": 2.25,
+      "baseline": 0.12280701754385964,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "trend_bridge",
+      "seconds": 3.094,
+      "baseline": 14.0,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "persistence_centralization",
+      "seconds": 3.141,
+      "baseline": 0.23976608187134502,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "trend_bridge",
+      "seconds": 3.14,
+      "baseline": 7.999999999999997,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "persistence_centralization",
+      "seconds": 4.141,
+      "baseline": 0.21052631578947367,
+      "invalid": 0
+    },
+    {
+      "dataset": "three_communities",
+      "model": "trend_bridge",
+      "seconds": 2.313,
+      "baseline": 15.999999999999995,
+      "invalid": 1
+    },
+    {
+      "dataset": "three_communities",
+      "model": "persistence_centralization",
+      "seconds": 4.171,
+      "baseline": 0.12648221343873517,
+      "invalid": 1
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "trend_bridge",
+      "seconds": 4.125,
+      "baseline": -5.57692307692308,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "persistence_centralization",
+      "seconds": 5.125,
+      "baseline": 0.008260931491240565,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "trend_bridge",
+      "seconds": 4.11,
+      "baseline": -5.714285714285726,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "persistence_centralization",
+      "seconds": 4.14,
+      "baseline": 0.008403361344537815,
+      "invalid": 3
+    },
+    {
+      "dataset": "decentraland",
+      "model": "trend_bridge",
+      "seconds": 6.141,
+      "baseline": 14.0,
+      "invalid": 2
+    },
+    {
+      "dataset": "decentraland",
+      "model": "persistence_centralization",
+      "seconds": 7.125,
+      "baseline": 0.15089672232529375,
+      "invalid": 2
+    },
+    {
+      "dataset": "email_eu_core",
+      "model": "trend_bridge",
+      "seconds": 9.188,
+      "baseline": 43.84848484848483,
+      "invalid": 3
+    },
+    {
+      "dataset": "email_eu_core",
+      "model": "persistence_centralization",
+      "seconds": 10.14,
+      "baseline": 0.01414572864321608,
+      "invalid": 3
+    },
+    {
+      "dataset": "sx_mathoverflow",
+      "model": "trend_bridge",
+      "seconds": 6.14,
+      "baseline": -11.099999999999852,
+      "invalid": 1
+    },
+    {
+      "dataset": "sx_mathoverflow",
+      "model": "persistence_centralization",
+      "seconds": 5.11,
+      "baseline": 0.07434838342116508,
+      "invalid": 1
+    },
+    {
+      "dataset": "tgbl_enron",
+      "model": "trend_bridge",
+      "seconds": 7.172,
+      "baseline": 6.960784313725494,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_enron",
+      "model": "persistence_centralization",
+      "seconds": 4.093,
+      "baseline": 0.07971014492753623,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_uci",
+      "model": "trend_bridge",
+      "seconds": 6.25,
+      "baseline": -9.474999999999987,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_uci",
+      "model": "persistence_centralization",
+      "seconds": 3.219,
+      "baseline": 0.008260931491240565,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_wiki",
+      "model": "trend_bridge",
+      "seconds": 3.156,
+      "baseline": -1.423076923076927,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_wiki",
+      "model": "persistence_centralization",
+      "seconds": 4.11,
+      "baseline": 0.010101010101010102,
+      "invalid": 2
+    },
+    {
+      "dataset": "stable",
+      "model": "slope_bridge",
+      "seconds": 4.313,
+      "baseline": 6.360965705585939e-17,
+      "invalid": 0
+    },
+    {
+      "dataset": "stable",
+      "model": "trend_clustering",
+      "seconds": 2.156,
+      "baseline": 0.2771904761904761,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "slope_bridge",
+      "seconds": 2.125,
+      "baseline": -0.9999999999999996,
+      "invalid": 0
+    },
+    {
+      "dataset": "decaying-bridge",
+      "model": "trend_clustering",
+      "seconds": 3.172,
+      "baseline": 0.14673015873015882,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "slope_bridge",
+      "seconds": 3.109,
+      "baseline": 1.0000000000000002,
+      "invalid": 0
+    },
+    {
+      "dataset": "growing-bridge",
+      "model": "trend_clustering",
+      "seconds": 3.203,
+      "baseline": 0.1562857142857143,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "slope_bridge",
+      "seconds": 3.125,
+      "baseline": 6.360965705585939e-17,
+      "invalid": 0
+    },
+    {
+      "dataset": "high-churn",
+      "model": "trend_clustering",
+      "seconds": 3.219,
+      "baseline": 0.30626984126984114,
+      "invalid": 0
+    },
+    {
+      "dataset": "three_communities",
+      "model": "slope_bridge",
+      "seconds": 4.203,
+      "baseline": 1.2721931411171878e-16,
+      "invalid": 1
+    },
+    {
+      "dataset": "three_communities",
+      "model": "trend_clustering",
+      "seconds": 3.156,
+      "baseline": 0.275376984126984,
+      "invalid": 1
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "slope_bridge",
+      "seconds": 5.125,
+      "baseline": -2.203296703296703,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_alpha",
+      "model": "trend_clustering",
+      "seconds": 5.156,
+      "baseline": -0.01360860649322189,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "slope_bridge",
+      "seconds": 3.094,
+      "baseline": -1.9142857142857157,
+      "invalid": 3
+    },
+    {
+      "dataset": "bitcoin_otc",
+      "model": "trend_clustering",
+      "seconds": 5.156,
+      "baseline": -0.013369996913952978,
+      "invalid": 3
+    },
+    {
+      "dataset": "decentraland",
+      "model": "slope_bridge",
+      "seconds": 9.141,
+      "baseline": -14.447368421052621,
+      "invalid": 2
+    },
+    {
+      "dataset": "decentraland",
+      "model": "trend_clustering",
+      "seconds": 9.25,
+      "baseline": 0.1649979312938623,
+      "invalid": 2
+    },
+    {
+      "dataset": "email_eu_core",
+      "model": "slope_bridge",
+      "seconds": 6.093,
+      "baseline": -5.741258741258741,
+      "invalid": 3
+    },
+    {
+      "dataset": "email_eu_core",
+      "model": "trend_clustering",
+      "seconds": 11.281,
+      "baseline": 0.04756315603522018,
+      "invalid": 3
+    },
+    {
+      "dataset": "sx_mathoverflow",
+      "model": "slope_bridge",
+      "seconds": 10.157,
+      "baseline": -15.629411764705877,
+      "invalid": 1
+    },
+    {
+      "dataset": "sx_mathoverflow",
+      "model": "trend_clustering",
+      "seconds": 9.187,
+      "baseline": 0.04053399399526056,
+      "invalid": 1
+    },
+    {
+      "dataset": "tgbl_enron",
+      "model": "slope_bridge",
+      "seconds": 5.172,
+      "baseline": -0.6006191950464392,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_enron",
+      "model": "trend_clustering",
+      "seconds": 4.125,
+      "baseline": 0.1296623536231381,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_uci",
+      "model": "slope_bridge",
+      "seconds": 3.203,
+      "baseline": -2.283823529411764,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_uci",
+      "model": "trend_clustering",
+      "seconds": 4.11,
+      "baseline": -0.008793335579181147,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_wiki",
+      "model": "slope_bridge",
+      "seconds": 3.109,
+      "baseline": -1.6318681318681325,
+      "invalid": 2
+    },
+    {
+      "dataset": "tgbl_wiki",
+      "model": "trend_clustering",
+      "seconds": 3.109,
+      "baseline": -0.012468467430005903,
+      "invalid": 2
+    }
+  ],
+  "failures": [],
+  "seconds": 130.204,
+  "summary": {
+    "total": 78,
+    "completed": 78,
+    "failures": 0,
+    "p50_seconds": 4.1175,
+    "p95_seconds": 10.14,
+    "max_seconds": 11.281
+  }
+}

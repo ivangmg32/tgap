@@ -1,0 +1,13 @@
+experiment,model,transformation,direction,baseline,transformed,impact,achieved_delta,noop,seed
+RQ2,persistence (present only),Bridge Trend,increase,3.0,3.0,0.0,0.45714285714285685,False,42
+RQ2,persistence (present only),Bridge Trend,decrease,3.0,3.0,0.0,-0.8571428571428565,False,42
+RQ2,persistence (present only),Churn,increase,3.0,3.0,0.0,0.47755170747842113,False,42
+RQ2,persistence (present only),Churn,decrease,3.0,3.0,0.0,-0.07378694570865033,False,42
+RQ2,slope (trajectory),Bridge Trend,increase,-0.9999999999999996,-0.5428571428571427,1.0,0.45714285714285685,False,42
+RQ2,slope (trajectory),Bridge Trend,decrease,-0.9999999999999996,-1.857142857142856,-1.0,-0.8571428571428565,False,42
+RQ2,slope (trajectory),Churn,increase,-0.9999999999999996,-0.9999999999999996,0.0,0.47755170747842113,False,42
+RQ2,slope (trajectory),Churn,decrease,-0.9999999999999996,-0.9999999999999996,0.0,-0.07378694570865033,False,42
+RQ2,trend-extrapolation (history),Bridge Trend,increase,2.0,2.5999999999999996,1.3125,0.45714285714285685,False,42
+RQ2,trend-extrapolation (history),Bridge Trend,decrease,2.0,0.6666666666666679,-1.5555555555555554,-0.8571428571428565,False,42
+RQ2,trend-extrapolation (history),Churn,increase,2.0,2.0,0.0,0.47755170747842113,False,42
+RQ2,trend-extrapolation (history),Churn,decrease,2.0,2.0,0.0,-0.07378694570865033,False,42

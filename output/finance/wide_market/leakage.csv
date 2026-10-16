@@ -1,0 +1,21 @@
+dataset,analysis_mode,transformation,property,before,after,change,delta,transformation_status,valid_for_analysis
+wide_market,temporal_evaluation,Bridge Width,bridge width,31.833333333333332,35.166666666666664,3.333333333333332,0.1,ok,True
+wide_market,temporal_evaluation,Bridge Width,centralization,0.16789819376026272,0.17713464696223316,0.009236453201970446,0.1,ok,True
+wide_market,temporal_evaluation,Bridge Width,density,0.14214559386973183,0.14214559386973183,0.0,0.1,ok,True
+wide_market,temporal_evaluation,Bridge Width,clustering,0.4858534317944793,0.4343688796965371,-0.05148455209794223,0.1,ok,True
+wide_market,temporal_evaluation,Centralization,bridge width,31.833333333333332,31.833333333333332,0.0,0.1,ok,True
+wide_market,temporal_evaluation,Centralization,centralization,0.16789819376026272,0.2171592775041051,0.04926108374384239,0.1,ok,True
+wide_market,temporal_evaluation,Centralization,density,0.14214559386973183,0.14214559386973183,0.0,0.1,ok,True
+wide_market,temporal_evaluation,Centralization,clustering,0.4858534317944793,0.4914342020879185,0.0055807702934391745,0.1,ok,True
+wide_market,temporal_evaluation,Density,bridge width,31.833333333333332,31.833333333333332,0.0,0.1,ok,True
+wide_market,temporal_evaluation,Density,centralization,0.16789819376026272,0.16030377668308704,-0.007594417077175675,0.1,ok,True
+wide_market,temporal_evaluation,Density,density,0.14214559386973183,0.1549808429118774,0.012835249042145558,0.1,ok,True
+wide_market,temporal_evaluation,Density,clustering,0.4858534317944793,0.4963133194634743,0.010459887668994972,0.1,ok,True
+wide_market,temporal_evaluation,Bridge Trend,bridge width,31.833333333333332,23.25,-8.583333333333332,0.1,edge_count_infeasible,False
+wide_market,temporal_evaluation,Bridge Trend,centralization,0.16789819376026272,0.1354679802955665,-0.03243021346469621,0.1,edge_count_infeasible,False
+wide_market,temporal_evaluation,Bridge Trend,density,0.14214559386973183,0.13793103448275862,-0.00421455938697321,0.1,edge_count_infeasible,False
+wide_market,temporal_evaluation,Bridge Trend,clustering,0.4858534317944793,0.4994195411571573,0.013566109362677992,0.1,edge_count_infeasible,False
+wide_market,temporal_evaluation,Churn,bridge width,31.833333333333332,31.833333333333332,0.0,0.1,ok,True
+wide_market,temporal_evaluation,Churn,centralization,0.16789819376026272,0.1709770114942529,0.0030788177339901857,0.1,ok,True
+wide_market,temporal_evaluation,Churn,density,0.14214559386973183,0.14214559386973183,0.0,0.1,ok,True
+wide_market,temporal_evaluation,Churn,clustering,0.4858534317944793,0.47014753001079107,-0.015705901783688248,0.1,ok,True

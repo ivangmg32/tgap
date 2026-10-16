@@ -1,0 +1,6 @@
+# Optional: financial-market studies (finance/, examples/financial/).
+# Only needed to DOWNLOAD new stock prices (yfinance) and for the OLS part
+# of Ivan's RQ2 (statsmodels). Cached prices work without them.
+#   python run.py --with-finance      or      tgap install --finance --yes
+yfinance
+statsmodels

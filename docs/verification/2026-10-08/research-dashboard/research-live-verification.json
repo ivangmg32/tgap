@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "health": 200,
+  "researcher_report": 200,
+  "zip_export": 200,
+  "zip_files": 7,
+  "logout_revokes_access": true,
+  "production_test_records_inserted": false
+}

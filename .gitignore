@@ -1,3 +1,7 @@
+# Project-specific folder ignores
+# Downloaded stock prices (Ivan's 8 tickers stay committed for offline use)
+finance/Cache/*.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -216,3 +220,23 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Real-data raw downloads: large, reproducible via `python -m realdata.download`
+/data/
+
+# Editor settings are personal, not project configuration
+.vscode/
+
+# Workbench development/runtime state is never published
+workbench/config.json
+workbench/users.txt
+workbench/data/
+workbench/verification/
+workbench/.venv/
+
+# run.py: private environment, caches, logs, and users' own example outputs
+.tgap_cache/
+output/logs/
+output/examples/
+# Outputs of the example projects are written next to them when run
+examples/projects/*/output/

@@ -1,0 +1,11 @@
+experiment,requested_delta,direction,achieved_delta,analytic_impact,impact_achieved,impact_requested,error_achieved,error_requested,noop_achieved,seed
+RQ8,0.05,increase,0.0,8.0,0.0,0.0,8.0,8.0,True,42
+RQ8,-0.05,decrease,0.0,-8.0,0.0,0.0,8.0,8.0,True,42
+RQ8,0.1,increase,0.125,8.0,8.0,10.0,0.0,2.0,False,42
+RQ8,-0.1,decrease,-0.125,-8.0,-8.0,-10.0,0.0,2.0,False,42
+RQ8,0.2,increase,0.25,8.0,8.0,10.0,0.0,2.0,False,42
+RQ8,-0.2,decrease,-0.25,-8.0,-8.0,-10.0,0.0,2.0,False,42
+RQ8,0.3,increase,0.25,8.0,8.0,6.666666666666667,0.0,1.333333333333333,False,42
+RQ8,-0.3,decrease,-0.25,-8.0,-8.0,-6.666666666666667,0.0,1.333333333333333,False,42
+RQ8,0.5,increase,0.5,8.0,8.0,8.0,0.0,0.0,False,42
+RQ8,-0.5,decrease,-0.5,-8.0,-8.0,-8.0,0.0,0.0,False,42
