@@ -256,3 +256,7 @@ pseudonyms. Older records retain their original version. Review free text and
 custom code before publication. Withdrawal removes records from future reports;
 already-downloaded copies must be handled separately under the retention policy.
 See research repo `docs/15-research-dashboard.md` for the complete handoff.
+
+## Guided TGAP user study (2026-10-22)
+
+Sidebar **Guided user study** (`#guided`): a six-step wizard that runs one TGAP experiment on the real pipeline plus the extra runs the paper charts need, then shows every paper chart regenerated from that run with a data-grounded explanation under each chart, an overall conclusion, provenance and JSON/CSV/HTML/PDF exports. See `docs/16-guided-user-study.md` in the research repository.

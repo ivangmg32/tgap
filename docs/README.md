@@ -24,6 +24,7 @@ are reference material; you do not need them to install or use TGAP.
 | Use your own data, model or concept | [Examples](../examples/README.md) |
 | Study stock markets (Ivan's finance work) | [Financial examples](../examples/financial/README.md) |
 | Inspect consented study results and export research data (researcher role) | [Study dashboard and exports](15-research-dashboard.md) |
+| Run the guided TGAP user study and read the paper-chart inventory | [Guided user study](16-guided-user-study.md) |
 | Use TGAP from Python or understand its concepts | [Complete guide](06-TGAP-complete-guide-A-to-Z.md) |
 | Start a new study in a few lines (functions, no classes) | [The wrapper](../examples/wrapper/README.md) |
 | Add your own transformation | [Example 4](../examples/04_your_own_transformation.py) and the [worked example](05-TGAP-worked-example-trace.md) |
