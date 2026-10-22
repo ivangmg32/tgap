@@ -1,0 +1,32 @@
+{
+  "_comment": "Predefined guided-study scenarios. Administrators may edit this file; the server re-reads it on each request. 'spec' uses the same fields as POST /api/guided/experiments. 'locked' lists fields participants cannot change when the scenario is used. Each scenario reproduces a configuration from the paper; none contains results.",
+  "scenarios": [
+    {
+      "id": "paper-email-eu-core",
+      "title": "Paper case study: Email-Eu-core",
+      "description": "The paper's real-data case study (Section 7) with department-label communities: all six models, all five concepts, request sizes 10%, 25% and 50%.",
+      "locked": [],
+      "spec": {"dataset": "email_eu_core", "model": "trend_bridge", "concept": "bridge_width", "direction": "increase", "delta": 0.1, "seed": 42,
+               "sweep": {"deltas": [0.1, 0.25, 0.5], "models": ["persistence_bridge", "trend_bridge", "slope_bridge", "persistence_density", "persistence_centralization", "trend_clustering"],
+                         "concepts": ["bridge_width", "centralization", "density", "bridge_trend", "churn"], "repeats": 2, "variation": "transformation", "matched": false, "sizes": []}}
+    },
+    {
+      "id": "paper-decentraland",
+      "title": "Paper case study: Decentraland",
+      "description": "The paper's projected co-voting case study (Section 7): the same 6 x 5 x 3 x 2 design, where Bridge Trend is expected to be invalid.",
+      "locked": [],
+      "spec": {"dataset": "decentraland", "model": "trend_bridge", "concept": "bridge_width", "direction": "increase", "delta": 0.1, "seed": 42,
+               "sweep": {"deltas": [0.1, 0.25, 0.5], "models": ["persistence_bridge", "trend_bridge", "slope_bridge", "persistence_density", "persistence_centralization", "trend_clustering"],
+                         "concepts": ["bridge_width", "centralization", "density", "bridge_trend", "churn"], "repeats": 2, "variation": "transformation", "matched": false, "sizes": []}}
+    },
+    {
+      "id": "known-truth-temporal",
+      "title": "Known truth: present versus history (RQ2)",
+      "description": "A synthetic decaying bridge. Bridge Trend edits history only, so a present-only model should not respond while trajectory models should.",
+      "locked": [],
+      "spec": {"dataset": "decaying-bridge", "model": "slope_bridge", "concept": "bridge_trend", "direction": "increase", "delta": 0.1, "seed": 42,
+               "sweep": {"deltas": [0.1, 0.25, 0.5], "models": ["persistence_bridge", "trend_bridge", "slope_bridge"],
+                         "concepts": ["bridge_width", "bridge_trend", "churn"], "repeats": 3, "variation": "graph", "matched": false, "sizes": [6, 15, 30]}}
+    }
+  ]
+}

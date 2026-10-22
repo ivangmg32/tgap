@@ -88,14 +88,46 @@ def catalogue(data_root):
                 examples=EXAMPLES, custom_template=CUSTOM_TEMPLATE)
 
 
+TREND_REASONS = {'saturated':'The width-one floor distorted part of the intended history.',
+                 'wrong_direction':'The achieved trend moved against the requested direction.',
+                 'no_property_change':'The trend did not change.'}
+
+
+def validity_gate(core, graphs, trans, delta, comm):
+    """The workbench's validity rule for one concept/direction: edge-count
+    feasibility first, then Bridge Trend direction/saturation. Returns
+    (status, reason); status 'ok' means valid for analysis."""
+    gate = core.edgeCountFeasibility(graphs,trans,delta,comm)
+    status = 'ok' if gate['feasible'] else 'edge_count_infeasible'
+    reason = gate.get('reason')
+    if status == 'ok' and isinstance(trans,core.BridgeTrendTransformation):
+        status = core.bridgeTrendDirection(graphs,trans,delta)['status']
+        if status != 'ok':
+            reason = TREND_REASONS.get(status,status)
+    return status, reason
+
+
 def world(spec, core, data_root):
+    """Load the dataset, then keep snapshots 0..target_snapshot when the
+    spec names a target (the prediction made at that time step)."""
+    graphs, comm, labels, meta = _world(spec, core, data_root)
+    target = spec.get('target_snapshot')
+    if target is not None:
+        if not 1 <= int(target) < len(graphs):
+            raise ValueError(f'Target snapshot must be between 2 and {len(graphs)} (1-based).')
+        graphs, labels = graphs[:int(target)+1], labels[:int(target)+1]
+    return graphs, comm, labels, meta
+
+
+def _world(spec, core, data_root):
     key = spec['dataset']
+    size = int(spec.get('n_per_community') or 0)
     if key == 'three_communities':
         graphs, comm = core.makeNCommunityTemporalGraph(nSnapshots=6, nCommunities=3,
-            nPerCommunity=8,pIntra=0.45,bridgeWidths={(0,1):8,(0,2):5,(1,2):3},seed=spec['seed'])
+            nPerCommunity=size or 8,pIntra=0.45,bridgeWidths={(0,1):8,(0,2):5,(1,2):3},seed=spec['seed'])
         return graphs, comm, [f'Window {i+1}' for i in range(len(graphs))], {'dataset':key,'analysis_mode':'synthetic','ground_truth_available':True}
     if key in SYNTHETIC:
-        graphs, comm, info = core.makeScenario(key,nSnapshots=6,nPerCommunity=10,seed=spec['seed'])
+        graphs, comm, info = core.makeScenario(key,nSnapshots=6,nPerCommunity=size or 10,seed=spec['seed'])
         return graphs, core.asPartition(comm), [f'Window {i+1}' for i in range(len(graphs))], {'dataset':key,'analysis_mode':'synthetic',**info}
     path = Path(data_root) / 'datasets' / f'{key}.json'
     if not path.is_file() or path.parent.resolve() != (Path(data_root)/'datasets').resolve():
@@ -179,6 +211,8 @@ def generated_program(spec):
         adapter = spec['dataset'] if spec['dataset'] in ('decentraland','tgbl_wiki') else 'edgelist'
         arg = '' if adapter != 'edgelist' else repr(spec['dataset'])
         code += f'from realdata.adapters import {adapter}\nprepared = {adapter}.prepare({arg})\nsnapshots, communities = prepared.snapshots, prepared.communities\n'
+    if spec.get('target_snapshot') is not None:
+        code += f"snapshots = snapshots[:{int(spec['target_snapshot'])+1}]  # predict at the selected target snapshot\n"
     code += f'model = {model}\ntransformations = [\n'
     for key in spec['transformations']:
         code += f"    {names[key]}(communities, seed={spec['seed']}),\n"
@@ -221,16 +255,7 @@ def execute(spec, root, data_root):
     for record in detailed:
         trans = next(t for t in transforms if t.name == record['transformation'])
         delta = record['requestedDelta']
-        gate = core.edgeCountFeasibility(graphs,trans,delta,comm)
-        status = 'ok' if gate['feasible'] else 'edge_count_infeasible'
-        reason = gate.get('reason')
-        if status == 'ok' and isinstance(trans,core.BridgeTrendTransformation):
-            trend = core.bridgeTrendDirection(graphs,trans,delta)
-            status = trend['status']
-            if status != 'ok':
-                reason = {'saturated':'The width-one floor distorted part of the intended history.',
-                          'wrong_direction':'The achieved trend moved against the requested direction.',
-                          'no_property_change':'The trend did not change.'}[status]
+        status, reason = validity_gate(core,graphs,trans,delta,comm)
         valid = status == 'ok'
         rows.append(dict(concept=trans.name,direction='increase' if delta>0 else 'decrease',
                          requested_delta=delta,achieved_delta=record['achievedDelta'] if valid else None,

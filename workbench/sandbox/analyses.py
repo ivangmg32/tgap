@@ -1,6 +1,8 @@
 """Measured, bounded inputs for publication-style figures for a live run."""
 import time
 
+from sandbox.engine import validity_gate
+
 
 class AnalysisLimit(Exception):
     pass
@@ -77,10 +79,7 @@ def detailed_analyses(core,graphs,communities,model,transforms,rows,captured,spe
                 samples=[]
                 for record in detail:
                     delta=record['requestedDelta']
-                    gate=core.edgeCountFeasibility(graphs,trans,delta,communities)
-                    status='ok' if gate['feasible'] else 'edge_count_infeasible'
-                    if status=='ok' and isinstance(trans,core.BridgeTrendTransformation):
-                        status=core.bridgeTrendDirection(graphs,trans,delta)['status']
+                    status,_=validity_gate(core,graphs,trans,delta,communities)
                     valid=status=='ok'
                     samples.append(dict(concept=trans.name,direction='increase' if delta>0 else 'decrease',
                                         requested_delta=delta,sweep_delta=amount,status=status,valid_for_analysis=valid,
