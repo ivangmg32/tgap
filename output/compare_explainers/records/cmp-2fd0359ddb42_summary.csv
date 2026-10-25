@@ -1,0 +1,251 @@
+experiment_id,section,field,value
+cmp-2fd0359ddb42,shared.dataset,dataset,uci_messages
+cmp-2fd0359ddb42,shared.dataset,archive,tgbl-uci.zip
+cmp-2fd0359ddb42,shared.dataset,archive_sha256,1ea477786d3aefa0b597f22483c6f30df5619594fa981658b80337d9d7ea33d5
+cmp-2fd0359ddb42,shared.dataset,member,tgbl-uci_edgelist.csv
+cmp-2fd0359ddb42,shared.dataset,member_sha256,6d96b0f87c74f16aa2792052820992ae293dcc8c80c0e7fbcbccc3caa1530095
+cmp-2fd0359ddb42,shared.dataset,events,59835
+cmp-2fd0359ddb42,shared.dataset,nodes,1899
+cmp-2fd0359ddb42,shared.dataset,node_id_range,"[1, 1899]"
+cmp-2fd0359ddb42,shared.dataset,time_span_seconds,16736181
+cmp-2fd0359ddb42,shared.dataset,preprocessing_version,uci-canonical-1
+cmp-2fd0359ddb42,shared.dataset,relation_to_cody_source,"identical to Opsahl OCnodeslinks.txt (CoDy README source) minus its 1,899 self-loop rows; timestamps = unix time - 1082015761"
+cmp-2fd0359ddb42,shared.dataset,stream_sha256,e6e6299194649556a0f8055f0a4af6aac9fd476afe7bfd405916ce2ae68d1672
+cmp-2fd0359ddb42,shared.dataset,split.method,"chronological, by timestamp quantile (as in TGN/CoDy)"
+cmp-2fd0359ddb42,shared.dataset,split.fractions,"[0.7, 0.15, 0.15]"
+cmp-2fd0359ddb42,shared.dataset,split.train,"[0, 41884]"
+cmp-2fd0359ddb42,shared.dataset,split.validation,"[41884, 50859]"
+cmp-2fd0359ddb42,shared.dataset,split.test,"[50859, 59835]"
+cmp-2fd0359ddb42,shared.dataset,split.validation_start_time,3834800.6
+cmp-2fd0359ddb42,shared.dataset,split.test_start_time,6714558.300000001
+cmp-2fd0359ddb42,shared.dataset,split.identifier,933ae600df3a26a5
+cmp-2fd0359ddb42,shared.model,implementation,"compare_explainers.tgn_backend.EventTgn (core.TgnModel GraphAttentionEmbedding + LinkPredictor; PyG TGNMemory, IdentityMessage, LastAggregator, LastNeighborLoader)"
+cmp-2fd0359ddb42,shared.model,configuration.name,TGN (event-level)
+cmp-2fd0359ddb42,shared.model,configuration.memory_dim,32
+cmp-2fd0359ddb42,shared.model,configuration.time_dim,32
+cmp-2fd0359ddb42,shared.model,configuration.embedding_dim,32
+cmp-2fd0359ddb42,shared.model,configuration.neighbor_size,10
+cmp-2fd0359ddb42,shared.model,configuration.raw_message,constant 1.0 per event (UCI has no edge features)
+cmp-2fd0359ddb42,shared.model,configuration.seed,42
+cmp-2fd0359ddb42,shared.model,configuration.epochs,10
+cmp-2fd0359ddb42,shared.model,configuration.batch_size,200
+cmp-2fd0359ddb42,shared.model,configuration.learning_rate,0.0001
+cmp-2fd0359ddb42,shared.model,checkpoint,output/compare_explainers/models/tgn_uci_de6a9219a182.pt
+cmp-2fd0359ddb42,shared.model,checkpoint_sha256,8311596a2405b25a76905e1eee14bc89f66135ddea1a9c4d4a42210009e95219
+cmp-2fd0359ddb42,shared.model,parameter_fingerprint,d68eb3e77d8b2a40c1ef9bce8aa60e6cf29d65b7fbdedd23be1b5d4b3fb3f349
+cmp-2fd0359ddb42,shared.model,model_key,de6a9219a182
+cmp-2fd0359ddb42,shared.model,evaluation.validation.average_precision,0.8274
+cmp-2fd0359ddb42,shared.model,evaluation.validation.auc,0.852
+cmp-2fd0359ddb42,shared.model,evaluation.validation.accuracy,0.7447
+cmp-2fd0359ddb42,shared.model,evaluation.validation.positives,8975
+cmp-2fd0359ddb42,shared.model,evaluation.validation.negatives,8975
+cmp-2fd0359ddb42,shared.model,evaluation.validation.chance_level,0.5
+cmp-2fd0359ddb42,shared.model,evaluation.test.average_precision,0.8739
+cmp-2fd0359ddb42,shared.model,evaluation.test.auc,0.8823
+cmp-2fd0359ddb42,shared.model,evaluation.test.accuracy,0.7458
+cmp-2fd0359ddb42,shared.model,evaluation.test.positives,8976
+cmp-2fd0359ddb42,shared.model,evaluation.test.negatives,8976
+cmp-2fd0359ddb42,shared.model,evaluation.test.chance_level,0.5
+cmp-2fd0359ddb42,shared.model,evaluation.protocol,"sequential replay; one seeded uniform-random negative destination per held-out event; balanced, so chance AP/AUC/accuracy = 0.5"
+cmp-2fd0359ddb42,shared.model,why_not_the_existing_tgap_tgn_adapter,"core.TgnModel.TgnTemporalGraphModel reads snapshots (time = snapshot index) and returns the MEAN probability of the last snapshot's edges; it scores no single link and keeps no checkpoint. CoDy explains one event of an event stream, so it cannot query that adapter without changing its semantics. One event-level TGN built from the same modules is trained instead and both explainers call it."
+cmp-2fd0359ddb42,shared.target,event_id,58894
+cmp-2fd0359ddb42,shared.target,source,492
+cmp-2fd0359ddb42,shared.target,destination,463
+cmp-2fd0359ddb42,shared.target,timestamp,14311088
+cmp-2fd0359ddb42,shared.target,timestamp_days,165.6376
+cmp-2fd0359ddb42,shared.target,split,test
+cmp-2fd0359ddb42,shared.target,ground_truth,"the message A -> B was observed at t (positive link, label 1)"
+cmp-2fd0359ddb42,shared.target,ground_truth_label,1
+cmp-2fd0359ddb42,shared.target,history_events,58894
+cmp-2fd0359ddb42,shared.target,prior_messages_between_a_and_b,0
+cmp-2fd0359ddb42,shared.target,selection_rank,0
+cmp-2fd0359ddb42,shared.target,selection_rule,seeded permutation of test-split events; take the first event that is eligible
+cmp-2fd0359ddb42,shared.target,eligibility,"[""no other event shares its timestamp (history = strictly earlier)"", ""both endpoints sent or received a message before t"", ""the model predicts it correctly as a message (logit > 0)""]"
+cmp-2fd0359ddb42,shared.target,selection_seed,42
+cmp-2fd0359ddb42,shared.target,history_fingerprint,2c3bc4aca3247877ff27879bc3329501b14432701099e07c935cb7554ea32d41
+cmp-2fd0359ddb42,shared.target,target_in_history,False
+cmp-2fd0359ddb42,shared.target,latest_history_timestamp,14308814
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.direct_full_replay.logit,0.16196347773075104
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.direct_full_replay.input_fingerprint,2c3bc4aca3247877ff27879bc3329501b14432701099e07c935cb7554ea32d41
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.direct_full_replay.probability,0.5404025874005165
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.selection_stream_pass.logit,0.16196347773075104
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.selection_stream_pass.input_fingerprint,2c3bc4aca3247877ff27879bc3329501b14432701099e07c935cb7554ea32d41
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.selection_stream_pass.probability,0.5404025874005165
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.tgap_adapter.logit,0.16196347773075104
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.tgap_adapter.input_fingerprint,2c3bc4aca3247877ff27879bc3329501b14432701099e07c935cb7554ea32d41
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.tgap_adapter.parameter_fingerprint,d68eb3e77d8b2a40c1ef9bce8aa60e6cf29d65b7fbdedd23be1b5d4b3fb3f349
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.tgap_adapter.probability,0.5404025874005165
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.cody_wrapper.logit,0.16196347773075104
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.cody_wrapper.input_fingerprint,2c3bc4aca3247877ff27879bc3329501b14432701099e07c935cb7554ea32d41
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.cody_wrapper.parameter_fingerprint,d68eb3e77d8b2a40c1ef9bce8aa60e6cf29d65b7fbdedd23be1b5d4b3fb3f349
+cmp-2fd0359ddb42,shared.baseline_consistency,paths.cody_wrapper.probability,0.5404025874005165
+cmp-2fd0359ddb42,shared.baseline_consistency,max_abs_logit_difference,0.0
+cmp-2fd0359ddb42,shared.baseline_consistency,tolerance,1e-09
+cmp-2fd0359ddb42,shared.baseline_consistency,scores_agree,True
+cmp-2fd0359ddb42,shared.baseline_consistency,same_input,True
+cmp-2fd0359ddb42,shared.baseline_consistency,same_model,True
+cmp-2fd0359ddb42,shared.baseline_consistency,passed,True
+cmp-2fd0359ddb42,shared.baseline_consistency,reasons,[]
+cmp-2fd0359ddb42,shared.baseline_consistency,original_logit,0.16196347773075104
+cmp-2fd0359ddb42,shared.baseline_consistency,original_probability,0.5404025874005165
+cmp-2fd0359ddb42,shared.baseline_consistency,original_class,message
+cmp-2fd0359ddb42,shared.comparability,comparable,True
+cmp-2fd0359ddb42,shared.comparability,label,"scientific comparison: same model, same input, same original score"
+cmp-2fd0359ddb42,shared.comparability,shared_model_verified,True
+cmp-2fd0359ddb42,shared.comparability,same_input_verified,True
+cmp-2fd0359ddb42,shared.comparability,explainer_baselines_agree,True
+cmp-2fd0359ddb42,shared.comparability,tgap_status,valid
+cmp-2fd0359ddb42,shared.comparability,cody_status,no_class_change
+cmp-2fd0359ddb42,shared.comparability,requested_scenario_completed,True
+cmp-2fd0359ddb42,shared.comparability,reasons,[]
+cmp-2fd0359ddb42,shared.timings,data_seconds,0.15
+cmp-2fd0359ddb42,shared.timings,model_seconds,286.51
+cmp-2fd0359ddb42,shared.timings,target_seconds,0.02
+cmp-2fd0359ddb42,shared.timings,baseline_seconds,374.93
+cmp-2fd0359ddb42,shared.timings,tgap_seconds,366.08
+cmp-2fd0359ddb42,shared.timings,cody_seconds,260.07
+cmp-2fd0359ddb42,tgap,status,valid
+cmp-2fd0359ddb42,tgap,baseline.logit,0.16196347773075104
+cmp-2fd0359ddb42,tgap,baseline.probability,0.5404025874005165
+cmp-2fd0359ddb42,tgap,baseline.input_fingerprint,2c3bc4aca3247877ff27879bc3329501b14432701099e07c935cb7554ea32d41
+cmp-2fd0359ddb42,tgap,baseline.parameter_fingerprint,d68eb3e77d8b2a40c1ef9bce8aa60e6cf29d65b7fbdedd23be1b5d4b3fb3f349
+cmp-2fd0359ddb42,tgap,primary_direction,Decrease
+cmp-2fd0359ddb42,tgap,model_calls,3
+cmp-2fd0359ddb42,tgap,expected_model_calls,3
+cmp-2fd0359ddb42,tgap,explainer,core.TemporalGraphExplainer.TgapExplainer.explainDetailed (normalization='achieved')
+cmp-2fd0359ddb42,tgap,transformation,core.Transformations.Churn.ChurnTransformation
+cmp-2fd0359ddb42,tgap.plan,concept,Churn
+cmp-2fd0359ddb42,tgap.plan,definition,"mean Jaccard distance between each earlier snapshot's edge set and the latest snapshot's edge set (0 = history identical to the present, 1 = completely different); ChurnTransformation.propertyValue"
+cmp-2fd0359ddb42,tgap.plan,original_churn,0.9720800825012903
+cmp-2fd0359ddb42,tgap.plan,requested_direction,decrease
+cmp-2fd0359ddb42,tgap.plan,requested_delta,-0.2
+cmp-2fd0359ddb42,tgap.plan,window_days,10
+cmp-2fd0359ddb42,tgap.plan,snapshots,17
+cmp-2fd0359ddb42,tgap.plan,temporal_scope,snapshots 1-16 (all history before the latest 10-day window)
+cmp-2fd0359ddb42,tgap.plan,latest_snapshot.window,17
+cmp-2fd0359ddb42,tgap.plan,latest_snapshot.start,13447088
+cmp-2fd0359ddb42,tgap.plan,latest_snapshot.end,14311088
+cmp-2fd0359ddb42,tgap.plan,latest_snapshot.events,747
+cmp-2fd0359ddb42,tgap.plan,latest_snapshot.edges,190
+cmp-2fd0359ddb42,tgap.plan,constraints,"[""the latest snapshot is kept exactly (TGAP's Churn anchor)"", ""every snapshot keeps its node set and edge count (remove-one-add-one swaps)"", ""no community constraint (communities=None): every edge is churn-eligible"", ""lift to events keeps the number, timing and order of events; only the addressee pair of swapped messages changes""]"
+cmp-2fd0359ddb42,tgap.plan,transformation_seed,42
+cmp-2fd0359ddb42,tgap.increase,direction,Increase
+cmp-2fd0359ddb42,tgap.increase,label,Increase Churn (20.0%)
+cmp-2fd0359ddb42,tgap.increase,requested_delta,0.2
+cmp-2fd0359ddb42,tgap.increase,churn_before,0.9720800825012903
+cmp-2fd0359ddb42,tgap.increase,churn_after,0.975281448817944
+cmp-2fd0359ddb42,tgap.increase,achieved_delta,0.003293315411232528
+cmp-2fd0359ddb42,tgap.increase,achieved_delta_recomputed,0.003293315411232528
+cmp-2fd0359ddb42,tgap.increase,original_probability,0.5404025874005165
+cmp-2fd0359ddb42,tgap.increase,modified_probability,0.5417411356257146
+cmp-2fd0359ddb42,tgap.increase,original_logit,0.16196347773075104
+cmp-2fd0359ddb42,tgap.increase,modified_logit,0.1673540472984314
+cmp-2fd0359ddb42,tgap.increase,prediction_change,0.0013385482251980774
+cmp-2fd0359ddb42,tgap.increase,class_before,message
+cmp-2fd0359ddb42,tgap.increase,class_after,message
+cmp-2fd0359ddb42,tgap.increase,class_changed,False
+cmp-2fd0359ddb42,tgap.increase,normalized_impact,0.4064439806259322
+cmp-2fd0359ddb42,tgap.increase,normalizer,achieved
+cmp-2fd0359ddb42,tgap.increase,noop,False
+cmp-2fd0359ddb42,tgap.increase,status,valid
+cmp-2fd0359ddb42,tgap.increase,latest_snapshot_preserved,True
+cmp-2fd0359ddb42,tgap.increase,edge_count_preserved_every_snapshot,True
+cmp-2fd0359ddb42,tgap.increase,lift_round_trip,True
+cmp-2fd0359ddb42,tgap.increase,edge_swaps_per_snapshot,"[0, 0, 1, 2, 2, 3, 1, 1, 1, 1, 2, 2, 2, 2, 2, 6]"
+cmp-2fd0359ddb42,tgap.increase,edges_swapped_total,28
+cmp-2fd0359ddb42,tgap.increase,events_readdressed,174
+cmp-2fd0359ddb42,tgap.increase,events_readdressed_touching_a_or_b,0
+cmp-2fd0359ddb42,tgap.increase,events_total,58894
+cmp-2fd0359ddb42,tgap.increase,modified_input_fingerprint,7d590bbbc2895176438824cae12df16d726c2653731d368cfdaca5d7546b979d
+cmp-2fd0359ddb42,tgap.increase,leakage.Density.before,0.0005900638976691418
+cmp-2fd0359ddb42,tgap.increase,leakage.Density.after,0.0005900638976691418
+cmp-2fd0359ddb42,tgap.increase,leakage.Density.change,0.0
+cmp-2fd0359ddb42,tgap.increase,leakage.Centralization.before,0.03421871450958648
+cmp-2fd0359ddb42,tgap.increase,leakage.Centralization.after,0.034155768018643194
+cmp-2fd0359ddb42,tgap.increase,leakage.Centralization.change,-6.294649094328725e-05
+cmp-2fd0359ddb42,tgap.increase,side_effects.event_count_and_timestamps,unchanged by construction
+cmp-2fd0359ddb42,tgap.increase,side_effects.synthetic_events,174
+cmp-2fd0359ddb42,tgap.increase,side_effects.density_change_mean_over_snapshots,0.0
+cmp-2fd0359ddb42,tgap.increase,side_effects.centralization_change_mean_over_snapshots,-6.294649094328725e-05
+cmp-2fd0359ddb42,tgap.decrease,direction,Decrease
+cmp-2fd0359ddb42,tgap.decrease,label,Decrease Churn (20.0%)
+cmp-2fd0359ddb42,tgap.decrease,requested_delta,-0.2
+cmp-2fd0359ddb42,tgap.decrease,churn_before,0.9720800825012903
+cmp-2fd0359ddb42,tgap.decrease,churn_after,0.8573292979924709
+cmp-2fd0359ddb42,tgap.decrease,achieved_delta,-0.11804663687126524
+cmp-2fd0359ddb42,tgap.decrease,achieved_delta_recomputed,-0.11804663687126524
+cmp-2fd0359ddb42,tgap.decrease,original_probability,0.5404025874005165
+cmp-2fd0359ddb42,tgap.decrease,modified_probability,0.5323725596905708
+cmp-2fd0359ddb42,tgap.decrease,original_logit,0.16196347773075104
+cmp-2fd0359ddb42,tgap.decrease,modified_logit,0.1296716332435608
+cmp-2fd0359ddb42,tgap.decrease,prediction_change,-0.008030027709945653
+cmp-2fd0359ddb42,tgap.decrease,class_before,message
+cmp-2fd0359ddb42,tgap.decrease,class_after,message
+cmp-2fd0359ddb42,tgap.decrease,class_changed,False
+cmp-2fd0359ddb42,tgap.decrease,normalized_impact,-0.06802419723911941
+cmp-2fd0359ddb42,tgap.decrease,normalizer,achieved
+cmp-2fd0359ddb42,tgap.decrease,noop,False
+cmp-2fd0359ddb42,tgap.decrease,status,valid
+cmp-2fd0359ddb42,tgap.decrease,latest_snapshot_preserved,True
+cmp-2fd0359ddb42,tgap.decrease,edge_count_preserved_every_snapshot,True
+cmp-2fd0359ddb42,tgap.decrease,lift_round_trip,True
+cmp-2fd0359ddb42,tgap.decrease,edge_swaps_per_snapshot,"[5, 189, 186, 180, 181, 174, 136, 58, 105, 71, 60, 45, 55, 57, 34, 38]"
+cmp-2fd0359ddb42,tgap.decrease,edges_swapped_total,1574
+cmp-2fd0359ddb42,tgap.decrease,events_readdressed,4841
+cmp-2fd0359ddb42,tgap.decrease,events_readdressed_touching_a_or_b,226
+cmp-2fd0359ddb42,tgap.decrease,events_total,58894
+cmp-2fd0359ddb42,tgap.decrease,modified_input_fingerprint,00db72073f82d883576218dfea2bcbc1bbdd726630d0dbd78422553b99d17ea9
+cmp-2fd0359ddb42,tgap.decrease,leakage.Density.before,0.0005900638976691418
+cmp-2fd0359ddb42,tgap.decrease,leakage.Density.after,0.0005900638976691418
+cmp-2fd0359ddb42,tgap.decrease,leakage.Density.change,0.0
+cmp-2fd0359ddb42,tgap.decrease,leakage.Centralization.before,0.03421871450958648
+cmp-2fd0359ddb42,tgap.decrease,leakage.Centralization.after,0.031165809698837022
+cmp-2fd0359ddb42,tgap.decrease,leakage.Centralization.change,-0.0030529048107494593
+cmp-2fd0359ddb42,tgap.decrease,side_effects.event_count_and_timestamps,unchanged by construction
+cmp-2fd0359ddb42,tgap.decrease,side_effects.synthetic_events,4841
+cmp-2fd0359ddb42,tgap.decrease,side_effects.density_change_mean_over_snapshots,0.0
+cmp-2fd0359ddb42,tgap.decrease,side_effects.centralization_change_mean_over_snapshots,-0.0030529048107494593
+cmp-2fd0359ddb42,cody,upstream.repository,https://github.com/daniel-gomm/CoDy
+cmp-2fd0359ddb42,cody,upstream.commit,0a004c2ad171b7ded59751c2179b64bf7738693a
+cmp-2fd0359ddb42,cody,upstream.commit_date,2025-10-02
+cmp-2fd0359ddb42,cody,upstream.license,"MIT (Copyright (c) 2025 Daniel Gomm), third_party/cody/LICENSE.md"
+cmp-2fd0359ddb42,cody,upstream.paper,https://proceedings.mlr.press/v267/qu25b.html
+cmp-2fd0359ddb42,cody,upstream.modified,False
+cmp-2fd0359ddb42,cody,configuration.selection_policy,spatio-temporal
+cmp-2fd0359ddb42,cody,configuration.num_hops,2
+cmp-2fd0359ddb42,cody,configuration.candidates_size,64
+cmp-2fd0359ddb42,cody,configuration.max_steps,300
+cmp-2fd0359ddb42,cody,configuration.alpha,0.6666666666666666
+cmp-2fd0359ddb42,cody,configuration.approximate_predictions,True
+cmp-2fd0359ddb42,cody,configuration.time_limit_seconds,1800
+cmp-2fd0359ddb42,cody,configuration.seed,42
+cmp-2fd0359ddb42,cody,wrapper,compare_explainers.cody_adapter.TgapTgnCoDyWrapper (cody.implementations.connector.TGNNWrapper subclass)
+cmp-2fd0359ddb42,cody,candidate_size,64
+cmp-2fd0359ddb42,cody,runtime_seconds,146.6
+cmp-2fd0359ddb42,cody,search_steps_logged,301
+cmp-2fd0359ddb42,cody,oracle_calls,301
+cmp-2fd0359ddb42,cody,events_replayed,77317
+cmp-2fd0359ddb42,cody,original_prediction_path.logit,0.16196347773075104
+cmp-2fd0359ddb42,cody,original_prediction_path.input_fingerprint,2c3bc4aca3247877ff27879bc3329501b14432701099e07c935cb7554ea32d41
+cmp-2fd0359ddb42,cody,original_prediction_path.input_events,58894
+cmp-2fd0359ddb42,cody,original_prediction_path.input_is_full_prefix,True
+cmp-2fd0359ddb42,cody,original_prediction_path.parameter_fingerprint,d68eb3e77d8b2a40c1ef9bce8aa60e6cf29d65b7fbdedd23be1b5d4b3fb3f349
+cmp-2fd0359ddb42,cody,status,no_class_change
+cmp-2fd0359ddb42,cody,termination,step budget exhausted (max_steps=300)
+cmp-2fd0359ddb42,cody,counterfactual_found,False
+cmp-2fd0359ddb42,cody,achieves_counterfactual_explanation_reported,False
+cmp-2fd0359ddb42,cody,event_count,2
+cmp-2fd0359ddb42,cody,sparsity,0.03125
+cmp-2fd0359ddb42,cody,sparsity_definition,"explanation size / candidate size (CoDy repository, evaluate_factual_subgraphs.py)"
+cmp-2fd0359ddb42,cody,original_logit,0.16196347773075104
+cmp-2fd0359ddb42,cody,original_probability,0.5404025874005165
+cmp-2fd0359ddb42,cody,counterfactual_logit_reported,0.11803468316793442
+cmp-2fd0359ddb42,cody,counterfactual_probability_reported,0.5294744584312593
+cmp-2fd0359ddb42,cody,counterfactual_logit_exact,0.11803468316793442
+cmp-2fd0359ddb42,cody,counterfactual_probability_exact,0.5294744584312593
+cmp-2fd0359ddb42,cody,score_change_exact,-0.010928128969257211
+cmp-2fd0359ddb42,cody,class_before,message
+cmp-2fd0359ddb42,cody,class_after_exact,message
+cmp-2fd0359ddb42,cody,class_changed_exact,False
+cmp-2fd0359ddb42,cody,raw_importances,"[-0.007798835635185242, 0.04392879456281662]"
+cmp-2fd0359ddb42,cody,error,

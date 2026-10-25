@@ -123,7 +123,7 @@ class GuidedEngineTests(unittest.TestCase):
     def test_conclusion_and_provenance(self):
         self.assertEqual(self.g['experiment_status']['code'], 'responded')
         self.assertIn('sensitive to Bridge Width', self.g['conclusion'])
-        self.assertIn('does not show that Bridge Width causes', self.g['conclusion'])
+        self.assertIn('does not show that Bridge Width concept causes', self.g['conclusion'])
         self.assertEqual(self.g['config_hash'], stable_hash(self.g['spec']))
         self.assertEqual(self.g['provenance']['seed'], 42)
         self.assertTrue(self.g['provenance']['core_sha256'])

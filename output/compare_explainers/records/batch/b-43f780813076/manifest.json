@@ -1,0 +1,390 @@
+{
+  "batch_id": "b-43f780813076",
+  "count": 30,
+  "selection_rule": {
+    "split": "test",
+    "seed": 42,
+    "rule": "seeded permutation of test-split events; take the first event that is eligible",
+    "eligibility": [
+      "no other event shares its timestamp (history = strictly earlier)",
+      "both endpoints sent or received a message before t",
+      "the model predicts it correctly as a message (logit > 0)"
+    ],
+    "max_candidates_examined": 400
+  },
+  "examined_candidates": [
+    {
+      "rank": 0,
+      "event_id": 58894,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 1,
+      "event_id": 57446,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 2,
+      "event_id": 53069,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 3,
+      "event_id": 54270,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 4,
+      "event_id": 52120,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 5,
+      "event_id": 59550,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 6,
+      "event_id": 52855,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 7,
+      "event_id": 56977,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 8,
+      "event_id": 52950,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 9,
+      "event_id": 58811,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 10,
+      "event_id": 54407,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 11,
+      "event_id": 53581,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 12,
+      "event_id": 53775,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 13,
+      "event_id": 52310,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 14,
+      "event_id": 54764,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 15,
+      "event_id": 54507,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 16,
+      "event_id": 58436,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 17,
+      "event_id": 54393,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 18,
+      "event_id": 55600,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 19,
+      "event_id": 58433,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 20,
+      "event_id": 59288,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 21,
+      "event_id": 54815,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 22,
+      "event_id": 52895,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 23,
+      "event_id": 52011,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 24,
+      "event_id": 51482,
+      "excluded": true,
+      "reasons": [
+        "model predicts no message (logit -0.0324)"
+      ]
+    },
+    {
+      "rank": 25,
+      "event_id": 59449,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 26,
+      "event_id": 59193,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 27,
+      "event_id": 59664,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 28,
+      "event_id": 55160,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 29,
+      "event_id": 51849,
+      "excluded": false,
+      "reasons": []
+    },
+    {
+      "rank": 30,
+      "event_id": 57197,
+      "excluded": false,
+      "reasons": []
+    }
+  ],
+  "checkpoint_sha256": "8311596a2405b25a76905e1eee14bc89f66135ddea1a9c4d4a42210009e95219",
+  "configuration_hash": "2fd0359ddb429df24f5bb4b3525ba1b7ecb2bdd9e7a59aa4732d19d3d53cb4dd",
+  "seconds": 4677.3,
+  "cases": [
+    {
+      "case_id": "uci-58894",
+      "selection_rank": 0,
+      "record": "uci-58894.json",
+      "record_sha256": "a07733b50b67921625e75808d186d10864e84f62f0a82565a001c6ff876b483e"
+    },
+    {
+      "case_id": "uci-57446",
+      "selection_rank": 1,
+      "record": "uci-57446.json",
+      "record_sha256": "9b4749a1802ba1be49c6b1f0c241a1b7ee61cdf60f0e547612e831d118204424"
+    },
+    {
+      "case_id": "uci-53069",
+      "selection_rank": 2,
+      "record": "uci-53069.json",
+      "record_sha256": "343218bcc4825ff752087b3c418a472968790ead518c93333f1b90ed2eb5773a"
+    },
+    {
+      "case_id": "uci-54270",
+      "selection_rank": 3,
+      "record": "uci-54270.json",
+      "record_sha256": "0df894886916ebb2c56fb76c1b7d19035a9328778a67302a3d14ec51bfd5544d"
+    },
+    {
+      "case_id": "uci-52120",
+      "selection_rank": 4,
+      "record": "uci-52120.json",
+      "record_sha256": "f985b810d0388e077ab83d0098317ec801477a6fc57dedf3c19b7f8ad68366e9"
+    },
+    {
+      "case_id": "uci-59550",
+      "selection_rank": 5,
+      "record": "uci-59550.json",
+      "record_sha256": "122445527933c65baef4c18c7681d9a7b6ef82bec9dadf3bcf87f43f86201678"
+    },
+    {
+      "case_id": "uci-52855",
+      "selection_rank": 6,
+      "record": "uci-52855.json",
+      "record_sha256": "0fae6032550c983157602af0dbacd04af6a8d0f8a601f8c1adf4dc4b47b41493"
+    },
+    {
+      "case_id": "uci-56977",
+      "selection_rank": 7,
+      "record": "uci-56977.json",
+      "record_sha256": "c43c52496295b2e3304d28b16b045524bd178b9740f0749023b56e0ade8101a3"
+    },
+    {
+      "case_id": "uci-52950",
+      "selection_rank": 8,
+      "record": "uci-52950.json",
+      "record_sha256": "e31d9fa6d67164cece4160759eea815c85fb21b8f30eea3bc545b7e01f3dda48"
+    },
+    {
+      "case_id": "uci-58811",
+      "selection_rank": 9,
+      "record": "uci-58811.json",
+      "record_sha256": "dd930395f320705d50115822c860a1cf5222592e4d91fb41df3fb4a22ee3ab98"
+    },
+    {
+      "case_id": "uci-54407",
+      "selection_rank": 10,
+      "record": "uci-54407.json",
+      "record_sha256": "b57bfd47f18f0dd3d89ba5f9e23a2b975c059f737eb7f62f4f59ca1081285d11"
+    },
+    {
+      "case_id": "uci-53581",
+      "selection_rank": 11,
+      "record": "uci-53581.json",
+      "record_sha256": "531be2fc65eec63e38e943077deee72e33b16b87196fe7d800a0ad1eecafd6ea"
+    },
+    {
+      "case_id": "uci-53775",
+      "selection_rank": 12,
+      "record": "uci-53775.json",
+      "record_sha256": "ede2f638aa8c84fe2ee6f2b87f677ec48478a1d64960d8a2d78a096473849d6d"
+    },
+    {
+      "case_id": "uci-52310",
+      "selection_rank": 13,
+      "record": "uci-52310.json",
+      "record_sha256": "603b8b84668d19e9c3db4d63b026ec53a1dd0f8e9a063977ee5d9d9f82cab986"
+    },
+    {
+      "case_id": "uci-54764",
+      "selection_rank": 14,
+      "record": "uci-54764.json",
+      "record_sha256": "7ad40c39307e905fe81e1156e185ab6559deeaa4464a503bdfc99c74e44f2c4e"
+    },
+    {
+      "case_id": "uci-54507",
+      "selection_rank": 15,
+      "record": "uci-54507.json",
+      "record_sha256": "0a868730852254e632a51e55760070afde7c7209fe2f79f1ef86d9b944990a5b"
+    },
+    {
+      "case_id": "uci-58436",
+      "selection_rank": 16,
+      "record": "uci-58436.json",
+      "record_sha256": "517410e82c334c3aaa54364a3dfc40562f33cf5a82e504467eb0db81285cbf7e"
+    },
+    {
+      "case_id": "uci-54393",
+      "selection_rank": 17,
+      "record": "uci-54393.json",
+      "record_sha256": "bda6c96def6af4c31a6d2e019cf0d6195787ee036106909f5d1bbe554e1c854f"
+    },
+    {
+      "case_id": "uci-55600",
+      "selection_rank": 18,
+      "record": "uci-55600.json",
+      "record_sha256": "e1e869b7acfa2e3d2c5533fbd286a809ed55309f895ba30ae3a5e8638839e999"
+    },
+    {
+      "case_id": "uci-58433",
+      "selection_rank": 19,
+      "record": "uci-58433.json",
+      "record_sha256": "2b54e06e6a1d43df245f7322d5664eb7495b8d35875e7165265a04499ab19886"
+    },
+    {
+      "case_id": "uci-59288",
+      "selection_rank": 20,
+      "record": "uci-59288.json",
+      "record_sha256": "326779b1ecabcb95e24153f8e8a6f39df92ba3e2e027a4adf8d953952e37918d"
+    },
+    {
+      "case_id": "uci-54815",
+      "selection_rank": 21,
+      "record": "uci-54815.json",
+      "record_sha256": "6d87a5f42db8fbb7f88e4138865ea68924021cfd520f34086399d490e4d41f36"
+    },
+    {
+      "case_id": "uci-52895",
+      "selection_rank": 22,
+      "record": "uci-52895.json",
+      "record_sha256": "4a367383cdcd42cf72e58bd9744b9253930e6dd2533d9302f4e9550376186693"
+    },
+    {
+      "case_id": "uci-52011",
+      "selection_rank": 23,
+      "record": "uci-52011.json",
+      "record_sha256": "d59b7eb2c09d5f15c240a3e748e73f5d96ef12fab0583b5857808ee8e5f47474"
+    },
+    {
+      "case_id": "uci-59449",
+      "selection_rank": 25,
+      "record": "uci-59449.json",
+      "record_sha256": "0c07b6a90e55ad50a02a572d63fa2e165226e9eb259ec0f2daf8d1de2965c863"
+    },
+    {
+      "case_id": "uci-59193",
+      "selection_rank": 26,
+      "record": "uci-59193.json",
+      "record_sha256": "246afcaefa0658527acdee633d83f4ac71c7f2eea6519599d6f9c78e1606fce5"
+    },
+    {
+      "case_id": "uci-59664",
+      "selection_rank": 27,
+      "record": "uci-59664.json",
+      "record_sha256": "63d59baf3951be94acfeb5fb86b18c8d9851367af1ae4f730bc8a522acf25640"
+    },
+    {
+      "case_id": "uci-55160",
+      "selection_rank": 28,
+      "record": "uci-55160.json",
+      "record_sha256": "7003fe6307a21ad5a0bda78cc71041286addac9f60b11ddbee2e47c8da3784c1"
+    },
+    {
+      "case_id": "uci-51849",
+      "selection_rank": 29,
+      "record": "uci-51849.json",
+      "record_sha256": "5cd789e675bcf7e6941126fd7df57a35cfa2c322eda8c1f7ac9b1d632ec4253f"
+    },
+    {
+      "case_id": "uci-57197",
+      "selection_rank": 30,
+      "record": "uci-57197.json",
+      "record_sha256": "e6f05ff4c947c695c1734ac92bd8d941ab3289d7f2cd0a9ab4d0eadd86f0b909"
+    }
+  ]
+}

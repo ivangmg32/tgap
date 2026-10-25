@@ -15,14 +15,23 @@ import statistics
 from sandbox.interpret import explain
 
 GROUPS = [
-    ('intervention', 'Intervention behaviour', 'What was requested, what was achieved, and how the prediction moved.'),
-    ('global', 'Concept impacts across models', 'The paper\'s global views (Figs 2, 3, 4, 11), regenerated for your dataset.'),
-    ('temporal', 'Temporal sensitivity', 'Whether and when history matters to the model.'),
-    ('local', 'Local structure and elements', 'The concrete graph change and element-level measurements.'),
-    ('side_effects', 'Unintended effects', 'How non-target properties moved.'),
-    ('robustness', 'Stability, size and computational cost', 'Repeatability, graph-size behaviour and model-call budget.'),
-    ('reference', 'Static figures and published references', 'Conceptual illustrations and results that cannot be recomputed here.'),
+    ('changed', 'What Changed in the Network', 'What was asked for, what really changed, and what else changed by accident.'),
+    ('response', 'How the Model Responded', 'How each model’s answer reacts when a network property is changed.'),
+    ('time', 'What Happened Over Time', 'Whether, and when, the network’s past matters to each model.'),
+    ('reliable', 'How Reliable Are the Results?', 'Whether the results hold up when the test is repeated or set up differently.'),
+    ('work', 'How Much Work Did the Experiment Require?', 'How many times the model was asked, and what that cost.'),
+    ('reference', 'Research References', 'Diagrams and published results that are not computed from your run.'),
 ]
+
+# Each chart's group, chosen by what the chart is for (applied to INVENTORY below).
+GROUP_OF = dict(
+    requested_vs_achieved='changed', validity_map='changed', local_graph='changed', trajectory='changed', bridge_matrix='changed', leakage='changed',
+    model_separated_impacts='response', beeswarm='response', boxplot='response', impact_distribution='response', matched_comparison='response',
+    local_bar='response', dependence='response',
+    temporal_local='time', edge_time='time', temporal_sensitivity='time',
+    seed_stability='reliable', graph_size='reliable', normalization='reliable', delta_sensitivity='reliable', faithfulness='reliable',
+    efficiency='work', workflow='reference', tgn_seed_stability='reference',
+)
 
 # kind: dynamic | conditional (needs an opt-in or dataset type) | static | blocked
 INVENTORY = [
@@ -171,6 +180,8 @@ INVENTORY = [
          blocked='The workbench models are the six real-data analytical variants (Table 4), not the known-truth suite, and no analytical expectation is defined for an arbitrary dataset. Run `tgap run paper` locally for RQ1. Your persistence-model runs on synthetic data can still be checked by hand: a present-only Bridge Width model\'s impact equals its baseline bridge count when bridges are constant over time.'),
 ]
 
+for _item in INVENTORY:
+    _item['group'] = GROUP_OF.get(_item['id'], _item['group'])
 INVENTORY_BY_ID = {item['id']: item for item in INVENTORY}
 
 
@@ -185,6 +196,20 @@ def chart(item_id, status, data=None, scope='', deviation='', ctx=None):
                    kind=item['kind'], status=status, scope=scope, deviation=deviation, data=data, axes=item['axes'],
                    blocked=item.get('blocked'))
     payload['explanation'] = explain(item_id, payload, ctx or {})
+    # Plain-language reading aids: axes, colours and two very easy sentences.
+    from sandbox.easy import easy_result, guide, label_terms
+    meta = CHART_META.get(item_id, {})
+    payload['technical_title'] = label_terms(payload['title'])
+    payload['title'] = label_terms(meta.get('title', payload['title']))
+    payload['metric'] = meta.get('metric')
+    payload['question'] = meta.get('question', '')
+    payload['provenance'] = ('published' if item['kind'] in ('blocked',) or (item['kind'] == 'static' and item_id != 'workflow')
+                             else meta.get('provenance', 'current run'))
+    payload['status_label'] = STATUS_LABEL.get(status, '')
+    payload['subtitle'] = label_terms(subtitle(item_id, ctx or {}))
+    payload['guide'] = guide(item_id)
+    payload['explanation']['easy_shows'] = payload['guide']['shows']
+    payload['explanation']['easy_result'] = easy_result(item_id, payload, ctx or {})
     return payload
 
 
@@ -502,3 +527,53 @@ def _tgn(ctx):
 
 def _faithfulness(ctx):
     return chart('faithfulness', 'blocked', ctx=ctx)
+
+
+##  User-facing titles, metric, provenance and subtitle (chart redesign)  ##
+# Titles say what the chart answers; the paper reference stays as a badge.
+# provenance: current run | requested sweep (extra runs on the user's data).
+CHART_META = dict(
+    workflow=dict(question='Shows the steps TGAP took to produce your explanation.', title='How TGAP produced your explanation', metric='model_calls'),
+    model_separated_impacts=dict(question='Shows, for each model, how much its answer moved when each network property was changed.', title='How strongly does each model react to each concept?', metric='normalized_impact', provenance='requested sweep'),
+    beeswarm=dict(question='Shows every single test as one dot, so you can see how the reactions are spread out.', title='All model reactions, one dot per test', metric='normalized_impact', provenance='requested sweep'),
+    boxplot=dict(question='Shows the usual range of reactions for each model.', title='Typical range of reactions for each model', metric='normalized_impact', provenance='requested sweep'),
+    tgn_seed_stability=dict(question='Shows whether a trained neural model gives similar quality when trained again from a different start.', title='Is a trained neural model (TGN) stable across training seeds?', metric='auc'),
+    local_graph=dict(question='Shows which connections TGAP added or removed, period by period.', title='Which connections did TGAP change?', metric=None),
+    local_bar=dict(question='Shows which single connections move the model’s answer most when they are taken out.', title='Which single connections move the prediction when removed?', metric='prediction_change'),
+    temporal_local=dict(question='Shows which period of time matters most to each model.', title='Which moment in time matters to each model?', metric='prediction_change', provenance='requested sweep'),
+    edge_time=dict(question='Shows which connections matter at which moment in time.', title='Which connections matter at which time?', metric='prediction_change'),
+    dependence=dict(question='Shows whether busier parts of the network matter more to the model.', title='Do busier parts of the network matter more?', metric='prediction_change'),
+    impact_distribution=dict(question='Shows small and large reactions on one common scale.', title='Small and large reactions on one scale', metric='normalized_impact', provenance='requested sweep'),
+    bridge_matrix=dict(question='Shows how connections between groups of students changed.', title='How did connections between communities change?', metric=None),
+    requested_vs_achieved=dict(question='Shows whether TGAP changed the network by the amount that was asked for.', title='Did the graph change as much as you asked?', metric='achieved_change', provenance='requested sweep'),
+    validity_map=dict(question='Shows which requested changes could be carried out correctly.', title='Which requested changes could be carried out?', metric='validity', provenance='requested sweep'),
+    delta_sensitivity=dict(question='Shows whether asking for a bigger change gives a bigger reaction.', title='Does a larger requested change produce a larger reaction?', metric='normalized_impact', provenance='requested sweep'),
+    normalization=dict(question='Shows how the result looks when divided by the real change versus the requested change.', title='Dividing by the real change versus the requested change', metric='requested_normalization', provenance='requested sweep'),
+    temporal_sensitivity=dict(question='Shows which models use the past and which use only the present.', title='Which models read the past, and which only the present?', metric='normalized_impact', provenance='requested sweep'),
+    trajectory=dict(question='Shows the network property over time, before and after the change.', title='The concept over time, before and after the change', metric='achieved_change'),
+    leakage=dict(question='Shows what else in the network changed by accident.', title='What else changed by accident?', metric='leakage', provenance='requested sweep'),
+    seed_stability=dict(question='Shows whether repeating the test with different random choices gives the same answer.', title='Do repeated runs give the same answer?', metric='seed_sd', provenance='requested sweep'),
+    efficiency=dict(question='Shows whether TGAP asked the model the expected number of times.', title='Did TGAP use the expected number of model calls?', metric='model_calls', provenance='requested sweep'),
+    graph_size=dict(question='Shows whether the result still holds for bigger and smaller networks.', title='Does the reaction hold for bigger and smaller networks?', metric='normalized_impact', provenance='requested sweep'),
+    matched_comparison=dict(question='Shows which network properties can be compared with each other fairly.', title='Which concepts can be compared fairly?', metric='normalized_impact', provenance='requested sweep'),
+    faithfulness=dict(question='Shows whether TGAP finds answers that are known in advance.', title='Does TGAP recover answers that are known in advance?', metric='normalized_impact'),
+)
+STATUS_LABEL = dict(ok='', partial='Partial: a bounded subset was measured', not_requested='Not requested',
+                    not_applicable='Not applicable', blocked='Blocked \u2014 reason shown', unavailable='Blocked \u2014 reason shown')
+
+
+def subtitle(item_id, ctx):
+    spec = ctx.get('spec') or {}
+    if not spec:
+        return ''
+    from sandbox.easy import model_label
+    parts = [f"Dataset: {spec.get('dataset')}"]
+    if item_id in ('model_separated_impacts', 'beeswarm', 'boxplot', 'impact_distribution', 'temporal_sensitivity',
+                   'temporal_local', 'validity_map', 'efficiency'):
+        parts.append(f"models: {len((spec.get('sweep') or {}).get('models', []))} compared")
+    else:
+        parts.append(f"model: {model_label(spec.get('model'))}")
+    if ctx.get('selected'):
+        parts.append(f"concept: {ctx['selected']} ({spec.get('direction')} {abs(spec.get('delta', 0)) * 100:g}%)")
+    parts.append(f"seed {spec.get('seed')}")
+    return ' \u00b7 '.join(parts)

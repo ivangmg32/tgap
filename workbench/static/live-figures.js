@@ -21,7 +21,7 @@ function liveNodeGraph(analysis){
 function liveScatter(rows,xKey,title,xLabel){
   const xs=rows.map(r=>r[xKey]),ys=rows.map(r=>r.impact),xMax=Math.max(...xs,1),low=Math.min(0,...ys),high=Math.max(0,...ys,low+.001),x=v=>85+v/xMax*555,y=v=>270-(v-low)/(high-low)*210;
   let content='';for(let i=0;i<5;i++){const value=low+(high-low)*i/4;content+=`<line x1="85" x2="640" y1="${y(value)}" y2="${y(value)}" stroke="#e6edf4"/><text x="73" y="${y(value)+5}" text-anchor="end" font-size="14" fill="#566b82">${number(value)}</text><text x="${x(xMax*i/4)}" y="295" text-anchor="middle" font-size="14" fill="#566b82">${number(xMax*i/4)}</text>`;}
-  rows.forEach(row=>{content+=`<circle cx="${x(row[xKey])}" cy="${y(row.impact)}" r="5" fill="${row.impact>=0?'#345f92':'#b56c38'}" opacity=".7"><title>${esc(row.node!==undefined?'Node '+row.node:'Edge '+row.u+'–'+row.v)}: ${xLabel} ${row[xKey]}, response ${number(row.impact,true)}</title></circle>`;});
+  rows.forEach(row=>{content+=`<circle cx="${x(row[xKey])}" cy="${y(row.impact)}" r="5" fill="${Math.abs(row.impact)<1e-9?'#8094a9':row.impact>0?'#345f92':'#b56c38'}" opacity=".7"><title>${esc(row.node!==undefined?'Node '+row.node:'Edge '+row.u+'–'+row.v)}: ${xLabel} ${row[xKey]}, response ${number(row.impact,true)}</title></circle>`;});
   content+=`<text x="360" y="326" text-anchor="middle" font-size="16" fill="#566b82">${esc(xLabel)}</text><text x="19" y="165" transform="rotate(-90 19 165)" text-anchor="middle" font-size="16" fill="#566b82">Prediction difference after removal</text>`;
   return svgFrame(title,content,720,345);
 }
