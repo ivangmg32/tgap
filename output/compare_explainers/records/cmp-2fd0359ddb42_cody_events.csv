@@ -1,0 +1,3 @@
+experiment_id,event_id,order_in_explanation,source,destination,timestamp,days_before_target,involves_a_or_b,absolute_importance
+cmp-2fd0359ddb42,58872,1,492,1181,14287254,0.276,True,-0.007798835635185242
+cmp-2fd0359ddb42,58873,2,492,1181,14287414,0.274,True,0.05172763019800186

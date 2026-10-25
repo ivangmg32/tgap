@@ -78,6 +78,17 @@ with db() as conn:
         conn.execute('ALTER TABLE jobs ADD COLUMN progress TEXT')
     conn.execute('''CREATE TABLE IF NOT EXISTS guided_events(id INTEGER PRIMARY KEY, study_id TEXT NOT NULL REFERENCES studies(id),
         event TEXT NOT NULL, step TEXT NOT NULL, job_id TEXT, scenario TEXT, created REAL NOT NULL)''')
+    # Compare Explainers study: own consent, pseudonymous code, responses paired by participant and case.
+    conn.execute('''CREATE TABLE IF NOT EXISTS cmp_sessions(id TEXT PRIMARY KEY, owner TEXT NOT NULL, participant TEXT NOT NULL,
+        bank TEXT NOT NULL, method_order TEXT NOT NULL, case_order TEXT NOT NULL, consent_version TEXT NOT NULL,
+        started REAL NOT NULL, finished REAL, UNIQUE(owner,bank))''')
+    conn.execute('''CREATE TABLE IF NOT EXISTS cmp_responses(id INTEGER PRIMARY KEY, session_id TEXT NOT NULL REFERENCES cmp_sessions(id),
+        case_id TEXT NOT NULL, stage TEXT NOT NULL, answers TEXT NOT NULL, correct TEXT NOT NULL, elapsed REAL NOT NULL,
+        submitted REAL NOT NULL, UNIQUE(session_id,case_id,stage))''')
+    conn.execute('''CREATE TABLE IF NOT EXISTS cmp_pre(session_id TEXT PRIMARY KEY REFERENCES cmp_sessions(id),
+        version TEXT NOT NULL, answers TEXT NOT NULL, submitted REAL NOT NULL, updated REAL NOT NULL)''')
+    conn.execute('''CREATE TABLE IF NOT EXISTS cmp_events(id INTEGER PRIMARY KEY, session_id TEXT NOT NULL REFERENCES cmp_sessions(id),
+        case_id TEXT NOT NULL, stage TEXT NOT NULL, created REAL NOT NULL)''')
     conn.execute('CREATE INDEX IF NOT EXISTS jobs_study_idx ON jobs(study_id,created)')
     conn.execute('CREATE INDEX IF NOT EXISTS studies_started_idx ON studies(started)')
     conn.execute("UPDATE jobs SET status='failed', error='The service restarted. Please run this experiment again.' WHERE status IN ('queued','running')")
@@ -178,7 +189,9 @@ class Login(BaseModel):
 
 
 class Registration(Login):
-    username: str = Field(min_length=3,max_length=32,pattern=r'^[A-Za-z][A-Za-z0-9_-]*$')
+    # Accounts are identified by e-mail address (stored in lowercase). Study
+    # records never contain it: they are keyed by a random participant code.
+    username: str = Field(min_length=6,max_length=254,pattern=r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
     password: str = Field(min_length=15,max_length=128)
 
 
@@ -259,10 +272,10 @@ def register(form: Registration,request: Request,response: Response):
     if form.password.casefold() in ('passwordpassword','123456789012345','qwertyuiopasdfgh','password123456789'):
         raise HTTPException(422,'Choose a less predictable password or passphrase.')
     if account_for(username):
-        raise HTTPException(409,'That username is unavailable. Choose another.')
+        raise HTTPException(409,'An account with that e-mail address already exists. Please sign in.')
     try:SECURITY.register(username,form.password)
     except sqlite3.IntegrityError:
-        raise HTTPException(409,'That username is unavailable. Choose another.') from None
+        raise HTTPException(409,'An account with that e-mail address already exists. Please sign in.') from None
     return create_session(account_for(username),response)
 
 
@@ -533,7 +546,17 @@ def withdraw(request: Request):
             conn.execute('DELETE FROM guided_events WHERE study_id=?',(row['id'],))
         conn.execute('DELETE FROM jobs WHERE owner=?',(owner,))
         conn.execute('DELETE FROM studies WHERE owner=?',(owner,))
+        delete_compare_records(conn,owner)
     return {'ok':True}
+
+
+def delete_compare_records(conn,owner):
+    for row in conn.execute('SELECT id FROM cmp_sessions WHERE owner=?',(owner,)).fetchall():
+        conn.execute('DELETE FROM cmp_responses WHERE session_id=?',(row['id'],))
+        conn.execute('DELETE FROM cmp_events WHERE session_id=?',(row['id'],))
+        conn.execute('DELETE FROM cmp_pre WHERE session_id=?',(row['id'],))
+    conn.execute('DELETE FROM cmp_sessions WHERE owner=?',(owner,))
+
 
 
 def researcher(request):
@@ -638,6 +661,27 @@ def export(kind: str,request: Request):
                 rows.append(dict(participant=r['participant'],experiment_id=r['id'],created=r['created'],status=r['status'],dataset=spec['dataset'],model=spec['model'],transformations=';'.join(spec['transformations']),delta=spec['delta'],seed=spec['seed'],custom=bool(spec['custom_code']),error=r['error']))
         elif kind=='guided_events':
             rows = [dict(r) for r in conn.execute('SELECT s.participant,s.consent_version,e.event,e.step,e.job_id,e.scenario,e.created FROM guided_events e JOIN studies s ON e.study_id=s.id ORDER BY e.created')]
+        elif kind=='compare_responses':
+            # One row per participant x case x stage: 0-7 ratings (review and side stages) or the free-text feedback.
+            rows=[]
+            rating_ids=list(dict.fromkeys(k for items in COMPARE.RATINGS.values() for k,_ in items))
+            for r in conn.execute('SELECT s.participant,s.bank,s.method_order,s.case_order,r.case_id,r.stage,r.answers,r.correct,r.elapsed,r.submitted,s.finished FROM cmp_responses r JOIN cmp_sessions s ON r.session_id=s.id ORDER BY s.participant,r.submitted'):
+                a=json.loads(r['answers'])
+                ratings=a.get('ratings') or {}
+                rows.append(dict(participant=r['participant'],bank=r['bank'],method_order=r['method_order'],case_id=r['case_id'],stage=r['stage'],
+                                 method=r['stage'].replace('review_','') if r['stage'].startswith('review_') else '',
+                                 **{f'rating_{k}':ratings.get(k) for k in rating_ids},
+                                 feedback=a.get('text'),elapsed_seconds=r['elapsed'],submitted=r['submitted'],
+                                 session_complete=r['finished'] is not None))
+        elif kind=='compare_pre':
+            rows=[]
+            for r in conn.execute('SELECT s.participant,s.consent_version,p.* FROM cmp_pre p JOIN cmp_sessions s ON p.session_id=s.id ORDER BY p.submitted'):
+                a=json.loads(r['answers'])
+                rows.append(dict(participant=r['participant'],consent_version=r['consent_version'],version=r['version'],age=a.get('age'),education=a.get('education'),
+                                 **{k:(a.get('familiarity') or {}).get(k) for k,_ in COMPARE.PRE_FAMILIARITY},submitted=r['submitted'],updated=r['updated']))
+        elif kind=='compare_sessions':
+            rows=[dict(participant=r['participant'],bank=r['bank'],method_order=r['method_order'],case_order=r['case_order'],
+                       consent_version=r['consent_version'],started=r['started'],finished=r['finished']) for r in conn.execute('SELECT * FROM cmp_sessions ORDER BY started')]
         else:
             raise HTTPException(404,'Unknown export.')
     return csv_response(rows,f'tgap-study-{kind}.csv')
@@ -777,7 +821,8 @@ def guided_catalogue(request: Request):
     timing = {k:dict(runs=len(v),median_seconds=round(statistics.median(v),1),max_seconds=round(max(v),1)) for k,v in durations.items()}
     from sandbox.chart_registry import inventory
     from sandbox import custom_samples as CS
-    return dict(custom=dict(skeleton=CS.SKELETON,samples=CS.SAMPLES,api=CS.API_REFERENCE,rules=CS.RULES),
+    from sandbox.registry import glossary
+    return dict(glossary=glossary(),custom=dict(skeleton=CS.SKELETON,samples=CS.SAMPLES,api=CS.API_REFERENCE,rules=CS.RULES),
                 datasets=datasets,models=GUIDED.model_catalogue(),concepts=GUIDED.concept_catalogue(guided_core()),
                 inventory=inventory(),scenarios=scenarios(),timing=timing,custom_template=base['custom_template'],
                 defaults=dict(delta=0.1,direction='increase',seed=42,sweep=GuidedSweep().model_dump(),paper_deltas=list(GUIDED.PAPER_DELTAS),
@@ -936,6 +981,276 @@ def guided_event(form: GuidedEvent,request: Request):
         conn.execute('INSERT INTO guided_events(study_id,event,step,job_id,scenario,created) VALUES (?,?,?,?,?,?)',
                      (study['id'],form.event,form.step,form.job_id,form.scenario,time.time()))
     return dict(recorded=True)
+
+
+##  Compare Explainers: TGAP vs CoDy (phase 2 of the guided study)  ##
+# Results are precomputed offline (python -m compare_explainers batch / casebank).
+# Within-participant, counterbalanced study; the observed outcome is withheld
+# until every required answer of the participant is stored.
+
+from sandbox import compare as COMPARE
+
+COMPARE_CONSENT = 'compare-pilot-4'   # native pre-study questionnaire + ratings + final feedback
+
+
+def compare_cases():
+    cases,meta,problem = COMPARE.load_cases(CONFIG)
+    if cases is None:
+        raise HTTPException(404,problem)
+    return COMPARE.study_cases(cases),meta
+
+
+def compare_bank_id(meta,cases):
+    # The single-case study is a new bank id, so sessions of the earlier two-case pilot are kept apart.
+    return f"{meta.get('batch_id') or cases[0]['case_id']}:{'+'.join(c['case_id'] for c in cases)}:{COMPARE_CONSENT}"
+
+
+def compare_session(conn,identity,bank):
+    return conn.execute('SELECT * FROM cmp_sessions WHERE owner=? AND bank=?',(owner_key(identity['username']),bank)).fetchone()
+
+
+def compare_state(conn,row):
+    done = {(r['case_id'],r['stage']) for r in conn.execute('SELECT case_id,stage FROM cmp_responses WHERE session_id=?',(row['id'],))}
+    cases = json.loads(row['case_order'])
+    nxt = COMPARE.next_stage(row['method_order'],cases,done)
+    pre = conn.execute('SELECT 1 FROM cmp_pre WHERE session_id=?',(row['id'],)).fetchone()
+    return dict(participant=row['participant'],order=row['method_order'],cases=cases,done=sorted([list(d) for d in done]),
+                next=list(nxt) if nxt else None,finished=row['finished'],recording=True,pre_done=bool(pre))
+
+
+@app.get('/api/compare/scenario')
+def compare_scenario(request: Request):
+    identity = session(request)
+    cases,meta,problem = COMPARE.load_cases(CONFIG)
+    cases = COMPARE.study_cases(cases) if cases else cases
+    if cases is None:
+        return dict(available=False,reason=problem)
+    bank = compare_bank_id(meta,cases)
+    with db() as conn:
+        row = compare_session(conn,identity,bank)
+        state = compare_state(conn,row) if row else None
+    reveal = bool(state and state['finished'])
+    if not state:
+        # Exploring without consent: nothing is recorded and the outcome is never shown here.
+        state = dict(participant=None,order=COMPARE.assign_order(owner_key(identity['username'])),
+                     cases=[c['case_id'] for c in cases],done=[],next=None,finished=None,recording=False,pre_done=False)
+    return dict(available=True,session=state,page=COMPARE.bank_view(cases,meta,reveal),consent_version=COMPARE_CONSENT)
+
+
+class CompareConsent(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    consent: bool
+    pre: Optional[dict] = None
+
+
+class ComparePre(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    pre: dict
+
+
+def save_pre(conn,session_id,answers):
+    # One row per session: a second submission updates it instead of adding a duplicate.
+    now = time.time()
+    conn.execute('INSERT INTO cmp_pre(session_id,version,answers,submitted,updated) VALUES (?,?,?,?,?) '
+                 'ON CONFLICT(session_id) DO UPDATE SET version=excluded.version,answers=excluded.answers,updated=excluded.updated',
+                 (session_id,COMPARE.PRE_VERSION,json.dumps(answers),now,now))
+
+
+STUDY_DATA = HOME/'study-data'
+
+
+def write_study_files(conn):
+    """Rewrite the study files from the database after every change, so they
+    always match it (withdrawn participants disappear from them too). Keyed by
+    the random participant code only; no account name or e-mail."""
+    STUDY_DATA.mkdir(parents=True,exist_ok=True)
+    sessions = [dict(r) for r in conn.execute('SELECT participant,bank,method_order,consent_version,started,finished,id FROM cmp_sessions ORDER BY started')]
+    code = {r['id']:r['participant'] for r in sessions}
+    pre = []
+    for r in conn.execute('SELECT * FROM cmp_pre ORDER BY submitted'):
+        a = json.loads(r['answers'])
+        pre.append(dict(participant=code.get(r['session_id']),version=r['version'],age=a.get('age') or '',education=a.get('education') or '',
+                        **{k:(a.get('familiarity') or {}).get(k) for k,_ in COMPARE.PRE_FAMILIARITY},submitted=r['submitted'],updated=r['updated']))
+    ids = list(dict.fromkeys(k for items in COMPARE.RATINGS.values() for k,_ in items))
+    ratings,feedback = [],[]
+    for r in conn.execute('SELECT * FROM cmp_responses ORDER BY submitted'):
+        a = json.loads(r['answers'])
+        base = dict(participant=code.get(r['session_id']),case_id=r['case_id'],stage=r['stage'],elapsed_seconds=r['elapsed'],submitted=r['submitted'])
+        if r['stage']=='feedback':
+            feedback.append(dict(base,text=a.get('text') or ''))
+        else:
+            for k in ids:
+                if k in (a.get('ratings') or {}):
+                    ratings.append(dict(base,method={'review_tgap':'tgap','review_cody':'cody'}.get(r['stage'],'side'),question_id=k,value=a['ratings'][k]))
+    for r in sessions: r.pop('id')
+    tables = dict(sessions=sessions,pre_survey=pre,ratings=ratings,feedback=feedback)
+    for name,rows in tables.items():
+        tmp = STUDY_DATA/f'.{name}.csv.tmp'
+        with tmp.open('w',newline='',encoding='utf-8') as fh:
+            if rows:
+                w = csv.DictWriter(fh,fieldnames=list(rows[0]))
+                w.writeheader(); w.writerows(rows)
+        tmp.replace(STUDY_DATA/f'{name}.csv')
+    questions = dict(pre=COMPARE.pre_definition(),ratings={k:[dict(id=i,text=t) for i,t in v] for k,v in COMPARE.RATINGS.items()},
+                     scale=dict(range=list(COMPARE.RATING),agreement=list(COMPARE.SCALE_LABELS),familiarity=list(COMPARE.FAMILIARITY_LABELS)))
+    tmp = STUDY_DATA/'.study.json.tmp'
+    tmp.write_text(json.dumps(dict(written=time.time(),consent_version=COMPARE_CONSENT,questions=questions,**tables),indent=1,ensure_ascii=False),encoding='utf-8')
+    tmp.replace(STUDY_DATA/'study.json')
+
+
+@app.post('/api/compare/start')
+def compare_start(form: CompareConsent,request: Request):
+    identity = session(request)
+    if not form.consent:
+        raise HTTPException(422,'Consent is required to record your answers. You can still explore without joining.')
+    problems = COMPARE.validate_pre(form.pre or {})
+    if problems:
+        raise HTTPException(422,' '.join(problems))
+    cases,meta = compare_cases()
+    usable = [c for c in cases if c['comparability']['comparable']]
+    if not usable:
+        raise HTTPException(409,'No case in the bank is verified as comparable, so the study cannot start. The cases remain viewable as a technical demonstration.')
+    bank = compare_bank_id(meta,cases)
+    with db() as conn:
+        if not compare_session(conn,identity,bank):
+            participant = 'P-'+secrets.token_hex(4).upper()
+            conn.execute('INSERT INTO cmp_sessions(id,owner,participant,bank,method_order,case_order,consent_version,started) VALUES (?,?,?,?,?,?,?,?)',
+                         (str(uuid.uuid4()),owner_key(identity['username']),participant,bank,COMPARE.assign_order(participant),
+                          json.dumps(COMPARE.case_order(participant,[c['case_id'] for c in usable])),COMPARE_CONSENT,time.time()))
+        row = compare_session(conn,identity,bank)
+        if not conn.execute('SELECT 1 FROM cmp_pre WHERE session_id=?',(row['id'],)).fetchone():
+            save_pre(conn,row['id'],form.pre)   # a repeated start never overwrites; edits go through /api/compare/pre
+        write_study_files(conn)
+    return compare_scenario(request)
+
+
+@app.post('/api/compare/pre')
+def compare_pre(form: ComparePre,request: Request):
+    """Submit or edit the pre-study questionnaire; editable only until the first rating is saved."""
+    identity = session(request)
+    problems = COMPARE.validate_pre(form.pre)
+    if problems:
+        raise HTTPException(422,' '.join(problems))
+    cases,meta = compare_cases()
+    with db() as conn:
+        row = compare_session(conn,identity,compare_bank_id(meta,cases))
+        if not row:
+            raise HTTPException(409,'Join the study first.')
+        if conn.execute('SELECT 1 FROM cmp_responses WHERE session_id=?',(row['id'],)).fetchone():
+            raise HTTPException(409,'The study has started, so the pre-study answers can no longer be changed.')
+        save_pre(conn,row['id'],form.pre)
+        write_study_files(conn)
+    return compare_scenario(request)
+
+
+class CompareEvent(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    case_id: str = Field(max_length=60,pattern=r'^[a-z0-9-]+$')
+    stage: Literal['case','review_tgap','review_cody','side','feedback','finish']
+
+
+@app.post('/api/compare/events')
+def compare_event(form: CompareEvent,request: Request):
+    identity = session(request)
+    cases,meta,_ = COMPARE.load_cases(CONFIG)
+    if cases is None:
+        return dict(recorded=False)
+    cases = COMPARE.study_cases(cases)
+    with db() as conn:
+        row = compare_session(conn,identity,compare_bank_id(meta,cases))
+        if not row or row['finished']:
+            return dict(recorded=False,reason='No active consented comparison session; nothing was recorded.')
+        if conn.execute('SELECT count(*) FROM cmp_events WHERE session_id=?',(row['id'],)).fetchone()[0]>=1000:
+            return dict(recorded=False,reason='Event limit reached.')
+        conn.execute('INSERT INTO cmp_events(session_id,case_id,stage,created) VALUES (?,?,?,?)',(row['id'],form.case_id,form.stage,time.time()))
+    return dict(recorded=True)
+
+
+class CompareResponse(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    case_id: str = Field(max_length=60,pattern=r'^[a-z0-9-]+$')
+    stage: Literal['review_tgap','review_cody','side','feedback']
+    answers: dict
+
+
+@app.post('/api/compare/responses')
+def compare_response(form: CompareResponse,request: Request):
+    identity = session(request)
+    cases,meta = compare_cases()
+    record = next((c for c in cases if c['case_id']==form.case_id),None)
+    if record is None:
+        raise HTTPException(422,'Unknown case.')
+    problems = COMPARE.validate(form.stage,form.answers,record)
+    if problems:
+        raise HTTPException(422,' '.join(problems))
+    with db() as conn:
+        row = compare_session(conn,identity,compare_bank_id(meta,cases))
+        if not row:
+            raise HTTPException(409,'Join the comparison study first; nothing is recorded while exploring.')
+        if row['finished']:
+            raise HTTPException(409,'This comparison session is already complete.')
+        state = compare_state(conn,row)
+        if not state['pre_done']:
+            raise HTTPException(409,'Please complete the "Before We Begin" questionnaire first.')
+        if state['next']!=[form.case_id,form.stage]:
+            raise HTTPException(409,f"Please complete the steps in order. The current step is {state['next']}.")
+        now = time.time()
+        entered = conn.execute('SELECT max(created) FROM cmp_events WHERE session_id=? AND case_id=? AND stage=?',
+                               (row['id'],form.case_id,form.stage)).fetchone()[0]
+        last = conn.execute('SELECT max(submitted) FROM cmp_responses WHERE session_id=?',(row['id'],)).fetchone()[0]
+        elapsed = now-(entered or last or row['started'])
+        correct = {}   # rating-only questionnaire: nothing is graded
+        conn.execute('INSERT INTO cmp_responses(session_id,case_id,stage,answers,correct,elapsed,submitted) VALUES (?,?,?,?,?,?,?)',
+                     (row['id'],form.case_id,form.stage,json.dumps(form.answers),json.dumps(correct),elapsed,now))
+        if compare_state(conn,row)['next'] is None:
+            conn.execute('UPDATE cmp_sessions SET finished=? WHERE id=?',(now,row['id']))
+        write_study_files(conn)
+    return compare_scenario(request)
+
+
+@app.delete('/api/compare')
+def compare_withdraw(request: Request):
+    identity = session(request)
+    with db() as conn:
+        delete_compare_records(conn,owner_key(identity['username']))
+        write_study_files(conn)
+    return {'ok':True}
+
+
+@app.get('/api/compare/download/{kind}')
+def compare_download(kind: str,request: Request):
+    session(request)
+    cases,meta = compare_cases()
+    # Downloads contain the full records (including outcomes): technical material, not participant pages.
+    if kind=='json':
+        return Response(json.dumps(dict(bank=meta,cases=cases),indent=2,allow_nan=False),media_type='application/json',
+                        headers={'Content-Disposition':'attachment; filename="tgap-vs-cody-cases.json"'})
+    if kind=='csv':
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('compare_export',Path(CONFIG['tgap_source'])/'compare_explainers'/'export.py')
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        rows = [dict(case_id=c['case_id'],**row) for c in cases for row in module.summaryRows(c)]
+        return csv_response(rows,'tgap-vs-cody-cases.csv')
+    raise HTTPException(404,'Choose JSON or CSV.')
+
+
+@app.get('/api/admin/compare/summary')
+def compare_summary(request: Request):
+    researcher(request)
+    with db() as conn:
+        # Only sessions of the current questionnaire version (earlier pilots used different items).
+        sessions = [dict(r) for r in conn.execute('SELECT * FROM cmp_sessions WHERE consent_version=?',(COMPARE_CONSENT,))]
+        rows = [dict(participant=r['participant'],case_id=r['case_id'],stage=r['stage'],answers=json.loads(r['answers']),elapsed=r['elapsed'])
+                for r in conn.execute('SELECT s.participant,r.* FROM cmp_responses r JOIN cmp_sessions s ON r.session_id=s.id WHERE s.consent_version=?',(COMPARE_CONSENT,))]
+    technical = None
+    root = Path(CONFIG.get('tgap_source','.'))/'output'/'compare_explainers'/'records'/'batch'
+    try:
+        bid = json.loads((root/'latest.json').read_text(encoding='utf-8'))['batch_id']
+        technical = json.loads((root/bid/'technical_summary.json').read_text(encoding='utf-8'))
+    except (OSError,ValueError,KeyError):
+        technical = None
+    return COMPARE.research_summary(rows,sessions,technical)
 
 
 PUBLICATION = Path(__file__).resolve().parents[1]/'publication'

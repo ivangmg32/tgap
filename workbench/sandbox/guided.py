@@ -113,7 +113,14 @@ def concept_catalogue(core):
 
 
 def model_catalogue():
-    return [dict(id=k, name=n, description=d, **MODEL_INFO[k]) for k, (n, d) in MODELS.items()]
+    from sandbox.registry import MODELS as REG
+    # Display name from the central registry; the technical name is kept alongside.
+    out = []
+    for k, (n, d) in MODELS.items():
+        reg = REG.get(k, {})
+        out.append({**dict(id=k, description=d), **MODEL_INFO[k], 'name': reg.get('name', n), 'technical': n,
+                    **{f: reg[f] for f in ('reads', 'calculates', 'output') if f in reg}})
+    return out
 
 
 def dataset_profile(dataset, core, data_root, seed=42):

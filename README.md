@@ -419,6 +419,7 @@ contract, feasibility checks, and limitations.
 - [Documentation index](docs/README.md)
 - [Installation and self-hosting](docs/12-installation-and-self-hosting.md)
 - [Study dashboard and exports](docs/15-research-dashboard.md) (researcher role)
+- [TGAP vs CoDy comparison](docs/17-tgap-vs-cody-comparison.md) (`python -m compare_explainers run`; website: **Compare explainers**)
 - [Worked example](docs/05-TGAP-worked-example-trace.md)
 - [Real data and preprocessing](realdata/README.md)
 - [Scientific reliability audit](docs/14-scientific-reliability-audit-2026-10-08.md)

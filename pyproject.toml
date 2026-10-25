@@ -18,9 +18,10 @@ tgap = "tgap_cli.cli:main"
 py-modules = ["paths", "run", "tgap_wrapper"]
 
 [tool.setuptools.packages.find]
-include = ["core*", "realdata*", "examples*", "experiments*", "finance*", "tgap_cli*"]
+include = ["core*", "realdata*", "examples*", "experiments*", "finance*", "tgap_cli*", "compare_explainers*"]
 exclude = ["tests*", "contrib*"]
 
 [tool.setuptools.package-data]
 tgap_cli = ["data/*.zip", "data/*.sha256"]
 realdata = ["README.md"]
+compare_explainers = ["README.md", "third_party/*.md", "third_party/*.sha256", "third_party/cody/*.md"]

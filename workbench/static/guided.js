@@ -17,49 +17,10 @@ const G_STAGES = [
   ['temporal', 'One-snapshot-at-a-time runs'], ['stability', 'Seed repeats'], ['matched', 'Matched comparison sweep'],
   ['sizes', 'Graph-size repeats'], ['structure', 'Graph comparison'], ['charts', 'Charts & explanations'],
 ];
-const G_SURVEY = {pre: 'https://forms.gle/a7CdrLcKz2wwYSwPA', post: 'https://forms.gle/QGBMkLXZBtVALhPk9'};
-function gSurveyCard(kind) {
-  const pre = kind === 'pre';
-  return `<div class="g-survey g-survey-${kind}"><div class="g-survey-icon">${gIcon(pre ? 'book' : 'check', 26)}</div>
-    <div><span class="eyebrow">${pre ? 'BEFORE YOU START' : 'ONE LAST STEP'}</span>
-      <h3>${pre ? 'Please fill in the short pre-study survey' : 'Please tell us what you think: post-study survey'}</h3>
-      <p>${pre ? 'It takes about 2 minutes and helps us understand your background. It opens in a new tab; come back here afterwards to start the experiment.' : 'You have finished the experiment. Your answers in this short survey are the most valuable part of the study. It opens in a new tab.'}</p></div>
-    <a class="g-survey-btn" href="${G_SURVEY[kind]}" target="_blank" rel="noopener noreferrer" data-g-survey="${kind}">${pre ? 'Open pre-survey' : 'Open post-survey'} ↗</a></div>`;
-}
-// Before the experiment: 1) fill in the pre-survey, 2) start.
-function gOnboardKey() { return 'tgap-onboard:' + (state.user?.username || ''); }
-function gOnboard() {
-  if (!G.onboard || G.onboard.key !== gOnboardKey()) {
-    let saved = {};
-    try { saved = JSON.parse(localStorage.getItem(gOnboardKey()) || '{}'); } catch (e) { saved = {}; }
-    G.onboard = {key: gOnboardKey(), preOpened: !!saved.preOpened, pre: !!saved.pre};
-  }
-  return G.onboard;
-}
-function gOnboardSave(patch) {
-  const o = Object.assign(gOnboard(), patch);
-  try { localStorage.setItem(o.key, JSON.stringify({preOpened: o.preOpened, pre: o.pre})); } catch (e) { /* private mode */ }
-  gRender();
-}
-function gOnboardHtml() {
-  const o = gOnboard(), ready = o.pre;
-  const item = (n, done, active, icon, title, text, action) => `<li class="g-ob-step ${done ? 'done' : active ? 'active' : 'locked'}">
-    <span class="g-ob-num">${done ? '✓' : n}</span><div class="g-ob-body"><b>${gIcon(icon, 18)} ${title}</b><p>${text}</p>${action}</div></li>`;
-  return `<section class="g-onboard" aria-label="Before you start">
-    <span class="eyebrow">BEFORE YOU START</span>
-    <h3>Fill in the short survey, then start the experiment</h3>
-    <ol>
-      ${item(1, o.pre, true, 'book', 'Fill in the pre-study survey', 'About 2 minutes. It opens in a new tab; come back here when you have submitted it.',
-        `<a class="g-survey-btn" href="${G_SURVEY.pre}" target="_blank" rel="noopener noreferrer" id="g-ob-pre">Open pre-survey ↗</a>
-          <label class="g-ob-check ${o.preOpened ? '' : 'disabled'}"><input type="checkbox" id="g-ob-pre-done" ${o.pre ? 'checked' : ''} ${o.preOpened ? '' : 'disabled'}> I have submitted the pre-survey</label>`)}
-      ${item(2, false, ready, 'spark', 'Start the experiment', ready ? 'All set! Read the short introduction below, then press <b>Let\'s begin</b>.' : 'Unlocks when the survey is done.',
-        ready ? `<button type="button" class="primary" data-g-go="1">Let's begin →</button>` : '')}
-    </ol></section>`;
-}
-function gWireOnboard() {
-  const pre = $('g-ob-pre'); if (pre) pre.onclick = () => setTimeout(() => gOnboardSave({preOpened: true}), 50);
-  const done = $('g-ob-pre-done'); if (done) done.onchange = () => { gEvent('step_complete', 'pre_survey'); gOnboardSave({pre: done.checked}); };
-}
+// The pre-study questionnaire is now native ("Before We Begin", in the comparison study); phase 1 needs no external survey.
+function gOnboard() { return {pre: true}; }
+function gOnboardHtml() { return ''; }
+function gWireOnboard() {}
 const G_POS = '#345f92', G_NEG = '#b56c38', G_ZERO = '#8094a9', G_MUTED = '#566b82', G_INK = '#29445f', G_GRID = '#e6edf4';
 pageHelp.guided = ['How the guided study works', 'Follow the six steps in order. Each step explains its choices; the panel on the right always shows your current configuration. Nothing runs until you press Run experiment on the review step. Results always belong to the run named in the provenance panel; if you change a setting afterwards, run again to update them.'];
 
@@ -71,10 +32,14 @@ function resetGuided() {
 }
 
 /* ---------- helpers ---------- */
+/* Display rule (same as the server, sandbox/easy.py): model names end in
+   "model", concept and measured-property names end in "concept". */
+const G_CONCEPT_RE = /\b(Bridge Width|Bridge Trend|Centralization|Density|Churn|Cohesion|Clustering)\b(?! concept| —)/g;
+function gTerms(text) { return String(text ?? '').replace(G_CONCEPT_RE, '$1 concept').replace(/ model model/g, ' model'); }
 const gName = {
   dataset: id => G.cat?.datasets.find(d => d.id === id)?.name || id,
-  model: id => G.cat?.models.find(m => m.id === id)?.name || id,
-  concept: id => id === 'custom' ? 'Custom concept' : (G.cat?.concepts.find(c => c.id === id)?.name || id),
+  model: id => { const n = G.cat?.models.find(m => m.id === id)?.name || id; return n.endsWith(' model') ? n : n + ' model'; },
+  concept: id => id === 'custom' ? 'Custom concept' : gTerms(G.cat?.concepts.find(c => c.id === id)?.name || id),
 };
 const gPct = d => `${+(Math.abs(d) * 100).toFixed(2)}%`;
 const gSigned = d => `${d < 0 ? '−' : '+'}${gPct(d)}`;
@@ -127,6 +92,11 @@ async function renderGuided() {
       return;
     }
     gLoadPreview();
+  }
+  // The study starts with "Before We Begin" (consent + pre-study questionnaire, shared with the CoDy comparison).
+  if (typeof cxNeedsPre === 'function' && await cxNeedsPre()) {
+    root.innerHTML = `<div class="cx-body">${cxPre()}</div><p class="error-text" role="alert">${esc(CX.error)}</p>`;
+    return cxWirePre(renderGuided);
   }
   gRender();
 }
@@ -285,12 +255,6 @@ function gIntroHtml() {
     ${gNav(null, 1, "Let's begin")}`;
 }
 
-function gModeCard(mode, icon, title, text, bullets) {
-  const active = (mode === 'custom') === (G.config.concept === 'custom');
-  return `<button type="button" class="g-mode ${active ? 'selected' : ''}" data-g-mode="${mode}" aria-pressed="${active}">
-    <span class="g-mode-icon">${gIcon(icon, 30)}</span><b>${title}</b><span>${text}</span><ul>${bullets.map(b => `<li>${b}</li>`).join('')}</ul>${active ? '<em>✓ Selected</em>' : '<em>Choose</em>'}</button>`;
-}
-
 function gCustomPanel() {
   const cu = G.cat.custom, c = G.config, v = G.codeCheck;
   return `<div class="g-custom g-animate">
@@ -335,12 +299,13 @@ function gTransformationHtml() {
   const deltaChip = d => `<label class="g-chip"><input type="checkbox" name="g-sweep-delta" value="${d}" ${s.deltas.includes(d) ? 'checked' : ''}>${gPct(d)}</label>`;
   const paper = G.cat.defaults.paper_deltas, extraDeltas = s.deltas.filter(d => !paper.includes(d));
   return `${gHero('transformation')}
-    <p class="g-lead">How would you like to define the change?</p>
-    <div class="g-modes">
-      ${gModeCard('builtin', 'wand', 'Use a ready-made concept', 'Pick one of the five concepts from the TGAP paper.', ['No coding needed', 'Feasibility checked before running', 'Recommended for a first experiment'])}
-      ${gModeCard('custom', 'code', 'Write my own transformation', 'Describe a new graph idea in a few lines of Python.', ['Skeleton and 3 worked examples', 'Safety check before running', 'Compared with the built-in concepts'])}
-    </div>
-    ${custom ? gCustomPanel() : `<h3 class="g-sub">${gIcon('wand', 18)} Choose a concept</h3><div class="g-card-grid g-animate">${G.cat.concepts.map(gConceptCard).join('')}</div>`}
+    ${custom ? `<div class="g-optional-head"><span class="tag">Optional extra</span><p class="g-lead">You are writing your own concept in Python.</p>
+        <button type="button" class="secondary" data-g-mode="builtin">← Back to the ready-made concepts</button></div>${gCustomPanel()}`
+      : `<p class="g-lead">Choose the graph concept TGAP should change.</p>
+        <h3 class="g-sub">${gIcon('wand', 18)} Choose a concept</h3><div class="g-card-grid g-animate">${G.cat.concepts.map(gConceptCard).join('')}</div>
+        <aside class="g-optional"><span class="g-optional-icon">${gIcon('code', 24)}</span><div><span class="tag">Optional · not needed for the study</span>
+          <b>Curious? Write your own concept in Python</b><p>You can define a new graph idea in a few lines of Python and test it the same way. This is an extra: skip it now and come back to try it after the study.</p></div>
+          <button type="button" class="secondary" data-g-mode="custom">Try it</button></aside>`}
     <h3 class="g-sub">${gIcon('target', 18)} Direction and size</h3>
     <div class="g-dir">
       ${['increase', 'decrease'].map(d => `<label class="g-dir-card ${c.direction === d ? 'selected' : ''}"><input type="radio" name="g-direction" value="${d}" ${c.direction === d ? 'checked' : ''} ${G.locked.includes('direction') ? 'disabled' : ''}><span class="g-dir-arrow">${d === 'increase' ? '▲' : '▼'}</span><b>${d === 'increase' ? 'Increase' : 'Decrease'}</b><small>${d === 'increase' ? 'more of the concept' : 'less of the concept'}</small></label>`).join('')}
@@ -384,7 +349,7 @@ function gRunningHtml() {
     ${gTip('While you wait: the headline result will be the change in the model\'s answer divided by the change TGAP <i>actually achieved</i> in your concept.')}</div>`;
 }
 
-const G_GROUP_ICON = {intervention: 'target', global: 'layers', temporal: 'time', local: 'graph', side_effects: 'alert', robustness: 'shield', reference: 'book'};
+const G_GROUP_ICON = {changed: 'graph', response: 'layers', time: 'time', reliable: 'shield', work: 'spark', reference: 'book'};
 const G_PART_ICON = {what: 'info', conditions: 'layers', observations: 'chart', pattern: 'spark', conclusion: 'check', caution: 'alert'};
 
 function gHeadline(g) {
@@ -409,7 +374,7 @@ function gResultsHtml() {
   const groups = G.cat.inventory.groups.filter(gr => gr.id !== 'reference');
   const counts = st.matrix_counts;
   const computed = g.charts.filter(c => ['ok', 'partial'].includes(c.status)).length;
-  const toc = [['g-sec-a', 'chart', 'Summary'], ['g-sec-b', 'graph', 'Graph'], ['g-sec-c', 'target', 'Requested vs achieved'], ['g-sec-d', 'layers', 'All paper charts'], ['g-sec-ref', 'book', 'References'], ['g-sec-f', 'check', 'Conclusion'], ['g-sec-g', 'download', 'Export']];
+  const toc = [['g-sec-a', 'chart', 'Summary'], ['g-sec-d', 'layers', 'Explore more results'], ['g-sec-ref', 'book', 'References'], ['g-sec-f', 'check', 'Conclusion'], ['g-sec-g', 'download', 'Export']];
   const intro = (text) => `<p class="g-sec-intro">${gIcon('info', 16)}<span>${text}</span></p>`;
   return `<div class="g-results" id="g-report">
     ${gHero('results')}
@@ -434,25 +399,19 @@ function gResultsHtml() {
       </div>
       <p class="field-help">Impact = (modified − original) ÷ |achieved change| (paper Eq. 10). All model outputs here are numbers, so a numerical difference is the right comparison.</p>
     </section>
-    <section class="g-section" id="g-sec-b"><h3><span class="g-sec-letter">B</span> Original and transformed graph</h3>
-      ${intro('See exactly which ties TGAP added (blue) and removed (orange dashed). Drag the slider to move through time; the bars above show how many edges changed in each snapshot.')}
-      ${gChartCard(charts.local_graph)}${gChartCard(charts.trajectory)}</section>
-    <section class="g-section" id="g-sec-c"><h3><span class="g-sec-letter">C</span> Requested versus achieved</h3>
-      ${intro('Graphs change in whole edges, so what you <i>asked</i> for and what TGAP <i>achieved</i> can differ. Crossed markers are measured but excluded because the change could not be made faithfully.')}
-      ${gChartCard(charts.requested_vs_achieved)}${gChartCard(charts.validity_map)}</section>
-    <section class="g-section" id="g-sec-d"><h3><span class="g-sec-letter">D</span> Every paper chart, from your run</h3>
-      ${intro('Each card names the paper figure it reproduces, shows your values, and explains below the chart what it measures, what you can conclude — and what you should <i>not</i> conclude. Click a group to fold it.')}
+    <section class="g-section" id="g-sec-d"><h3><span class="g-sec-letter">B</span> Explore More TGAP Results</h3>
+      ${intro('The following charts explore the experiment from different angles. You do not need to open every chart. Choose any chart that interests you to see what it measures and what the results mean.')}
       ${groups.map(gr => {
-        const items = g.charts.filter(c => c.group === gr.id && !['local_graph', 'trajectory', 'requested_vs_achieved', 'validity_map'].includes(c.id));
-        return items.length ? `<details class="g-group" open><summary><span class="g-group-icon">${gIcon(G_GROUP_ICON[gr.id], 20)}</span><span><b>${esc(gr.title)}</b><small>${esc(gr.description)} · ${items.length} chart${items.length > 1 ? 's' : ''}</small></span></summary>${items.map(gChartCard).join('')}</details>` : '';
+        const items = g.charts.filter(c => c.group === gr.id);
+        return items.length ? `<details class="g-group" id="g-group-${gr.id}"><summary><span class="g-group-icon">${gIcon(G_GROUP_ICON[gr.id], 20)}</span><span><b>${esc(gr.title)}</b><small>${esc(gr.description)} · ${items.length} chart${items.length > 1 ? 's' : ''}</small></span></summary>${items.map(gChartCard).join('')}</details>` : '';
       }).join('')}
     </section>
-    <section class="g-section" id="g-sec-ref"><h3><span class="g-sec-letter">E</span> Static figures and published references</h3>
+    <section class="g-section" id="g-sec-ref"><h3><span class="g-sec-letter">C</span> Static figures and published references</h3>
       ${intro('Illustrations and published results that cannot be recomputed in the browser. Anything framed in a dashed gold border is <b>from the paper, not from your run</b>.')}
       ${g.charts.filter(c => c.group === 'reference').map(gChartCard).join('')}
     </section>
     <section class="g-section g-conclusion" id="g-sec-f"><h3>${gIcon('check', 22)} Overall Experiment Conclusion</h3>${gConclusionHtml(r, g)}</section>
-    <section class="g-section" id="g-sec-g"><h3><span class="g-sec-letter">G</span> Reproducibility and export</h3>
+    <section class="g-section" id="g-sec-g"><h3><span class="g-sec-letter">D</span> Reproducibility and export</h3>
       <div class="g-exports">
         <a class="g-export" href="/api/guided/experiments/${esc(G.job)}/download/json" data-g-export="json">${gIcon('data', 22)}<b>Full data</b><small>JSON · every measurement</small></a>
         <a class="g-export" href="/api/guided/experiments/${esc(G.job)}/download/csv" data-g-export="csv">${gIcon('layers', 22)}<b>Table</b><small>CSV · measurements & explanations</small></a>
@@ -464,7 +423,10 @@ function gResultsHtml() {
         <details><summary>Generated Python program</summary><pre class="g-code">${esc(r.program)}</pre></details>
       </details>
     </section>
-    ${gSurveyCard('post')}
+    <section class="g-phase2"><div class="g-phase2-art" aria-hidden="true"><span>TGAP</span><i>⇄</i><span>CoDy</span></div>
+      <div><span class="eyebrow">PHASE 2 · ABOUT 5 MINUTES</span><h3>Now let’s compare TGAP with another explainer</h3>
+        <p>You have seen how TGAP explains a model. Next, see TGAP and <b>CoDy</b>, a recent counterfactual explainer, explain the <b>same prediction</b> of a real trained neural network, first one by one, then side by side. The post-study survey follows at the end.</p>
+        <a class="primary g-phase2-btn" href="#compare">Let’s compare with CoDy →</a></div></section>
     <div class="g-nav"><button type="button" class="secondary" data-g-go="3">← Try another change</button><button type="button" class="secondary" data-g-go="1">Start a new experiment</button></div>
   </div>`;
 }
@@ -474,24 +436,57 @@ function gChartCard(chart) {
   const id = 'g-fig-' + chart.id;
   let svg = '';
   if (chart.status === 'ok' || chart.status === 'partial') {
+    G.currentChart = chart;   // gFrame draws this chart's axis/colour key inside the SVG
     try { svg = gRender_[chart.renderer] ? gRender_[chart.renderer](chart) : ''; }
     catch (error) { svg = `<p class="error-text">This chart could not be drawn (${esc(error.message)}). Its data remain in the JSON export.</p>`; }
+    finally { G.currentChart = null; }
   }
   const published = chart.paper_figure && G.cat.inventory.charts.find(i => i.id === chart.id);
   const reference = chart.paper_figure && (chart.kind === 'blocked' || chart.kind === 'static');
   const hasSvg = svg.includes('<svg');
-  return `<figure class="figure-card g-chart" data-chart="${esc(chart.id)}">
-    <div class="g-chart-head"><span class="g-chart-icon">${gIcon(G_GROUP_ICON[chart.group] || 'chart', 20)}</span>
-      <div class="g-chart-titles"><h4>${esc(chart.title)}</h4><div class="g-chart-tags"><span class="tag g-paper-tag">${gIcon('book', 12)} ${esc(chart.paper)}</span>${gStatusTag(chart.status)}</div></div>
-      ${hasSvg ? `<div class="figure-downloads"><button type="button" class="text-button" data-g-svg="${id}">SVG</button><button type="button" class="text-button" data-g-png="${id}">PNG</button></div>` : ''}</div>
-    <p class="g-what">${esc(chart.explanation.what)}</p>
+  const prov = chart.provenance === 'published' ? '<span class="g-prov pub">PUBLISHED REFERENCE — NOT YOUR RESULT</span>'
+    : chart.provenance === 'requested sweep' ? '<span class="g-prov sweep">Your run · requested comparisons</span>' : '<span class="g-prov run">Your run</span>';
+  const metric = chart.metric && G.cat.glossary?.metrics?.[chart.metric];
+  const usable = chart.status === 'ok' || chart.status === 'partial';
+  const group = (G.cat.inventory?.groups || []).find(gr => gr.id === chart.group);
+  return `<details class="figure-card g-chart" id="chart-${esc(chart.id)}" data-chart="${esc(chart.id)}">
+    <summary class="g-chart-head"><span class="g-chart-icon">${gIcon(G_GROUP_ICON[chart.group] || 'chart', 20)}</span>
+      <div class="g-chart-titles"><h4>${esc(chart.title)}</h4>${chart.question ? `<p class="g-question">${esc(chart.question)}</p>` : ''}
+        <div class="g-chart-tags">${group ? `<span class="tag">${esc(group.title)}</span>` : ''}${prov}${chart.status_label ? `<span class="g-prov status">${esc(chart.status_label)}</span>` : ''}</div></div>
+      <span class="g-chev" aria-hidden="true">▾</span></summary>
+    <div class="g-chart-body">
+    ${chart.subtitle && chart.provenance !== 'published' ? `<p class="g-subtitle">${esc(chart.subtitle)}</p>` : ''}
+    <div class="g-chart-tags">${metric ? `<span class="tag" title="${esc(metric.definition)}">Measured: ${esc(metric.name)}</span>` : ''}<span class="tag g-paper-tag">${gIcon('book', 12)} ${esc(chart.paper)}</span>
+      ${hasSvg ? `<span class="figure-downloads"><button type="button" class="text-button" data-g-svg="${id}">SVG</button><button type="button" class="text-button" data-g-png="${id}">PNG</button></span>` : ''}</div>
     ${chart.scope ? `<p class="g-scope">${gIcon('info', 14)}<span>${esc(chart.scope)}</span></p>` : ''}
     ${chart.deviation ? `<p class="g-deviation">${gIcon('alert', 14)}<span><b>Different from the paper:</b> ${esc(chart.deviation)}</span></p>` : ''}
+    ${!usable ? `<p class="g-status-note">${esc(chart.status_label || chart.status)}: ${esc(chart.explanation.observations)}</p>` : ''}
     ${svg ? `<div class="figure-canvas" id="${id}">${svg}</div>` : ''}
-    ${hasSvg ? `<details class="g-howto"><summary>${gIcon('bulb', 15)} How to read this chart</summary><p>${esc(chart.axes)}</p><p>Blue means the answer went up, orange means it went down, grey means no change. Hover over points and bars to see exact values.</p></details>` : ''}
+    ${hasSvg && !svg.includes('↔ Across:') ? gGuideHtml(chart.guide) : ''}
+    ${chart.explanation.easy_shows ? `<div class="g-easy">
+      <p><b>How to read this chart:</b> ${esc(chart.explanation.easy_shows)}</p>
+      <p class="g-finding"><b>What did we find?</b> ${esc(chart.explanation.easy_result)}</p>
+      ${usable ? `<p class="g-limit"><b>What it cannot tell us:</b> ${esc(chart.explanation.caution)}</p>` : ''}</div>` : ''}
     ${reference ? `<div class="g-published"><span class="g-published-label">${gIcon('book', 14)} PUBLISHED REFERENCE · NOT YOUR RESULT</span><img src="/api/publication/${esc(chart.paper_figure)}/png" alt="Published paper figure: ${esc(published?.caption || chart.title)}" loading="lazy"><p>${esc(published?.caption || '')}</p></div>` : ''}
-    <div class="g-explanation"><strong>${gIcon('spark', 16)} What this chart tells you</strong><dl>${G_PARTS.filter(([k]) => k !== 'what').map(([k, label]) => `<dt>${gIcon(G_PART_ICON[k], 15)} ${label}</dt><dd>${gProse(chart.explanation[k])}</dd>`).join('')}</dl></div>
-  </figure>`;
+    <details class="g-explanation"><summary>${gIcon('spark', 16)} Technical details</summary>
+      ${metric ? `<p><b>${esc(metric.name)}</b> — ${esc(metric.definition)}. Unit: ${esc(metric.unit)}. ${esc(metric.reading)} Higher is ${metric.better === 'depends' ? 'not simply better or worse: it depends on the question' : esc(metric.better === 'higher' ? 'better' : 'worse')}. Formula: <code>${esc(metric.formula)}</code></p>` : ''}
+      <p class="field-help">Technical name: ${esc(chart.technical_title || '')} · ${esc(chart.paper)} · axes: ${esc(chart.axes)}</p>
+      <dl>${G_PARTS.filter(([k]) => k !== 'what').map(([k, label]) => `<dt>${gIcon(G_PART_ICON[k], 15)} ${label}</dt><dd>${gProse(chart.explanation[k])}</dd>`).join('')}</dl></details>
+    </div></details>`;
+}
+
+function gGuideHtml(guide) {
+  // HTML version of the key, for charts drawn without gFrame (diagrams, heatmaps reused from the Laboratory).
+  if (!guide || (!guide.x && !guide.y && !(guide.colors || []).length)) return '';
+  return `<div class="g-key">${guide.x ? `<p><b>↔ Across:</b> ${esc(guide.x)}</p>` : ''}${guide.y ? `<p><b>↕ Up/down:</b> ${esc(guide.y)}</p>` : ''}
+    ${(guide.colors || []).map(c => `<p><span class="g-key-swatch" style="background:${esc(c.color)}"></span>${esc(c.meaning)}</p>`).join('')}</div>`;
+}
+
+function gExploreNav(g, groups) {
+  // Contents menu: every chart by group, plus a title search. Clicking opens the group and scrolls to the chart.
+  const main = [];
+  return `<nav class="g-explore-nav" aria-label="Research analyses contents"><input type="search" id="g-chart-search" placeholder="Search charts (e.g. time, seed, side effect)" aria-label="Search charts">
+    <div class="g-explore-groups">${groups.map(gr => { const items = g.charts.filter(c => c.group === gr.id && !main.includes(c.id)); return items.length ? `<div><b>${esc(gr.title)}</b><ul>${items.map(c => `<li data-g-search="${esc((c.title + ' ' + (c.technical_title || '') + ' ' + c.paper).toLowerCase())}"><a href="#chart-${esc(c.id)}" data-g-open="g-group-${esc(gr.id)}" data-g-chart="chart-${esc(c.id)}">${esc(c.title)}</a>${c.status_label ? ` <small>(${esc(c.status_label)})</small>` : ''}</li>`).join('')}</ul></div>` : ''; }).join('')}</div></nav>`;
 }
 
 /* ---------- step content ---------- */
@@ -860,7 +855,13 @@ function gWireResults() {
   $('g-print').onclick = () => { gEvent('export', 'results', {job_id: G.job}); document.querySelectorAll('#g-report details').forEach(d => d.open = true); window.print(); };
   gWireResultsInner();
 }
+function gWireExplore() {
+  const box = $('g-chart-search');
+  if (box) box.oninput = () => { const q = box.value.trim().toLowerCase(); document.querySelectorAll('[data-g-search]').forEach(li => { li.hidden = q && !li.dataset.gSearch.includes(q); }); };
+  document.querySelectorAll('[data-g-open]').forEach(a => a.onclick = () => { const d = $(a.dataset.gOpen), c = $(a.dataset.gChart); if (d) d.open = true; if (c) c.open = true; });
+}
 function gWireResultsInner() {
+  gWireExplore();
   const slider = $('g-snapshot');
   if (slider) slider.oninput = () => { G.snapshot = Number(slider.value); $('g-fig-local_graph').innerHTML = gRender_.network(G.result.guided.charts.find(c => c.id === 'local_graph')); gWireResultsInner(); };
   const metric = $('g-traj-metric');
@@ -876,6 +877,7 @@ function gReportHtml() {
     return `<section><h3>${esc(chart.title)} <small>(${esc(chart.paper)} · ${esc(chart.status)})</small></h3>
       ${chart.scope ? `<p><i>${esc(chart.scope)}</i></p>` : ''}${chart.deviation ? `<p><b>Deviation from the paper:</b> ${esc(chart.deviation)}</p>` : ''}
       ${svg ? new XMLSerializer().serializeToString(svg) : ''}
+      ${chart.explanation.easy_shows ? `<p><b>What this chart shows:</b> ${esc(chart.explanation.easy_shows)}<br><b>What your result shows:</b> ${esc(chart.explanation.easy_result)}</p>` : ''}
       ${published ? `<p><i>The paper's original ${esc(chart.paper)} is shown next to this chart in the app as a reference; it is not part of this run.</i></p>` : ''}
       <dl>${G_PARTS.map(([k, label]) => `<dt>${label}</dt><dd>${esc(chart.explanation[k])}</dd>`).join('')}</dl><p class="axes">${esc(chart.axes)}</p></section>`;
   }).join('');
@@ -955,26 +957,51 @@ function gConclusionHtml(r, g) {
 }
 
 /* ---------- SVG chart renderers ---------- */
+function gWrap(text, maxChars) {
+  const words = String(text).split(' '), lines = [''];
+  words.forEach(w => { if ((lines[lines.length - 1] + ' ' + w).trim().length > maxChars) lines.push(w); else lines[lines.length - 1] = (lines[lines.length - 1] + ' ' + w).trim(); });
+  return lines.filter(Boolean);
+}
+function gKeyBand(guide, width, y0) {
+  // "How to read" band inside the SVG, so it travels with PNG/SVG downloads.
+  if (!guide || (!guide.x && !guide.y && !(guide.colors || []).length)) return ['', 0];
+  const max = Math.floor((width - 40) / 7.2);
+  let s = `<line x1="15" x2="${width - 15}" y1="${y0}" y2="${y0}" stroke="#d7e0ea"/>`, y = y0 + 20;
+  const row = (label, text) => {
+    gWrap(text, max - label.length - 2).forEach((line, i) => {
+      s += `<text x="15" y="${y}" font-size="13" fill="${G_INK}">${i ? '' : `<tspan font-weight="bold">${esc(label)}</tspan> `}${esc(line)}</text>`; y += 18; });
+  };
+  if (guide.x) row('↔ Across:', guide.x);
+  if (guide.y) row('↕ Up/down:', guide.y);
+  (guide.colors || []).forEach(c => {
+    gWrap(c.meaning, max - 4).forEach((line, i) => { s += (i ? '' : `<rect x="15" y="${y - 11}" width="12" height="12" rx="2" fill="${c.color}" stroke="#9aa9b8" stroke-width=".5"/>`) + `<text x="34" y="${y}" font-size="13" fill="${G_INK}">${esc(line)}</text>`; y += 18; });
+  });
+  return [s, y - y0 + 4];
+}
 function gFrame(title, content, width, height) {
   const g = G.result.guided;
-  const caption = `TGAP guided study | ${g.spec.dataset} | ${g.spec.model} | ${g.selected_concept} ${g.spec.direction} ${gPct(g.spec.delta)} | seed ${g.spec.seed} | run ${G.job.slice(0, 8)}`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height + 70}"${width > 900 ? ` style="min-width:${Math.round(width * .85)}px"` : ''} role="img" aria-label="${esc(title)}" style="font-family:Arial,sans-serif;background:white"><title>${esc(title)}</title><rect width="${width}" height="${height + 70}" fill="white"/>
-    <text x="15" y="26" font-size="17" font-weight="bold" fill="${G_INK}">${esc(title)}</text><g transform="translate(0 40)">${content}</g>
-    <text x="15" y="${height + 60}" font-size="12" fill="#61748c">${esc(caption)}</text></svg>`;
+  if (G.currentChart?.title) title = G.currentChart.title;   // the image carries the same title as its card
+  const caption = `TGAP guided study | ${g.spec.dataset} | ${gName.model(g.spec.model)} | ${gTerms(g.selected_concept)} ${g.spec.direction} ${gPct(g.spec.delta)} | seed ${g.spec.seed} | run ${G.job.slice(0, 8)}`;
+  const [key, keyH] = gKeyBand(G.currentChart?.guide, width, height + 48);
+  const total = height + 70 + keyH;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${total}"${width > 900 ? ` style="min-width:${Math.round(width * .85)}px"` : ''} role="img" aria-label="${esc(gTerms(title))}" style="font-family:Arial,sans-serif;background:white"><title>${esc(gTerms(title))}</title><rect width="${width}" height="${total}" fill="white"/>
+    <text x="15" y="26" font-size="17" font-weight="bold" fill="${G_INK}">${esc(gTerms(title))}</text><g transform="translate(0 40)">${content}</g>
+    ${key}<text x="15" y="${total - 10}" font-size="12" fill="#61748c">${esc(caption)}</text></svg>`;
 }
 function gText(x, y, text, opts = {}) {
-  return `<text x="${x}" y="${y}" font-size="${opts.size || 13}" fill="${opts.fill || G_MUTED}" text-anchor="${opts.anchor || 'start'}"${opts.weight ? ` font-weight="${opts.weight}"` : ''}${opts.rotate ? ` transform="rotate(${opts.rotate} ${x} ${y})"` : ''}>${esc(text)}</text>`;
+  return `<text x="${x}" y="${y}" font-size="${opts.size || 13}" fill="${opts.fill || G_MUTED}" text-anchor="${opts.anchor || 'start'}"${opts.weight ? ` font-weight="${opts.weight}"` : ''}${opts.rotate ? ` transform="rotate(${opts.rotate} ${x} ${y})"` : ''}>${esc(opts.raw ? text : gTerms(text))}</text>`;
 }
 function gScale(min, max, a, b) { const span = max - min || 1; return v => a + (v - min) / span * (b - a); }
 function gExtent(values, includeZero = true) {
   const v = values.filter(x => x !== null && x !== undefined && Number.isFinite(x));
+  if (v.length && v.every(x => Math.abs(x) < 1e-9)) return [-1, 1];   // all rounding noise: show as zero
   let lo = Math.min(...v, includeZero ? 0 : Infinity), hi = Math.max(...v, includeZero ? 0 : -Infinity);
   if (!v.length) { lo = -1; hi = 1; }
   if (lo === hi) { lo -= Math.abs(lo) * .1 || 1; hi += Math.abs(hi) * .1 || 1; }
   const pad = (hi - lo) * .06;
   return [lo - (lo < 0 ? pad : 0), hi + (hi > 0 ? pad : 0)];
 }
-function gColor(v) { return v > 0 ? G_POS : v < 0 ? G_NEG : G_ZERO; }
+function gColor(v) { return v > 1e-9 ? G_POS : v < -1e-9 ? G_NEG : G_ZERO; }  // below 1e-9 is rounding noise
 function gPack(values, x, center, step = 11, maxRows = 6) {
   // Deterministic beeswarm packing: place each point at the nearest free offset.
   const placed = [];
@@ -989,14 +1016,15 @@ function gPack(values, x, center, step = 11, maxRows = 6) {
     return {x: px, y: center + offset};
   });
 }
-function gAxisX(x, lo, hi, y, label, fmtv = v => number(v, true)) {
+function gTick(v) { if (Math.abs(v) < 1e-12) return '0'; const t = +v.toPrecision(3); return (t > 0 ? '+' : t < 0 ? '−' : '') + Math.abs(t); }
+function gAxisX(x, lo, hi, y, label, fmtv = gTick) {
   let s = `<line x1="${x(lo)}" x2="${x(hi)}" y1="${y}" y2="${y}" stroke="#cad7e4"/>`;
   for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4; s += gText(x(v), y + 17, fmtv(v), {anchor: 'middle', size: 12}); }
   return s + (label ? gText((x(lo) + x(hi)) / 2, y + 36, label, {anchor: 'middle'}) : '');
 }
 function gAxisY(y, lo, hi, x0, x1, label) {
   let s = '';
-  for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4; s += `<line x1="${x0}" x2="${x1}" y1="${y(v)}" y2="${y(v)}" stroke="${G_GRID}"/>` + gText(x0 - 6, y(v) + 4, number(v, true), {anchor: 'end', size: 12}); }
+  for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4; s += `<line x1="${x0}" x2="${x1}" y1="${y(v)}" y2="${y(v)}" stroke="${G_GRID}"/>` + gText(x0 - 6, y(v) + 4, gTick(v), {anchor: 'end', size: 12}); }
   return s + (label ? gText(16, (y(lo) + y(hi)) / 2, label, {anchor: 'middle', rotate: -90}) : '');
 }
 function gLegend(items, x, y) {
@@ -1102,12 +1130,12 @@ const gRender_ = {
   },
   strips(chart) {
     const d = chart.data, models = d.models, rows = d.semantic_rows.flatMap(gr => gr.concepts.map(c => [gr.label, c]));
-    const pw = 210, rh = 34, W = 170 + models.length * pw, H = 40 + rows.length * rh + 30;
-    let s = models.map((m, i) => gText(170 + i * pw + pw / 2, 12, gName.model(m), {anchor: 'middle', size: 12, fill: G_INK, weight: 'bold'})).join('');
+    const pw = 210, rh = 34, W = 170 + models.length * pw, H = 52 + rows.length * rh + 30;
+    let s = models.map((m, i) => gName.model(m).split(' — ').map((part, k) => gText(170 + i * pw + pw / 2, k ? 20 : 6, part, {anchor: 'middle', size: 12, fill: G_INK, weight: 'bold', raw: true})).join('')).join('');
     let prevGroup = null;
     rows.forEach(([group, concept], j) => {
-      const yy = 40 + j * rh;
-      if (group !== prevGroup) { s += `<line x1="10" x2="${W - 10}" y1="${yy - 16}" y2="${yy - 16}" stroke="#cad7e4" stroke-dasharray="${prevGroup ? '4 3' : '0'}"/>` + gText(12, yy - 3 + (group === concept ? 0 : 0), group === concept ? '' : `[${group}]`, {size: 10}); prevGroup = group; }
+      const yy = 52 + j * rh;
+      if (group !== prevGroup) { s += `<line x1="10" x2="${W - 10}" y1="${yy - 16}" y2="${yy - 16}" stroke="#cad7e4" stroke-dasharray="${prevGroup ? '4 3' : '0'}"/>` + gText(12, yy - 19, group === concept ? '' : `[${group}]`, {size: 10}); prevGroup = group; }
       s += gText(160, yy + 4, concept, {anchor: 'end', size: 12, fill: G_INK});
     });
     models.forEach((m, i) => {
@@ -1117,7 +1145,7 @@ const gRender_ = {
       const [lo, hi] = gExtent(values), x = gScale(lo, hi, x0, x1);
       if (values.length) s += `<line x1="${x(0)}" x2="${x(0)}" y1="22" y2="${H - 40}" stroke="#8a9db2"/>` + gText(x0, H - 22, number(lo, true), {size: 10}) + gText(x1, H - 22, number(hi, true), {size: 10, anchor: 'end'});
       rows.forEach(([group, concept], j) => {
-        const cell = cells.find(p => p.concept === concept && p.group === group), yy = 40 + j * rh;
+        const cell = cells.find(p => p.concept === concept && p.group === group), yy = 52 + j * rh;
         if (!cell || !cell.n) { s += gText((x0 + x1) / 2, yy + 4, 'no valid obs. (n=0)', {anchor: 'middle', size: 10}); return; }
         gPack(cell.points.map(p => p.impact), x, yy, 8, 2).forEach((pt, k) => {
           const p = cell.points[k];
@@ -1152,24 +1180,24 @@ const gRender_ = {
     return gFrame('Beeswarm of valid TGAP impacts (deterministic packing)', s, W, H);
   },
   boxplot(chart) {
-    const d = chart.data, pw = 250, W = Math.max(760, 30 + Math.min(3, d.panels.length) * pw), perRow = Math.min(3, d.panels.length), rowsN = Math.ceil(d.panels.length / perRow);
+    const d = chart.data, pw = 290, W = Math.max(760, 30 + Math.min(3, d.panels.length) * pw), perRow = Math.min(3, d.panels.length), rowsN = Math.ceil(d.panels.length / perRow);
     const ph = 40 + d.concepts.length * 44, H = rowsN * (ph + 30);
     let s = '';
     d.panels.forEach((panel, i) => {
       const x0 = 15 + (i % perRow) * pw, y0 = Math.floor(i / perRow) * (ph + 30), x1 = x0 + pw - 30;
       const values = panel.boxes.flatMap(b => b.values || []);
-      const [lo, hi] = gExtent(values), x = gScale(lo, hi, x0 + 90, x1);
+      const [lo, hi] = gExtent(values), x = gScale(lo, hi, x0 + 140, x1);
       s += gText(x0, y0 + 14, gName.model(panel.model), {size: 12, fill: G_INK, weight: 'bold'});
       if (values.length) s += `<line x1="${x(0)}" x2="${x(0)}" y1="${y0 + 24}" y2="${y0 + ph - 8}" stroke="#8a9db2"/>`;
       panel.boxes.forEach((b, j) => {
         const yy = y0 + 44 + j * 44;
-        s += gText(x0 + 84, yy + 4, b.concept, {anchor: 'end', size: 11, fill: G_INK});
-        if (!b.n) { s += gText((x0 + 90 + x1) / 2, yy + 4, 'n=0', {anchor: 'middle', size: 10}); return; }
+        s += gText(x0 + 134, yy + 4, b.concept, {anchor: 'end', size: 11, fill: G_INK});
+        if (!b.n) { s += gText((x0 + 140 + x1) / 2, yy + 4, 'n=0', {anchor: 'middle', size: 10}); return; }
         s += `<line x1="${x(b.whisker_low)}" x2="${x(b.whisker_high)}" y1="${yy}" y2="${yy}" stroke="${G_POS}"/><rect x="${x(b.q1)}" y="${yy - 12}" width="${Math.max(1.5, x(b.q3) - x(b.q1))}" height="24" fill="#d7e5f2" stroke="${G_POS}"/><line x1="${x(b.median)}" x2="${x(b.median)}" y1="${yy - 12}" y2="${yy + 12}" stroke="#18283e" stroke-width="2"><title>median ${number(b.median, true)}, IQR ${number(b.q1, true)} to ${number(b.q3, true)}, n=${b.n}</title></line>`;
         b.values.forEach(v => { s += `<circle cx="${x(v)}" cy="${yy}" r="2.6" fill="${gColor(v)}" opacity=".8"><title>${number(v, true)}</title></circle>`; });
         s += gText(x1, yy - 14, `n=${b.n}`, {anchor: 'end', size: 10});
       });
-      s += gText(x0 + 90, y0 + ph + 8, number(lo, true), {size: 10}) + gText(x1, y0 + ph + 8, number(hi, true), {size: 10, anchor: 'end'});
+      s += gText(x0 + 140, y0 + ph + 8, number(lo, true), {size: 10}) + gText(x1, y0 + ph + 8, number(hi, true), {size: 10, anchor: 'end'});
     });
     return gFrame('Distribution of valid impacts per model (relative-delta concepts)', s, W, H);
   },
@@ -1315,11 +1343,11 @@ const gRender_ = {
   leakage(chart) {
     const rows = chart.data.rows.filter(r => Math.abs(Math.abs(r.requested_delta) - chart.data.delta) < 1e-9);
     if (!rows.length) return '<p class="result-note">No leakage rows at the selected size.</p>';
-    const metrics = Object.keys(rows[0].metrics), W = 780, H = 40 + metrics.length * 44, center = 470, half = 250;
-    let s = gText(center - half / 2, 12, 'decrease', {anchor: 'middle', size: 12}) + gText(center + half / 2, 12, 'increase', {anchor: 'middle', size: 12});
+    const metrics = Object.keys(rows[0].metrics), W = 780, H = 40 + metrics.length * 44, center = 510, half = 220;
+    let s = gText(center - half / 2, 12, 'when you asked for LESS', {anchor: 'middle', size: 12, weight: 'bold'}) + gText(center + half / 2, 12, 'when you asked for MORE', {anchor: 'middle', size: 12, weight: 'bold'});
     metrics.forEach((m, j) => {
       const yy = 36 + j * 44, values = rows.map(r => r.metrics[m].change), max = Math.max(...values.map(v => Math.abs(v || 0)), 1e-12);
-      s += gText(200, yy + 4, m, {anchor: 'end', size: 12, fill: G_INK}) + `<line x1="${center}" x2="${center}" y1="${yy - 14}" y2="${yy + 14}" stroke="#8a9db2"/>`;
+      s += gText(215, yy + 4, m, {anchor: 'end', size: 12, fill: G_INK}) + `<line x1="${center}" x2="${center}" y1="${yy - 14}" y2="${yy + 14}" stroke="#8a9db2"/>`;
       rows.forEach(r => {
         const v = r.metrics[m].change || 0, side = r.direction === 'increase' ? 1 : -1, len = Math.abs(v) / max * (half - 20);
         const x = side > 0 ? center : center - len;

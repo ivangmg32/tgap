@@ -1,0 +1,121 @@
+{
+  "sha256": "8311596a2405b25a76905e1eee14bc89f66135ddea1a9c4d4a42210009e95219",
+  "parameter_fingerprint": "d68eb3e77d8b2a40c1ef9bce8aa60e6cf29d65b7fbdedd23be1b5d4b3fb3f349",
+  "num_nodes": 1900,
+  "model_config": {
+    "name": "TGN (event-level)",
+    "memory_dim": 32,
+    "time_dim": 32,
+    "embedding_dim": 32,
+    "neighbor_size": 10,
+    "raw_message": "constant 1.0 per event (UCI has no edge features)",
+    "seed": 42,
+    "epochs": 10,
+    "batch_size": 200,
+    "learning_rate": 0.0001
+  },
+  "training": {
+    "epochs_run": 10,
+    "selected_epoch": 10,
+    "selection": "highest validation AP (batched PyG evaluation)",
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.3160988228661674,
+        "validation_ap_batched": 0.743669
+      },
+      {
+        "epoch": 2,
+        "loss": 1.009341843071438,
+        "validation_ap_batched": 0.736678
+      },
+      {
+        "epoch": 3,
+        "loss": 0.9629864993549528,
+        "validation_ap_batched": 0.766619
+      },
+      {
+        "epoch": 4,
+        "loss": 0.9437710109211149,
+        "validation_ap_batched": 0.761082
+      },
+      {
+        "epoch": 5,
+        "loss": 0.9367587038448879,
+        "validation_ap_batched": 0.76406
+      },
+      {
+        "epoch": 6,
+        "loss": 0.9324849523249127,
+        "validation_ap_batched": 0.772291
+      },
+      {
+        "epoch": 7,
+        "loss": 0.9243254408949897,
+        "validation_ap_batched": 0.771938
+      },
+      {
+        "epoch": 8,
+        "loss": 0.9224368435995919,
+        "validation_ap_batched": 0.769377
+      },
+      {
+        "epoch": 9,
+        "loss": 0.9230928304649535,
+        "validation_ap_batched": 0.776478
+      },
+      {
+        "epoch": 10,
+        "loss": 0.9186447986534664,
+        "validation_ap_batched": 0.777459
+      }
+    ],
+    "training_seconds": 94.0,
+    "train_events": 41884,
+    "negative_sampling": "uniform random destination node id, seeded"
+  },
+  "evaluation": {
+    "validation": {
+      "average_precision": 0.8274,
+      "auc": 0.852,
+      "accuracy": 0.7447,
+      "positives": 8975,
+      "negatives": 8975,
+      "chance_level": 0.5
+    },
+    "test": {
+      "average_precision": 0.8739,
+      "auc": 0.8823,
+      "accuracy": 0.7458,
+      "positives": 8976,
+      "negatives": 8976,
+      "chance_level": 0.5
+    },
+    "protocol": "sequential replay; one seeded uniform-random negative destination per held-out event; balanced, so chance AP/AUC/accuracy = 0.5"
+  },
+  "model_key": "de6a9219a182",
+  "stream_sha256": "e6e6299194649556a0f8055f0a4af6aac9fd476afe7bfd405916ce2ae68d1672",
+  "split": {
+    "method": "chronological, by timestamp quantile (as in TGN/CoDy)",
+    "fractions": [
+      0.7,
+      0.15,
+      0.15
+    ],
+    "train": [
+      0,
+      41884
+    ],
+    "validation": [
+      41884,
+      50859
+    ],
+    "test": [
+      50859,
+      59835
+    ],
+    "validation_start_time": 3834800.6,
+    "test_start_time": 6714558.300000001,
+    "identifier": "933ae600df3a26a5"
+  }
+}

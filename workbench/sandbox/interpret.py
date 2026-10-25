@@ -36,7 +36,9 @@ def pct(delta):
 
 
 def model_name(key):
-    return MODELS.get(key, (key,))[0]
+    # Display rule: model names end in "model" (see sandbox/easy.py).
+    from sandbox.easy import model_label
+    return model_label(key)
 
 
 def achieved_text(value, mode):
@@ -57,7 +59,9 @@ def conditions(ctx, extra=''):
 
 
 def part(what, cond, observations, pattern, conclusion, caution):
-    return dict(what=what, conditions=cond, observations=observations, pattern=pattern, conclusion=conclusion, caution=caution)
+    from sandbox.easy import label_terms
+    return {k: label_terms(v) for k, v in dict(what=what, conditions=cond, observations=observations, pattern=pattern,
+                                                 conclusion=conclusion, caution=caution).items()}
 
 
 STATUS_TEXT = {
@@ -634,4 +638,5 @@ def overall_conclusion(ctx):
         s.append(f" Overall, the experiment indicates that this model's output did not respond to a realized change in {concept} on this dataset; this is a statement about the model, not the network.")
     else:
         s.append(' Overall, the main request cannot support a conclusion about this concept; consider a different request size or direction, or read the valid rows in the charts above.')
-    return ''.join(s)
+    from sandbox.easy import label_terms
+    return label_terms(''.join(s))

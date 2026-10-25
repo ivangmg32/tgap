@@ -1,0 +1,286 @@
+{
+  "batch_id": "b-43f780813076",
+  "cases_attempted": 30,
+  "note": "Every attempted case is counted. This is the technical set (first eligible targets by the preregistered rule), so these rates describe this model and configuration only.",
+  "counts": {
+    "baseline_verified": {
+      "n": 30,
+      "of": 30,
+      "share": 1.0
+    },
+    "comparable": {
+      "n": 30,
+      "of": 30,
+      "share": 1.0
+    },
+    "tgap_valid_transformation": {
+      "n": 30,
+      "of": 30,
+      "share": 1.0
+    },
+    "tgap_noop": {
+      "n": 0,
+      "of": 30,
+      "share": 0.0
+    },
+    "tgap_invalid_or_failed": {
+      "n": 0,
+      "of": 30,
+      "share": 0.0
+    },
+    "tgap_class_changed": {
+      "n": 0,
+      "of": 30,
+      "share": 0.0
+    },
+    "cody_valid_counterfactual": {
+      "n": 0,
+      "of": 30,
+      "share": 0.0
+    },
+    "cody_no_class_change": {
+      "n": 26,
+      "of": 30,
+      "share": 0.8667
+    },
+    "cody_no_counterfactual": {
+      "n": 4,
+      "of": 30,
+      "share": 0.1333
+    },
+    "cody_timeout": {
+      "n": 0,
+      "of": 30,
+      "share": 0.0
+    },
+    "cody_execution_failure": {
+      "n": 0,
+      "of": 30,
+      "share": 0.0
+    },
+    "cody_not_reproduced": {
+      "n": 0,
+      "of": 30,
+      "share": 0.0
+    }
+  },
+  "tgap_achieved_change": {
+    "min": -0.13468781252048662,
+    "median": -0.12053546574283995,
+    "max": -0.10479743575798527
+  },
+  "tgap_seconds_median": 537.875,
+  "cody_seconds_median": 390.92499999999995,
+  "cases": [
+    {
+      "case_id": "uci-58894",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.5404025874005165
+    },
+    {
+      "case_id": "uci-57446",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.828155827141388
+    },
+    {
+      "case_id": "uci-53069",
+      "tgap": "valid",
+      "cody": "no_counterfactual",
+      "comparable": true,
+      "original_score": 0.6344403667847636
+    },
+    {
+      "case_id": "uci-54270",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.750422213640336
+    },
+    {
+      "case_id": "uci-52120",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.6534369989418832
+    },
+    {
+      "case_id": "uci-59550",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.7356574290532043
+    },
+    {
+      "case_id": "uci-52855",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8735235960343681
+    },
+    {
+      "case_id": "uci-56977",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8534844586002416
+    },
+    {
+      "case_id": "uci-52950",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.7835581474527779
+    },
+    {
+      "case_id": "uci-58811",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.7867918715117291
+    },
+    {
+      "case_id": "uci-54407",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8397703505011602
+    },
+    {
+      "case_id": "uci-53581",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.6835056619755251
+    },
+    {
+      "case_id": "uci-53775",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8671880821489822
+    },
+    {
+      "case_id": "uci-52310",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.727720197536395
+    },
+    {
+      "case_id": "uci-54764",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8341611354580307
+    },
+    {
+      "case_id": "uci-54507",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8646139940898376
+    },
+    {
+      "case_id": "uci-58436",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8487962160194761
+    },
+    {
+      "case_id": "uci-54393",
+      "tgap": "valid",
+      "cody": "no_counterfactual",
+      "comparable": true,
+      "original_score": 0.7440136126160692
+    },
+    {
+      "case_id": "uci-55600",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8441417189993051
+    },
+    {
+      "case_id": "uci-58433",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.7923996955861596
+    },
+    {
+      "case_id": "uci-59288",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.843636154335355
+    },
+    {
+      "case_id": "uci-54815",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8461316770969038
+    },
+    {
+      "case_id": "uci-52895",
+      "tgap": "valid",
+      "cody": "no_counterfactual",
+      "comparable": true,
+      "original_score": 0.7463466738546468
+    },
+    {
+      "case_id": "uci-52011",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.7692889389756307
+    },
+    {
+      "case_id": "uci-59449",
+      "tgap": "valid",
+      "cody": "no_counterfactual",
+      "comparable": true,
+      "original_score": 0.7762924776434386
+    },
+    {
+      "case_id": "uci-59193",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8549296777595702
+    },
+    {
+      "case_id": "uci-59664",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.9114582292836229
+    },
+    {
+      "case_id": "uci-55160",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8336400753215478
+    },
+    {
+      "case_id": "uci-51849",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.7602117082869801
+    },
+    {
+      "case_id": "uci-57197",
+      "tgap": "valid",
+      "cody": "no_class_change",
+      "comparable": true,
+      "original_score": 0.8830254949171019
+    }
+  ]
+}

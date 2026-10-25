@@ -1,0 +1,5875 @@
+{
+  "record_version": 2,
+  "kind": "case",
+  "case_id": "uci-59449",
+  "created_utc": "2026-10-25T15:58:29+00:00",
+  "configuration": {
+    "contract_version": "tgap-vs-cody-contract-1",
+    "experiment_name": "uci-tgn-pilot",
+    "dataset": {
+      "id": "uci_messages",
+      "source_key": "tgbl_uci",
+      "archive": "tgbl-uci.zip",
+      "member": "tgbl-uci_edgelist.csv",
+      "preprocessing_version": "uci-canonical-1",
+      "timestamp_unit": "seconds since the first message (2004-04-15 07:56:01 UTC)",
+      "node_id_mapping": "identity: TGB node id n -> TGN memory slot n (slot 0 unused)",
+      "direction": "sender -> receiver as stored in the file"
+    },
+    "split": {
+      "method": "chronological, by timestamp quantile (as in TGN/CoDy)",
+      "train": 0.7,
+      "validation": 0.15,
+      "test": 0.15
+    },
+    "model": {
+      "name": "TGN (event-level)",
+      "memory_dim": 32,
+      "time_dim": 32,
+      "embedding_dim": 32,
+      "neighbor_size": 10,
+      "raw_message": "constant 1.0 per event (UCI has no edge features)",
+      "seed": 42,
+      "epochs": 10,
+      "batch_size": 200,
+      "learning_rate": 0.0001
+    },
+    "inference": {
+      "protocol": "sequential: every history event is replayed one at a time, in event-id order, from a reset memory",
+      "score": "sigmoid(logit) of the TGN link predictor for (A, B) at t",
+      "decision_rule": "predicted class = 'message' when logit > 0 (probability > 0.5); CoDy's own counterfactual criterion is a sign change of this logit",
+      "decision_threshold_probability": 0.5,
+      "torch_threads": 1,
+      "baseline_tolerance": 1e-09
+    },
+    "target_selection": {
+      "split": "test",
+      "seed": 42,
+      "rule": "seeded permutation of test-split events; take the first event that is eligible",
+      "eligibility": [
+        "no other event shares its timestamp (history = strictly earlier)",
+        "both endpoints sent or received a message before t",
+        "the model predicts it correctly as a message (logit > 0)"
+      ],
+      "max_candidates_examined": 400
+    },
+    "tgap": {
+      "concept": "churn",
+      "direction": "decrease",
+      "requested_delta": 0.2,
+      "window_days": 10,
+      "communities": null,
+      "seed": 42
+    },
+    "cody": {
+      "selection_policy": "spatio-temporal",
+      "num_hops": 2,
+      "candidates_size": 64,
+      "max_steps": 300,
+      "alpha": 0.6666666666666666,
+      "approximate_predictions": true,
+      "time_limit_seconds": 1800,
+      "seed": 42
+    }
+  },
+  "configuration_hash": "2fd0359ddb429df24f5bb4b3525ba1b7ecb2bdd9e7a59aa4732d19d3d53cb4dd",
+  "software": {
+    "python": "3.12.3",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+    "torch": "2.14.1+cpu",
+    "torch_geometric": "2.8.1",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "networkx": "3.7",
+    "tgap_git_commit": "b3ec399f3fbd2c270fae9135803c49df268c99e8",
+    "tgap_git_dirty": true
+  },
+  "dataset": {
+    "dataset": "uci_messages",
+    "archive": "tgbl-uci.zip",
+    "archive_sha256": "1ea477786d3aefa0b597f22483c6f30df5619594fa981658b80337d9d7ea33d5",
+    "member": "tgbl-uci_edgelist.csv",
+    "member_sha256": "6d96b0f87c74f16aa2792052820992ae293dcc8c80c0e7fbcbccc3caa1530095",
+    "events": 59835,
+    "nodes": 1899,
+    "node_id_range": [
+      1,
+      1899
+    ],
+    "time_span_seconds": 16736181,
+    "preprocessing_version": "uci-canonical-1",
+    "preprocessing": [
+      "read tgbl-uci_edgelist.csv columns u, i, ts (label and idx unused: label is always 0, idx is the 1-based row number)",
+      "event id = 0-based row position; rows are already sorted by ts",
+      "no events are filtered: the file has no self-loops",
+      "direction kept as stored (u = sender, i = receiver)",
+      "node ids used as memory slots directly (no remapping)"
+    ],
+    "relation_to_cody_source": "identical to Opsahl OCnodeslinks.txt (CoDy README source) minus its 1,899 self-loop rows; timestamps = unix time - 1082015761",
+    "stream_sha256": "e6e6299194649556a0f8055f0a4af6aac9fd476afe7bfd405916ce2ae68d1672",
+    "split": {
+      "method": "chronological, by timestamp quantile (as in TGN/CoDy)",
+      "fractions": [
+        0.7,
+        0.15,
+        0.15
+      ],
+      "train": [
+        0,
+        41884
+      ],
+      "validation": [
+        41884,
+        50859
+      ],
+      "test": [
+        50859,
+        59835
+      ],
+      "validation_start_time": 3834800.6,
+      "test_start_time": 6714558.300000001,
+      "identifier": "933ae600df3a26a5"
+    }
+  },
+  "model": {
+    "implementation": "compare_explainers.tgn_backend.EventTgn (core.TgnModel GraphAttentionEmbedding + LinkPredictor; PyG TGNMemory, IdentityMessage, LastAggregator, LastNeighborLoader)",
+    "configuration": {
+      "name": "TGN (event-level)",
+      "memory_dim": 32,
+      "time_dim": 32,
+      "embedding_dim": 32,
+      "neighbor_size": 10,
+      "raw_message": "constant 1.0 per event (UCI has no edge features)",
+      "seed": 42,
+      "epochs": 10,
+      "batch_size": 200,
+      "learning_rate": 0.0001
+    },
+    "checkpoint": "output/compare_explainers/models/tgn_uci_de6a9219a182.pt",
+    "checkpoint_sha256": "8311596a2405b25a76905e1eee14bc89f66135ddea1a9c4d4a42210009e95219",
+    "parameter_fingerprint": "d68eb3e77d8b2a40c1ef9bce8aa60e6cf29d65b7fbdedd23be1b5d4b3fb3f349",
+    "model_key": "de6a9219a182",
+    "training": {
+      "epochs_run": 10,
+      "selected_epoch": 10,
+      "selection": "highest validation AP (batched PyG evaluation)",
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 1.3160988228661674,
+          "validation_ap_batched": 0.743669
+        },
+        {
+          "epoch": 2,
+          "loss": 1.009341843071438,
+          "validation_ap_batched": 0.736678
+        },
+        {
+          "epoch": 3,
+          "loss": 0.9629864993549528,
+          "validation_ap_batched": 0.766619
+        },
+        {
+          "epoch": 4,
+          "loss": 0.9437710109211149,
+          "validation_ap_batched": 0.761082
+        },
+        {
+          "epoch": 5,
+          "loss": 0.9367587038448879,
+          "validation_ap_batched": 0.76406
+        },
+        {
+          "epoch": 6,
+          "loss": 0.9324849523249127,
+          "validation_ap_batched": 0.772291
+        },
+        {
+          "epoch": 7,
+          "loss": 0.9243254408949897,
+          "validation_ap_batched": 0.771938
+        },
+        {
+          "epoch": 8,
+          "loss": 0.9224368435995919,
+          "validation_ap_batched": 0.769377
+        },
+        {
+          "epoch": 9,
+          "loss": 0.9230928304649535,
+          "validation_ap_batched": 0.776478
+        },
+        {
+          "epoch": 10,
+          "loss": 0.9186447986534664,
+          "validation_ap_batched": 0.777459
+        }
+      ],
+      "training_seconds": 94.0,
+      "train_events": 41884,
+      "negative_sampling": "uniform random destination node id, seeded"
+    },
+    "evaluation": {
+      "validation": {
+        "average_precision": 0.8274,
+        "auc": 0.852,
+        "accuracy": 0.7447,
+        "positives": 8975,
+        "negatives": 8975,
+        "chance_level": 0.5
+      },
+      "test": {
+        "average_precision": 0.8739,
+        "auc": 0.8823,
+        "accuracy": 0.7458,
+        "positives": 8976,
+        "negatives": 8976,
+        "chance_level": 0.5
+      },
+      "protocol": "sequential replay; one seeded uniform-random negative destination per held-out event; balanced, so chance AP/AUC/accuracy = 0.5"
+    },
+    "why_not_the_existing_tgap_tgn_adapter": "core.TgnModel.TgnTemporalGraphModel reads snapshots (time = snapshot index) and returns the MEAN probability of the last snapshot's edges; it scores no single link and keeps no checkpoint. CoDy explains one event of an event stream, so it cannot query that adapter without changing its semantics. One event-level TGN built from the same modules is trained instead and both explainers call it."
+  },
+  "target": {
+    "event_id": 59449,
+    "source": 9,
+    "destination": 1624,
+    "timestamp": 15477404,
+    "timestamp_days": 179.1366,
+    "split": "test",
+    "ground_truth": "the message A -> B was observed at t (positive link, label 1)",
+    "ground_truth_label": 1,
+    "history_events": 59449,
+    "prior_messages_between_a_and_b": 11,
+    "selection_rank": 25,
+    "selection_rule": "seeded permutation of test-split events; take the first event that is eligible",
+    "eligibility": [
+      "no other event shares its timestamp (history = strictly earlier)",
+      "both endpoints sent or received a message before t",
+      "the model predicts it correctly as a message (logit > 0)"
+    ],
+    "selection_seed": 42,
+    "history_fingerprint": "672c30b019337c607aa79dc1a9e5d6581fb2a92f55670493b732c3bbef4e4c7a"
+  },
+  "baseline_consistency": {
+    "paths": {
+      "selection_stream_pass": {
+        "logit": 1.2441898584365845,
+        "input_fingerprint": "672c30b019337c607aa79dc1a9e5d6581fb2a92f55670493b732c3bbef4e4c7a",
+        "probability": 0.7762924776434386
+      },
+      "tgap_adapter": {
+        "logit": 1.2441898584365845,
+        "input_fingerprint": "672c30b019337c607aa79dc1a9e5d6581fb2a92f55670493b732c3bbef4e4c7a",
+        "parameter_fingerprint": "d68eb3e77d8b2a40c1ef9bce8aa60e6cf29d65b7fbdedd23be1b5d4b3fb3f349",
+        "probability": 0.7762924776434386
+      },
+      "cody_wrapper": {
+        "logit": 1.2441898584365845,
+        "input_fingerprint": "672c30b019337c607aa79dc1a9e5d6581fb2a92f55670493b732c3bbef4e4c7a",
+        "parameter_fingerprint": "d68eb3e77d8b2a40c1ef9bce8aa60e6cf29d65b7fbdedd23be1b5d4b3fb3f349",
+        "probability": 0.7762924776434386
+      }
+    },
+    "max_abs_logit_difference": 0.0,
+    "tolerance": 1e-09,
+    "scores_agree": true,
+    "same_input": true,
+    "same_model": true,
+    "passed": true,
+    "reasons": [],
+    "original_logit": 1.2441898584365845,
+    "original_probability": 0.7762924776434386,
+    "original_class": "message"
+  },
+  "baseline_protocol": "three independent paths: target-selection stream pass, TGAP's baseline call, CoDy's original-score computation",
+  "provenance": "precomputed offline by compare_explainers.batch",
+  "tgap": {
+    "status": "valid",
+    "plan": {
+      "concept": "Churn",
+      "definition": "mean Jaccard distance between each earlier snapshot's edge set and the latest snapshot's edge set (0 = history identical to the present, 1 = completely different); ChurnTransformation.propertyValue",
+      "original_churn": 0.9707163252687158,
+      "requested_direction": "decrease",
+      "requested_delta": -0.2,
+      "window_days": 10,
+      "snapshots": 18,
+      "temporal_scope": "snapshots 1-17 (all history before the latest 10-day window)",
+      "latest_snapshot": {
+        "window": 18,
+        "start": 14613404,
+        "end": 15477404,
+        "events": 410,
+        "edges": 132
+      },
+      "windows": [
+        {
+          "window": 1,
+          "start": 0,
+          "end": 789404,
+          "events": 766,
+          "edges": 380
+        },
+        {
+          "window": 2,
+          "start": 789404,
+          "end": 1653404,
+          "events": 8380,
+          "edges": 2441
+        },
+        {
+          "window": 3,
+          "start": 1653404,
+          "end": 2517404,
+          "events": 12359,
+          "edges": 3363
+        },
+        {
+          "window": 4,
+          "start": 2517404,
+          "end": 3381404,
+          "events": 12260,
+          "edges": 3449
+        },
+        {
+          "window": 5,
+          "start": 3381404,
+          "end": 4245404,
+          "events": 10492,
+          "edges": 3136
+        },
+        {
+          "window": 6,
+          "start": 4245404,
+          "end": 5109404,
+          "events": 4637,
+          "edges": 1481
+        },
+        {
+          "window": 7,
+          "start": 5109404,
+          "end": 5973404,
+          "events": 847,
+          "edges": 348
+        },
+        {
+          "window": 8,
+          "start": 5973404,
+          "end": 6837404,
+          "events": 1340,
+          "edges": 448
+        },
+        {
+          "window": 9,
+          "start": 6837404,
+          "end": 7701404,
+          "events": 1550,
+          "edges": 577
+        },
+        {
+          "window": 10,
+          "start": 7701404,
+          "end": 8565404,
+          "events": 774,
+          "edges": 277
+        },
+        {
+          "window": 11,
+          "start": 8565404,
+          "end": 9429404,
+          "events": 964,
+          "edges": 287
+        },
+        {
+          "window": 12,
+          "start": 9429404,
+          "end": 10293404,
+          "events": 731,
+          "edges": 232
+        },
+        {
+          "window": 13,
+          "start": 10293404,
+          "end": 11157404,
+          "events": 835,
+          "edges": 270
+        },
+        {
+          "window": 14,
+          "start": 11157404,
+          "end": 12021404,
+          "events": 1010,
+          "edges": 305
+        },
+        {
+          "window": 15,
+          "start": 12021404,
+          "end": 12885404,
+          "events": 513,
+          "edges": 178
+        },
+        {
+          "window": 16,
+          "start": 12885404,
+          "end": 13749404,
+          "events": 850,
+          "edges": 252
+        },
+        {
+          "window": 17,
+          "start": 13749404,
+          "end": 14613404,
+          "events": 731,
+          "edges": 195
+        },
+        {
+          "window": 18,
+          "start": 14613404,
+          "end": 15477404,
+          "events": 410,
+          "edges": 132
+        }
+      ],
+      "constraints": [
+        "the latest snapshot is kept exactly (TGAP's Churn anchor)",
+        "every snapshot keeps its node set and edge count (remove-one-add-one swaps)",
+        "no community constraint (communities=None): every edge is churn-eligible",
+        "lift to events keeps the number, timing and order of events; only the addressee pair of swapped messages changes"
+      ],
+      "transformation_seed": 42
+    },
+    "baseline": {
+      "logit": 1.2441898584365845,
+      "probability": 0.7762924776434386,
+      "input_fingerprint": "672c30b019337c607aa79dc1a9e5d6581fb2a92f55670493b732c3bbef4e4c7a",
+      "parameter_fingerprint": "d68eb3e77d8b2a40c1ef9bce8aa60e6cf29d65b7fbdedd23be1b5d4b3fb3f349"
+    },
+    "primary_direction": "Decrease",
+    "directions": [
+      {
+        "direction": "Increase",
+        "label": "Increase Churn (20.0%)",
+        "requested_delta": 0.2,
+        "churn_before": 0.9707163252687158,
+        "churn_after": 0.9736517221006877,
+        "achieved_delta": 0.0030239491760472737,
+        "achieved_delta_recomputed": 0.0030239491760472737,
+        "original_probability": 0.7762924776434386,
+        "modified_probability": 0.7763321198162276,
+        "original_logit": 1.2441898584365845,
+        "modified_logit": 1.2444181442260742,
+        "prediction_change": 3.964217278906723e-05,
+        "class_before": "message",
+        "class_after": "message",
+        "class_changed": false,
+        "normalized_impact": 0.013109404451329146,
+        "normalizer": "achieved",
+        "noop": false,
+        "status": "valid",
+        "latest_snapshot_preserved": true,
+        "edge_count_preserved_every_snapshot": true,
+        "lift_round_trip": true,
+        "edge_swaps_per_snapshot": [
+          0,
+          0,
+          1,
+          1,
+          2,
+          1,
+          0,
+          1,
+          2,
+          1,
+          1,
+          1,
+          3,
+          1,
+          2,
+          2,
+          3
+        ],
+        "edges_swapped_total": 22,
+        "events_readdressed": 176,
+        "events_readdressed_touching_a_or_b": 12,
+        "events_total": 59449,
+        "event_changes_sample": [
+          {
+            "event_id": 9330,
+            "window": 3,
+            "timestamp": 1673121,
+            "original": [
+              302,
+              557
+            ],
+            "lifted": [
+              714,
+              1393
+            ]
+          },
+          {
+            "event_id": 10867,
+            "window": 3,
+            "timestamp": 1759238,
+            "original": [
+              557,
+              302
+            ],
+            "lifted": [
+              1393,
+              714
+            ]
+          },
+          {
+            "event_id": 12922,
+            "window": 3,
+            "timestamp": 1860144,
+            "original": [
+              302,
+              557
+            ],
+            "lifted": [
+              714,
+              1393
+            ]
+          },
+          {
+            "event_id": 12939,
+            "window": 3,
+            "timestamp": 1860572,
+            "original": [
+              557,
+              302
+            ],
+            "lifted": [
+              1393,
+              714
+            ]
+          },
+          {
+            "event_id": 12943,
+            "window": 3,
+            "timestamp": 1860750,
+            "original": [
+              302,
+              557
+            ],
+            "lifted": [
+              714,
+              1393
+            ]
+          },
+          {
+            "event_id": 12957,
+            "window": 3,
+            "timestamp": 1861324,
+            "original": [
+              557,
+              302
+            ],
+            "lifted": [
+              1393,
+              714
+            ]
+          },
+          {
+            "event_id": 12964,
+            "window": 3,
+            "timestamp": 1861864,
+            "original": [
+              302,
+              557
+            ],
+            "lifted": [
+              714,
+              1393
+            ]
+          },
+          {
+            "event_id": 12965,
+            "window": 3,
+            "timestamp": 1861918,
+            "original": [
+              557,
+              302
+            ],
+            "lifted": [
+              1393,
+              714
+            ]
+          },
+          {
+            "event_id": 20756,
+            "window": 3,
+            "timestamp": 2384908,
+            "original": [
+              557,
+              302
+            ],
+            "lifted": [
+              1393,
+              714
+            ]
+          },
+          {
+            "event_id": 20957,
+            "window": 3,
+            "timestamp": 2389134,
+            "original": [
+              302,
+              557
+            ],
+            "lifted": [
+              714,
+              1393
+            ]
+          },
+          {
+            "event_id": 20962,
+            "window": 3,
+            "timestamp": 2389294,
+            "original": [
+              557,
+              302
+            ],
+            "lifted": [
+              1393,
+              714
+            ]
+          },
+          {
+            "event_id": 22763,
+            "window": 4,
+            "timestamp": 2649413,
+            "original": [
+              1034,
+              32
+            ],
+            "lifted": [
+              1617,
+              543
+            ]
+          },
+          {
+            "event_id": 24856,
+            "window": 4,
+            "timestamp": 2811200,
+            "original": [
+              1034,
+              32
+            ],
+            "lifted": [
+              1617,
+              543
+            ]
+          },
+          {
+            "event_id": 24857,
+            "window": 4,
+            "timestamp": 2811223,
+            "original": [
+              32,
+              1034
+            ],
+            "lifted": [
+              543,
+              1617
+            ]
+          },
+          {
+            "event_id": 27545,
+            "window": 4,
+            "timestamp": 2963976,
+            "original": [
+              1034,
+              32
+            ],
+            "lifted": [
+              1617,
+              543
+            ]
+          },
+          {
+            "event_id": 27597,
+            "window": 4,
+            "timestamp": 2968275,
+            "original": [
+              32,
+              1034
+            ],
+            "lifted": [
+              543,
+              1617
+            ]
+          },
+          {
+            "event_id": 43041,
+            "window": 5,
+            "timestamp": 4075800,
+            "original": [
+              620,
+              27
+            ],
+            "lifted": [
+              151,
+              46
+            ]
+          },
+          {
+            "event_id": 43142,
+            "window": 5,
+            "timestamp": 4095467,
+            "original": [
+              620,
+              27
+            ],
+            "lifted": [
+              151,
+              46
+            ]
+          },
+          {
+            "event_id": 43972,
+            "window": 5,
+            "timestamp": 4202766,
+            "original": [
+              620,
+              27
+            ],
+            "lifted": [
+              151,
+              46
+            ]
+          },
+          {
+            "event_id": 43974,
+            "window": 5,
+            "timestamp": 4202924,
+            "original": [
+              620,
+              27
+            ],
+            "lifted": [
+              151,
+              46
+            ]
+          },
+          {
+            "event_id": 43977,
+            "window": 5,
+            "timestamp": 4203049,
+            "original": [
+              620,
+              27
+            ],
+            "lifted": [
+              151,
+              46
+            ]
+          },
+          {
+            "event_id": 44191,
+            "window": 5,
+            "timestamp": 4214241,
+            "original": [
+              620,
+              27
+            ],
+            "lifted": [
+              151,
+              46
+            ]
+          },
+          {
+            "event_id": 44253,
+            "window": 5,
+            "timestamp": 4245222,
+            "original": [
+              620,
+              27
+            ],
+            "lifted": [
+              151,
+              46
+            ]
+          },
+          {
+            "event_id": 41589,
+            "window": 5,
+            "timestamp": 3739715,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 41691,
+            "window": 5,
+            "timestamp": 3758695,
+            "original": [
+              1072,
+              1158
+            ],
+            "lifted": [
+              843,
+              1334
+            ]
+          },
+          {
+            "event_id": 41762,
+            "window": 5,
+            "timestamp": 3775359,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 41787,
+            "window": 5,
+            "timestamp": 3780391,
+            "original": [
+              1072,
+              1158
+            ],
+            "lifted": [
+              843,
+              1334
+            ]
+          },
+          {
+            "event_id": 41789,
+            "window": 5,
+            "timestamp": 3780438,
+            "original": [
+              1072,
+              1158
+            ],
+            "lifted": [
+              843,
+              1334
+            ]
+          },
+          {
+            "event_id": 41844,
+            "window": 5,
+            "timestamp": 3819778,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 41850,
+            "window": 5,
+            "timestamp": 3822174,
+            "original": [
+              1072,
+              1158
+            ],
+            "lifted": [
+              843,
+              1334
+            ]
+          },
+          {
+            "event_id": 41981,
+            "window": 5,
+            "timestamp": 3857641,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 41988,
+            "window": 5,
+            "timestamp": 3858953,
+            "original": [
+              1072,
+              1158
+            ],
+            "lifted": [
+              843,
+              1334
+            ]
+          },
+          {
+            "event_id": 42050,
+            "window": 5,
+            "timestamp": 3866944,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 42057,
+            "window": 5,
+            "timestamp": 3868592,
+            "original": [
+              1072,
+              1158
+            ],
+            "lifted": [
+              843,
+              1334
+            ]
+          },
+          {
+            "event_id": 42060,
+            "window": 5,
+            "timestamp": 3869045,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 42061,
+            "window": 5,
+            "timestamp": 3869077,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 42062,
+            "window": 5,
+            "timestamp": 3869108,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 42063,
+            "window": 5,
+            "timestamp": 3869130,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 42064,
+            "window": 5,
+            "timestamp": 3869251,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 42066,
+            "window": 5,
+            "timestamp": 3869340,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 42501,
+            "window": 5,
+            "timestamp": 3979675,
+            "original": [
+              1072,
+              1158
+            ],
+            "lifted": [
+              843,
+              1334
+            ]
+          },
+          {
+            "event_id": 42502,
+            "window": 5,
+            "timestamp": 3979702,
+            "original": [
+              1072,
+              1158
+            ],
+            "lifted": [
+              843,
+              1334
+            ]
+          },
+          {
+            "event_id": 42521,
+            "window": 5,
+            "timestamp": 3985909,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 42522,
+            "window": 5,
+            "timestamp": 3986020,
+            "original": [
+              1158,
+              1072
+            ],
+            "lifted": [
+              1334,
+              843
+            ]
+          },
+          {
+            "event_id": 44667,
+            "window": 6,
+            "timestamp": 4289781,
+            "original": [
+              1362,
+              342
+            ],
+            "lifted": [
+              1604,
+              71
+            ]
+          },
+          {
+            "event_id": 44796,
+            "window": 6,
+            "timestamp": 4327597,
+            "original": [
+              1362,
+              342
+            ],
+            "lifted": [
+              1604,
+              71
+            ]
+          },
+          {
+            "event_id": 45422,
+            "window": 6,
+            "timestamp": 4522353,
+            "original": [
+              1362,
+              342
+            ],
+            "lifted": [
+              1604,
+              71
+            ]
+          },
+          {
+            "event_id": 50208,
+            "window": 8,
+            "timestamp": 6454414,
+            "original": [
+              27,
+              620
+            ],
+            "lifted": [
+              432,
+              1292
+            ]
+          },
+          {
+            "event_id": 50239,
+            "window": 8,
+            "timestamp": 6493216,
+            "original": [
+              620,
+              27
+            ],
+            "lifted": [
+              1292,
+              432
+            ]
+          },
+          {
+            "event_id": 50265,
+            "window": 8,
+            "timestamp": 6500627,
+            "original": [
+              27,
+              620
+            ],
+            "lifted": [
+              432,
+              1292
+            ]
+          },
+          {
+            "event_id": 52193,
+            "window": 9,
+            "timestamp": 7458382,
+            "original": [
+              1713,
+              233
+            ],
+            "lifted": [
+              1034,
+              461
+            ]
+          },
+          {
+            "event_id": 52195,
+            "window": 9,
+            "timestamp": 7458797,
+            "original": [
+              233,
+              1713
+            ],
+            "lifted": [
+              461,
+              1034
+            ]
+          },
+          {
+            "event_id": 52197,
+            "window": 9,
+            "timestamp": 7458849,
+            "original": [
+              1713,
+              233
+            ],
+            "lifted": [
+              1034,
+              461
+            ]
+          },
+          {
+            "event_id": 52201,
+            "window": 9,
+            "timestamp": 7459121,
+            "original": [
+              233,
+              1713
+            ],
+            "lifted": [
+              461,
+              1034
+            ]
+          },
+          {
+            "event_id": 52202,
+            "window": 9,
+            "timestamp": 7459385,
+            "original": [
+              1713,
+              233
+            ],
+            "lifted": [
+              1034,
+              461
+            ]
+          },
+          {
+            "event_id": 52206,
+            "window": 9,
+            "timestamp": 7460836,
+            "original": [
+              233,
+              1713
+            ],
+            "lifted": [
+              461,
+              1034
+            ]
+          },
+          {
+            "event_id": 52218,
+            "window": 9,
+            "timestamp": 7462811,
+            "original": [
+              1713,
+              233
+            ],
+            "lifted": [
+              1034,
+              461
+            ]
+          },
+          {
+            "event_id": 52220,
+            "window": 9,
+            "timestamp": 7462882,
+            "original": [
+              233,
+              1713
+            ],
+            "lifted": [
+              461,
+              1034
+            ]
+          },
+          {
+            "event_id": 52222,
+            "window": 9,
+            "timestamp": 7462983,
+            "original": [
+              1713,
+              233
+            ],
+            "lifted": [
+              1034,
+              461
+            ]
+          },
+          {
+            "event_id": 52229,
+            "window": 9,
+            "timestamp": 7464127,
+            "original": [
+              233,
+              1713
+            ],
+            "lifted": [
+              461,
+              1034
+            ]
+          },
+          {
+            "event_id": 52231,
+            "window": 9,
+            "timestamp": 7464701,
+            "original": [
+              1713,
+              233
+            ],
+            "lifted": [
+              1034,
+              461
+            ]
+          },
+          {
+            "event_id": 51258,
+            "window": 9,
+            "timestamp": 6926258,
+            "original": [
+              1713,
+              536
+            ],
+            "lifted": [
+              1014,
+              944
+            ]
+          },
+          {
+            "event_id": 51808,
+            "window": 9,
+            "timestamp": 7215379,
+            "original": [
+              536,
+              1713
+            ],
+            "lifted": [
+              944,
+              1014
+            ]
+          },
+          {
+            "event_id": 51930,
+            "window": 9,
+            "timestamp": 7295804,
+            "original": [
+              1713,
+              536
+            ],
+            "lifted": [
+              1014,
+              944
+            ]
+          },
+          {
+            "event_id": 52650,
+            "window": 10,
+            "timestamp": 7710099,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              1661,
+              1718
+            ]
+          },
+          {
+            "event_id": 52664,
+            "window": 10,
+            "timestamp": 7718376,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              1718,
+              1661
+            ]
+          },
+          {
+            "event_id": 52665,
+            "window": 10,
+            "timestamp": 7719498,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              1661,
+              1718
+            ]
+          },
+          {
+            "event_id": 52732,
+            "window": 10,
+            "timestamp": 7776716,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              1718,
+              1661
+            ]
+          },
+          {
+            "event_id": 52741,
+            "window": 10,
+            "timestamp": 7787404,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              1661,
+              1718
+            ]
+          },
+          {
+            "event_id": 52763,
+            "window": 10,
+            "timestamp": 7805847,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              1718,
+              1661
+            ]
+          },
+          {
+            "event_id": 52773,
+            "window": 10,
+            "timestamp": 7807668,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              1661,
+              1718
+            ]
+          },
+          {
+            "event_id": 52774,
+            "window": 10,
+            "timestamp": 7808119,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              1718,
+              1661
+            ]
+          },
+          {
+            "event_id": 52854,
+            "window": 10,
+            "timestamp": 7887127,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              1661,
+              1718
+            ]
+          },
+          {
+            "event_id": 52866,
+            "window": 10,
+            "timestamp": 7899364,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              1718,
+              1661
+            ]
+          },
+          {
+            "event_id": 53002,
+            "window": 10,
+            "timestamp": 8211117,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              1718,
+              1661
+            ]
+          },
+          {
+            "event_id": 53015,
+            "window": 10,
+            "timestamp": 8236676,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              1661,
+              1718
+            ]
+          },
+          {
+            "event_id": 53048,
+            "window": 10,
+            "timestamp": 8253944,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              1718,
+              1661
+            ]
+          },
+          {
+            "event_id": 53200,
+            "window": 10,
+            "timestamp": 8393495,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              1661,
+              1718
+            ]
+          },
+          {
+            "event_id": 53360,
+            "window": 10,
+            "timestamp": 8513150,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              1718,
+              1661
+            ]
+          },
+          {
+            "event_id": 53361,
+            "window": 10,
+            "timestamp": 8514030,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              1661,
+              1718
+            ]
+          },
+          {
+            "event_id": 53365,
+            "window": 10,
+            "timestamp": 8515020,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              1718,
+              1661
+            ]
+          },
+          {
+            "event_id": 53366,
+            "window": 10,
+            "timestamp": 8515297,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              1661,
+              1718
+            ]
+          },
+          {
+            "event_id": 53394,
+            "window": 10,
+            "timestamp": 8554281,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              1718,
+              1661
+            ]
+          },
+          {
+            "event_id": 53475,
+            "window": 11,
+            "timestamp": 8652981,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1086,
+              62
+            ]
+          },
+          {
+            "event_id": 53479,
+            "window": 11,
+            "timestamp": 8657554,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              62,
+              1086
+            ]
+          },
+          {
+            "event_id": 53617,
+            "window": 11,
+            "timestamp": 8820710,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1086,
+              62
+            ]
+          },
+          {
+            "event_id": 53623,
+            "window": 11,
+            "timestamp": 8827574,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              62,
+              1086
+            ]
+          },
+          {
+            "event_id": 53934,
+            "window": 11,
+            "timestamp": 9015282,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1086,
+              62
+            ]
+          },
+          {
+            "event_id": 53952,
+            "window": 11,
+            "timestamp": 9031465,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              62,
+              1086
+            ]
+          },
+          {
+            "event_id": 53963,
+            "window": 11,
+            "timestamp": 9036198,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1086,
+              62
+            ]
+          },
+          {
+            "event_id": 53975,
+            "window": 11,
+            "timestamp": 9041349,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              62,
+              1086
+            ]
+          },
+          {
+            "event_id": 54030,
+            "window": 11,
+            "timestamp": 9088682,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1086,
+              62
+            ]
+          },
+          {
+            "event_id": 54034,
+            "window": 11,
+            "timestamp": 9090545,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              62,
+              1086
+            ]
+          },
+          {
+            "event_id": 54132,
+            "window": 11,
+            "timestamp": 9167566,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1086,
+              62
+            ]
+          },
+          {
+            "event_id": 54134,
+            "window": 11,
+            "timestamp": 9168862,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              62,
+              1086
+            ]
+          },
+          {
+            "event_id": 54220,
+            "window": 11,
+            "timestamp": 9257660,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1086,
+              62
+            ]
+          },
+          {
+            "event_id": 54223,
+            "window": 11,
+            "timestamp": 9259228,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              62,
+              1086
+            ]
+          },
+          {
+            "event_id": 54278,
+            "window": 11,
+            "timestamp": 9341098,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1086,
+              62
+            ]
+          },
+          {
+            "event_id": 54281,
+            "window": 11,
+            "timestamp": 9343953,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              62,
+              1086
+            ]
+          },
+          {
+            "event_id": 54362,
+            "window": 11,
+            "timestamp": 9425175,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1086,
+              62
+            ]
+          },
+          {
+            "event_id": 54365,
+            "window": 11,
+            "timestamp": 9426419,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              62,
+              1086
+            ]
+          },
+          {
+            "event_id": 54520,
+            "window": 12,
+            "timestamp": 9553996,
+            "original": [
+              1713,
+              561
+            ],
+            "lifted": [
+              895,
+              258
+            ]
+          },
+          {
+            "event_id": 54525,
+            "window": 12,
+            "timestamp": 9554576,
+            "original": [
+              561,
+              1713
+            ],
+            "lifted": [
+              258,
+              895
+            ]
+          },
+          {
+            "event_id": 55515,
+            "window": 13,
+            "timestamp": 10741753,
+            "original": [
+              27,
+              620
+            ],
+            "lifted": [
+              367,
+              709
+            ]
+          },
+          {
+            "event_id": 55574,
+            "window": 13,
+            "timestamp": 10766937,
+            "original": [
+              620,
+              27
+            ],
+            "lifted": [
+              709,
+              367
+            ]
+          },
+          {
+            "event_id": 55576,
+            "window": 13,
+            "timestamp": 10767216,
+            "original": [
+              27,
+              620
+            ],
+            "lifted": [
+              367,
+              709
+            ]
+          },
+          {
+            "event_id": 55533,
+            "window": 13,
+            "timestamp": 10751645,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1848,
+              647
+            ]
+          },
+          {
+            "event_id": 55548,
+            "window": 13,
+            "timestamp": 10758075,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              647,
+              1848
+            ]
+          },
+          {
+            "event_id": 55551,
+            "window": 13,
+            "timestamp": 10758878,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              647,
+              1848
+            ]
+          },
+          {
+            "event_id": 55566,
+            "window": 13,
+            "timestamp": 10765925,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1848,
+              647
+            ]
+          },
+          {
+            "event_id": 55567,
+            "window": 13,
+            "timestamp": 10766022,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1848,
+              647
+            ]
+          },
+          {
+            "event_id": 55573,
+            "window": 13,
+            "timestamp": 10766611,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              647,
+              1848
+            ]
+          },
+          {
+            "event_id": 55629,
+            "window": 13,
+            "timestamp": 10836244,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1848,
+              647
+            ]
+          },
+          {
+            "event_id": 55644,
+            "window": 13,
+            "timestamp": 10841073,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              647,
+              1848
+            ]
+          },
+          {
+            "event_id": 55645,
+            "window": 13,
+            "timestamp": 10841183,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              647,
+              1848
+            ]
+          },
+          {
+            "event_id": 55658,
+            "window": 13,
+            "timestamp": 10849312,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1848,
+              647
+            ]
+          },
+          {
+            "event_id": 55690,
+            "window": 13,
+            "timestamp": 10854993,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              647,
+              1848
+            ]
+          },
+          {
+            "event_id": 55761,
+            "window": 13,
+            "timestamp": 10930446,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1848,
+              647
+            ]
+          },
+          {
+            "event_id": 55763,
+            "window": 13,
+            "timestamp": 10930789,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              647,
+              1848
+            ]
+          },
+          {
+            "event_id": 55764,
+            "window": 13,
+            "timestamp": 10930869,
+            "original": [
+              561,
+              431
+            ],
+            "lifted": [
+              1848,
+              647
+            ]
+          },
+          {
+            "event_id": 55770,
+            "window": 13,
+            "timestamp": 10933996,
+            "original": [
+              431,
+              561
+            ],
+            "lifted": [
+              647,
+              1848
+            ]
+          },
+          {
+            "event_id": 55537,
+            "window": 13,
+            "timestamp": 10752136,
+            "original": [
+              561,
+              557
+            ],
+            "lifted": [
+              1403,
+              655
+            ]
+          },
+          {
+            "event_id": 55539,
+            "window": 13,
+            "timestamp": 10753205,
+            "original": [
+              557,
+              561
+            ],
+            "lifted": [
+              655,
+              1403
+            ]
+          },
+          {
+            "event_id": 55565,
+            "window": 13,
+            "timestamp": 10765862,
+            "original": [
+              561,
+              557
+            ],
+            "lifted": [
+              1403,
+              655
+            ]
+          },
+          {
+            "event_id": 55578,
+            "window": 13,
+            "timestamp": 10767793,
+            "original": [
+              557,
+              561
+            ],
+            "lifted": [
+              655,
+              1403
+            ]
+          },
+          {
+            "event_id": 55635,
+            "window": 13,
+            "timestamp": 10837922,
+            "original": [
+              561,
+              557
+            ],
+            "lifted": [
+              1403,
+              655
+            ]
+          },
+          {
+            "event_id": 55641,
+            "window": 13,
+            "timestamp": 10838856,
+            "original": [
+              557,
+              561
+            ],
+            "lifted": [
+              655,
+              1403
+            ]
+          },
+          {
+            "event_id": 55643,
+            "window": 13,
+            "timestamp": 10839056,
+            "original": [
+              561,
+              557
+            ],
+            "lifted": [
+              1403,
+              655
+            ]
+          },
+          {
+            "event_id": 55657,
+            "window": 13,
+            "timestamp": 10848729,
+            "original": [
+              561,
+              557
+            ],
+            "lifted": [
+              1403,
+              655
+            ]
+          },
+          {
+            "event_id": 55660,
+            "window": 13,
+            "timestamp": 10849665,
+            "original": [
+              557,
+              561
+            ],
+            "lifted": [
+              655,
+              1403
+            ]
+          },
+          {
+            "event_id": 55760,
+            "window": 13,
+            "timestamp": 10930424,
+            "original": [
+              561,
+              557
+            ],
+            "lifted": [
+              1403,
+              655
+            ]
+          },
+          {
+            "event_id": 55796,
+            "window": 13,
+            "timestamp": 10943389,
+            "original": [
+              557,
+              561
+            ],
+            "lifted": [
+              655,
+              1403
+            ]
+          },
+          {
+            "event_id": 55959,
+            "window": 14,
+            "timestamp": 11190001,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              469,
+              233
+            ]
+          },
+          {
+            "event_id": 56292,
+            "window": 14,
+            "timestamp": 11429978,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              233,
+              469
+            ]
+          },
+          {
+            "event_id": 56299,
+            "window": 14,
+            "timestamp": 11433034,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              469,
+              233
+            ]
+          },
+          {
+            "event_id": 56412,
+            "window": 14,
+            "timestamp": 11509736,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              233,
+              469
+            ]
+          },
+          {
+            "event_id": 56414,
+            "window": 14,
+            "timestamp": 11515509,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              469,
+              233
+            ]
+          },
+          {
+            "event_id": 56531,
+            "window": 14,
+            "timestamp": 11636115,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              233,
+              469
+            ]
+          },
+          {
+            "event_id": 57112,
+            "window": 15,
+            "timestamp": 12246113,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              632,
+              953
+            ]
+          },
+          {
+            "event_id": 57124,
+            "window": 15,
+            "timestamp": 12282774,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              953,
+              632
+            ]
+          },
+          {
+            "event_id": 57269,
+            "window": 15,
+            "timestamp": 12562393,
+            "original": [
+              12,
+              1312
+            ],
+            "lifted": [
+              632,
+              953
+            ]
+          },
+          {
+            "event_id": 57283,
+            "window": 15,
+            "timestamp": 12572741,
+            "original": [
+              1312,
+              12
+            ],
+            "lifted": [
+              953,
+              632
+            ]
+          },
+          {
+            "event_id": 57341,
+            "window": 15,
+            "timestamp": 12654971,
+            "original": [
+              1624,
+              1781
+            ],
+            "lifted": [
+              979,
+              1131
+            ]
+          },
+          {
+            "event_id": 57518,
+            "window": 16,
+            "timestamp": 12967105,
+            "original": [
+              1,
+              312
+            ],
+            "lifted": [
+              843,
+              1239
+            ]
+          },
+          {
+            "event_id": 57523,
+            "window": 16,
+            "timestamp": 12974236,
+            "original": [
+              312,
+              1
+            ],
+            "lifted": [
+              1239,
+              843
+            ]
+          },
+          {
+            "event_id": 57559,
+            "window": 16,
+            "timestamp": 12998358,
+            "original": [
+              1,
+              312
+            ],
+            "lifted": [
+              843,
+              1239
+            ]
+          },
+          {
+            "event_id": 58047,
+            "window": 16,
+            "timestamp": 13400241,
+            "original": [
+              312,
+              1
+            ],
+            "lifted": [
+              1239,
+              843
+            ]
+          },
+          {
+            "event_id": 58048,
+            "window": 16,
+            "timestamp": 13400627,
+            "original": [
+              312,
+              1
+            ],
+            "lifted": [
+              1239,
+              843
+            ]
+          },
+          {
+            "event_id": 58127,
+            "window": 16,
+            "timestamp": 13440374,
+            "original": [
+              1,
+              312
+            ],
+            "lifted": [
+              843,
+              1239
+            ]
+          },
+          {
+            "event_id": 58128,
+            "window": 16,
+            "timestamp": 13440466,
+            "original": [
+              1,
+              312
+            ],
+            "lifted": [
+              843,
+              1239
+            ]
+          },
+          {
+            "event_id": 58130,
+            "window": 16,
+            "timestamp": 13441147,
+            "original": [
+              1,
+              312
+            ],
+            "lifted": [
+              843,
+              1239
+            ]
+          },
+          {
+            "event_id": 58152,
+            "window": 16,
+            "timestamp": 13479544,
+            "original": [
+              312,
+              1
+            ],
+            "lifted": [
+              1239,
+              843
+            ]
+          },
+          {
+            "event_id": 57583,
+            "window": 16,
+            "timestamp": 13008022,
+            "original": [
+              1836,
+              536
+            ],
+            "lifted": [
+              1001,
+              875
+            ]
+          },
+          {
+            "event_id": 57613,
+            "window": 16,
+            "timestamp": 13043677,
+            "original": [
+              536,
+              1836
+            ],
+            "lifted": [
+              875,
+              1001
+            ]
+          },
+          {
+            "event_id": 58448,
+            "window": 17,
+            "timestamp": 13940860,
+            "original": [
+              95,
+              561
+            ],
+            "lifted": [
+              239,
+              803
+            ]
+          },
+          {
+            "event_id": 58462,
+            "window": 17,
+            "timestamp": 13952483,
+            "original": [
+              1624,
+              1781
+            ],
+            "lifted": [
+              953,
+              1774
+            ]
+          },
+          {
+            "event_id": 58739,
+            "window": 17,
+            "timestamp": 14203859,
+            "original": [
+              1624,
+              1781
+            ],
+            "lifted": [
+              953,
+              1774
+            ]
+          },
+          {
+            "event_id": 58744,
+            "window": 17,
+            "timestamp": 14205090,
+            "original": [
+              1781,
+              1624
+            ],
+            "lifted": [
+              1774,
+              953
+            ]
+          },
+          {
+            "event_id": 58746,
+            "window": 17,
+            "timestamp": 14205287,
+            "original": [
+              1624,
+              1781
+            ],
+            "lifted": [
+              953,
+              1774
+            ]
+          },
+          {
+            "event_id": 58749,
+            "window": 17,
+            "timestamp": 14205991,
+            "original": [
+              1781,
+              1624
+            ],
+            "lifted": [
+              1774,
+              953
+            ]
+          },
+          {
+            "event_id": 58751,
+            "window": 17,
+            "timestamp": 14207000,
+            "original": [
+              1624,
+              1781
+            ],
+            "lifted": [
+              953,
+              1774
+            ]
+          },
+          {
+            "event_id": 58752,
+            "window": 17,
+            "timestamp": 14207534,
+            "original": [
+              1781,
+              1624
+            ],
+            "lifted": [
+              1774,
+              953
+            ]
+          },
+          {
+            "event_id": 58753,
+            "window": 17,
+            "timestamp": 14207554,
+            "original": [
+              1624,
+              1781
+            ],
+            "lifted": [
+              953,
+              1774
+            ]
+          },
+          {
+            "event_id": 58755,
+            "window": 17,
+            "timestamp": 14208752,
+            "original": [
+              1624,
+              1781
+            ],
+            "lifted": [
+              953,
+              1774
+            ]
+          },
+          {
+            "event_id": 58881,
+            "window": 17,
+            "timestamp": 14294255,
+            "original": [
+              1781,
+              1624
+            ],
+            "lifted": [
+              1774,
+              953
+            ]
+          },
+          {
+            "event_id": 58882,
+            "window": 17,
+            "timestamp": 14294768,
+            "original": [
+              1624,
+              1781
+            ],
+            "lifted": [
+              953,
+              1774
+            ]
+          },
+          {
+            "event_id": 58691,
+            "window": 17,
+            "timestamp": 14095999,
+            "original": [
+              1724,
+              1836
+            ],
+            "lifted": [
+              1202,
+              1663
+            ]
+          },
+          {
+            "event_id": 58718,
+            "window": 17,
+            "timestamp": 14172394,
+            "original": [
+              1836,
+              1724
+            ],
+            "lifted": [
+              1663,
+              1202
+            ]
+          },
+          {
+            "event_id": 58725,
+            "window": 17,
+            "timestamp": 14188274,
+            "original": [
+              1724,
+              1836
+            ],
+            "lifted": [
+              1202,
+              1663
+            ]
+          },
+          {
+            "event_id": 58839,
+            "window": 17,
+            "timestamp": 14219088,
+            "original": [
+              1836,
+              1724
+            ],
+            "lifted": [
+              1663,
+              1202
+            ]
+          },
+          {
+            "event_id": 58886,
+            "window": 17,
+            "timestamp": 14298083,
+            "original": [
+              1724,
+              1836
+            ],
+            "lifted": [
+              1202,
+              1663
+            ]
+          },
+          {
+            "event_id": 58923,
+            "window": 17,
+            "timestamp": 14379789,
+            "original": [
+              1836,
+              1724
+            ],
+            "lifted": [
+              1663,
+              1202
+            ]
+          },
+          {
+            "event_id": 58962,
+            "window": 17,
+            "timestamp": 14460441,
+            "original": [
+              1724,
+              1836
+            ],
+            "lifted": [
+              1202,
+              1663
+            ]
+          },
+          {
+            "event_id": 58974,
+            "window": 17,
+            "timestamp": 14480577,
+            "original": [
+              1836,
+              1724
+            ],
+            "lifted": [
+              1663,
+              1202
+            ]
+          },
+          {
+            "event_id": 58998,
+            "window": 17,
+            "timestamp": 14535012,
+            "original": [
+              1724,
+              1836
+            ],
+            "lifted": [
+              1202,
+              1663
+            ]
+          },
+          {
+            "event_id": 59022,
+            "window": 17,
+            "timestamp": 14565776,
+            "original": [
+              1836,
+              1724
+            ],
+            "lifted": [
+              1663,
+              1202
+            ]
+          }
+        ],
+        "modified_input_fingerprint": "5f19eb7a5d639078a72bd3ecd540580afbee1a2b5adc3d742d5f3499f21b4bf0",
+        "feasibility": {
+          "periods": [
+            {
+              "snapshot": 1,
+              "eligible_edges": 0,
+              "requested_swaps": 0,
+              "applied_swaps": 0,
+              "limited": false
+            },
+            {
+              "snapshot": 2,
+              "eligible_edges": 2,
+              "requested_swaps": 0,
+              "applied_swaps": 0,
+              "limited": false
+            },
+            {
+              "snapshot": 3,
+              "eligible_edges": 7,
+              "requested_swaps": 1,
+              "applied_swaps": 1,
+              "limited": false
+            },
+            {
+              "snapshot": 4,
+              "eligible_edges": 7,
+              "requested_swaps": 1,
+              "applied_swaps": 1,
+              "limited": false
+            },
+            {
+              "snapshot": 5,
+              "eligible_edges": 9,
+              "requested_swaps": 2,
+              "applied_swaps": 2,
+              "limited": false
+            },
+            {
+              "snapshot": 6,
+              "eligible_edges": 7,
+              "requested_swaps": 1,
+              "applied_swaps": 1,
+              "limited": false
+            },
+            {
+              "snapshot": 7,
+              "eligible_edges": 3,
+              "requested_swaps": 1,
+              "applied_swaps": 1,
+              "limited": false
+            },
+            {
+              "snapshot": 8,
+              "eligible_edges": 13,
+              "requested_swaps": 3,
+              "applied_swaps": 3,
+              "limited": false
+            },
+            {
+              "snapshot": 9,
+              "eligible_edges": 14,
+              "requested_swaps": 3,
+              "applied_swaps": 3,
+              "limited": false
+            },
+            {
+              "snapshot": 10,
+              "eligible_edges": 11,
+              "requested_swaps": 2,
+              "applied_swaps": 2,
+              "limited": false
+            },
+            {
+              "snapshot": 11,
+              "eligible_edges": 11,
+              "requested_swaps": 2,
+              "applied_swaps": 2,
+              "limited": false
+            },
+            {
+              "snapshot": 12,
+              "eligible_edges": 13,
+              "requested_swaps": 3,
+              "applied_swaps": 3,
+              "limited": false
+            },
+            {
+              "snapshot": 13,
+              "eligible_edges": 14,
+              "requested_swaps": 3,
+              "applied_swaps": 3,
+              "limited": false
+            },
+            {
+              "snapshot": 14,
+              "eligible_edges": 15,
+              "requested_swaps": 3,
+              "applied_swaps": 3,
+              "limited": false
+            },
+            {
+              "snapshot": 15,
+              "eligible_edges": 19,
+              "requested_swaps": 4,
+              "applied_swaps": 4,
+              "limited": false
+            },
+            {
+              "snapshot": 16,
+              "eligible_edges": 26,
+              "requested_swaps": 5,
+              "applied_swaps": 5,
+              "limited": false
+            },
+            {
+              "snapshot": 17,
+              "eligible_edges": 39,
+              "requested_swaps": 8,
+              "applied_swaps": 8,
+              "limited": false
+            }
+          ],
+          "limited_periods": [],
+          "requested_swaps_total": 42,
+          "applied_swaps_total": 42,
+          "cause": "Every requested swap was possible in every earlier period.",
+          "measure_note": "Churn is a ratio (Jaccard distance), so swapping a share of edges does not change it by exactly the same share."
+        },
+        "leakage": {
+          "Density": {
+            "before": 0.00055244182648453,
+            "after": 0.00055244182648453,
+            "change": 0.0
+          },
+          "Centralization": {
+            "before": 0.03083128086184362,
+            "after": 0.03077239848304038,
+            "change": -5.888237880323846e-05
+          }
+        },
+        "side_effects": {
+          "event_count_and_timestamps": "unchanged by construction",
+          "synthetic_events": 176,
+          "density_change_mean_over_snapshots": 0.0,
+          "centralization_change_mean_over_snapshots": -5.888237880323846e-05
+        }
+      },
+      {
+        "direction": "Decrease",
+        "label": "Decrease Churn (20.0%)",
+        "requested_delta": -0.2,
+        "churn_before": 0.9707163252687158,
+        "churn_after": 0.8418916491117525,
+        "achieved_delta": -0.13271094016194868,
+        "achieved_delta_recomputed": -0.13271094016194868,
+        "original_probability": 0.7762924776434386,
+        "modified_probability": 0.7673225119688232,
+        "original_logit": 1.2441898584365845,
+        "modified_logit": 1.1932538747787476,
+        "prediction_change": -0.008969965674615388,
+        "class_before": "message",
+        "class_after": "message",
+        "class_changed": false,
+        "normalized_impact": -0.06759025038681239,
+        "normalizer": "achieved",
+        "noop": false,
+        "status": "valid",
+        "latest_snapshot_preserved": true,
+        "edge_count_preserved_every_snapshot": true,
+        "lift_round_trip": true,
+        "edge_swaps_per_snapshot": [
+          76,
+          130,
+          125,
+          125,
+          123,
+          125,
+          69,
+          87,
+          113,
+          53,
+          55,
+          44,
+          51,
+          58,
+          32,
+          45,
+          31
+        ],
+        "edges_swapped_total": 1342,
+        "events_readdressed": 4067,
+        "events_readdressed_touching_a_or_b": 612,
+        "events_total": 59449,
+        "event_changes_sample": [
+          {
+            "event_id": 446,
+            "window": 1,
+            "timestamp": 727804,
+            "original": [
+              1,
+              159
+            ],
+            "lifted": [
+              1,
+              132
+            ]
+          },
+          {
+            "event_id": 21,
+            "window": 1,
+            "timestamp": 440164,
+            "original": [
+              26,
+              7
+            ],
+            "lifted": [
+              312,
+              1
+            ]
+          },
+          {
+            "event_id": 416,
+            "window": 1,
+            "timestamp": 708581,
+            "original": [
+              9,
+              8
+            ],
+            "lifted": [
+              1781,
+              9
+            ]
+          },
+          {
+            "event_id": 430,
+            "window": 1,
+            "timestamp": 718007,
+            "original": [
+              9,
+              8
+            ],
+            "lifted": [
+              1781,
+              9
+            ]
+          },
+          {
+            "event_id": 434,
+            "window": 1,
+            "timestamp": 721094,
+            "original": [
+              9,
+              8
+            ],
+            "lifted": [
+              1781,
+              9
+            ]
+          },
+          {
+            "event_id": 455,
+            "window": 1,
+            "timestamp": 732903,
+            "original": [
+              9,
+              8
+            ],
+            "lifted": [
+              1781,
+              9
+            ]
+          },
+          {
+            "event_id": 17,
+            "window": 1,
+            "timestamp": 409282,
+            "original": [
+              8,
+              23
+            ],
+            "lifted": [
+              19,
+              1882
+            ]
+          },
+          {
+            "event_id": 460,
+            "window": 1,
+            "timestamp": 740891,
+            "original": [
+              58,
+              8
+            ],
+            "lifted": [
+              620,
+              27
+            ]
+          },
+          {
+            "event_id": 481,
+            "window": 1,
+            "timestamp": 743181,
+            "original": [
+              8,
+              58
+            ],
+            "lifted": [
+              27,
+              620
+            ]
+          },
+          {
+            "event_id": 269,
+            "window": 1,
+            "timestamp": 645952,
+            "original": [
+              124,
+              8
+            ],
+            "lifted": [
+              652,
+              27
+            ]
+          },
+          {
+            "event_id": 450,
+            "window": 1,
+            "timestamp": 732387,
+            "original": [
+              129,
+              8
+            ],
+            "lifted": [
+              1034,
+              32
+            ]
+          },
+          {
+            "event_id": 19,
+            "window": 1,
+            "timestamp": 409695,
+            "original": [
+              9,
+              22
+            ],
+            "lifted": [
+              32,
+              1878
+            ]
+          },
+          {
+            "event_id": 415,
+            "window": 1,
+            "timestamp": 708483,
+            "original": [
+              9,
+              22
+            ],
+            "lifted": [
+              32,
+              1878
+            ]
+          },
+          {
+            "event_id": 78,
+            "window": 1,
+            "timestamp": 562218,
+            "original": [
+              9,
+              58
+            ],
+            "lifted": [
+              93,
+              1624
+            ]
+          },
+          {
+            "event_id": 107,
+            "window": 1,
+            "timestamp": 569333,
+            "original": [
+              9,
+              58
+            ],
+            "lifted": [
+              93,
+              1624
+            ]
+          },
+          {
+            "event_id": 412,
+            "window": 1,
+            "timestamp": 708430,
+            "original": [
+              9,
+              58
+            ],
+            "lifted": [
+              93,
+              1624
+            ]
+          },
+          {
+            "event_id": 413,
+            "window": 1,
+            "timestamp": 708439,
+            "original": [
+              9,
+              58
+            ],
+            "lifted": [
+              93,
+              1624
+            ]
+          },
+          {
+            "event_id": 437,
+            "window": 1,
+            "timestamp": 722713,
+            "original": [
+              9,
+              58
+            ],
+            "lifted": [
+              93,
+              1624
+            ]
+          },
+          {
+            "event_id": 488,
+            "window": 1,
+            "timestamp": 746875,
+            "original": [
+              9,
+              58
+            ],
+            "lifted": [
+              93,
+              1624
+            ]
+          },
+          {
+            "event_id": 303,
+            "window": 1,
+            "timestamp": 656511,
+            "original": [
+              9,
+              109
+            ],
+            "lifted": [
+              105,
+              561
+            ]
+          },
+          {
+            "event_id": 304,
+            "window": 1,
+            "timestamp": 657505,
+            "original": [
+              9,
+              109
+            ],
+            "lifted": [
+              105,
+              561
+            ]
+          },
+          {
+            "event_id": 368,
+            "window": 1,
+            "timestamp": 673499,
+            "original": [
+              9,
+              109
+            ],
+            "lifted": [
+              105,
+              561
+            ]
+          },
+          {
+            "event_id": 414,
+            "window": 1,
+            "timestamp": 708462,
+            "original": [
+              9,
+              135
+            ],
+            "lifted": [
+              172,
+              523
+            ]
+          },
+          {
+            "event_id": 406,
+            "window": 1,
+            "timestamp": 708110,
+            "original": [
+              9,
+              148
+            ],
+            "lifted": [
+              193,
+              393
+            ]
+          },
+          {
+            "event_id": 408,
+            "window": 1,
+            "timestamp": 708215,
+            "original": [
+              9,
+              150
+            ],
+            "lifted": [
+              224,
+              1644
+            ]
+          },
+          {
+            "event_id": 409,
+            "window": 1,
+            "timestamp": 708301,
+            "original": [
+              9,
+              151
+            ],
+            "lifted": [
+              418,
+              928
+            ]
+          },
+          {
+            "event_id": 491,
+            "window": 1,
+            "timestamp": 747182,
+            "original": [
+              9,
+              165
+            ],
+            "lifted": [
+              418,
+              1565
+            ]
+          },
+          {
+            "event_id": 36,
+            "window": 1,
+            "timestamp": 499501,
+            "original": [
+              41,
+              14
+            ],
+            "lifted": [
+              1565,
+              423
+            ]
+          },
+          {
+            "event_id": 120,
+            "window": 1,
+            "timestamp": 572483,
+            "original": [
+              19,
+              72
+            ],
+            "lifted": [
+              429,
+              1700
+            ]
+          },
+          {
+            "event_id": 138,
+            "window": 1,
+            "timestamp": 577333,
+            "original": [
+              19,
+              72
+            ],
+            "lifted": [
+              429,
+              1700
+            ]
+          },
+          {
+            "event_id": 15,
+            "window": 1,
+            "timestamp": 403983,
+            "original": [
+              20,
+              21
+            ],
+            "lifted": [
+              431,
+              561
+            ]
+          },
+          {
+            "event_id": 20,
+            "window": 1,
+            "timestamp": 426128,
+            "original": [
+              25,
+              21
+            ],
+            "lifted": [
+              1866,
+              447
+            ]
+          },
+          {
+            "event_id": 23,
+            "window": 1,
+            "timestamp": 463122,
+            "original": [
+              29,
+              25
+            ],
+            "lifted": [
+              1741,
+              463
+            ]
+          },
+          {
+            "event_id": 82,
+            "window": 1,
+            "timestamp": 562553,
+            "original": [
+              67,
+              32
+            ],
+            "lifted": [
+              1713,
+              536
+            ]
+          },
+          {
+            "event_id": 84,
+            "window": 1,
+            "timestamp": 562688,
+            "original": [
+              67,
+              32
+            ],
+            "lifted": [
+              1713,
+              536
+            ]
+          },
+          {
+            "event_id": 87,
+            "window": 1,
+            "timestamp": 562907,
+            "original": [
+              67,
+              32
+            ],
+            "lifted": [
+              1713,
+              536
+            ]
+          },
+          {
+            "event_id": 88,
+            "window": 1,
+            "timestamp": 563038,
+            "original": [
+              67,
+              32
+            ],
+            "lifted": [
+              1713,
+              536
+            ]
+          },
+          {
+            "event_id": 90,
+            "window": 1,
+            "timestamp": 563118,
+            "original": [
+              67,
+              32
+            ],
+            "lifted": [
+              1713,
+              536
+            ]
+          },
+          {
+            "event_id": 95,
+            "window": 1,
+            "timestamp": 567393,
+            "original": [
+              67,
+              32
+            ],
+            "lifted": [
+              1713,
+              536
+            ]
+          },
+          {
+            "event_id": 226,
+            "window": 1,
+            "timestamp": 628469,
+            "original": [
+              96,
+              32
+            ],
+            "lifted": [
+              1836,
+              536
+            ]
+          },
+          {
+            "event_id": 306,
+            "window": 1,
+            "timestamp": 659051,
+            "original": [
+              96,
+              32
+            ],
+            "lifted": [
+              1836,
+              536
+            ]
+          },
+          {
+            "event_id": 496,
+            "window": 1,
+            "timestamp": 748433,
+            "original": [
+              32,
+              174
+            ],
+            "lifted": [
+              540,
+              615
+            ]
+          },
+          {
+            "event_id": 540,
+            "window": 1,
+            "timestamp": 750959,
+            "original": [
+              32,
+              179
+            ],
+            "lifted": [
+              561,
+              1713
+            ]
+          },
+          {
+            "event_id": 660,
+            "window": 1,
+            "timestamp": 756532,
+            "original": [
+              185,
+              32
+            ],
+            "lifted": [
+              821,
+              583
+            ]
+          },
+          {
+            "event_id": 663,
+            "window": 1,
+            "timestamp": 756756,
+            "original": [
+              32,
+              185
+            ],
+            "lifted": [
+              583,
+              821
+            ]
+          },
+          {
+            "event_id": 30,
+            "window": 1,
+            "timestamp": 484757,
+            "original": [
+              34,
+              33
+            ],
+            "lifted": [
+              1862,
+              601
+            ]
+          },
+          {
+            "event_id": 29,
+            "window": 1,
+            "timestamp": 484569,
+            "original": [
+              34,
+              35
+            ],
+            "lifted": [
+              617,
+              1713
+            ]
+          },
+          {
+            "event_id": 429,
+            "window": 1,
+            "timestamp": 717784,
+            "original": [
+              101,
+              34
+            ],
+            "lifted": [
+              697,
+              645
+            ]
+          },
+          {
+            "event_id": 456,
+            "window": 1,
+            "timestamp": 736659,
+            "original": [
+              34,
+              101
+            ],
+            "lifted": [
+              645,
+              697
+            ]
+          },
+          {
+            "event_id": 31,
+            "window": 1,
+            "timestamp": 489988,
+            "original": [
+              36,
+              37
+            ],
+            "lifted": [
+              674,
+              1877
+            ]
+          },
+          {
+            "event_id": 61,
+            "window": 1,
+            "timestamp": 558756,
+            "original": [
+              36,
+              60
+            ],
+            "lifted": [
+              697,
+              1713
+            ]
+          },
+          {
+            "event_id": 64,
+            "window": 1,
+            "timestamp": 559826,
+            "original": [
+              36,
+              60
+            ],
+            "lifted": [
+              697,
+              1713
+            ]
+          },
+          {
+            "event_id": 66,
+            "window": 1,
+            "timestamp": 560911,
+            "original": [
+              36,
+              60
+            ],
+            "lifted": [
+              697,
+              1713
+            ]
+          },
+          {
+            "event_id": 144,
+            "window": 1,
+            "timestamp": 579071,
+            "original": [
+              36,
+              60
+            ],
+            "lifted": [
+              697,
+              1713
+            ]
+          },
+          {
+            "event_id": 158,
+            "window": 1,
+            "timestamp": 581240,
+            "original": [
+              36,
+              60
+            ],
+            "lifted": [
+              697,
+              1713
+            ]
+          },
+          {
+            "event_id": 284,
+            "window": 1,
+            "timestamp": 651693,
+            "original": [
+              36,
+              60
+            ],
+            "lifted": [
+              697,
+              1713
+            ]
+          },
+          {
+            "event_id": 204,
+            "window": 1,
+            "timestamp": 618356,
+            "original": [
+              36,
+              105
+            ],
+            "lifted": [
+              697,
+              1852
+            ]
+          },
+          {
+            "event_id": 400,
+            "window": 1,
+            "timestamp": 704854,
+            "original": [
+              36,
+              105
+            ],
+            "lifted": [
+              697,
+              1852
+            ]
+          },
+          {
+            "event_id": 453,
+            "window": 1,
+            "timestamp": 732837,
+            "original": [
+              36,
+              105
+            ],
+            "lifted": [
+              697,
+              1852
+            ]
+          },
+          {
+            "event_id": 212,
+            "window": 1,
+            "timestamp": 621779,
+            "original": [
+              36,
+              109
+            ],
+            "lifted": [
+              697,
+              1864
+            ]
+          },
+          {
+            "event_id": 256,
+            "window": 1,
+            "timestamp": 642885,
+            "original": [
+              36,
+              109
+            ],
+            "lifted": [
+              697,
+              1864
+            ]
+          },
+          {
+            "event_id": 258,
+            "window": 1,
+            "timestamp": 643185,
+            "original": [
+              36,
+              109
+            ],
+            "lifted": [
+              697,
+              1864
+            ]
+          },
+          {
+            "event_id": 261,
+            "window": 1,
+            "timestamp": 643966,
+            "original": [
+              36,
+              109
+            ],
+            "lifted": [
+              697,
+              1864
+            ]
+          },
+          {
+            "event_id": 401,
+            "window": 1,
+            "timestamp": 704932,
+            "original": [
+              36,
+              109
+            ],
+            "lifted": [
+              697,
+              1864
+            ]
+          },
+          {
+            "event_id": 421,
+            "window": 1,
+            "timestamp": 709809,
+            "original": [
+              36,
+              109
+            ],
+            "lifted": [
+              697,
+              1864
+            ]
+          },
+          {
+            "event_id": 452,
+            "window": 1,
+            "timestamp": 732750,
+            "original": [
+              36,
+              109
+            ],
+            "lifted": [
+              697,
+              1864
+            ]
+          },
+          {
+            "event_id": 248,
+            "window": 1,
+            "timestamp": 640037,
+            "original": [
+              36,
+              124
+            ],
+            "lifted": [
+              773,
+              1741
+            ]
+          },
+          {
+            "event_id": 250,
+            "window": 1,
+            "timestamp": 640718,
+            "original": [
+              36,
+              128
+            ],
+            "lifted": [
+              809,
+              1167
+            ]
+          },
+          {
+            "event_id": 32,
+            "window": 1,
+            "timestamp": 497888,
+            "original": [
+              38,
+              39
+            ],
+            "lifted": [
+              868,
+              1866
+            ]
+          },
+          {
+            "event_id": 335,
+            "window": 1,
+            "timestamp": 665772,
+            "original": [
+              38,
+              61
+            ],
+            "lifted": [
+              868,
+              1876
+            ]
+          },
+          {
+            "event_id": 574,
+            "window": 1,
+            "timestamp": 752366,
+            "original": [
+              41,
+              90
+            ],
+            "lifted": [
+              983,
+              1079
+            ]
+          },
+          {
+            "event_id": 464,
+            "window": 1,
+            "timestamp": 741511,
+            "original": [
+              41,
+              132
+            ],
+            "lifted": [
+              983,
+              1876
+            ]
+          },
+          {
+            "event_id": 467,
+            "window": 1,
+            "timestamp": 741603,
+            "original": [
+              41,
+              157
+            ],
+            "lifted": [
+              1002,
+              1052
+            ]
+          },
+          {
+            "event_id": 470,
+            "window": 1,
+            "timestamp": 741687,
+            "original": [
+              41,
+              169
+            ],
+            "lifted": [
+              1052,
+              1881
+            ]
+          },
+          {
+            "event_id": 559,
+            "window": 1,
+            "timestamp": 751810,
+            "original": [
+              41,
+              180
+            ],
+            "lifted": [
+              1079,
+              1881
+            ]
+          },
+          {
+            "event_id": 564,
+            "window": 1,
+            "timestamp": 751951,
+            "original": [
+              41,
+              180
+            ],
+            "lifted": [
+              1079,
+              1881
+            ]
+          },
+          {
+            "event_id": 573,
+            "window": 1,
+            "timestamp": 752346,
+            "original": [
+              41,
+              180
+            ],
+            "lifted": [
+              1079,
+              1881
+            ]
+          },
+          {
+            "event_id": 577,
+            "window": 1,
+            "timestamp": 752529,
+            "original": [
+              41,
+              180
+            ],
+            "lifted": [
+              1079,
+              1881
+            ]
+          },
+          {
+            "event_id": 583,
+            "window": 1,
+            "timestamp": 752739,
+            "original": [
+              41,
+              180
+            ],
+            "lifted": [
+              1079,
+              1881
+            ]
+          },
+          {
+            "event_id": 585,
+            "window": 1,
+            "timestamp": 752799,
+            "original": [
+              41,
+              180
+            ],
+            "lifted": [
+              1079,
+              1881
+            ]
+          },
+          {
+            "event_id": 678,
+            "window": 1,
+            "timestamp": 757487,
+            "original": [
+              41,
+              186
+            ],
+            "lifted": [
+              1168,
+              1624
+            ]
+          },
+          {
+            "event_id": 680,
+            "window": 1,
+            "timestamp": 757568,
+            "original": [
+              41,
+              186
+            ],
+            "lifted": [
+              1168,
+              1624
+            ]
+          },
+          {
+            "event_id": 700,
+            "window": 1,
+            "timestamp": 759963,
+            "original": [
+              41,
+              188
+            ],
+            "lifted": [
+              1236,
+              1237
+            ]
+          },
+          {
+            "event_id": 44,
+            "window": 1,
+            "timestamp": 547261,
+            "original": [
+              44,
+              46
+            ],
+            "lifted": [
+              1282,
+              1773
+            ]
+          },
+          {
+            "event_id": 314,
+            "window": 1,
+            "timestamp": 661493,
+            "original": [
+              44,
+              60
+            ],
+            "lifted": [
+              1285,
+              1624
+            ]
+          },
+          {
+            "event_id": 394,
+            "window": 1,
+            "timestamp": 700642,
+            "original": [
+              44,
+              60
+            ],
+            "lifted": [
+              1285,
+              1624
+            ]
+          },
+          {
+            "event_id": 340,
+            "window": 1,
+            "timestamp": 666596,
+            "original": [
+              44,
+              74
+            ],
+            "lifted": [
+              1291,
+              1836
+            ]
+          },
+          {
+            "event_id": 447,
+            "window": 1,
+            "timestamp": 729301,
+            "original": [
+              44,
+              74
+            ],
+            "lifted": [
+              1291,
+              1836
+            ]
+          },
+          {
+            "event_id": 145,
+            "window": 1,
+            "timestamp": 579270,
+            "original": [
+              86,
+              48
+            ],
+            "lifted": [
+              1868,
+              1338
+            ]
+          },
+          {
+            "event_id": 170,
+            "window": 1,
+            "timestamp": 584256,
+            "original": [
+              48,
+              86
+            ],
+            "lifted": [
+              1338,
+              1868
+            ]
+          },
+          {
+            "event_id": 180,
+            "window": 1,
+            "timestamp": 589559,
+            "original": [
+              48,
+              97
+            ],
+            "lifted": [
+              1344,
+              1783
+            ]
+          },
+          {
+            "event_id": 183,
+            "window": 1,
+            "timestamp": 590015,
+            "original": [
+              97,
+              48
+            ],
+            "lifted": [
+              1783,
+              1344
+            ]
+          },
+          {
+            "event_id": 186,
+            "window": 1,
+            "timestamp": 590639,
+            "original": [
+              97,
+              48
+            ],
+            "lifted": [
+              1783,
+              1344
+            ]
+          },
+          {
+            "event_id": 190,
+            "window": 1,
+            "timestamp": 591102,
+            "original": [
+              97,
+              48
+            ],
+            "lifted": [
+              1783,
+              1344
+            ]
+          },
+          {
+            "event_id": 196,
+            "window": 1,
+            "timestamp": 612555,
+            "original": [
+              105,
+              56
+            ],
+            "lifted": [
+              1878,
+              1362
+            ]
+          },
+          {
+            "event_id": 217,
+            "window": 1,
+            "timestamp": 623648,
+            "original": [
+              56,
+              105
+            ],
+            "lifted": [
+              1362,
+              1878
+            ]
+          },
+          {
+            "event_id": 347,
+            "window": 1,
+            "timestamp": 669965,
+            "original": [
+              105,
+              56
+            ],
+            "lifted": [
+              1878,
+              1362
+            ]
+          },
+          {
+            "event_id": 476,
+            "window": 1,
+            "timestamp": 741953,
+            "original": [
+              56,
+              171
+            ],
+            "lifted": [
+              1375,
+              1756
+            ]
+          },
+          {
+            "event_id": 116,
+            "window": 1,
+            "timestamp": 571703,
+            "original": [
+              79,
+              58
+            ],
+            "lifted": [
+              1793,
+              1474
+            ]
+          },
+          {
+            "event_id": 255,
+            "window": 1,
+            "timestamp": 641770,
+            "original": [
+              79,
+              58
+            ],
+            "lifted": [
+              1793,
+              1474
+            ]
+          },
+          {
+            "event_id": 517,
+            "window": 1,
+            "timestamp": 750544,
+            "original": [
+              161,
+              63
+            ],
+            "lifted": [
+              1890,
+              1487
+            ]
+          },
+          {
+            "event_id": 522,
+            "window": 1,
+            "timestamp": 750614,
+            "original": [
+              161,
+              63
+            ],
+            "lifted": [
+              1890,
+              1487
+            ]
+          },
+          {
+            "event_id": 529,
+            "window": 1,
+            "timestamp": 750758,
+            "original": [
+              161,
+              63
+            ],
+            "lifted": [
+              1890,
+              1487
+            ]
+          },
+          {
+            "event_id": 545,
+            "window": 1,
+            "timestamp": 751209,
+            "original": [
+              161,
+              63
+            ],
+            "lifted": [
+              1890,
+              1487
+            ]
+          },
+          {
+            "event_id": 553,
+            "window": 1,
+            "timestamp": 751664,
+            "original": [
+              161,
+              63
+            ],
+            "lifted": [
+              1890,
+              1487
+            ]
+          },
+          {
+            "event_id": 562,
+            "window": 1,
+            "timestamp": 751925,
+            "original": [
+              161,
+              63
+            ],
+            "lifted": [
+              1890,
+              1487
+            ]
+          },
+          {
+            "event_id": 458,
+            "window": 1,
+            "timestamp": 739165,
+            "original": [
+              163,
+              72
+            ],
+            "lifted": [
+              1870,
+              1488
+            ]
+          },
+          {
+            "event_id": 213,
+            "window": 1,
+            "timestamp": 622546,
+            "original": [
+              79,
+              109
+            ],
+            "lifted": [
+              1488,
+              1875
+            ]
+          },
+          {
+            "event_id": 202,
+            "window": 1,
+            "timestamp": 614289,
+            "original": [
+              105,
+              81
+            ],
+            "lifted": [
+              1884,
+              1488
+            ]
+          },
+          {
+            "event_id": 739,
+            "window": 1,
+            "timestamp": 766838,
+            "original": [
+              176,
+              86
+            ],
+            "lifted": [
+              1886,
+              1488
+            ]
+          },
+          {
+            "event_id": 487,
+            "window": 1,
+            "timestamp": 746400,
+            "original": [
+              96,
+              163
+            ],
+            "lifted": [
+              1488,
+              1888
+            ]
+          },
+          {
+            "event_id": 673,
+            "window": 1,
+            "timestamp": 757281,
+            "original": [
+              185,
+              97
+            ],
+            "lifted": [
+              1889,
+              1488
+            ]
+          },
+          {
+            "event_id": 271,
+            "window": 1,
+            "timestamp": 647064,
+            "original": [
+              99,
+              126
+            ],
+            "lifted": [
+              1540,
+              1700
+            ]
+          },
+          {
+            "event_id": 702,
+            "window": 1,
+            "timestamp": 761299,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 704,
+            "window": 1,
+            "timestamp": 761320,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 705,
+            "window": 1,
+            "timestamp": 761350,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 706,
+            "window": 1,
+            "timestamp": 761419,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 707,
+            "window": 1,
+            "timestamp": 761441,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 709,
+            "window": 1,
+            "timestamp": 761553,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 710,
+            "window": 1,
+            "timestamp": 761594,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 711,
+            "window": 1,
+            "timestamp": 761607,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 712,
+            "window": 1,
+            "timestamp": 761658,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 713,
+            "window": 1,
+            "timestamp": 761683,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 714,
+            "window": 1,
+            "timestamp": 761694,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 715,
+            "window": 1,
+            "timestamp": 761706,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 716,
+            "window": 1,
+            "timestamp": 761712,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 721,
+            "window": 1,
+            "timestamp": 761858,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 722,
+            "window": 1,
+            "timestamp": 761866,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 724,
+            "window": 1,
+            "timestamp": 761953,
+            "original": [
+              101,
+              190
+            ],
+            "lifted": [
+              1543,
+              1870
+            ]
+          },
+          {
+            "event_id": 369,
+            "window": 1,
+            "timestamp": 674722,
+            "original": [
+              103,
+              109
+            ],
+            "lifted": [
+              1543,
+              1879
+            ]
+          },
+          {
+            "event_id": 372,
+            "window": 1,
+            "timestamp": 675753,
+            "original": [
+              103,
+              109
+            ],
+            "lifted": [
+              1543,
+              1879
+            ]
+          },
+          {
+            "event_id": 493,
+            "window": 1,
+            "timestamp": 748171,
+            "original": [
+              103,
+              109
+            ],
+            "lifted": [
+              1543,
+              1879
+            ]
+          },
+          {
+            "event_id": 727,
+            "window": 1,
+            "timestamp": 762269,
+            "original": [
+              103,
+              109
+            ],
+            "lifted": [
+              1543,
+              1879
+            ]
+          },
+          {
+            "event_id": 729,
+            "window": 1,
+            "timestamp": 762542,
+            "original": [
+              103,
+              109
+            ],
+            "lifted": [
+              1543,
+              1879
+            ]
+          },
+          {
+            "event_id": 730,
+            "window": 1,
+            "timestamp": 762631,
+            "original": [
+              103,
+              109
+            ],
+            "lifted": [
+              1543,
+              1879
+            ]
+          },
+          {
+            "event_id": 708,
+            "window": 1,
+            "timestamp": 761492,
+            "original": [
+              103,
+              192
+            ],
+            "lifted": [
+              1565,
+              1876
+            ]
+          },
+          {
+            "event_id": 354,
+            "window": 1,
+            "timestamp": 670434,
+            "original": [
+              105,
+              135
+            ],
+            "lifted": [
+              1601,
+              1796
+            ]
+          },
+          {
+            "event_id": 440,
+            "window": 1,
+            "timestamp": 727318,
+            "original": [
+              105,
+              135
+            ],
+            "lifted": [
+              1601,
+              1796
+            ]
+          },
+          {
+            "event_id": 257,
+            "window": 1,
+            "timestamp": 643013,
+            "original": [
+              124,
+              109
+            ],
+            "lifted": [
+              1727,
+              1624
+            ]
+          },
+          {
+            "event_id": 499,
+            "window": 1,
+            "timestamp": 749032,
+            "original": [
+              124,
+              109
+            ],
+            "lifted": [
+              1727,
+              1624
+            ]
+          },
+          {
+            "event_id": 726,
+            "window": 1,
+            "timestamp": 762269,
+            "original": [
+              109,
+              124
+            ],
+            "lifted": [
+              1624,
+              1727
+            ]
+          },
+          {
+            "event_id": 723,
+            "window": 1,
+            "timestamp": 761932,
+            "original": [
+              190,
+              109
+            ],
+            "lifted": [
+              1866,
+              1624
+            ]
+          },
+          {
+            "event_id": 367,
+            "window": 1,
+            "timestamp": 673395,
+            "original": [
+              144,
+              121
+            ],
+            "lifted": [
+              1878,
+              1624
+            ]
+          },
+          {
+            "event_id": 307,
+            "window": 1,
+            "timestamp": 660096,
+            "original": [
+              137,
+              138
+            ],
+            "lifted": [
+              1642,
+              1881
+            ]
+          },
+          {
+            "event_id": 312,
+            "window": 1,
+            "timestamp": 660532,
+            "original": [
+              137,
+              138
+            ],
+            "lifted": [
+              1642,
+              1881
+            ]
+          },
+          {
+            "event_id": 717,
+            "window": 1,
+            "timestamp": 761755,
+            "original": [
+              193,
+              149
+            ],
+            "lifted": [
+              1866,
+              1644
+            ]
+          },
+          {
+            "event_id": 508,
+            "window": 1,
+            "timestamp": 750205,
+            "original": [
+              161,
+              164
+            ],
+            "lifted": [
+              1676,
+              1881
+            ]
+          },
+          {
+            "event_id": 509,
+            "window": 1,
+            "timestamp": 750207,
+            "original": [
+              161,
+              164
+            ],
+            "lifted": [
+              1676,
+              1881
+            ]
+          },
+          {
+            "event_id": 759,
+            "window": 1,
+            "timestamp": 767192,
+            "original": [
+              176,
+              184
+            ],
+            "lifted": [
+              1724,
+              1836
+            ]
+          },
+          {
+            "event_id": 752,
+            "window": 1,
+            "timestamp": 767140,
+            "original": [
+              176,
+              188
+            ],
+            "lifted": [
+              1741,
+              1847
+            ]
+          },
+          {
+            "event_id": 749,
+            "window": 1,
+            "timestamp": 767127,
+            "original": [
+              176,
+              190
+            ],
+            "lifted": [
+              1750,
+              1881
+            ]
+          },
+          {
+            "event_id": 748,
+            "window": 1,
+            "timestamp": 767123,
+            "original": [
+              176,
+              200
+            ],
+            "lifted": [
+              1852,
+              1865
+            ]
+          },
+          {
+            "event_id": 588,
+            "window": 1,
+            "timestamp": 752920,
+            "original": [
+              183,
+              184
+            ],
+            "lifted": [
+              1864,
+              1878
+            ]
+          },
+          {
+            "event_id": 719,
+            "window": 1,
+            "timestamp": 761807,
+            "original": [
+              193,
+              190
+            ],
+            "lifted": [
+              1878,
+              1865
+            ]
+          },
+          {
+            "event_id": 725,
+            "window": 1,
+            "timestamp": 761979,
+            "original": [
+              193,
+              190
+            ],
+            "lifted": [
+              1878,
+              1865
+            ]
+          },
+          {
+            "event_id": 762,
+            "window": 1,
+            "timestamp": 772752,
+            "original": [
+              204,
+              205
+            ],
+            "lifted": [
+              1876,
+              1880
+            ]
+          },
+          {
+            "event_id": 5810,
+            "window": 2,
+            "timestamp": 1422700,
+            "original": [
+              36,
+              3
+            ],
+            "lifted": [
+              132,
+              1
+            ]
+          },
+          {
+            "event_id": 5827,
+            "window": 2,
+            "timestamp": 1423769,
+            "original": [
+              36,
+              3
+            ],
+            "lifted": [
+              132,
+              1
+            ]
+          },
+          {
+            "event_id": 2202,
+            "window": 2,
+            "timestamp": 1052862,
+            "original": [
+              32,
+              8
+            ],
+            "lifted": [
+              312,
+              1
+            ]
+          },
+          {
+            "event_id": 3765,
+            "window": 2,
+            "timestamp": 1227180,
+            "original": [
+              32,
+              8
+            ],
+            "lifted": [
+              312,
+              1
+            ]
+          },
+          {
+            "event_id": 6299,
+            "window": 2,
+            "timestamp": 1493762,
+            "original": [
+              8,
+              32
+            ],
+            "lifted": [
+              1,
+              312
+            ]
+          },
+          {
+            "event_id": 6300,
+            "window": 2,
+            "timestamp": 1494169,
+            "original": [
+              32,
+              8
+            ],
+            "lifted": [
+              312,
+              1
+            ]
+          },
+          {
+            "event_id": 6302,
+            "window": 2,
+            "timestamp": 1494259,
+            "original": [
+              8,
+              32
+            ],
+            "lifted": [
+              1,
+              312
+            ]
+          },
+          {
+            "event_id": 6318,
+            "window": 2,
+            "timestamp": 1497693,
+            "original": [
+              32,
+              8
+            ],
+            "lifted": [
+              312,
+              1
+            ]
+          },
+          {
+            "event_id": 6319,
+            "window": 2,
+            "timestamp": 1497883,
+            "original": [
+              32,
+              8
+            ],
+            "lifted": [
+              312,
+              1
+            ]
+          },
+          {
+            "event_id": 7719,
+            "window": 2,
+            "timestamp": 1602719,
+            "original": [
+              8,
+              32
+            ],
+            "lifted": [
+              1,
+              312
+            ]
+          },
+          {
+            "event_id": 7847,
+            "window": 2,
+            "timestamp": 1606611,
+            "original": [
+              32,
+              8
+            ],
+            "lifted": [
+              312,
+              1
+            ]
+          },
+          {
+            "event_id": 1398,
+            "window": 2,
+            "timestamp": 928777,
+            "original": [
+              276,
+              8
+            ],
+            "lifted": [
+              1190,
+              9
+            ]
+          },
+          {
+            "event_id": 1954,
+            "window": 2,
+            "timestamp": 1017513,
+            "original": [
+              9,
+              78
+            ],
+            "lifted": [
+              9,
+              1624
+            ]
+          },
+          {
+            "event_id": 2683,
+            "window": 2,
+            "timestamp": 1102643,
+            "original": [
+              9,
+              212
+            ],
+            "lifted": [
+              9,
+              1781
+            ]
+          },
+          {
+            "event_id": 3117,
+            "window": 2,
+            "timestamp": 1168652,
+            "original": [
+              9,
+              212
+            ],
+            "lifted": [
+              9,
+              1781
+            ]
+          },
+          {
+            "event_id": 3151,
+            "window": 2,
+            "timestamp": 1171696,
+            "original": [
+              9,
+              212
+            ],
+            "lifted": [
+              9,
+              1781
+            ]
+          },
+          {
+            "event_id": 3168,
+            "window": 2,
+            "timestamp": 1173333,
+            "original": [
+              9,
+              212
+            ],
+            "lifted": [
+              9,
+              1781
+            ]
+          },
+          {
+            "event_id": 3207,
+            "window": 2,
+            "timestamp": 1175742,
+            "original": [
+              9,
+              212
+            ],
+            "lifted": [
+              9,
+              1781
+            ]
+          },
+          {
+            "event_id": 3276,
+            "window": 2,
+            "timestamp": 1181690,
+            "original": [
+              9,
+              212
+            ],
+            "lifted": [
+              9,
+              1781
+            ]
+          },
+          {
+            "event_id": 3195,
+            "window": 2,
+            "timestamp": 1174614,
+            "original": [
+              9,
+              405
+            ],
+            "lifted": [
+              12,
+              1312
+            ]
+          },
+          {
+            "event_id": 3203,
+            "window": 2,
+            "timestamp": 1175306,
+            "original": [
+              9,
+              405
+            ],
+            "lifted": [
+              12,
+              1312
+            ]
+          },
+          {
+            "event_id": 3206,
+            "window": 2,
+            "timestamp": 1175654,
+            "original": [
+              9,
+              405
+            ],
+            "lifted": [
+              12,
+              1312
+            ]
+          },
+          {
+            "event_id": 3209,
+            "window": 2,
+            "timestamp": 1176014,
+            "original": [
+              9,
+              405
+            ],
+            "lifted": [
+              12,
+              1312
+            ]
+          },
+          {
+            "event_id": 3211,
+            "window": 2,
+            "timestamp": 1176098,
+            "original": [
+              9,
+              405
+            ],
+            "lifted": [
+              12,
+              1312
+            ]
+          },
+          {
+            "event_id": 3213,
+            "window": 2,
+            "timestamp": 1176481,
+            "original": [
+              9,
+              405
+            ],
+            "lifted": [
+              12,
+              1312
+            ]
+          },
+          {
+            "event_id": 7690,
+            "window": 2,
+            "timestamp": 1601311,
+            "original": [
+              9,
+              626
+            ],
+            "lifted": [
+              19,
+              1882
+            ]
+          },
+          {
+            "event_id": 7742,
+            "window": 2,
+            "timestamp": 1603507,
+            "original": [
+              9,
+              626
+            ],
+            "lifted": [
+              19,
+              1882
+            ]
+          },
+          {
+            "event_id": 8624,
+            "window": 2,
+            "timestamp": 1621303,
+            "original": [
+              9,
+              638
+            ],
+            "lifted": [
+              27,
+              652
+            ]
+          },
+          {
+            "event_id": 1975,
+            "window": 2,
+            "timestamp": 1018403,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 1978,
+            "window": 2,
+            "timestamp": 1018481,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 1985,
+            "window": 2,
+            "timestamp": 1018634,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 1991,
+            "window": 2,
+            "timestamp": 1018772,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 1997,
+            "window": 2,
+            "timestamp": 1018914,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 2004,
+            "window": 2,
+            "timestamp": 1018994,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 2014,
+            "window": 2,
+            "timestamp": 1019163,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 2017,
+            "window": 2,
+            "timestamp": 1019203,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 2020,
+            "window": 2,
+            "timestamp": 1019234,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 2028,
+            "window": 2,
+            "timestamp": 1019315,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 2033,
+            "window": 2,
+            "timestamp": 1019417,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 2034,
+            "window": 2,
+            "timestamp": 1019511,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 2036,
+            "window": 2,
+            "timestamp": 1019579,
+            "original": [
+              12,
+              288
+            ],
+            "lifted": [
+              27,
+              1876
+            ]
+          },
+          {
+            "event_id": 3415,
+            "window": 2,
+            "timestamp": 1187547,
+            "original": [
+              19,
+              419
+            ],
+            "lifted": [
+              32,
+              1034
+            ]
+          },
+          {
+            "event_id": 4202,
+            "window": 2,
+            "timestamp": 1270658,
+            "original": [
+              19,
+              478
+            ],
+            "lifted": [
+              32,
+              1878
+            ]
+          },
+          {
+            "event_id": 4917,
+            "window": 2,
+            "timestamp": 1327241,
+            "original": [
+              19,
+              519
+            ],
+            "lifted": [
+              42,
+              323
+            ]
+          }
+        ],
+        "modified_input_fingerprint": "475f6cd3854b88d9e98a0e9b4d37575891d2a572f668bcbf0e20f785d73b6da3",
+        "feasibility": {
+          "periods": [
+            {
+              "snapshot": 1,
+              "eligible_edges": 380,
+              "requested_swaps": 76,
+              "applied_swaps": 76,
+              "limited": false
+            },
+            {
+              "snapshot": 2,
+              "eligible_edges": 2439,
+              "requested_swaps": 488,
+              "applied_swaps": 130,
+              "limited": true
+            },
+            {
+              "snapshot": 3,
+              "eligible_edges": 3356,
+              "requested_swaps": 671,
+              "applied_swaps": 125,
+              "limited": true
+            },
+            {
+              "snapshot": 4,
+              "eligible_edges": 3442,
+              "requested_swaps": 688,
+              "applied_swaps": 125,
+              "limited": true
+            },
+            {
+              "snapshot": 5,
+              "eligible_edges": 3127,
+              "requested_swaps": 625,
+              "applied_swaps": 123,
+              "limited": true
+            },
+            {
+              "snapshot": 6,
+              "eligible_edges": 1474,
+              "requested_swaps": 295,
+              "applied_swaps": 125,
+              "limited": true
+            },
+            {
+              "snapshot": 7,
+              "eligible_edges": 345,
+              "requested_swaps": 69,
+              "applied_swaps": 69,
+              "limited": false
+            },
+            {
+              "snapshot": 8,
+              "eligible_edges": 435,
+              "requested_swaps": 87,
+              "applied_swaps": 87,
+              "limited": false
+            },
+            {
+              "snapshot": 9,
+              "eligible_edges": 563,
+              "requested_swaps": 113,
+              "applied_swaps": 113,
+              "limited": false
+            },
+            {
+              "snapshot": 10,
+              "eligible_edges": 266,
+              "requested_swaps": 53,
+              "applied_swaps": 53,
+              "limited": false
+            },
+            {
+              "snapshot": 11,
+              "eligible_edges": 276,
+              "requested_swaps": 55,
+              "applied_swaps": 55,
+              "limited": false
+            },
+            {
+              "snapshot": 12,
+              "eligible_edges": 219,
+              "requested_swaps": 44,
+              "applied_swaps": 44,
+              "limited": false
+            },
+            {
+              "snapshot": 13,
+              "eligible_edges": 256,
+              "requested_swaps": 51,
+              "applied_swaps": 51,
+              "limited": false
+            },
+            {
+              "snapshot": 14,
+              "eligible_edges": 290,
+              "requested_swaps": 58,
+              "applied_swaps": 58,
+              "limited": false
+            },
+            {
+              "snapshot": 15,
+              "eligible_edges": 159,
+              "requested_swaps": 32,
+              "applied_swaps": 32,
+              "limited": false
+            },
+            {
+              "snapshot": 16,
+              "eligible_edges": 226,
+              "requested_swaps": 45,
+              "applied_swaps": 45,
+              "limited": false
+            },
+            {
+              "snapshot": 17,
+              "eligible_edges": 156,
+              "requested_swaps": 31,
+              "applied_swaps": 31,
+              "limited": false
+            }
+          ],
+          "limited_periods": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "requested_swaps_total": 3481,
+          "applied_swaps_total": 1342,
+          "cause": "In 5 of 17 earlier periods fewer swaps were possible than requested, because the latest period has only a limited number of connections that can be copied into the past.",
+          "measure_note": "Churn is a ratio (Jaccard distance), so swapping a share of edges does not change it by exactly the same share."
+        },
+        "leakage": {
+          "Density": {
+            "before": 0.00055244182648453,
+            "after": 0.00055244182648453,
+            "change": 0.0
+          },
+          "Centralization": {
+            "before": 0.03083128086184362,
+            "after": 0.027887161921681575,
+            "change": -0.0029441189401620445
+          }
+        },
+        "side_effects": {
+          "event_count_and_timestamps": "unchanged by construction",
+          "synthetic_events": 4067,
+          "density_change_mean_over_snapshots": 0.0,
+          "centralization_change_mean_over_snapshots": -0.0029441189401620445
+        }
+      }
+    ],
+    "model_calls": 3,
+    "expected_model_calls": 3,
+    "explainer": "core.TemporalGraphExplainer.TgapExplainer.explainDetailed (normalization='achieved')",
+    "transformation": "core.Transformations.Churn.ChurnTransformation"
+  },
+  "cody": {
+    "upstream": {
+      "repository": "https://github.com/daniel-gomm/CoDy",
+      "commit": "0a004c2ad171b7ded59751c2179b64bf7738693a",
+      "commit_date": "2025-10-02",
+      "license": "MIT (Copyright (c) 2025 Daniel Gomm), third_party/cody/LICENSE.md",
+      "paper": "https://proceedings.mlr.press/v267/qu25b.html",
+      "modified": false
+    },
+    "configuration": {
+      "selection_policy": "spatio-temporal",
+      "num_hops": 2,
+      "candidates_size": 64,
+      "max_steps": 300,
+      "alpha": 0.6666666666666666,
+      "approximate_predictions": true,
+      "time_limit_seconds": 1800,
+      "seed": 42
+    },
+    "wrapper": "compare_explainers.cody_adapter.TgapTgnCoDyWrapper (cody.implementations.connector.TGNNWrapper subclass)",
+    "candidate_event_ids": [
+      59377,
+      59378,
+      59380,
+      59381,
+      59382,
+      59383,
+      59384,
+      59385,
+      59387,
+      59388,
+      59389,
+      59390,
+      59391,
+      59392,
+      59393,
+      59394,
+      59395,
+      59396,
+      59397,
+      59398,
+      59399,
+      59400,
+      59401,
+      59402,
+      59403,
+      59404,
+      59409,
+      59410,
+      59412,
+      59413,
+      59415,
+      59416,
+      59417,
+      59418,
+      59419,
+      59420,
+      59421,
+      59422,
+      59423,
+      59424,
+      59425,
+      59426,
+      59427,
+      59428,
+      59429,
+      59430,
+      59431,
+      59432,
+      59433,
+      59435,
+      59436,
+      59437,
+      59438,
+      59439,
+      59440,
+      59441,
+      59442,
+      59443,
+      59444,
+      59445,
+      59446,
+      59447,
+      59448,
+      59449
+    ],
+    "candidate_size": 64,
+    "runtime_seconds": 234.3,
+    "search_steps_logged": 301,
+    "oracle_calls": 301,
+    "events_replayed": 77873,
+    "original_prediction_path": {
+      "logit": 1.2441898584365845,
+      "input_fingerprint": "672c30b019337c607aa79dc1a9e5d6581fb2a92f55670493b732c3bbef4e4c7a",
+      "input_events": 59449,
+      "input_is_full_prefix": true,
+      "parameter_fingerprint": "d68eb3e77d8b2a40c1ef9bce8aa60e6cf29d65b7fbdedd23be1b5d4b3fb3f349"
+    },
+    "status": "no_counterfactual",
+    "termination": "step budget exhausted (max_steps=300)",
+    "counterfactual_found": false,
+    "achieves_counterfactual_explanation_reported": false,
+    "events": [],
+    "event_count": 0,
+    "sparsity": 0.0,
+    "sparsity_definition": "explanation size / candidate size (CoDy repository, evaluate_factual_subgraphs.py)",
+    "original_logit": 1.2441898584365845,
+    "original_probability": 0.7762924776434386,
+    "counterfactual_logit_reported": 1.2441898584365845,
+    "counterfactual_probability_reported": 0.7762924776434386,
+    "counterfactual_logit_exact": null,
+    "counterfactual_probability_exact": null,
+    "score_change_exact": null,
+    "class_before": "message",
+    "class_after_exact": null,
+    "class_changed_exact": false,
+    "raw_importances": [],
+    "error": null
+  },
+  "timings": {
+    "tgap_seconds": 568.11,
+    "cody_seconds": 234.37
+  },
+  "comparability": {
+    "comparable": true,
+    "label": "scientific comparison: same model, same input, same original score",
+    "shared_model_verified": true,
+    "same_input_verified": true,
+    "explainer_baselines_agree": true,
+    "tgap_status": "valid",
+    "cody_status": "no_counterfactual",
+    "requested_scenario_completed": true,
+    "reasons": []
+  }
+}
