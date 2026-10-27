@@ -95,6 +95,11 @@ class StudyFlowTests(unittest.TestCase):
             edited = dict(PRE, age='35–44')
             A.compare_pre(A.ComparePre(pre=edited), None)                          # editing updates, no duplicate
             A.compare_start(A.CompareConsent(consent=True, pre=PRE), None)         # a repeated start adds nothing
+            post = dict(ratings={k: 6 for k, _ in C.RATINGS['tgap']}, text='Clear charts.')
+            with self.assertRaises(HTTPException):
+                A.compare_post(A.ComparePost(post=dict(post, ratings={'easy': 9})), None)
+            A.compare_post(A.ComparePost(post=post), None)
+            self.assertTrue(A.compare_post(A.ComparePost(post=dict(post, text='Very clear.')), None)['session']['post_done'])
             self.assertEqual(s['cases'], ['uci-1'])                             # the study uses one case only
             self.assertEqual(len(data['page']['cases']), 1)
             self.assertEqual(s['order'], C.assign_order(s['participant']))
@@ -120,8 +125,10 @@ class StudyFlowTests(unittest.TestCase):
             self.assertEqual(len(mine_pre), 1)
             self.assertEqual(mine_pre[0]['age'], '35–44')
             self.assertEqual(mine_pre[0]['fam_tgnn'], '3')
+            post_rows = [r for r in csv.DictReader(A.export('compare_post', None).body.decode().splitlines()) if r['participant'] == s['participant']]
+            self.assertEqual([(r['tgap_easy'], r['final_thoughts']) for r in post_rows], [('6', 'Very clear.')])   # one row, updated
             files = {p.name for p in A.STUDY_DATA.iterdir()}
-            self.assertLessEqual({'sessions.csv', 'pre_survey.csv', 'ratings.csv', 'feedback.csv', 'study.json'}, files)
+            self.assertLessEqual({'sessions.csv', 'pre_survey.csv', 'post_survey.csv', 'ratings.csv', 'feedback.csv', 'study.json'}, files)
             saved = json.loads((A.STUDY_DATA/'study.json').read_text())
             self.assertEqual(len([r for r in saved['ratings'] if r['participant'] == s['participant']]), 10)   # 4 + 4 + 2
             self.assertEqual([r['text'] for r in saved['feedback'] if r['participant'] == s['participant']], ['The cards were clear.'])

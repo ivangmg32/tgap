@@ -199,20 +199,18 @@ class QuestionnaireTests(unittest.TestCase):
         self.assertEqual(C.SCALE_LABELS, ('Strongly disagree', 'Strongly agree'))
         self.assertEqual(C.RATINGS['tgap'][0][1], 'I understood what TGAP changed in the network’s history.')
 
-    def test_no_google_form_links_left(self):
-        for f in STATIC.iterdir():
-            if f.suffix in ('.js', '.html'):
-                body = f.read_text()
-                self.assertNotIn('forms.gle', body, f.name)
-                self.assertNotIn('docs.google.com/forms', body, f.name)
-                self.assertNotIn('STUDY_LINKS', body, f.name)
-
-    def test_pre_page_comes_before_the_six_stages(self):
+    def test_google_form_links(self):
+        links = (STATIC/'study-links.js').read_text()
+        self.assertEqual(links.count("pre: '"), 1)
+        self.assertEqual(links.count("url: '"), 2)                     # two post-study surveys
         js = (STATIC/'compare.js').read_text()
-        self.assertIn('Before We Begin', js)
-        self.assertIn('Continue to the Study', js)
-        render = js[js.index('async function renderCompare'):js.index('function cxGo')]
-        self.assertLess(render.index('cxPre()'), render.index('cxSteps()'))
+        finish = js[js.index('function cxFinish'):js.index('function cxWire()')]
+        self.assertIn('STUDY_LINKS.post', finish)
+        self.assertIn('function cxRecording() { return false; }', js)      # no in-app ratings or text boxes are shown
+        g = (STATIC/'guided.js').read_text()
+        entry = g[g.index('async function renderGuided'):g.index('function gCanVisit')]
+        self.assertIn('cxPreLink()', g[g.index('function gRender()'):g.index('function gRender()') + 400])
+        self.assertNotIn('cxPostHtml', g)
 
 
 class StudyEntryTests(unittest.TestCase):
@@ -222,5 +220,5 @@ class StudyEntryTests(unittest.TestCase):
         self.assertNotIn('<a href="#compare" data-view="compare">', html)        # part 2 is reached from the end of part 1
         g = (STATIC/'guided.js').read_text()
         entry = g[g.index('async function renderGuided'):g.index('function gCanVisit')]
-        self.assertLess(entry.index('cxNeedsPre'), entry.index('gRender()'))
+        self.assertLess(entry.index('cxNeedsPre'), entry.index('gRender()'))   # pre-study survey link first
         self.assertIn('href="#compare"', g)                                       # "Let's compare with CoDy" button

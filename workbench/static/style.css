@@ -630,3 +630,6 @@ details.g-chart[open]{border-color:#237e81}
 .cx-scale-row input:focus-visible{outline:3px solid #237e81;outline-offset:2px}
 .cx-scale-row label:has(input:checked) span{font-weight:800;color:#237e81}
 @media (max-width:700px){.cx-pre-grid{grid-template-columns:1fr}}
+.cx-post{border:1.5px solid #9fd0cc;border-left:6px solid #237e81;border-radius:12px;padding:18px 20px;background:#fff}
+.cx-post h4{margin:16px 0 4px}
+.cx-post-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}

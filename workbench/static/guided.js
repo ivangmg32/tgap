@@ -94,10 +94,7 @@ async function renderGuided() {
     gLoadPreview();
   }
   // The study starts with "Before We Begin" (consent + pre-study questionnaire, shared with the CoDy comparison).
-  if (typeof cxNeedsPre === 'function' && await cxNeedsPre()) {
-    root.innerHTML = `<div class="cx-body">${cxPre()}</div><p class="error-text" role="alert">${esc(CX.error)}</p>`;
-    return cxWirePre(renderGuided);
-  }
+  G.needPre = typeof cxNeedsPre === 'function' && await cxNeedsPre();
   gRender();
 }
 
@@ -190,6 +187,11 @@ function gHelp(title, body) {
 
 function gRender() {
   const root = $('guided-content');
+  if (G.needPre) {
+    // The pre-study survey link comes first; every redraw keeps it until the participant continues.
+    root.innerHTML = `<div class="cx-body">${cxPreLink()}</div>`;
+    return cxWirePreLink(() => { G.needPre = false; gRender(); });
+  }
   const step = G_STEPS[G.step][0];
   const results = step === 'results';
   const pct = Math.round(G.step / (G_STEPS.length - 1) * 100);

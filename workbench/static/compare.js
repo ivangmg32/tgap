@@ -13,7 +13,7 @@ function resetCompare() { CX.data = null; CX.step = 0; CX.error = ''; CX.entered
 
 function cxDate(unix) { return new Date(unix * 1000).toISOString().replace('T', ' ').slice(0, 16) + ' UTC'; }
 function cxNum(v, d = 3) { return v === null || v === undefined || !isFinite(v) ? '—' : (v < 0 ? '−' : '') + Math.abs(v).toFixed(d); }
-function cxRecording() { return !!CX.data?.session?.recording; }
+function cxRecording() { return false; }   // answers are collected in Google Forms (study-links.js)
 function cxCase(id) { return CX.data.page.cases.find(c => c.case_id === id); }
 function cxParas(list) { return (list || []).map(t => `<p>${esc(t)}</p>`).join(''); }
 function cxDone(caseId, stage) { return CX.data.session.done.some(([id, st]) => id === caseId && st === stage); }
@@ -43,11 +43,6 @@ async function renderCompare() {
   if (!CX.data.available) {
     root.innerHTML = `<div class="panel cx-pad"><span class="eyebrow">NOT READY YET</span><h2>The comparison has not been computed.</h2><p>${esc(CX.data.reason)}</p></div>`;
     return;
-  }
-  if (!CX.explore && !(cxRecording() && CX.data.session.pre_done)) {
-    // "Before We Begin": consent + pre-study questionnaire, before (and not counted in) the six stages.
-    root.innerHTML = `<div class="cx-body">${cxPre()}</div><p class="error-text" role="alert">${esc(CX.error)}</p>`;
-    return cxWirePre();
   }
   const steps = cxSteps(), [kind, caseId] = steps[CX.step];
   const reachable = i => !cxRecording() || CX.data.session.finished || i <= cxStepIndexOfNext();
@@ -173,9 +168,18 @@ function cxRatingForm(c, stage, items) {
 /* ---------- Before We Begin (pre-study questionnaire) ----------
    Shown once at the very start of the user study (phase 1 page), and on
    the comparison page if it was skipped. */
+function cxPreKey() { return 'tgap-pre-survey:' + (state.user?.username || ''); }
 async function cxNeedsPre() {
-  if (!CX.data) { try { CX.data = await api('/compare/scenario'); } catch (e) { return false; } }
-  return !!CX.data.available && !CX.explore && !(cxRecording() && CX.data.session.pre_done);
+  try { return localStorage.getItem(cxPreKey()) !== 'done'; } catch (e) { return !CX.preDone; }
+}
+function cxPreLink() {
+  return `<section class="panel cx-pad"><span class="eyebrow">BEFORE THE STUDY</span><h2 class="cx-title">Before We Begin</h2>
+    <p>Please fill in the short pre-study survey first. It opens in a new tab; come back here when you have submitted it.</p>
+    <div class="cx-actions"><a class="primary" id="cx-pre-open" href="${esc(STUDY_LINKS.pre)}" target="_blank" rel="noopener noreferrer">Open the pre-study survey ↗</a>
+      <button class="secondary" type="button" id="cx-pre-continue">I have submitted it, continue to the study →</button></div></section>`;
+}
+function cxWirePreLink(after) {
+  $('cx-pre-continue').onclick = () => { CX.preDone = true; try { localStorage.setItem(cxPreKey(), 'done'); } catch (e) { /* private mode */ } after(); window.scrollTo(0, 0); };
 }
 function cxPre() {
   const q = CX.data.page.pre, joined = cxRecording();
@@ -209,8 +213,34 @@ function cxWirePre(after = renderCompare) {
     } catch (e) { CX.error = e.message; after(); }
   };
 }
+/* ---------- Part 1 post-study questionnaire (end of the TGAP results) ---------- */
+function cxPostHtml() {
+  if (!CX.data?.available) return '';
+  const p = CX.data.page, joined = cxRecording(), done = joined && CX.data.session.post_done;
+  if (!joined) return `<section class="g-section cx-post" id="cx-post"><h3>Your Experience with TGAP</h3><p class="cx-small">You are exploring without recording, so this questionnaire is not shown. Open <b>User study</b> and agree on “Before We Begin” to take part.</p></section>`;
+  if (done) return `<section class="g-section cx-post" id="cx-post"><h3>Your Experience with TGAP</h3><p class="cx-callout ok">Thank you. Your answers are saved. Continue below to compare TGAP with CoDy.</p></section>`;
+  return `<section class="g-section cx-post" id="cx-post"><h3>Your Experience with TGAP</h3>
+    <form class="cx-form" id="cx-post-form"><p>Please rate each statement based on your experience using TGAP Lab.</p>
+      <p class="cx-small">0 = ${esc(p.scale_labels[0])}, 7 = ${esc(p.scale_labels[1])}.</p>
+      ${p.ratings.tgap.map(r => cxScale(r, p.scale_labels)).join('')}
+      <h4>Your Final Thoughts</h4><label for="cx-post-text" class="cx-fb-label">${esc(p.post.question)}</label>
+      <textarea id="cx-post-text" rows="6" maxlength="5000" spellcheck="true" placeholder="Optional. You can type, or use your device’s voice typing."></textarea>
+      <p class="error-text" role="alert" id="cx-post-error"></p>
+      <div class="cx-actions"><button class="primary" type="submit">Save my answers</button></div></form></section>`;
+}
+function cxWirePost() {
+  const form = $('cx-post-form');
+  if (!form) return;
+  form.onsubmit = async ev => {
+    ev.preventDefault();
+    const post = {ratings: cxReadScale(form, CX.data.page.ratings.tgap), text: $('cx-post-text').value};
+    try { CX.data = await api('/compare/post', {method: 'POST', body: JSON.stringify({post})}); $('cx-post').outerHTML = cxPostHtml(); }
+    catch (e) { $('cx-post-error').textContent = e.message; }
+  };
+}
+
 function cxAfter(c, stage, items) {
-  if (!cxRecording()) return `<p class="cx-small">Exploring: study participants rate this explanation here.</p>${cxNav('Continue')}`;
+  if (!cxRecording()) return cxNav('Continue');
   return cxDone(c.case_id, stage) || CX.data.session.finished ? cxNav('Continue') : cxRatingForm(c, stage, items);
 }
 
@@ -218,7 +248,7 @@ function cxAfter(c, stage, items) {
 function cxIntro() {
   const p = CX.data.page, s = CX.data.session;
   const join = s.recording ? `<div class="cx-callout ok"><b>You are taking part as ${esc(s.participant)}</b>. Your ratings, feedback and time per step are recorded under this code.</div>`
-    : `<div class="cx-callout warn">You are exploring without recording. <button class="text-button" id="cx-join">Take part in the study instead</button></div>`;
+    : '';
   return `<section class="panel cx-pad"><span class="eyebrow">PHASE 2 · TWO EXPLAINERS, ONE PREDICTION</span>
     <h2 class="cx-title">How do two explainers describe the same model prediction?</h2>
     <p class="cx-lead">A neural network reads past messages between students and gives a <b>model score</b> for whether one student will message another. Two methods explain that score:</p>
@@ -290,6 +320,9 @@ function cxFinish(c) {
         <textarea id="cx-feedback" rows="8" maxlength="5000" spellcheck="true" autocomplete="off" placeholder="Optional. You can type, or use your device’s voice typing."></textarea>
         <div class="cx-actions"><button class="primary" type="submit">Submit and finish</button><button class="secondary" type="button" id="cx-skip">Finish without writing</button></div></form></section>`;
   }
+  if (!cxRecording()) return `<section class="panel cx-pad"><span class="eyebrow">FINISH</span><h2 class="cx-title">Thank you! Two last surveys</h2>
+    <p>You have seen TGAP and CoDy explain the same prediction. Please fill in both post-study surveys. Each opens in a new tab.</p>
+    <div class="cx-post-links">${STUDY_LINKS.post.map((f, i) => `<a class="g-survey-btn" href="${esc(f.url)}" target="_blank" rel="noopener noreferrer"><b>${i + 1}.</b> ${esc(f.title)} ↗</a>`).join('')}</div></section>`;
   const outcome = c?.outcome ? `<h3 class="cx-h3">What really happened</h3><p>Student ${c.query.source} → ${c.query.destination}: <b>${esc(c.outcome.text)}</b> The model answered “${esc(c.original.predicted_class)}” (${esc(c.original.score_text)}), which was ${c.outcome.model_was_right ? 'right' : 'wrong'}.</p>` : '';
   return `<section class="panel cx-pad"><span class="eyebrow">FINISH</span><h2 class="cx-title">Thank you for taking part.</h2>
     ${s.recording ? outcome : '<p>Study participants see what really happened here, after their answers are saved.</p>'}
