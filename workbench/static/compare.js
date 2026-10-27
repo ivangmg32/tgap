@@ -174,9 +174,13 @@ async function cxNeedsPre() {
 }
 function cxPreLink() {
   return `<section class="panel cx-pad"><span class="eyebrow">BEFORE THE STUDY</span><h2 class="cx-title">Before We Begin</h2>
-    <p>Please fill in the short pre-study survey first. It opens in a new tab; come back here when you have submitted it.</p>
+    <div class="cx-video-step"><span class="cx-step-no">1</span><div><h3 class="cx-h3">Watch the introduction video</h3>
+      <p>Please watch this short video first. It explains what TGAP does and walks you through every step of the study, so the rest will be much easier to follow.</p>
+      <div class="cx-actions"><a class="primary" href="${esc(STUDY_LINKS.video)}" target="_blank" rel="noopener noreferrer">▶ Watch the video on YouTube ↗</a></div>
+    <div class="cx-video-step"><span class="cx-step-no">2</span><div><h3 class="cx-h3">Fill in the pre-study survey</h3>
+    <p>When you have watched the video, please fill in the short pre-study survey. It opens in a new tab; come back here when you have submitted it.</p>
     <div class="cx-actions"><a class="primary" id="cx-pre-open" href="${esc(STUDY_LINKS.pre)}" target="_blank" rel="noopener noreferrer">Open the pre-study survey ↗</a>
-      <button class="secondary" type="button" id="cx-pre-continue">I have submitted it, continue to the study →</button></div></section>`;
+      <button class="secondary" type="button" id="cx-pre-continue">I have submitted it, continue to the study →</button></div></div></div></section>`;
 }
 function cxWirePreLink(after) {
   $('cx-pre-continue').onclick = () => { CX.preDone = true; try { localStorage.setItem(cxPreKey(), 'done'); } catch (e) { /* private mode */ } after(); window.scrollTo(0, 0); };

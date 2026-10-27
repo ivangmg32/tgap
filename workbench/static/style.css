@@ -633,3 +633,16 @@ details.g-chart[open]{border-color:#237e81}
 .cx-post{border:1.5px solid #9fd0cc;border-left:6px solid #237e81;border-radius:12px;padding:18px 20px;background:#fff}
 .cx-post h4{margin:16px 0 4px}
 .cx-post-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+
+/* Introduction video page + study intro steps */
+nav a.nav-sub{margin-left:18px;padding-top:6px;padding-bottom:6px}
+nav a.nav-sub .nav-icon{font-size:.8em}
+.video-wrap{max-width:1100px;margin:0 auto;border-radius:16px;overflow:hidden;background:#000;box-shadow:0 12px 40px rgba(0,0,0,.18);aspect-ratio:16/9}
+.video-wrap video{display:block;width:100%;height:100%;object-fit:contain;background:#000}
+.video-actions{max-width:1100px;margin:20px auto 0;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between}
+@media (max-width:640px){.video-wrap{border-radius:10px;margin:0 -4px}.video-actions a{flex:1 1 100%;text-align:center}}
+.cx-video-step{display:flex;gap:16px;align-items:flex-start;padding:18px 0;border-top:1px solid rgba(127,127,127,.2)}
+.cx-video-step:first-of-type{border-top:0}
+.cx-video-step>div{flex:1;min-width:0}
+.cx-video-step .cx-actions{margin-top:12px}
+.cx-step-no{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:var(--accent,#3b5bdb);color:#fff}
