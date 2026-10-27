@@ -60,6 +60,28 @@ PRE_FAMILIARITY = [
 ]
 FAMILIARITY_LABELS = ('Not at all familiar', 'Extremely familiar')
 
+# Post-study questionnaire for part 1 (the guided TGAP experiment), shown at
+# the end of its results: the four TGAP items plus one optional text field.
+POST_VERSION = 'post-1'
+POST_QUESTION = 'What was clear or confusing about the TGAP explanation? What did you find useful, and what would you improve?'
+
+
+def validate_post(answers):
+    problems = []
+    ratings = answers.get('ratings') or {}
+    for key, text in RATINGS['tgap']:
+        v = ratings.get(key)
+        if not isinstance(v, int) or isinstance(v, bool) or not RATING[0] <= v <= RATING[1]:
+            problems.append(f'Please rate: "{text}" (0–7).')
+    if set(ratings) - {k for k, _ in RATINGS['tgap']}:
+        problems.append('Unexpected ratings.')
+    text = answers.get('text', '')
+    if not isinstance(text, str) or len(text) > FEEDBACK_MAX:
+        problems.append(f'Your feedback must be text of at most {FEEDBACK_MAX} characters.')
+    if set(answers) - {'ratings', 'text'}:
+        problems.append('Unexpected fields.')
+    return problems
+
 
 def validate_pre(answers):
     problems = []
@@ -470,7 +492,7 @@ def _when(unix):
 def bank_view(cases, meta, reveal=False):
     return dict(cases=[case_view(c, reveal) for c in cases], bank=meta, shared_task=SHARED_TASK,
                 ratings={k: [dict(id=i, text=t) for i, t in v] for k, v in RATINGS.items()}, rating_scale=list(RATING),
-                scale_labels=list(SCALE_LABELS), pre=pre_definition(),
+                scale_labels=list(SCALE_LABELS), pre=pre_definition(), post=dict(version=POST_VERSION, question=POST_QUESTION),
                 descriptions=DESCRIPTIONS,
                 side_note=('Both methods examine the same prediction but investigate different kinds of change. Their score '
                            'differences should not be treated as a direct ranking of explanation quality.'))

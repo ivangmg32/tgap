@@ -13,8 +13,8 @@ function setAuthMode(mode){
   $('auth-login').setAttribute('aria-pressed',String(!registration));$('auth-register').setAttribute('aria-pressed',String(registration));
   $('username-help').hidden=!registration;$('password-help').hidden=!registration;$('confirm-password-field').hidden=!registration;
   $('confirm-password').disabled=!registration;$('confirm-password').required=registration;
-  $('username').maxLength=registration?32:80;$('username').minLength=registration?3:1;
-  $('password').minLength=registration?15:1;$('password').maxLength=registration?128:150;$('password').autocomplete=registration?'new-password':'current-password';
+  $('username').maxLength=registration?254:254;$('username').minLength=registration?6:1;
+  $('password').minLength=registration?4:1;$('password').maxLength=registration?128:150;$('password').autocomplete=registration?'new-password':'current-password';
   $('sign-in').textContent=registration?'Create account & enter':'Sign in';$('login-error').textContent='';refreshAuthCaptcha();
 }
 $('auth-login').onclick=()=>setAuthMode('login');$('auth-register').onclick=()=>setAuthMode('register');$('captcha-refresh').onclick=refreshAuthCaptcha;
@@ -24,7 +24,7 @@ $('login-form').onsubmit=async event=>{
   if(!authChallenge){$('login-error').textContent='Load a new verification image before continuing.';return;}
   $('sign-in').disabled=true;
   try{const user=await api(authMode==='register'?'/register':'/login',{method:'POST',body:JSON.stringify({username:$('username').value.trim(),password:$('password').value,captcha_id:authChallenge.id,captcha_answer:$('captcha-answer').value})});
-    authChallenge=null;$('password').value='';$('confirm-password').value='';$('captcha-answer').value='';location.hash='guide';await openWorkspace(user);
+    authChallenge=null;$('password').value='';$('confirm-password').value='';$('captcha-answer').value='';location.hash='guided';await openWorkspace(user);
   }catch(error){$('login-error').textContent=error.message;await refreshAuthCaptcha();}
   finally{$('sign-in').disabled=!authChallenge;}
 };
