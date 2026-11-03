@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import sys
+import time
 
 os.environ['MPLBACKEND'] = 'Agg'
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
@@ -24,9 +25,20 @@ if __name__ == '__main__':
 
             def progress(stage, message):
                 # Write-then-rename so the server never reads a partial file.
+                # On Windows the rename fails while the server is reading the
+                # old file, so retry briefly; progress is cosmetic and must
+                # never fail the experiment.
                 temporary = progress_path.with_suffix('.tmp')
-                temporary.write_text(json.dumps(dict(stage=stage,message=message)),encoding='utf-8')
-                os.replace(temporary,progress_path)
+                try:
+                    temporary.write_text(json.dumps(dict(stage=stage,message=message)),encoding='utf-8')
+                    for attempt in range(20):
+                        try:
+                            os.replace(temporary,progress_path)
+                            return
+                        except PermissionError:
+                            time.sleep(0.02*(attempt+1))
+                except OSError:
+                    pass
             result = execute_guided(request['spec'],request['tgap_source'],request['data_root'],progress)
         else:
             from sandbox.engine import execute

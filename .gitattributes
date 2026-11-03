@@ -1,0 +1,2 @@
+# Hash-verified study records must stay byte-identical (no CRLF conversion).
+output/compare_explainers/** -text
