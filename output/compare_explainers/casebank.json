@@ -1,0 +1,30 @@
+{
+  "batch_id": "b-43f780813076",
+  "rule": "demonstration case first, then the first comparable case of each CoDy outcome category in selection order; chosen before any participant data exists",
+  "absent_categories": [
+    "valid_counterfactual"
+  ],
+  "warning": "Stratified by CoDy outcome for usability testing. Do not use it to estimate CoDy's success rate; see the technical summary of the batch.",
+  "cases": [
+    {
+      "case_id": "uci-58894",
+      "record": "output/compare_explainers/records/batch/b-43f780813076/uci-58894.json",
+      "record_sha256": "a07733b50b67921625e75808d186d10864e84f62f0a82565a001c6ff876b483e",
+      "inclusion_reason": "demonstration case: the first eligible target (the pilot case)",
+      "cody_status": "no_class_change",
+      "tgap_status": "valid",
+      "original_score": 0.5404025874005165,
+      "selection_rank": 0
+    },
+    {
+      "case_id": "uci-53069",
+      "record": "output/compare_explainers/records/batch/b-43f780813076/uci-53069.json",
+      "record_sha256": "343218bcc4825ff752087b3c418a472968790ead518c93333f1b90ed2eb5773a",
+      "inclusion_reason": "first comparable case (in selection order) whose CoDy outcome is 'no_counterfactual'",
+      "cody_status": "no_counterfactual",
+      "tgap_status": "valid",
+      "original_score": 0.6344403667847636,
+      "selection_rank": 2
+    }
+  ]
+}

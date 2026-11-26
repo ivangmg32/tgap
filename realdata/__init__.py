@@ -24,6 +24,7 @@ Layout:
     run_ncommunity.py      N = 2, 3, 4 community sweep
     run_tgn.py             explains a trained TGN (needs torch)
     run_tgn_stability.py   the TGN over five seeds, matched comparison
+    comparability.py       the concept comparability rule (no torch import)
     make_publication.py    the paper's figures and tables
     plotting.py            the shared publication theme
 

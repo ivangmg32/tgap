@@ -21,6 +21,14 @@ class InstallationTests(unittest.TestCase):
             self.assertTrue((target / 'sandbox/reporting.py').is_file())
             self.assertTrue((target / 'static/researcher.js').is_file())
             self.assertTrue((target / 'static/auth.js').is_file())
+            # The installed workbench must ship its offline graph engine and
+            # the same explorer that was validated in the source checkout.
+            source = Path(__file__).resolve().parents[1] / 'workbench'
+            for filename in ('network-explorer.js', 'guided.js', 'index.html',
+                             'style.css', 'vendor/cytoscape-3.35.0.min.js',
+                             'vendor/cytoscape-LICENSE.txt'):
+                self.assertEqual((target / 'static' / filename).read_bytes(),
+                                 (source / 'static' / filename).read_bytes(), filename)
             self.assertIn('Pillow', (target / 'requirements.txt').read_text())
             self.assertEqual(len(list((target / 'publication').glob('*.png'))),12)
             self.assertEqual(len(list((target / 'data/datasets').glob('*.json'))), 8)
