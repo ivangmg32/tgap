@@ -260,3 +260,32 @@ See research repo `docs/15-research-dashboard.md` for the complete handoff.
 ## Guided TGAP user study (2026-10-22)
 
 Sidebar **Guided user study** (`#guided`): a six-step wizard that runs one TGAP experiment on the real pipeline plus the extra runs the paper charts need, then shows every paper chart regenerated from that run with a data-grounded explanation under each chart, an overall conclusion, provenance and JSON/CSV/HTML/PDF exports. See `docs/16-guided-user-study.md` in the research repository.
+
+## Guided graph comparison
+
+The interactive network explorer preserves the original topology-driven layout.
+Before/after panels share coordinates and linked pan/zoom; Changes overlay shows
+both kinds of edit on one graph. Blue solid connections are additions and orange
+dashed connections are removals. Click any node or edge for exact names and
+before/after presence. Search, change navigation and neighborhood filters help
+inspect dense networks without replacing the diagram with a grid.
+
+Labels adapt to available space and zoom. Selected/changed elements receive
+priority; full names remain available in the inspector and paginated register.
+All connections are retained. Each snapshot's complete register can be downloaded
+as CSV. Individual SVG/PNG and bulk PNG ZIP downloads export the full network,
+even when its card is collapsed or its viewport has been panned/zoomed.
+
+Cytoscape.js 3.35.0 is served locally from `static/vendor` with its MIT license.
+Research sources, design decisions and scale limits are documented in
+[the network explorer design note](docs/network-explorer-design.md).
+
+Run the browser regression/scale check with Playwright and an installed Chromium:
+
+```sh
+python workbench/tests/graph_browser_check.py --browser /usr/bin/google-chrome --output /tmp/tgap-graph-check
+```
+
+It uses local synthetic fixtures, including 5,000 nodes and 25,000 original edges,
+without a server or participant credentials. Screenshots and local timing metrics
+are written to the output directory; `--skip-scale` runs only the functional checks.

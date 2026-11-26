@@ -12,7 +12,7 @@ source=args.source.resolve()
 target=root/'tgap_cli'/'data'/'sandbox.zip'
 target.parent.mkdir(parents=True,exist_ok=True)
 files=[]
-for folder in ('sandbox','static','fixtures','publication'):
+for folder in ('sandbox','static','fixtures','publication','docs'):
     files.extend(p for p in (source/folder).rglob('*') if p.is_file() and '__pycache__' not in p.parts)
 files.append(source/'requirements.txt')
 if (source/'README.md').exists():files.append(source/'README.md')

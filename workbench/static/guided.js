@@ -25,6 +25,7 @@ const G_POS = '#345f92', G_NEG = '#b56c38', G_ZERO = '#8094a9', G_MUTED = '#566b
 pageHelp.guided = ['How the guided study works', 'Follow the six steps in order. Each step explains its choices; the panel on the right always shows your current configuration. Nothing runs until you press Run experiment on the review step. Results always belong to the run named in the provenance panel; if you change a setting afterwards, run again to update them.'];
 
 function resetGuided() {
+  window.TgapNetwork?.destroy();
   // Called on sign-out so a different account never sees the previous results.
   Object.assign(G, {cat: null, step: 0, config: null, preview: null, feasibility: null, job: null, result: null, running: false,
     progress: null, error: '', scenario: null, locked: [], snapshot: null});
@@ -186,6 +187,7 @@ function gHelp(title, body) {
 }
 
 function gRender() {
+  window.TgapNetwork?.destroy();
   const root = $('guided-content');
   if (G.needPre) {
     // The pre-study survey link comes first; every redraw keeps it until the participant continues.
@@ -418,6 +420,7 @@ function gResultsHtml() {
         <a class="g-export" href="/api/guided/experiments/${esc(G.job)}/download/json" data-g-export="json">${gIcon('data', 22)}<b>Full data</b><small>JSON · every measurement</small></a>
         <a class="g-export" href="/api/guided/experiments/${esc(G.job)}/download/csv" data-g-export="csv">${gIcon('layers', 22)}<b>Table</b><small>CSV · measurements & explanations</small></a>
         <button type="button" class="g-export" id="g-report-html">${gIcon('book', 22)}<b>Report</b><small>HTML · charts, text, conclusion</small></button>
+        <button type="button" class="g-export" id="g-export-images"><b>Export all charts</b><small>ZIP · PNG images</small></button>
         <button type="button" class="g-export" id="g-print">${gIcon('download', 22)}<b>PDF</b><small>Print or save this page</small></button>
       </div>
       <details class="g-provenance"><summary>${gIcon('shield', 16)} Configuration and provenance (everything needed to reproduce this run)</summary>
@@ -445,7 +448,7 @@ function gChartCard(chart) {
   }
   const published = chart.paper_figure && G.cat.inventory.charts.find(i => i.id === chart.id);
   const reference = chart.paper_figure && (chart.kind === 'blocked' || chart.kind === 'static');
-  const hasSvg = svg.includes('<svg');
+  const hasGraphic = svg.includes('<svg') || svg.includes('nx-explorer');
   const prov = chart.provenance === 'published' ? '<span class="g-prov pub">PUBLISHED REFERENCE — NOT YOUR RESULT</span>'
     : chart.provenance === 'requested sweep' ? '<span class="g-prov sweep">Your run · requested comparisons</span>' : '<span class="g-prov run">Your run</span>';
   const metric = chart.metric && G.cat.glossary?.metrics?.[chart.metric];
@@ -459,12 +462,12 @@ function gChartCard(chart) {
     <div class="g-chart-body">
     ${chart.subtitle && chart.provenance !== 'published' ? `<p class="g-subtitle">${esc(chart.subtitle)}</p>` : ''}
     <div class="g-chart-tags">${metric ? `<span class="tag" title="${esc(metric.definition)}">Measured: ${esc(metric.name)}</span>` : ''}<span class="tag g-paper-tag">${gIcon('book', 12)} ${esc(chart.paper)}</span>
-      ${hasSvg ? `<span class="figure-downloads"><button type="button" class="text-button" data-g-svg="${id}">SVG</button><button type="button" class="text-button" data-g-png="${id}">PNG</button></span>` : ''}</div>
+      ${hasGraphic ? `<span class="figure-downloads"><button type="button" class="text-button" data-g-svg="${id}">SVG</button><button type="button" class="text-button" data-g-png="${id}">PNG</button></span>` : ''}</div>
     ${chart.scope ? `<p class="g-scope">${gIcon('info', 14)}<span>${esc(chart.scope)}</span></p>` : ''}
     ${chart.deviation ? `<p class="g-deviation">${gIcon('alert', 14)}<span><b>Different from the paper:</b> ${esc(chart.deviation)}</span></p>` : ''}
     ${!usable ? `<p class="g-status-note">${esc(chart.status_label || chart.status)}: ${esc(chart.explanation.observations)}</p>` : ''}
     ${svg ? `<div class="figure-canvas" id="${id}">${svg}</div>` : ''}
-    ${hasSvg && !svg.includes('↔ Across:') ? gGuideHtml(chart.guide) : ''}
+    ${hasGraphic && !svg.includes('↔ Across:') ? gGuideHtml(chart.guide) : ''}
     ${chart.explanation.easy_shows ? `<div class="g-easy">
       <p><b>How to read this chart:</b> ${esc(chart.explanation.easy_shows)}</p>
       <p class="g-finding"><b>What did we find?</b> ${esc(chart.explanation.easy_result)}</p>
@@ -835,23 +838,89 @@ function gProvenanceRows(g) {
 
 const G_PARTS = [['what', 'What it measures'], ['conditions', 'Conditions'], ['observations', 'Key results'], ['pattern', 'Pattern'], ['conclusion', 'What you can conclude'], ['caution', 'What not to conclude']];
 
+// Export every panel at its intrinsic size, even inside collapsed chart cards.
+function gExportSvg(host) {
+  if (host.querySelector('.nx-explorer')) {
+    const spec = G.result.guided.spec;
+    return TgapNetwork.exportSvg(host, `TGAP | ${spec.dataset} | ${gName.model(spec.model)} | ${G.result.guided.selected_concept} ${spec.direction} ${gPct(spec.delta)} | seed ${spec.seed} | run ${G.job}`);
+  }
+  const svgs = [...host.querySelectorAll('svg:not(.g-icon)')];
+  let y = 0, width = Math.max(780, ...svgs.map(s => s.viewBox.baseVal.width));
+  const panels = svgs.map(svg => {
+    const copy = svg.cloneNode(true), box = svg.viewBox.baseVal;
+    copy.removeAttribute('style'); copy.setAttribute('x', 0); copy.setAttribute('y', y);
+    copy.setAttribute('width', box.width); copy.setAttribute('height', box.height);
+    y += box.height + 20;
+    return new XMLSerializer().serializeToString(copy);
+  });
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${y+20}" width="${width}" height="${y+20}" style="font-family:Arial,sans-serif"><rect width="100%" height="100%" fill="white"/>${panels.join('')}</svg>`;
+}
+async function gPngBlob(host) {
+  const xml = gExportSvg(host), doc = new DOMParser().parseFromString(xml,'image/svg+xml');
+  const box = doc.documentElement.viewBox.baseVal, image = new Image();
+  // data: is explicitly allowed by the workbench image CSP; blob: is not.
+  await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=reject;image.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(xml);});
+  const canvas=document.createElement('canvas');
+  const scale=Math.min(2, 16000/Math.max(box.width,box.height), Math.sqrt(32000000/(box.width*box.height)));
+  canvas.width=Math.ceil(box.width*scale);canvas.height=Math.ceil(box.height*scale);
+  canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
+  return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('PNG encoding failed')),'image/png'));
+}
+function gSaveBlob(blob, name) {
+  const url=URL.createObjectURL(blob), a=document.createElement('a'); a.href=url;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),10000);
+}
+function gImageZip(files) {
+  const chunks=[], entries=[];let offset=0;
+  const header=(size)=>{const bytes=new Uint8Array(size);return [bytes,new DataView(bytes.buffer)];};
+  files.forEach(({name,data})=>{
+    const filename=new TextEncoder().encode(name);let crc=0xffffffff;
+    for(const byte of data){crc^=byte;for(let k=0;k<8;k++)crc=(crc>>>1)^((crc&1)?0xedb88320:0);}
+    crc=(crc^0xffffffff)>>>0;
+    const [local,l]=header(30);l.setUint32(0,0x04034b50,true);l.setUint16(4,20,true);l.setUint16(6,0x800,true);l.setUint16(12,33,true);l.setUint32(14,crc,true);l.setUint32(18,data.length,true);l.setUint32(22,data.length,true);l.setUint16(26,filename.length,true);
+    const [central,c]=header(46);c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x800,true);c.setUint16(14,33,true);c.setUint32(16,crc,true);c.setUint32(20,data.length,true);c.setUint32(24,data.length,true);c.setUint16(28,filename.length,true);c.setUint32(42,offset,true);
+    chunks.push(local,filename,data);entries.push(central,filename);offset+=30+filename.length+data.length;
+  });
+  const centralSize=entries.reduce((sum,e)=>sum+e.length,0),[end,e]=header(22);
+  e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,centralSize,true);e.setUint32(16,offset,true);
+  return new Blob([...chunks,...entries,end],{type:'application/zip'});
+}
+
 function gWireResults() {
   document.querySelectorAll('[data-g-jump]').forEach(a => a.onclick = e => { e.preventDefault(); $(a.dataset.gJump)?.scrollIntoView({behavior: 'smooth', block: 'start'}); });
   gEvent('results_viewed', 'results', {job_id: G.job});
   document.querySelectorAll('[data-g-svg]').forEach(b => b.onclick = () => {
-    const svg = $(b.dataset.gSvg).querySelector('svg');
-    downloadText(new XMLSerializer().serializeToString(svg), `tgap-guided-${G.job.slice(0, 8)}-${b.dataset.gSvg.slice(6)}.svg`, 'image/svg+xml');
+    downloadText(gExportSvg($(b.dataset.gSvg)), `tgap-${b.dataset.gSvg}.svg`, 'image/svg+xml');
   });
   document.querySelectorAll('[data-g-png]').forEach(b => b.onclick = async () => {
-    try {
-      const svg = $(b.dataset.gPng).querySelector('svg'), image = new Image(), xml = new XMLSerializer().serializeToString(svg);
-      await new Promise((resolve, reject) => { image.onload = resolve; image.onerror = reject; image.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(xml); });
-      const box = svg.viewBox.baseVal, canvas = document.createElement('canvas');
-      canvas.width = box.width * 2; canvas.height = box.height * 2;
-      canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
-      const a = document.createElement('a'); a.download = `tgap-guided-${G.job.slice(0, 8)}-${b.dataset.gPng.slice(6)}.png`; a.href = canvas.toDataURL('image/png'); a.click();
-    } catch { toast('Could not create the PNG. Download the SVG instead.'); }
+    try { gSaveBlob(await gPngBlob($(b.dataset.gPng)), `tgap-${b.dataset.gPng}.png`); }
+    catch { toast('Could not create the PNG. Download the SVG instead.'); }
   });
+  $('g-export-images').onclick = async event => {
+    const button = event.currentTarget;
+    button.disabled = true;
+    try {
+      const cards = [...document.querySelectorAll('#g-report .figure-canvas')].filter(c => c.querySelector('svg:not(.g-icon), .nx-explorer'));
+      const references = [...document.querySelectorAll('#g-report .g-published img')];
+      const total = cards.length + references.length;
+      const files = [];
+      for (const [i, card] of cards.entries()) {
+        button.textContent = `Exporting ${i+1} / ${total}…`;
+        files.push({name:`${card.id}.png`, data:new Uint8Array(await (await gPngBlob(card)).arrayBuffer())});
+      }
+      for (const [i, reference] of references.entries()) {
+        button.textContent = `Exporting ${cards.length+i+1} / ${total}…`;
+        const response = await fetch(reference.currentSrc || reference.src);
+        if (!response.ok) throw new Error('Reference image unavailable');
+        const blob = await response.blob();
+        const id = reference.closest('[data-chart]')?.dataset.chart || String(i+1);
+        files.push({name:`published-reference-${id}.png`, data:new Uint8Array(await blob.arrayBuffer())});
+      }
+      if (!files.length) throw new Error('No charts');
+      gSaveBlob(gImageZip(files), `tgap-charts-${G.job.slice(0,8)}.zip`);
+    } catch { toast('Image export failed. Try downloading individual charts.'); }
+    finally { button.disabled = false; button.innerHTML = '<b>Export all charts</b><small>ZIP · PNG images</small>'; }
+  };
   document.querySelectorAll('[data-g-export]').forEach(a => a.addEventListener('click', () => gEvent('export', 'results', {job_id: G.job})));
   $('g-report-html').onclick = () => { gEvent('export', 'results', {job_id: G.job}); downloadText(gReportHtml(), `tgap-guided-report-${G.job.slice(0, 8)}.html`, 'text/html'); };
   $('g-print').onclick = () => { gEvent('export', 'results', {job_id: G.job}); document.querySelectorAll('#g-report details').forEach(d => d.open = true); window.print(); };
@@ -864,8 +933,8 @@ function gWireExplore() {
 }
 function gWireResultsInner() {
   gWireExplore();
-  const slider = $('g-snapshot');
-  if (slider) slider.oninput = () => { G.snapshot = Number(slider.value); $('g-fig-local_graph').innerHTML = gRender_.network(G.result.guided.charts.find(c => c.id === 'local_graph')); gWireResultsInner(); };
+  const network = $('g-fig-local_graph');
+  if (network) TgapNetwork.mount(network, {onSnapshot: index => { G.snapshot = index; }});
   const metric = $('g-traj-metric');
   if (metric) metric.onchange = () => { G.trajMetric = metric.value; $('g-fig-trajectory').innerHTML = gRender_.trajectory(G.result.guided.charts.find(c => c.id === 'trajectory')); gWireResultsInner(); };
 }
@@ -874,11 +943,12 @@ function gReportHtml() {
   const g = G.result.guided;
   const cards = [...document.querySelectorAll('#g-report .g-chart')].map(card => {
     const chart = g.charts.find(c => c.id === card.dataset.chart);
-    const svg = card.querySelector('.figure-canvas svg');
+    const canvas = card.querySelector('.figure-canvas');
+    const graphic = canvas?.querySelector('svg, .nx-explorer');
     const published = card.querySelector('.g-published');
     return `<section><h3>${esc(chart.title)} <small>(${esc(chart.paper)} · ${esc(chart.status)})</small></h3>
       ${chart.scope ? `<p><i>${esc(chart.scope)}</i></p>` : ''}${chart.deviation ? `<p><b>Deviation from the paper:</b> ${esc(chart.deviation)}</p>` : ''}
-      ${svg ? new XMLSerializer().serializeToString(svg) : ''}
+      ${graphic ? gExportSvg(canvas) : ''}
       ${chart.explanation.easy_shows ? `<p><b>What this chart shows:</b> ${esc(chart.explanation.easy_shows)}<br><b>What your result shows:</b> ${esc(chart.explanation.easy_result)}</p>` : ''}
       ${published ? `<p><i>The paper's original ${esc(chart.paper)} is shown next to this chart in the app as a reference; it is not part of this run.</i></p>` : ''}
       <dl>${G_PARTS.map(([k, label]) => `<dt>${label}</dt><dd>${esc(chart.explanation[k])}</dd>`).join('')}</dl><p class="axes">${esc(chart.axes)}</p></section>`;
@@ -984,11 +1054,14 @@ function gFrame(title, content, width, height) {
   const g = G.result.guided;
   if (G.currentChart?.title) title = G.currentChart.title;   // the image carries the same title as its card
   const caption = `TGAP guided study | ${g.spec.dataset} | ${gName.model(g.spec.model)} | ${gTerms(g.selected_concept)} ${g.spec.direction} ${gPct(g.spec.delta)} | seed ${g.spec.seed} | run ${G.job.slice(0, 8)}`;
-  const [key, keyH] = gKeyBand(G.currentChart?.guide, width, height + 48);
-  const total = height + 70 + keyH;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${total}"${width > 900 ? ` style="min-width:${Math.round(width * .85)}px"` : ''} role="img" aria-label="${esc(gTerms(title))}" style="font-family:Arial,sans-serif;background:white"><title>${esc(gTerms(title))}</title><rect width="${width}" height="${total}" fill="white"/>
-    <text x="15" y="26" font-size="17" font-weight="bold" fill="${G_INK}">${esc(gTerms(title))}</text><g transform="translate(0 40)">${content}</g>
-    ${key}<text x="15" y="${total - 10}" font-size="12" fill="#61748c">${esc(caption)}</text></svg>`;
+  const titleLines = gWrap(gTerms(title), Math.max(20, Math.floor((width - 30) / 10)));
+  const headingHeight = 18 + titleLines.length * 22;
+  const captionLines = gWrap(caption, Math.max(20, Math.floor((width - 30) / 7)));
+  const [key, keyH] = gKeyBand(G.currentChart?.guide, width, height + headingHeight + 8);
+  const total = height + headingHeight + 16 + keyH + captionLines.length * 16;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${total}" role="img" aria-label="${esc(gTerms(title))}" style="font-family:Arial,sans-serif;background:white;${width > 900 ? `min-width:${Math.round(width*.85)}px` : ''}"><title>${esc(gTerms(title))}</title><rect width="${width}" height="${total}" fill="white"/>
+    ${titleLines.map((line,i) => gText(15,26+i*22,line,{size:17,weight:'bold',fill:G_INK,raw:true})).join('')}<g transform="translate(0 ${headingHeight})">${content}</g>
+    ${key}${captionLines.map((line,i) => gText(15,total-8-(captionLines.length-1-i)*16,line,{size:12,raw:true})).join('')}</svg>`;
 }
 function gText(x, y, text, opts = {}) {
   return `<text x="${x}" y="${y}" font-size="${opts.size || 13}" fill="${opts.fill || G_MUTED}" text-anchor="${opts.anchor || 'start'}"${opts.weight ? ` font-weight="${opts.weight}"` : ''}${opts.rotate ? ` transform="rotate(${opts.rotate} ${x} ${y})"` : ''}>${esc(opts.raw ? text : gTerms(text))}</text>`;
@@ -1280,47 +1353,8 @@ const gRender_ = {
       + (chart.data.edges ? liveScatter(chart.data.edges.rows, 'snapshots_present', 'Edge persistence versus measured response', 'Snapshots containing the edge') : ''));
   },
   network(chart) {
-    const view = chart.data.view, per = chart.data.per_snapshot, n = view.snapshots.length;
-    const index = G.snapshot === null ? n - 1 : Math.min(G.snapshot, n - 1), snap = view.snapshots[index];
-    const W = 780, H = 400, pw = (W - 30) / 2, top = 30, bottom = H - 95;
-    const key = e => e.map(String).sort().join('|');
-    // Nodes with a tie in any snapshot are laid out; inactive ones go to a small row below.
-    const activeIds = new Set();
-    view.snapshots.forEach(sn => [...sn.edges, ...sn.added].forEach(([u, v]) => { activeIds.add(String(u)); activeIds.add(String(v)); }));
-    const active = view.nodes.filter(nd => activeIds.has(String(nd.id))), idle = view.nodes.filter(nd => !activeIds.has(String(nd.id)));
-    const xs = active.map(nd => nd.x), ys = active.map(nd => nd.y);
-    // Zoom to the central 94% of nodes; a few far-away nodes are pinned to the frame edge.
-    const q = (v, f) => { const o = [...v].sort((a, b) => a - b); return o[Math.min(o.length - 1, Math.max(0, Math.round(f * (o.length - 1))))]; };
-    const [x0, x1, y0, y1] = [q(xs, .03), q(xs, .97), q(ys, .03), q(ys, .97)];
-    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-    const pos = new Map(active.map(nd => [String(nd.id), nd]));
-    const sx = (v, off) => off + 18 + clamp((v - x0) / ((x1 - x0) || 1), -.02, 1.02) * (pw - 36), sy = v => top + clamp((v - y0) / ((y1 - y0) || 1), -.02, 1.02) * (bottom - top);
-    const palette = ['#547ba8', '#60a0a0', '#ba8a55', '#927ba3', '#7d9b5a', '#a86a7d'];
-    const removed = snap.removed, added = snap.added, removedSet = new Set(removed.map(key));
-    const touched = new Set([...removed, ...added].flat().map(String));
-    const panel = (off, title, transformed) => {
-      const changes = transformed ? added : removed, color = transformed ? G_POS : G_NEG;
-      let s = gText(off + 12, 14, title, {size: 13, fill: G_INK, weight: 'bold'});
-      const line = (e, stroke, width, extra = '') => { const a = pos.get(String(e[0])), b = pos.get(String(e[1])); return a && b ? `<line x1="${sx(a.x, off)}" y1="${sy(a.y)}" x2="${sx(b.x, off)}" y2="${sy(b.y)}" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round" ${extra}/>` : ''; };
-      snap.edges.slice(0, 4000).forEach(e => { if (!(transformed && removedSet.has(key(e))) && !(!transformed && removedSet.has(key(e)))) s += line(e, '#d3dee9', .6, 'opacity=".7"'); });
-      active.forEach(nd => { if (!touched.has(String(nd.id))) s += `<circle cx="${sx(nd.x, off)}" cy="${sy(nd.y)}" r="3" fill="${palette[nd.community % palette.length] || '#a7b3c1'}" opacity=".55"><title>${esc(nd.id)} · ${esc(view.community_labels[nd.community] || '')}</title></circle>`; });
-      // Changed edges last: white halo + thick colour so they stay visible in dense graphs.
-      changes.forEach(e => { s += line(e, '#fff', 7) + line(e, color, 3.4, transformed ? '' : 'stroke-dasharray="7 4"'); });
-      active.forEach(nd => { if (touched.has(String(nd.id))) s += `<circle cx="${sx(nd.x, off)}" cy="${sy(nd.y)}" r="9" fill="${color}" opacity=".18"/><circle cx="${sx(nd.x, off)}" cy="${sy(nd.y)}" r="4.8" fill="${palette[nd.community % palette.length] || '#a7b3c1'}" stroke="${color}" stroke-width="2"><title>${esc(nd.id)} · ${esc(view.community_labels[nd.community] || '')} · touched by the change</title></circle>`; });
-      if (!changes.length) s += gText(off + pw / 2, bottom + 14, transformed ? 'no edges added in this snapshot' : 'no edges removed in this snapshot', {anchor: 'middle', size: 11});
-      return s;
-    };
-    let content = panel(0, `Original — removed edges in orange (${removed.length})`, false) + panel(pw + 30, `Transformed (${view.direction}) — added edges in blue (${added.length})`, true);
-    content += `<line x1="${pw + 15}" x2="${pw + 15}" y1="20" y2="${bottom + 10}" stroke="#e3e8ee"/>`;
-    if (idle.length) content += gText(18, bottom + 34, `${idle.length} inactive node${idle.length > 1 ? 's' : ''} (no ties in any snapshot) are not drawn.`, {size: 11});
-    content += `<line x1="20" x2="48" y1="${H - 30}" y2="${H - 30}" stroke="${G_NEG}" stroke-width="3.4" stroke-dasharray="7 4"/>` + gText(54, H - 26, 'removed edge', {size: 12})
-      + `<line x1="160" x2="188" y1="${H - 30}" y2="${H - 30}" stroke="${G_POS}" stroke-width="3.4"/>` + gText(194, H - 26, 'added edge', {size: 12})
-      + `<circle cx="292" cy="${H - 30}" r="7" fill="${G_NEG}" opacity=".25"/>` + gText(304, H - 26, 'node touched by the change', {size: 12})
-      + view.community_labels.slice(0, 4).map((label, i) => `<circle cx="${500 + i * 70}" cy="${H - 30}" r="4.5" fill="${palette[i]}"/>` + gText(508 + i * 70, H - 26, String(label).slice(0, 9), {size: 11})).join('');
-    const maxChange = Math.max(1, ...per.map(p => p.added + p.removed));
-    const strip = `<div class="g-strip" aria-label="Edges changed per snapshot">${per.map((p, i) => `<span title="${esc(p.label)}: +${p.added} / −${p.removed} edges" class="${i === index ? 'current' : ''}" style="height:${4 + 36 * (p.added + p.removed) / maxChange}px"></span>`).join('')}</div>`;
-    return `<div class="g-row g-tight"><label for="g-snapshot">Snapshot</label><input type="range" id="g-snapshot" min="0" max="${n - 1}" value="${index}"><output>${index + 1}/${n} · ${esc(snap.label)} · <b style="color:${G_POS}">+${per[index].added}</b> / <b style="color:${G_NEG}">−${per[index].removed}</b> edges</output></div>${strip}<p class="field-help">Bar height = number of edges changed in that snapshot. Drag the slider or pick a tall bar to see bigger changes.</p>`
-      + gFrame(`Snapshot ${index + 1} (${snap.label}): original versus transformed`, content, W, H);
+    if (!chart.data.view.snapshots.length) return '<p>No snapshots available.</p>';
+    return TgapNetwork.render(chart, G.snapshot);
   },
   bridge_matrix(chart) {
     const d = chart.data, labels = d.labels, k = labels.length, cell = Math.min(90, 300 / k), W = 780, H = 70 + k * cell;

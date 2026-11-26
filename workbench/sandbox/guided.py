@@ -495,7 +495,7 @@ def execute_guided(spec, root, data_root, progress=None):
         # Snapshot-by-snapshot network view of the primary direction.
         union = nx.Graph()
         for g in graphs:
-            union.add_nodes_from(g.nodes())
+            union.add_nodes_from(g.nodes(data=True))
             union.add_edges_from(g.edges())
         positions = nx.spring_layout(union, seed=spec['seed'], iterations=40)
         changed = sel.transform(graphs, signed)
@@ -504,7 +504,7 @@ def execute_guided(spec, root, data_root, progress=None):
             diff = core.graphDifference(a, b)
             snaps.append(dict(label=labels[i], edges=[list(e) for e in a.edges()],
                               added=[list(e) for e in diff['added']], removed=[list(e) for e in diff['removed']]))
-        view = dict(direction=spec['direction'], nodes=[dict(id=n, community=comm.communityOf(n), x=float(positions[n][0]),
+        view = dict(direction=spec['direction'], nodes=[dict(id=n, label=str(union.nodes[n].get('label', union.nodes[n].get('name', n))), community=comm.communityOf(n), x=float(positions[n][0]),
                     y=float(positions[n][1])) for n in union.nodes()], snapshots=snaps,
                     community_labels=list(getattr(comm, 'labels', None) or [f'Community {i+1}' for i in range(len(comm))]))
         return dict(directions=out, view=view)
