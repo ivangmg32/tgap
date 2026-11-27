@@ -1,0 +1,67 @@
+/home/abrnoc/develop/catalyst/tgap/tgap/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+.........................................................................................FFF.FF.F...........................
+======================================================================
+FAIL: test_concurrent_duplicate_registration (test_security.AuthenticationTests.test_concurrent_duplicate_registration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/abrnoc/develop/catalyst/tgap/tgap/workbench/tests/test_security.py", line 79, in test_concurrent_duplicate_registration
+    self.assertEqual(sorted(statuses),[201,409])
+AssertionError: Lists differ: [422, 422] != [201, 409]
+
+First differing element 0:
+422
+201
+
+- [422, 422]
++ [201, 409]
+
+======================================================================
+FAIL: test_disabled_registration_account_revokes_sessions (test_security.AuthenticationTests.test_disabled_registration_account_revokes_sessions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/abrnoc/develop/catalyst/tgap/tgap/workbench/tests/test_security.py", line 66, in test_disabled_registration_account_revokes_sessions
+    self.assertEqual(self.register().status_code,201)
+AssertionError: 422 != 201
+
+======================================================================
+FAIL: test_duplicate_case_and_operator_reserved (test_security.AuthenticationTests.test_duplicate_case_and_operator_reserved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/abrnoc/develop/catalyst/tgap/tgap/workbench/tests/test_security.py", line 38, in test_duplicate_case_and_operator_reserved
+    self.assertEqual(self.register().status_code,201)
+AssertionError: 422 != 201
+
+======================================================================
+FAIL: test_registration_hashed_participant_and_private (test_security.AuthenticationTests.test_registration_hashed_participant_and_private)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/abrnoc/develop/catalyst/tgap/tgap/workbench/tests/test_security.py", line 26, in test_registration_hashed_participant_and_private
+    r=self.register();self.assertEqual(r.status_code,201,r.text)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 422 != 201 : {"detail":[{"type":"string_pattern_mismatch","loc":["body","username"],"msg":"String should match pattern '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'","input":"audit_a62c5202746e","ctx":{"pattern":"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"}}]}
+
+======================================================================
+FAIL: test_registration_throttle (test_security.AuthenticationTests.test_registration_throttle)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/unittest/mock.py", line 1843, in _inner
+    return f(*args, **kw)
+           ^^^^^^^^^^^^^^
+  File "/home/abrnoc/develop/catalyst/tgap/tgap/workbench/tests/test_security.py", line 100, in test_registration_throttle
+    self.assertEqual(r.status_code,429 if i==5 else 400,r.text)
+AssertionError: 422 != 400 : {"detail":[{"type":"string_pattern_mismatch","loc":["body","username"],"msg":"String should match pattern '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'","input":"audit_8301918fe613","ctx":{"pattern":"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"}}]}
+
+======================================================================
+FAIL: test_storage_exhaustion_fails_safely (test_security.AuthenticationTests.test_storage_exhaustion_fails_safely)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/abrnoc/develop/catalyst/tgap/tgap/workbench/tests/test_security.py", line 88, in test_storage_exhaustion_fails_safely
+    r=self.register();self.assertEqual(r.status_code,201)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 422 != 201
+
+----------------------------------------------------------------------
+Ran 124 tests in 70.679s
+
+FAILED (failures=6)

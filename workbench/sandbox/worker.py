@@ -40,6 +40,9 @@ if __name__ == '__main__':
                 except OSError:
                     pass
             result = execute_guided(request['spec'],request['tgap_source'],request['data_root'],progress)
+        elif request.get('kind') == 'applications':
+            from sandbox.applications import execute_applications
+            result = execute_applications(request['spec'],request['tgap_source'],request['data_root'])
         else:
             from sandbox.engine import execute
             result = execute(request['spec'],request['tgap_source'],request['data_root'])

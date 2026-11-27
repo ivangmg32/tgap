@@ -25,10 +25,14 @@ class InstallationTests(unittest.TestCase):
             # the same explorer that was validated in the source checkout.
             source = Path(__file__).resolve().parents[1] / 'workbench'
             for filename in ('network-explorer.js', 'guided.js', 'index.html',
+                             'applications.js', 'applications.css', 'app.js',
                              'style.css', 'vendor/cytoscape-3.35.0.min.js',
                              'vendor/cytoscape-LICENSE.txt'):
                 self.assertEqual((target / 'static' / filename).read_bytes(),
                                  (source / 'static' / filename).read_bytes(), filename)
+            for filename in ('applications.py', 'app.py', 'worker.py'):
+                self.assertEqual((target / 'sandbox' / filename).read_bytes(),
+                                 (source / 'sandbox' / filename).read_bytes(), filename)
             self.assertIn('Pillow', (target / 'requirements.txt').read_text())
             self.assertEqual(len(list((target / 'publication').glob('*.png'))),12)
             self.assertEqual(len(list((target / 'data/datasets').glob('*.json'))), 8)

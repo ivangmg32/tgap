@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "page_errors": [],
+  "checks": [
+    "real worker",
+    "7 explained chart sections",
+    "graph time and scenario views",
+    "SVG PNG CSV JSON downloads",
+    "independent laboratory state",
+    "saved history",
+    "slope semantics",
+    "mobile overflow",
+    "laboratory regression",
+    "logout cleanup"
+  ]
+}

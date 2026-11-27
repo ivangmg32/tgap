@@ -310,7 +310,8 @@ def program(spec: Experiment,request: Request):
     return {'program':generated_program(validate_spec(spec))}
 
 
-JOB_LIMITS = {'lab':dict(seconds=40,cpu=35,output=4*1024*1024),
+JOB_LIMITS = {'applications':dict(seconds=90,cpu=80,output=16*1024*1024),
+              'lab':dict(seconds=40,cpu=35,output=4*1024*1024),
               'guided':dict(seconds=240,cpu=230,output=16*1024*1024)}
 
 
@@ -384,6 +385,24 @@ def experiment(spec: Experiment,request: Request):
     return admit_job(identity,values,'lab')
 
 
+@app.get('/api/applications/experiments')
+def application_history(request: Request):
+    identity = session(request)
+    with db() as conn:
+        rows = conn.execute("SELECT id,status,created,spec,error,kind FROM jobs WHERE owner=? AND kind='applications' ORDER BY created DESC LIMIT 30",
+                            (owner_key(identity['username']),)).fetchall()
+    return [dict(id=r['id'],status=r['status'],created=r['created'],spec=json.loads(r['spec']),error=r['error'],kind=r['kind']) for r in rows]
+
+
+@app.post('/api/applications/experiments',status_code=202)
+def application_experiment(spec: Experiment,request: Request):
+    identity = session(request)
+    SECURITY.rate('experiment:'+identity['username'],30,3600)
+    if spec.custom_code.strip():
+        raise HTTPException(422,'Application charts use the listed built-in concepts.')
+    return admit_job(identity,validate_spec(spec),'applications')
+
+
 def admit_job(identity,values,kind):
     owner = owner_key(identity['username'])
     with QUEUE_LOCK,db() as conn:
@@ -397,7 +416,7 @@ def admit_job(identity,values,kind):
         study = conn.execute('SELECT id FROM studies WHERE owner=? AND finished IS NULL ORDER BY started DESC LIMIT 1',(owner,)).fetchone()
         job_id = str(uuid.uuid4())
         conn.execute('INSERT INTO jobs(id,owner,status,created,spec,study_id,kind) VALUES (?,?,?,?,?,?,?)',
-                     (job_id,owner,'queued',time.time(),json.dumps(values),study['id'] if study else None,kind))
+                     (job_id,owner,'queued',time.time(),json.dumps(values),study['id'] if study and kind!='applications' else None,kind))
     POOL.submit(run_job,job_id,values,kind)
     return {'id':job_id,'status':'queued'}
 
@@ -414,7 +433,7 @@ def own_job(job_id,identity):
 def history(request: Request):
     identity = session(request)
     with db() as conn:
-        rows = conn.execute('SELECT id,status,created,spec,error,kind FROM jobs WHERE owner=? ORDER BY created DESC LIMIT 30',
+        rows = conn.execute("SELECT id,status,created,spec,error,kind FROM jobs WHERE owner=? AND kind!='applications' ORDER BY created DESC LIMIT 30",
                             (owner_key(identity['username']),)).fetchall()
     return [dict(id=r['id'],status=r['status'],created=r['created'],spec=json.loads(r['spec']),error=r['error'],kind=r['kind']) for r in rows]
 

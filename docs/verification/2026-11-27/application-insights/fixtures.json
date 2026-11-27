@@ -1,0 +1,42 @@
+[
+  {
+    "dataset": "bitcoin_alpha",
+    "bytes": 160840,
+    "seconds": 4.5
+  },
+  {
+    "dataset": "bitcoin_otc",
+    "bytes": 179687,
+    "seconds": 3.88
+  },
+  {
+    "dataset": "decentraland",
+    "bytes": 12565194,
+    "seconds": 12.63
+  },
+  {
+    "dataset": "email_eu_core",
+    "bytes": 308127,
+    "seconds": 12.39
+  },
+  {
+    "dataset": "sx_mathoverflow",
+    "bytes": 1485942,
+    "seconds": 11.38
+  },
+  {
+    "dataset": "tgbl_enron",
+    "bytes": 297304,
+    "seconds": 1.32
+  },
+  {
+    "dataset": "tgbl_uci",
+    "bytes": 210660,
+    "seconds": 5.04
+  },
+  {
+    "dataset": "tgbl_wiki",
+    "bytes": 210238,
+    "seconds": 3.23
+  }
+]

@@ -1,0 +1,74 @@
+{
+  "feature": "Independent application insights menu",
+  "route": "#applications",
+  "branch": "codex/application-insights",
+  "application_tests": {
+    "tests": 6,
+    "passed": 6
+  },
+  "browser": {
+    "passed": true,
+    "real_worker": true,
+    "real_decentraland_all_concepts": true,
+    "mobile": true,
+    "exports": [
+      "SVG",
+      "PNG",
+      "CSV",
+      "JSON"
+    ],
+    "laboratory_regression": true,
+    "page_errors": 0,
+    "unique_element_ids": true
+  },
+  "fixtures": {
+    "datasets": 8,
+    "all_concepts": true,
+    "largest_result_bytes": 12565194,
+    "worker_output_limit_bytes": 16777216
+  },
+  "installation": {
+    "tests": 13,
+    "passed": 13,
+    "source_bundle_parity": true
+  },
+  "known_preexisting_failures": {
+    "suite": "workbench/tests/test_security.py",
+    "count": 6,
+    "reproduced_at_parent_source": true,
+    "reason": "Registration tests send non-email usernames; existing Registration schema requires email addresses. Production registration behavior was not changed."
+  },
+  "scope": {
+    "new_view_css": "All selectors scoped to #view-applications",
+    "core_modified": false,
+    "existing_views": "Only navigation, routing and logout integration; application jobs have separate history and are not linked into studies."
+  },
+  "commands": [
+    "PYTHONPATH=workbench:workbench/tests .venv/bin/python -m unittest test_applications -v",
+    ".venv/bin/python workbench/tests/applications_browser_check.py",
+    "PYTHONPATH=workbench:workbench/tests .venv/bin/python -m unittest discover -s workbench/tests -p test_*.py",
+    ".venv/bin/python -m unittest discover -s tests -p test_*.py",
+    ".venv/bin/python -m unittest discover -s tests -p test_cli_installation.py"
+  ],
+  "workbench_suite": {
+    "tests": 124,
+    "passed": 118,
+    "failed": 6,
+    "all_failures_reproduced_at_parent_source": true
+  },
+  "distribution": {
+    "rebuilt_from_canonical_workbench_source": true,
+    "checksum_and_source_parity_checked_in_git_index": true,
+    "preexisting_working_bundle_backup": "/tmp/tgap-sandbox-before-application-insights.zip",
+    "preexisting_bundle_only_changes_match_committed_source": true
+  },
+  "core_suite": {
+    "tests": 623,
+    "initial_passed": 620,
+    "skipped": 2,
+    "initial_failures": 1,
+    "failure": "Portable bundle index.html lagged the new source during the initial run.",
+    "resolution": "Rebuilt portable bundle; all 13 installation tests then passed, including exact source/bundle checks for all feature files.",
+    "unresolved_failures": 0
+  }
+}

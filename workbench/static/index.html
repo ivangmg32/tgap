@@ -18,6 +18,8 @@
   <script src="/static/network-explorer.js" defer></script>
   <script src="/static/guided.js" defer></script>
   <script src="/static/compare.js" defer></script>
+  <link rel="stylesheet" href="/static/applications.css">
+  <script src="/static/applications.js" defer></script>
 </head>
 <body>
   <div id="login" class="login-shell" hidden>
@@ -37,6 +39,7 @@
         <a href="#intro-video" data-view="intro-video" class="nav-sub"><span class="nav-icon">▶</span><span>Introduction video<small>Watch before you start</small></span></a>
         <a href="#examples" data-view="examples"><span class="nav-icon">▦</span><span>Example library<small>Learn from ready-made experiments</small></span></a>
         <a href="#laboratory" data-view="laboratory"><span class="nav-icon">◈</span><span>Laboratory<small>Build, run &amp; visualize experiments</small></span></a>
+        <a href="#applications" data-view="applications"><span class="nav-icon">↗</span><span>تحلیل کاربردی<small>نمودارها و تغییرات شبکه، با توضیح ساده</small></span></a>
         <a href="#docs" data-view="docs"><span class="nav-icon">⌘</span><span>Documentation<small>Concepts, code &amp; reproducibility</small></span></a>
         <a href="#publication" data-view="publication"><span class="nav-icon">?</span><span>Paper figures<small>Publication charts &amp; scope notes</small></span></a>
         <a href="#researcher" data-view="researcher" id="researcher-nav" hidden><span class="nav-icon">▥</span><span>Researcher<small>Review participation &amp; export data</small></span></a>
@@ -68,6 +71,7 @@
             </div>
           </div>
         </section>
+        <section id="view-applications" class="view" lang="fa" dir="rtl" hidden><div id="applications-content"></div></section>
         <section id="view-examples" class="view" hidden><div class="page-intro"><span class="eyebrow">A SMALL LIBRARY OF GOOD QUESTIONS</span><h1>Begin with an example.</h1><p>Each example sets up a complete experiment. Run it, read the result,<br>then change one thing to see what happens.</p></div><div id="example-cards" class="example-grid"></div><div class="reading-note"><span class="note-symbol">i</span><div><strong>Synthetic examples have known structure.</strong><p>They help you learn and check behavior. Real datasets show applicability, without explanation ground truth.</p></div></div></section>
         <section id="view-guide" class="view" hidden><div class="page-intro"><span class="eyebrow">WELCOME TO TGAP · START HERE</span><h1>Understand the graph.<br>Then ask what changes.</h1><p>TGAP explains a model by changing one graph concept at a time.<br>This tutorial takes you from your first question to a visual, reproducible result.</p></div><div class="welcome-overview"><article><span class="eyebrow">WHAT YOU ARE EXPLORING</span><h2>A model’s response to structure</h2><p>A temporal graph is a sequence of networks. Choose a dataset and a prediction model, then change a concept such as bridge width or density. Compare the new prediction with the original.</p><p>The figures show what changed in the network, how its history moved, and how the model responded. This measures sensitivity; it does not prove real-world causation.</p><div class="welcome-actions"><a class="primary" href="#examples">Try a worked example</a><a class="secondary" href="#laboratory">Open laboratory</a></div></article><div class="learning-path"><h2>Your first experiment</h2><ol><li><b>Choose</b><span>A dataset, model and graph concept.</span></li><li><b>Run</b><span>Test both increase and decrease directions.</span></li><li><b>Inspect</b><span>Read the figures, achieved changes and validity flags.</span></li><li><b>Keep</b><span>Download your images, data and Python program.</span></li></ol></div></div><div class="section-heading tutorial-heading"><h2>Follow the 12-minute tutorial</h2><a href="#docs">Open the full reference →</a></div><div id="guide-content" class="document"></div></section>
         <section id="view-guided" class="view" hidden><div class="page-intro"><span class="eyebrow">TGAP GUIDED USER STUDY · PHASE 1</span><h1>TGAP Guided User Study</h1><p>Run one complete TGAP experiment step by step, on the real pipeline,<br>and read every paper chart regenerated from your own configuration.</p></div><div id="guided-content"></div></section>

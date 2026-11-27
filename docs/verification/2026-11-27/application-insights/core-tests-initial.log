@@ -1,0 +1,583 @@
+/home/abrnoc/develop/catalyst/tgap/tgap/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+........../home/abrnoc/develop/catalyst/tgap/tgap/tests/test_attribution_persistence.py:102: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tgap-attr-test-r6sivpm9/edge4.csv' mode='r' encoding='utf-8'>
+  text = open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.....F....usage: tgap [-h] [--home HOME] {install,start,stop,status,path,run} ...
+tgap: error: Port must be between 1 and 65535.
+usage: tgap [-h] [--home HOME] {install,start,stop,status,path,run} ...
+tgap: error: Port must be between 1 and 65535.
+.......The workbench is not installed yet - installing it first (one time, 1-3 minutes).
+
+................................................................................./home/abrnoc/develop/catalyst/tgap/tgap/examples/projects/ivan_rq_walkthrough/main.py:50: UserWarning: obj.round has no effect with datetime, timedelta, or period dtypes. Use obj.dt.round(...) instead.
+  features.round(4).to_csv(os.path.join(output, "features.csv"))
+/home/abrnoc/develop/catalyst/tgap/tgap/examples/projects/ivan_rq_walkthrough/main.py:56: UserWarning: obj.round has no effect with datetime, timedelta, or period dtypes. Use obj.dt.round(...) instead.
+  t.table(features.reset_index().round(3).head(6),
+/home/abrnoc/develop/catalyst/tgap/tgap/.venv/lib/python3.12/site-packages/scipy/stats/_axis_nan_policy.py:601: RuntimeWarning: Precision loss occurred in moment calculation due to catastrophic cancellation. This occurs when the data are nearly identical. Results may be unreliable.
+  res = hypotest_fun_out(*samples, **kwds)
+/home/abrnoc/develop/catalyst/tgap/tgap/finance/experimentationDatamining.py:422: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  spearman = stats.spearmanr(
+.............................................==================================================================
+TGAP with a user-defined transformation
+==================================================================
+  model        : trend of density over 6 snapshots
+  isolated now : 2.50 actors per snapshot (mean)
+
+  Increase Bridge Width (50.0%)          impact     0.0000   achieved   0.463
+  Decrease Bridge Width (50.0%)          impact     0.0000   achieved  -0.463
+  Increase Density (50.0%)               impact     0.1935   achieved   0.502
+  Decrease Density (50.0%)               impact    -0.1935   achieved  -0.502
+  Increase Isolation (50.0%)             impact    -0.0349   achieved   0.533  <- custom
+  Decrease Isolation (50.0%)             impact     0.0151   achieved  -0.533  <- custom
+
+  core/ was not modified to make this work.
+  [1/5] Data: sample_edges.csv
+  [2/5] Groups: sizes 8/8
+  [3/5] Model: MyModel (yours)
+  [4/5] Concepts: Bridge Width, Density, Churn, Quiet Members
+  [5/5] Explaining (run name: my_project)
+
+      The model predicts 7.2500 on your data.
+      Nudging each concept by 10%:
+
+        concept                  direction        impact
+        ------------------------------------------------
+        Bridge Width             increase        +0.0000
+        Bridge Width             decrease        +0.0000
+        Density                  increase        +7.3571
+        Density                  decrease        -7.3571
+        Churn                    increase        +0.0000
+        Churn                    decrease        +0.0000
+        Quiet Members            increase       -10.0000
+        Quiet Members            decrease        +0.0000   (could not change this graph)
+
+      impact > 0: more of the concept raises the prediction; < 0: lowers it; 0: no effect.
+
+      Drawing the paper-style pictures (where and when the model reacts) ...
+      Results (20 pictures + CSV + tutorial): /tmp/tgap-examples-_hd48hyr/my_project
+      Read first: /tmp/tgap-examples-_hd48hyr/my_project/TUTORIAL.md
+  [1/4] Building a made-up temporal graph: 6 snapshots, two groups of 10 people
+  [2/4] Model: trend_bridge_width (bridge width, extrapolated from its trend over all snapshots)
+  [3/4] Concepts to test: bridge_width, centralization, density, bridge_trend, churn
+  [4/4] Explaining
+
+      The model predicts 8.0000 on your data.
+      Nudging each concept by 10%:
+
+        concept                  direction        impact
+        ------------------------------------------------
+        Bridge Width             increase        +8.0000
+        Bridge Width             decrease        -8.0000
+        Centralization           increase        +0.0000
+        Centralization           decrease        +0.0000
+        Density                  increase        +0.0000
+        Density                  decrease        +0.0000
+        Bridge Trend             increase        +0.8485
+        Bridge Trend             decrease        -1.1667
+        Churn                    increase        +0.0000
+        Churn                    decrease        +0.0000
+
+      impact > 0: more of the concept raises the prediction; < 0: lowers it; 0: no effect.
+
+      Drawing the paper-style pictures (where and when the model reacts) ...
+      Results (20 pictures + CSV + tutorial): /tmp/tgap-examples-74m9xjg8/01_quickstart
+      Read first: /tmp/tgap-examples-74m9xjg8/01_quickstart/TUTORIAL.md
+  [1/3] Preparing email_eu_core (downloads once, then works offline)
+        201 people, 12 snapshots
+  [2/3] Model: trend_bridge_width;  concepts: bridge_width, centralization, density, churn
+  [3/3] Explaining
+
+      The model predicts 43.8485 on your data.
+      Nudging each concept by 10%:
+
+        concept                  direction        impact
+        ------------------------------------------------
+        Bridge Width             increase       +45.9292
+        Bridge Width             decrease       -45.9292
+        Centralization           increase        +0.0000
+        Centralization           decrease        +0.0000
+        Density                  increase        +0.0000
+        Density                  decrease        +0.0000
+        Churn                    increase        +0.0000
+        Churn                    decrease        +0.0000
+
+      impact > 0: more of the concept raises the prediction; < 0: lowers it; 0: no effect.
+
+      Drawing the paper-style pictures (where and when the model reacts) ...
+      Results (20 pictures + CSV + tutorial): /tmp/tgap-examples-ljzi06mm/05_real_dataset_email_eu_core
+      Read first: /tmp/tgap-examples-ljzi06mm/05_real_dataset_email_eu_core/TUTORIAL.md
+  [1/4] Reading sample_edges.csv
+        16 people, 6 snapshots
+  [2/4] Groups (from sample_groups.csv): sizes 8/8
+  [3/4] Model: trend_bridge_width;  concepts: bridge_width, density, churn
+  [4/4] Explaining
+
+      The model predicts 7.0000 on your data.
+      Nudging each concept by 10%:
+
+        concept                  direction        impact
+        ------------------------------------------------
+        Bridge Width             increase        +7.8400
+        Bridge Width             decrease        -7.8400
+        Density                  increase        +0.0000
+        Density                  decrease        +0.0000
+        Churn                    increase        +0.0000
+        Churn                    decrease        +0.0000
+
+      impact > 0: more of the concept raises the prediction; < 0: lowers it; 0: no effect.
+
+      Drawing the paper-style pictures (where and when the model reacts) ...
+      Results (20 pictures + CSV + tutorial): /tmp/tgap-examples-dx1_pa2d/02_your_own_dataset
+      Read first: /tmp/tgap-examples-dx1_pa2d/02_your_own_dataset/TUTORIAL.md
+  [1/3] Building a made-up temporal graph whose groups drift apart
+  [2/3] Your model: FragmentationRisk (last 2 snapshots) -> predicts 1.283
+  [3/3] Explaining with: bridge_width, centralization, density, churn
+
+      The model predicts 1.2830 on your data.
+      Nudging each concept by 10%:
+
+        concept                  direction        impact
+        ------------------------------------------------
+        Bridge Width             increase        +0.0000
+        Bridge Width             decrease        +0.0000
+        Centralization           increase        +0.0934
+        Centralization           decrease        -0.0934
+        Density                  increase        -0.0334
+        Density                  decrease        +0.3277
+        Churn                    increase        +0.0000
+        Churn                    decrease        +0.0000
+
+      impact > 0: more of the concept raises the prediction; < 0: lowers it; 0: no effect.
+
+      Drawing the paper-style pictures (where and when the model reacts) ...
+      Results (20 pictures + CSV + tutorial): /tmp/tgap-examples-nx1h6n7f/03_your_own_model
+      Read first: /tmp/tgap-examples-nx1h6n7f/03_your_own_model/TUTORIAL.md
+  [1/4] Building a made-up temporal graph
+  [2/4] Your concept 'Triangle Closing': 0.332 -> 0.416 after a +25% nudge
+  [3/4] Model: trend of the clustering coefficient
+  [4/4] Explaining: Triangle Closing + density, bridge_width
+
+      The model predicts 0.2914 on your data.
+      Nudging each concept by 10%:
+
+        concept                  direction        impact
+        ------------------------------------------------
+        Triangle Closing         increase        +0.2778
+        Triangle Closing         decrease        -0.1823
+        Density                  increase        +1.2022
+        Density                  decrease        -0.9266
+        Bridge Width             increase        -0.1836
+        Bridge Width             decrease        +0.4491
+
+      impact > 0: more of the concept raises the prediction; < 0: lowers it; 0: no effect.
+
+      Drawing the paper-style pictures (where and when the model reacts) ...
+      Results (20 pictures + CSV + tutorial): /tmp/tgap-examples-tp50_ysw/04_your_own_transformation
+      Read first: /tmp/tgap-examples-tp50_ysw/04_your_own_transformation/TUTORIAL.md
+  [1/3] Building 12 correlation networks of 6mo each over 5y
+  [2/3] Most synchronized window ends 2023-01-12 (mean +0.51); least ends 2026-09-18 (+0.04)
+  [3/3] Saved the table and two pictures....../home/abrnoc/develop/catalyst/tgap/tgap/.venv/lib/python3.12/site-packages/pandas/core/internals/blocks.py:347: DeprecationWarning: Bitwise inversion '~' on bool is deprecated. This returns the bitwise inversion of the underlying int object and is usually not what you expect from negating a bool. Use the 'not' operator for boolean negation or ~int(x) if you really want the bitwise inversion of the underlying int.
+  result = func(self.values, **kwargs)
+./home/abrnoc/develop/catalyst/tgap/tgap/.venv/lib/python3.12/site-packages/pandas/core/internals/blocks.py:347: DeprecationWarning: Bitwise inversion '~' on bool is deprecated. This returns the bitwise inversion of the underlying int object and is usually not what you expect from negating a bool. Use the 'not' operator for boolean negation or ~int(x) if you really want the bitwise inversion of the underlying int.
+  result = func(self.values, **kwargs)
+............................................................../home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+./home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+./home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+./home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+./home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+............./home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+./home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:523: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/attribution/edge_attribution.csv'>
+  hashlib.md5(open(path, "rb").read()).hexdigest(),
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:524: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/attribution_again/edge_attribution.csv'>
+  hashlib.md5(open(other[key], "rb").read()).hexdigest(),
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:523: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/attribution/node_attribution.csv'>
+  hashlib.md5(open(path, "rb").read()).hexdigest(),
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:524: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/attribution_again/node_attribution.csv'>
+  hashlib.md5(open(other[key], "rb").read()).hexdigest(),
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:523: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/attribution/edge_time_attribution.csv'>
+  hashlib.md5(open(path, "rb").read()).hexdigest(),
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:524: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/attribution_again/edge_time_attribution.csv'>
+  hashlib.md5(open(other[key], "rb").read()).hexdigest(),
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:523: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/attribution/edge_attribution_trend.csv'>
+  hashlib.md5(open(path, "rb").read()).hexdigest(),
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:524: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/attribution_again/edge_attribution_trend.csv'>
+  hashlib.md5(open(other[key], "rb").read()).hexdigest(),
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:564: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tgap_pub_mupwtj92/m1.json' mode='r' encoding='utf-8'>
+  self.assertEqual(open(first, encoding="utf-8").read(),
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:565: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tgap_pub_mupwtj92/m2.json' mode='r' encoding='utf-8'>
+  open(second, encoding="utf-8").read())
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.../home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro0/f8.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro0/f8.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro0/f9.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro0/f9.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro0/f10.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro0/f10.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro0/f11.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro0/f11.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro0/f12.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro0/f12.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro1/f8.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro1/f8.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro1/f9.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro1/f9.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/realdata/make_publication.py:828: MatplotlibDeprecationWarning: vert: bool was deprecated in Matplotlib 3.11 and will be removed in 3.13. Use orientation: {'vertical', 'horizontal'} instead.
+  ax.boxplot(series, vert=False, widths=0.55,
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro1/f10.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro1/f10.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro1/f11.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro1/f11.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro1/f12.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_publication_figures.py:512: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_pub_mupwtj92/repro1/f12.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.........s.........................................................................s........................................................................................................................./home/abrnoc/develop/catalyst/tgap/tgap/tests/test_semantic_figures.py:331: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_figs_xed8zeqv/final0/final.png'>
+  open(name, "rb").read()).hexdigest()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_semantic_figures.py:331: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_figs_xed8zeqv/final0/final.pdf'>
+  open(name, "rb").read()).hexdigest()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_semantic_figures.py:331: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_figs_xed8zeqv/final1/final.png'>
+  open(name, "rb").read()).hexdigest()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_semantic_figures.py:331: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_figs_xed8zeqv/final1/final.pdf'>
+  open(name, "rb").read()).hexdigest()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......../home/abrnoc/develop/catalyst/tgap/tgap/tests/test_semantic_figures.py:167: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_figs_1p_5d_s2/repro0/a.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_semantic_figures.py:167: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_figs_1p_5d_s2/repro0/a.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_semantic_figures.py:167: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_figs_1p_5d_s2/repro0/m.json'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_semantic_figures.py:167: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_figs_1p_5d_s2/repro1/a.png'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_semantic_figures.py:167: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_figs_1p_5d_s2/repro1/a.pdf'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_semantic_figures.py:167: ResourceWarning: unclosed file <_io.BufferedReader name='/tmp/tgap_figs_1p_5d_s2/repro1/m.json'>
+  open(os.path.join(directory, name), "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.........................................................../home/abrnoc/develop/catalyst/tgap/tgap/.venv/lib/python3.12/site-packages/torch/_compile.py:54: UserWarning: optimizer contains a parameter group with duplicate parameters; in future, this will cause an error; see github.com/pytorch/pytorch/issues/40967 for more information
+  return disable_fn(*args, **kwargs)
+/home/abrnoc/develop/catalyst/tgap/tgap/core/TgnModel.py:350: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  losses.append(float(loss))
+..........................................................................................................
+======================================================================
+FAIL: test_bundle_contains_complete_app_without_live_records (test_cli_installation.InstallationTests.test_bundle_contains_complete_app_without_live_records)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/abrnoc/develop/catalyst/tgap/tgap/tests/test_cli_installation.py", line 30, in test_bundle_contains_complete_app_without_live_records
+    self.assertEqual((target / 'static' / filename).read_bytes(),
+AssertionError: b'<!d[1142 chars]pt>\n</head>\n<body>\n  <div id="login" class=[16185 chars]l>\n' != b'<!d[1142 chars]pt>\n  <link rel="stylesheet" href="/static/ap[16922 chars]l>\n' : index.html
+
+----------------------------------------------------------------------
+Ran 623 tests in 605.786s
+
+FAILED (failures=1, skipped=2)
+
+      Results (CSV + PNG + tutorial): /tmp/tgap-fin-examples-6ob65u4f/financial/02_correlations_over_time
+      Read first: /tmp/tgap-fin-examples-6ob65u4f/financial/02_correlations_over_time/TUTORIAL.md
+  [1/3] Building the market graph (8 stocks, threshold 0.3)
+  [2/3] Model: trend_bridge_width - bridge width, extrapolated from its trend over all snapshots
+  [3/3] Explaining with: bridge_width, density, churn, bridge_trend
+
+      The model predicts 2.9545 on your data.
+      Nudging each concept by 10%:
+
+        concept                  direction        impact
+        ------------------------------------------------
+        Bridge Width             increase        +0.5455
+        Bridge Width             decrease        -0.5455
+        Density                  increase        +0.0000
+        Density                  decrease        +0.0000
+        Churn                    increase        +0.0000   (could not change this graph)
+        Churn                    decrease        +0.0000   (could not change this graph)
+        Bridge Trend             increase        +0.6541
+        Bridge Trend             decrease        -1.2292
+
+      impact > 0: more of the concept raises the prediction; < 0: lowers it; 0: no effect.
+
+      Drawing the paper-style pictures (where and when the model reacts) ...
+      Results (20 pictures + CSV + tutorial): /tmp/tgap-fin-examples-_i8mkghf/financial/04_explain_a_market_model
+      Read first: /tmp/tgap-fin-examples-_i8mkghf/financial/04_explain_a_market_model/TUTORIAL.md
+  [1/4] Correlation networks for 8 stocks
+  [2/4] Communities: Technology (4), Other (4)
+  [3/4] Threshold check (usable = TGAP can keep its promises on these graphs):
+        threshold 0.2:  15.8 ties per window   not usable
+        threshold 0.3:  12.0 ties per window   usable
+        threshold 0.4:   8.5 ties per window   usable
+        threshold 0.5:   6.4 ties per window   not usable
+        threshold 0.6:   3.8 ties per window   not usable
+        threshold 0.7:   2.0 ties per window   not usable
+  [4/4] With threshold 0.3: ties per window [13, 17, 25, 12, 11, 10, 9, 11, 19, 7, 8, 2]
+      Results (CSV + PNG + tutorial): /tmp/tgap-fin-examples-ggm6k0z2/financial/03_market_as_tgap_graph
+      Read first: /tmp/tgap-fin-examples-ggm6k0z2/financial/03_market_as_tgap_graph/TUTORIAL.md
+  [1/3] Correlating 8 stocks over the last 6mo
+  [2/3] Strongest and weakest pairs:
+        GOOGL - AMZN   +0.63
+         MSFT - AMZN   +0.43
+         AMZN - NVDA   +0.24
+         AMZN - XOM    -0.32
+        GOOGL - XOM    -0.35
+  [3/3] Saved the network picture and the table
+      Results (CSV + PNG + tutorial): /tmp/tgap-fin-examples-v0gmjj7_/financial/01_stock_correlations
+      Read first: /tmp/tgap-fin-examples-v0gmjj7_/financial/01_stock_correlations/TUTORIAL.md
+  [1/3] Building the market graph
+  [2/3] Your model: SystemicRisk -> today 0.083
+  [3/3] Explaining with: bridge_width, density, centralization, churn
+
+      The model predicts 0.0833 on your data.
+      Nudging each concept by 10%:
+
+        concept                  direction        impact
+        ------------------------------------------------
+        Bridge Width             increase        +0.0000
+        Bridge Width             decrease        +0.0000
+        Density                  increase        +0.8571
+        Density                  decrease        -0.4000
+        Centralization           increase        +0.0000
+        Centralization           decrease        -0.5556
+        Churn                    increase        +0.0000   (could not change this graph)
+        Churn                    decrease        +0.0000   (could not change this graph)
+
+      impact > 0: more of the concept raises the prediction; < 0: lowers it; 0: no effect.
+
+      Drawing the paper-style pictures (where and when the model reacts) ...
+      Results (20 pictures + CSV + tutorial): /tmp/tgap-fin-examples-hktsugpy/financial/05_your_own_market_model
+      Read first: /tmp/tgap-fin-examples-hktsugpy/financial/05_your_own_market_model/TUTORIAL.md
